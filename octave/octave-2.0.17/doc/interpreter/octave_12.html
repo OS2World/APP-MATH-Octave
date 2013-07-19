@@ -1,0 +1,1355 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from ./octave.texi on 9 October 1998 -->
+
+<TITLE>GNU Octave - Functions and Script Files</TITLE>
+</HEAD>
+<BODY>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_11.html">previous</A>, <A HREF="octave_13.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC89" HREF="octave_toc.html#TOC89">Functions and Script Files</A></H1>
+<P>
+<A NAME="IDX421"></A>
+<A NAME="IDX422"></A>
+<A NAME="IDX423"></A>
+<A NAME="IDX424"></A>
+
+</P>
+<P>
+Complicated Octave programs can often be simplified by defining
+functions.  Functions can be defined directly on the command line during
+interactive Octave sessions, or in external files, and can be called just
+like built-in functions.
+
+</P>
+
+
+
+<H2><A NAME="SEC90" HREF="octave_toc.html#TOC90">Defining Functions</A></H2>
+<P>
+<A NAME="IDX425"></A>
+<A NAME="IDX426"></A>
+
+</P>
+<P>
+In its simplest form, the definition of a function named <VAR>name</VAR>
+looks like this:
+
+</P>
+
+<PRE>
+function <VAR>name</VAR>
+  <VAR>body</VAR>
+endfunction
+</PRE>
+
+<P>
+A valid function name is like a valid variable name: a sequence of
+letters, digits and underscores, not starting with a digit.  Functions
+share the same pool of names as variables.
+
+</P>
+<P>
+The function <VAR>body</VAR> consists of Octave statements.  It is the
+most important part of the definition, because it says what the function
+should actually <EM>do</EM>.
+
+</P>
+<P>
+For example, here is a function that, when executed, will ring the bell
+on your terminal (assuming that it is possible to do so):
+
+</P>
+
+<PRE>
+function wakeup
+  printf ("\a");
+endfunction
+</PRE>
+
+<P>
+The <CODE>printf</CODE> statement (see section <A HREF="octave_14.html#SEC100">Input and Output</A>) simply tells
+Octave to print the string <CODE>"\a"</CODE>.  The special character <SAMP>`\a'</SAMP>
+stands for the alert character (ASCII 7).  See section <A HREF="octave_6.html#SEC53">Strings</A>.
+
+</P>
+<P>
+Once this function is defined, you can ask Octave to evaluate it by
+typing the name of the function.
+
+</P>
+<P>
+Normally, you will want to pass some information to the functions you
+define.  The syntax for passing parameters to a function in Octave is
+
+</P>
+
+<PRE>
+function <VAR>name</VAR> (<VAR>arg-list</VAR>)
+  <VAR>body</VAR>
+endfunction
+</PRE>
+
+<P>
+where <VAR>arg-list</VAR> is a comma-separated list of the function's
+arguments.  When the function is called, the argument names are used to
+hold the argument values given in the call.  The list of arguments may
+be empty, in which case this form is equivalent to the one shown above.
+
+</P>
+<P>
+To print a message along with ringing the bell, you might modify the
+<CODE>beep</CODE> to look like this:
+
+</P>
+
+<PRE>
+function wakeup (message)
+  printf ("\a%s\n", message);
+endfunction
+</PRE>
+
+<P>
+Calling this function using a statement like this
+
+</P>
+
+<PRE>
+wakeup ("Rise and shine!");
+</PRE>
+
+<P>
+will cause Octave to ring your terminal's bell and print the message
+<SAMP>`Rise and shine!'</SAMP>, followed by a newline character (the <SAMP>`\n'</SAMP>
+in the first argument to the <CODE>printf</CODE> statement).
+
+</P>
+<P>
+In most cases, you will also want to get some information back from the
+functions you define.  Here is the syntax for writing a function that
+returns a single value:
+
+</P>
+
+<PRE>
+function <VAR>ret-var</VAR> = <VAR>name</VAR> (<VAR>arg-list</VAR>)
+  <VAR>body</VAR>
+endfunction
+</PRE>
+
+<P>
+The symbol <VAR>ret-var</VAR> is the name of the variable that will hold the
+value to be returned by the function.  This variable must be defined
+before the end of the function body in order for the function to return
+a value.
+
+</P>
+<P>
+Variables used in the body of a function are local to the
+function.  Variables named in <VAR>arg-list</VAR> and <VAR>ret-var</VAR> are also
+local to the function.  See section <A HREF="octave_8.html#SEC60">Global Variables</A>, for information about
+how to access global variables inside a function.
+
+</P>
+<P>
+For example, here is a function that computes the average of the
+elements of a vector:
+
+</P>
+
+<PRE>
+function retval = avg (v)
+  retval = sum (v) / length (v);
+endfunction
+</PRE>
+
+<P>
+If we had written <CODE>avg</CODE> like this instead,
+
+</P>
+
+<PRE>
+function retval = avg (v)
+  if (is_vector (v))
+    retval = sum (v) / length (v);
+  endif
+endfunction
+</PRE>
+
+<P>
+and then called the function with a matrix instead of a vector as the
+argument, Octave would have printed an error message like this:
+
+</P>
+
+<PRE>
+error: `retval' undefined near line 1 column 10
+error: evaluating index expression near line 7, column 1
+</PRE>
+
+<P>
+because the body of the <CODE>if</CODE> statement was never executed, and
+<CODE>retval</CODE> was never defined.  To prevent obscure errors like this,
+it is a good idea to always make sure that the return variables will
+always have values, and to produce meaningful error messages when
+problems are encountered.  For example, <CODE>avg</CODE> could have been
+written like this:
+
+</P>
+
+<PRE>
+function retval = avg (v)
+  retval = 0;
+  if (is_vector (v))
+    retval = sum (v) / length (v);
+  else
+    error ("avg: expecting vector argument");
+  endif
+endfunction
+</PRE>
+
+<P>
+There is still one additional problem with this function.  What if it is
+called without an argument?  Without additional error checking, Octave
+will probably print an error message that won't really help you track
+down the source of the error.  To allow you to catch errors like this,
+Octave provides each function with an automatic variable called
+<CODE>nargin</CODE>.  Each time a function is called, <CODE>nargin</CODE> is
+automatically initialized to the number of arguments that have actually
+been passed to the function.  For example, we might rewrite the
+<CODE>avg</CODE> function like this:
+
+</P>
+
+<PRE>
+function retval = avg (v)
+  retval = 0;
+  if (nargin != 1)
+    usage ("avg (vector)");
+  endif
+  if (is_vector (v))
+    retval = sum (v) / length (v);
+  else
+    error ("avg: expecting vector argument");
+  endif
+endfunction
+</PRE>
+
+<P>
+Although Octave does not automatically report an error if you call a
+function with more arguments than expected, doing so probably indicates
+that something is wrong.  Octave also does not automatically report an
+error if a function is called with too few arguments, but any attempt to
+use a variable that has not been given a value will result in an error.
+To avoid such problems and to provide useful messages, we check for both
+possibilities and issue our own error message.
+
+</P>
+<P>
+<DL>
+<DT><U>Automatic Variable:</U> <B>nargin</B>
+<DD><A NAME="IDX427"></A>
+When a function is called, this local variable is automatically
+initialized to the number of arguments passed to the function.  At the
+top level, <CODE>nargin</CODE> holds the number of command line arguments that
+were passed to Octave.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>silent_functions</B>
+<DD><A NAME="IDX428"></A>
+If the value of <CODE>silent_functions</CODE> is nonzero, internal output
+from a function is suppressed.  Otherwise, the results of expressions
+within a function body that are not terminated with a semicolon will
+have their values printed.  The default value is 0.
+
+</P>
+<P>
+For example, if the function
+
+</P>
+
+<PRE>
+function f ()
+  2 + 2
+endfunction
+</PRE>
+
+<P>
+is executed, Octave will either print <SAMP>`ans = 4'</SAMP> or nothing
+depending on the value of <CODE>silent_functions</CODE>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>warn_missing_semicolon</B>
+<DD><A NAME="IDX429"></A>
+If the value of this variable is nonzero, Octave will warn when
+statements in function definitions don't end in semicolons.  The default
+value is 0.
+</DL>
+
+</P>
+
+
+<H2><A NAME="SEC91" HREF="octave_toc.html#TOC91">Multiple Return Values</A></H2>
+
+<P>
+Unlike many other computer languages, Octave allows you to define
+functions that return more than one value.  The syntax for defining
+functions that return multiple values is
+
+</P>
+
+<PRE>
+function [<VAR>ret-list</VAR>] = <VAR>name</VAR> (<VAR>arg-list</VAR>)
+  <VAR>body</VAR>
+endfunction
+</PRE>
+
+<P>
+where <VAR>name</VAR>, <VAR>arg-list</VAR>, and <VAR>body</VAR> have the same meaning
+as before, and <VAR>ret-list</VAR> is a comma-separated list of variable
+names that will hold the values returned from the function.  The list of
+return values must have at least one element.  If <VAR>ret-list</VAR> has
+only one element, this form of the <CODE>function</CODE> statement is
+equivalent to the form described in the previous section.
+
+</P>
+<P>
+Here is an example of a function that returns two values, the maximum
+element of a vector and the index of its first occurrence in the vector.
+
+</P>
+
+<PRE>
+function [max, idx] = vmax (v)
+  idx = 1;
+  max = v (idx);
+  for i = 2:length (v)
+    if (v (i) &#62; max)
+      max = v (i);
+      idx = i;
+    endif
+  endfor
+endfunction
+</PRE>
+
+<P>
+In this particular case, the two values could have been returned as
+elements of a single array, but that is not always possible or
+convenient.  The values to be returned may not have compatible
+dimensions, and it is often desirable to give the individual return
+values distinct names.
+
+</P>
+<P>
+In addition to setting <CODE>nargin</CODE> each time a function is called,
+Octave also automatically initializes <CODE>nargout</CODE> to the number of
+values that are expected to be returned.  This allows you to write
+functions that behave differently depending on the number of values that
+the user of the function has requested.  The implicit assignment to the
+built-in variable <CODE>ans</CODE> does not figure in the count of output
+arguments, so the value of <CODE>nargout</CODE> may be zero.
+
+</P>
+<P>
+The <CODE>svd</CODE> and <CODE>lu</CODE> functions are examples of built-in
+functions that behave differently depending on the value of
+<CODE>nargout</CODE>.
+
+</P>
+<P>
+It is possible to write functions that only set some return values.  For
+example, calling the function
+
+</P>
+
+<PRE>
+function [x, y, z] = f ()
+  x = 1;
+  z = 2;
+endfunction
+</PRE>
+
+<P>
+as
+
+</P>
+
+<PRE>
+[a, b, c] = f ()
+</PRE>
+
+<P>
+produces:
+
+</P>
+
+<PRE>
+a = 1
+
+b = [](0x0)
+
+c = 2
+</PRE>
+
+<P>
+provided that the built-in variable <CODE>define_all_return_values</CODE> is
+nonzero and the value of <CODE>default_return_value</CODE> is <SAMP>`[]'</SAMP>.
+See section <A HREF="octave_8.html#SEC62">Summary of Built-in Variables</A>.
+
+</P>
+<P>
+<DL>
+<DT><U>Automatic Variable:</U> <B>nargout</B>
+<DD><A NAME="IDX430"></A>
+When a function is called, this local variable is automatically
+initialized to the number of arguments expected to be returned.  For
+example, 
+
+</P>
+
+<PRE>
+f ()
+</PRE>
+
+<P>
+will result in <CODE>nargout</CODE> being set to 0 inside the function
+<CODE>f</CODE> and
+
+</P>
+
+<PRE>
+[s, t] = f ()
+</PRE>
+
+<P>
+will result in <CODE>nargout</CODE> being set to 2 inside the function
+<CODE>f</CODE>.
+
+</P>
+<P>
+At the top level, <CODE>nargout</CODE> is undefined.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>default_return_value</B>
+<DD><A NAME="IDX431"></A>
+The value given to otherwise uninitialized return values if
+<CODE>define_all_return_values</CODE> is nonzero.  The default value is
+<CODE>[]</CODE>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>define_all_return_values</B>
+<DD><A NAME="IDX432"></A>
+If the value of <CODE>define_all_return_values</CODE> is nonzero, Octave
+will substitute the value specified by <CODE>default_return_value</CODE> for
+any return values that remain undefined when a function returns.  The
+default value is 0.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>nargchk</B> <I>(<VAR>nargin_min</VAR>, <VAR>nargin_max</VAR>, <VAR>n</VAR>)</I>
+<DD><A NAME="IDX433"></A>
+If <VAR>n</VAR> is in the range <VAR>nargin_min</VAR> through <VAR>nargin_max</VAR>
+inclusive, return the empty matrix.  Otherwise, return a message
+indicating whether <VAR>n</VAR> is too large or too small.
+
+</P>
+<P>
+This is useful for checking to see that the number of arguments supplied
+to a function is within an acceptable range.
+</DL>
+
+</P>
+
+
+<H2><A NAME="SEC92" HREF="octave_toc.html#TOC92">Variable-length Argument Lists</A></H2>
+<P>
+<A NAME="IDX434"></A>
+<A NAME="IDX435"></A>
+
+</P>
+<P>
+Octave has a real mechanism for handling functions that take an
+unspecified number of arguments, so it is not necessary to place an
+upper bound on the number of optional arguments that a function can
+accept.
+
+</P>
+
+<P>
+Here is an example of a function that uses the new syntax to print a
+header followed by an unspecified number of values:
+
+</P>
+
+<PRE>
+function foo (heading, ...)
+  disp (heading);
+  va_start ();
+  ## Pre-decrement to skip `heading' arg.
+  while (--nargin)
+    disp (va_arg ());
+  endwhile
+endfunction
+</PRE>
+
+<P>
+The ellipsis that marks the variable argument list may only appear once
+and must be the last element in the list of arguments.
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>va_start</B> <I>()</I>
+<DD><A NAME="IDX436"></A>
+Position an internal pointer to the first unnamed argument and allows
+you to cycle through the arguments more than once.  It is not necessary
+to call <CODE>va_start</CODE> if you do not plan to cycle through the
+arguments more than once.  This function may only be called inside
+functions that have been declared to accept a variable number of input
+arguments.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>va_arg</B> <I>()</I>
+<DD><A NAME="IDX437"></A>
+Return the value of the next available argument and move the internal
+pointer to the next argument.  It is an error to call <CODE>va_arg()</CODE>
+when there are no more arguments available.
+</DL>
+
+</P>
+<P>
+Sometimes it is useful to be able to pass all unnamed arguments to
+another function.  The keyword <VAR>all_va_args</VAR> makes this very easy to
+do.  For example,
+
+</P>
+
+<PRE>
+function f (...)
+  while (nargin--)
+    disp (va_arg ())
+  endwhile
+endfunction
+
+function g (...)
+  f ("begin", all_va_args, "end")
+endfunction
+
+g (1, 2, 3)
+
+     -| begin
+     -| 1
+     -| 2
+     -| 3
+     -| end
+</PRE>
+
+<P>
+<DL>
+<DT><U>Keyword:</U> <B>all_va_args</B>
+<DD><A NAME="IDX438"></A>
+This keyword stands for the entire list of optional argument, so it is
+possible to use it more than once within the same function without
+having to call <CODE>va_start</CODE>.  It can only be used within functions
+that take a variable number of arguments.  It is an error to use it in
+other contexts.
+</DL>
+
+</P>
+
+
+<H2><A NAME="SEC93" HREF="octave_toc.html#TOC93">Variable-length Return Lists</A></H2>
+<P>
+<A NAME="IDX439"></A>
+<A NAME="IDX440"></A>
+
+</P>
+<P>
+Octave also has a real mechanism for handling functions that return an
+unspecified number of values, so it is no longer necessary to place an
+upper bound on the number of outputs that a function can produce.
+
+</P>
+<P>
+Here is an example of a function that uses a variable-length return list
+to produce <VAR>n</VAR> values:
+
+</P>
+
+<PRE>
+function [...] = f (n, x)
+  for i = 1:n
+    vr_val (i * x);
+  endfor
+endfunction
+
+[dos, quatro] = f (2, 2)
+     => dos = 2
+     => quatro = 4
+</PRE>
+
+<P>
+As with variable argument lists, the ellipsis that marks the variable
+return list may only appear once and must be the last element in the
+list of returned values.
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>vr_val</B> <I>(<VAR>val</VAR>)</I>
+<DD><A NAME="IDX441"></A>
+Each time this function is called, it places the value of its argument
+at the end of the list of values to return from the current function.
+Once <CODE>vr_val</CODE> has been called, there is no way to go back to the
+beginning of the list and rewrite any of the return values.  This
+function may only be called within functions that have been declared to
+return an unspecified number of output arguments (by using the special
+ellipsis notation described above).
+</DL>
+
+</P>
+
+
+<H2><A NAME="SEC94" HREF="octave_toc.html#TOC94">Returning From a Function</A></H2>
+
+<P>
+The body of a user-defined function can contain a <CODE>return</CODE> statement.
+This statement returns control to the rest of the Octave program.  It
+looks like this:
+
+</P>
+
+<PRE>
+return
+</PRE>
+
+<P>
+Unlike the <CODE>return</CODE> statement in C, Octave's <CODE>return</CODE>
+statement cannot be used to return a value from a function.  Instead,
+you must assign values to the list of return variables that are part of
+the <CODE>function</CODE> statement.  The <CODE>return</CODE> statement simply makes
+it easier to exit a function from a deeply nested loop or conditional
+statement.
+
+</P>
+<P>
+Here is an example of a function that checks to see if any elements of a
+vector are nonzero.
+
+</P>
+
+<PRE>
+function retval = any_nonzero (v)
+  retval = 0;
+  for i = 1:length (v)
+    if (v (i) != 0)
+      retval = 1;
+      return;
+    endif
+  endfor
+  printf ("no nonzero elements found\n");
+endfunction
+</PRE>
+
+<P>
+Note that this function could not have been written using the
+<CODE>break</CODE> statement to exit the loop once a nonzero value is found
+without adding extra logic to avoid printing the message if the vector
+does contain a nonzero element.
+
+</P>
+<P>
+<DL>
+<DT><U>Keyword:</U> <B>return</B>
+<DD><A NAME="IDX442"></A>
+When Octave encounters the keyword <CODE>return</CODE> inside a function or
+script, it returns control to be caller immediately.  At the top level,
+the return statement is ignored.  A <CODE>return</CODE> statement is assumed
+at the end of every function definition.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>return_last_computed_value</B>
+<DD><A NAME="IDX443"></A>
+If the value of <CODE>return_last_computed_value</CODE> is true, and a
+function is defined without explicitly specifying a return value, the
+function will return the value of the last expression.  Otherwise, no
+value will be returned.  The default value is 0.
+
+</P>
+<P>
+For example, the function
+
+</P>
+
+<PRE>
+function f ()
+  2 + 2;
+endfunction
+</PRE>
+
+<P>
+will either return nothing, if the value of
+<CODE>return_last_computed_value</CODE> is 0, or 4, if the value of
+<CODE>return_last_computed_value</CODE> is nonzero.
+</DL>
+
+</P>
+
+
+<H2><A NAME="SEC95" HREF="octave_toc.html#TOC95">Function Files</A></H2>
+<P>
+<A NAME="IDX444"></A>
+
+</P>
+<P>
+Except for simple one-shot programs, it is not practical to have to
+define all the functions you need each time you need them.  Instead, you
+will normally want to save them in a file so that you can easily edit
+them, and save them for use at a later time.
+
+</P>
+<P>
+Octave does not require you to load function definitions from files
+before using them.  You simply need to put the function definitions in a
+place where Octave can find them.
+
+</P>
+<P>
+When Octave encounters an identifier that is undefined, it first looks
+for variables or functions that are already compiled and currently
+listed in its symbol table.  If it fails to find a definition there, it
+searches the list of directories specified by the built-in variable
+<CODE>LOADPATH</CODE> for files ending in <TT>`.m'</TT> that have the same base
+name as the undefined identifier.<A NAME="DOCF4" HREF="octave_foot.html#FOOT4">(4)</A>  Once Octave finds a file
+with a name that matches, the contents of the file are read.  If it
+defines a <EM>single</EM> function, it is compiled and executed.
+See section <A HREF="octave_12.html#SEC96">Script Files</A>, for more information about how you can define more
+than one function in a single file.
+
+</P>
+<P>
+When Octave defines a function from a function file, it saves the full
+name of the file it read and the time stamp on the file.  After
+that, it checks the time stamp on the file every time it needs the
+function.  If the time stamp indicates that the file has changed since
+the last time it was read, Octave reads it again.
+
+</P>
+<P>
+Checking the time stamp allows you to edit the definition of a function
+while Octave is running, and automatically use the new function
+definition without having to restart your Octave session.  Checking the
+time stamp every time a function is used is rather inefficient, but it
+has to be done to ensure that the correct function definition is used.
+
+</P>
+<P>
+To avoid degrading performance unnecessarily by checking the time stamps
+on functions that are not likely to change, Octave assumes that function
+files in the directory tree
+<TT>`<VAR>octave-home</VAR>/share/octave/<VAR>version</VAR>/m'</TT>
+will not change, so it doesn't have to check their time stamps every time the
+functions defined in those files are used.  This is normally a very good
+assumption and provides a significant improvement in performance for the
+function files that are distributed with Octave.
+
+</P>
+<P>
+If you know that your own function files will not change while you are
+running Octave, you can improve performance by setting the variable
+<CODE>ignore_function_time_stamp</CODE> to <CODE>"all"</CODE>, so that Octave will
+ignore the time stamps for all function files.  Setting it to
+<CODE>"system"</CODE> gives the default behavior.  If you set it to anything
+else, Octave will check the time stamps on all function files.
+
+</P>
+
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>LOADPATH</B>
+<DD><A NAME="IDX445"></A>
+A colon separated list of directories in which to search for function
+files.  See section <A HREF="octave_12.html#SEC89">Functions and Script Files</A>.  The value of <CODE>LOADPATH</CODE>
+overrides the environment variable <CODE>OCTAVE_PATH</CODE>.  See section <A HREF="octave_33.html#SEC189">Installing Octave</A>.
+
+</P>
+<P>
+<CODE>LOADPATH</CODE> is now handled in the same way as TeX handles
+<CODE>TEXINPUTS</CODE>.  If the path starts with <SAMP>`:'</SAMP>, the standard path
+is prepended to the value of <CODE>LOADPATH</CODE>.  If it ends with <SAMP>`:'</SAMP>
+the standard path is appended to the value of <CODE>LOADPATH</CODE>.
+
+</P>
+<P>
+In addition, if any path element ends in <SAMP>`//'</SAMP>, that directory and
+all subdirectories it contains are searched recursively for function
+files.  This can result in a slight delay as Octave caches the lists of
+files found in the <CODE>LOADPATH</CODE> the first time Octave searches for a
+function.  After that, searching is usually much faster because Octave
+normally only needs to search its internal cache for files.
+
+</P>
+<P>
+To improve performance of recursive directory searching, it is best for
+each directory that is to be searched recursively to contain
+<EM>either</EM> additional subdirectories <EM>or</EM> function files, but
+not a mixture of both.
+
+</P>
+<P>
+See section <A HREF="octave_12.html#SEC98">Organization of Functions Distributed with Octave</A> for a description of the function file
+directories that are distributed with Octave.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>ignore_function_time_stamp</B>
+<DD><A NAME="IDX446"></A>
+This variable can be used to prevent Octave from making the system call
+<CODE>stat</CODE> each time it looks up functions defined in function files.
+If <CODE>ignore_function_time_stamp</CODE> to <CODE>"system"</CODE>, Octave will not
+automatically recompile function files in subdirectories of
+<TT>`<VAR>octave-home</VAR>/lib/<VAR>version</VAR>'</TT> if they have changed since
+they were last compiled, but will recompile other function files in the
+<CODE>LOADPATH</CODE> if they change.  If set to <CODE>"all"</CODE>, Octave will not
+recompile any function files unless their definitions are removed with
+<CODE>clear</CODE>.  For any other value of <CODE>ignore_function_time_stamp</CODE>,
+Octave will always check to see if functions defined in function files
+need to recompiled.  The default value of <CODE>ignore_function_time_stamp</CODE> is
+<CODE>"system"</CODE>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>warn_function_name_clash</B>
+<DD><A NAME="IDX447"></A>
+If the value of <CODE>warn_function_name_clash</CODE> is nonzero, a warning is
+issued when Octave finds that the name of a function defined in a
+function file differs from the name of the file.  (If the names
+disagree, the name declared inside the file is ignored.)  If the value
+is 0, the warning is omitted.  The default value is 1.
+</DL>
+
+</P>
+
+
+<H2><A NAME="SEC96" HREF="octave_toc.html#TOC96">Script Files</A></H2>
+
+<P>
+A script file is a file containing (almost) any sequence of Octave
+commands.  It is read and evaluated just as if you had typed each
+command at the Octave prompt, and provides a convenient way to perform a
+sequence of commands that do not logically belong inside a function.
+
+</P>
+<P>
+Unlike a function file, a script file must <EM>not</EM> begin with the
+keyword <CODE>function</CODE>.  If it does, Octave will assume that it is a
+function file, and that it defines a single function that should be
+evaluated as soon as it is defined.
+
+</P>
+<P>
+A script file also differs from a function file in that the variables
+named in a script file are not local variables, but are in the same
+scope as the other variables that are visible on the command line.
+
+</P>
+<P>
+Even though a script file may not begin with the <CODE>function</CODE>
+keyword, it is possible to define more than one function in a single
+script file and load (but not execute) all of them at once.  To do 
+this, the first token in the file (ignoring comments and other white
+space) must be something other than <CODE>function</CODE>.  If you have no
+other statements to evaluate, you can use a statement that has no
+effect, like this:
+
+</P>
+
+<PRE>
+# Prevent Octave from thinking that this
+# is a function file:
+
+1;
+
+# Define function one:
+
+function one ()
+  ...
+</PRE>
+
+<P>
+To have Octave read and compile these functions into an internal form,
+you need to make sure that the file is in Octave's <CODE>LOADPATH</CODE>, then
+simply type the base name of the file that contains the commands.
+(Octave uses the same rules to search for script files as it does to
+search for function files.)
+
+</P>
+<P>
+If the first token in a file (ignoring comments) is <CODE>function</CODE>,
+Octave will compile the function and try to execute it, printing a
+message warning about any non-whitespace characters that appear after
+the function definition.
+
+</P>
+<P>
+Note that Octave does not try to look up the definition of any identifier
+until it needs to evaluate it.  This means that Octave will compile the
+following statements if they appear in a script file, or are typed at
+the command line,
+
+</P>
+
+<PRE>
+# not a function file:
+1;
+function foo ()
+  do_something ();
+endfunction
+function do_something ()
+  do_something_else ();
+endfunction
+</PRE>
+
+<P>
+even though the function <CODE>do_something</CODE> is not defined before it is
+referenced in the function <CODE>foo</CODE>.  This is not an error because
+Octave does not need to resolve all symbols that are referenced by a
+function until the function is actually evaluated.
+
+</P>
+<P>
+Since Octave doesn't look for definitions until they are needed, the
+following code will always print <SAMP>`bar = 3'</SAMP> whether it is typed
+directly on the command line, read from a script file, or is part of a
+function body, even if there is a function or script file called
+<TT>`bar.m'</TT> in Octave's <CODE>LOADPATH</CODE>.
+
+</P>
+
+<PRE>
+eval ("bar = 3");
+bar
+</PRE>
+
+<P>
+Code like this appearing within a function body could fool Octave if
+definitions were resolved as the function was being compiled.  It would
+be virtually impossible to make Octave clever enough to evaluate this
+code in a consistent fashion.  The parser would have to be able to
+perform the call to <CODE>eval</CODE> at compile time, and that would be
+impossible unless all the references in the string to be evaluated could
+also be resolved, and requiring that would be too restrictive (the
+string might come from user input, or depend on things that are not
+known until the function is evaluated).
+
+</P>
+<P>
+Although Octave normally executes commands from script files that have
+the name <TT>`<VAR>file</VAR>.m'</TT>, you can use the function <CODE>source</CODE> to
+execute commands from any file.
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>source</B> <I>(<VAR>file</VAR>)</I>
+<DD><A NAME="IDX448"></A>
+Parse and execute the contents of <VAR>file</VAR>.  This is equivalent to
+executing commands from a script file, but without requiring the file to
+be named <TT>`<VAR>file</VAR>.m'</TT>.
+</DL>
+
+</P>
+
+
+<H2><A NAME="SEC97" HREF="octave_toc.html#TOC97">Dynamically Linked Functions</A></H2>
+<P>
+<A NAME="IDX449"></A>
+
+</P>
+<P>
+On some systems, Octave can dynamically load and execute functions
+written in C++.  Octave can only directly call functions written in C++,
+but you can also load functions written in other languages
+by calling them from a simple wrapper function written in C++.
+
+</P>
+<P>
+Here is an example of how to write a C++ function that Octave can load,
+with commentary.  The source for this function is included in the source
+distributions of Octave, in the file <TT>`examples/oregonator.cc'</TT>.  It
+defines the same set of differential equations that are used in the
+example problem of section <A HREF="octave_21.html#SEC152">Ordinary Differential Equations</A>.  By running
+that example and this one, we can compare the execution times to see
+what sort of increase in speed you can expect by using dynamically
+linked functions.
+
+</P>
+<P>
+The function defined in <TT>`oregonator.cc'</TT> contains just 8 statements,
+and is not much different than the code defined in the corresponding
+M-file (also distributed with Octave in the file
+<TT>`examples/oregonator.m'</TT>).
+
+</P>
+<P>
+Here is the complete text of <TT>`oregonator.cc'</TT>:
+
+</P>
+<P>
+just
+
+</P>
+
+<PRE>
+#include &#60;octave/oct.h&#62;
+
+DEFUN_DLD (oregonator, args, ,
+  "The `oregonator'.")
+{
+  ColumnVector dx (3);
+
+  ColumnVector x = args(0).vector_value ();
+
+  dx(0) = 77.27 * (x(1) - x(0)*x(1) + x(0)
+                   - 8.375e-06*pow (x(0), 2));
+
+  dx(1) = (x(2) - x(0)*x(1) - x(1)) / 77.27;
+
+  dx(2) = 0.161*(x(0) - x(2));
+
+  return octave_value (dx);
+}
+</PRE>
+
+<P>
+The first line of the file,
+
+</P>
+
+<PRE>
+#include &#60;octave/oct.h&#62;
+</PRE>
+
+<P>
+includes declarations for all of Octave's internal functions that you
+will need.  If you need other functions from the standard C++ or C
+libraries, you can include the necessary headers here.
+
+</P>
+<P>
+The next two lines
+
+<PRE>
+DEFUN_DLD (oregonator, args, ,
+  "The `oregonator'.")
+</PRE>
+
+<P>
+declares the function.  The macro <CODE>DEFUN_DLD</CODE> and the macros that
+it depends on are defined in the files <TT>`defun-dld.h'</TT>,
+<TT>`defun.h'</TT>, and <TT>`defun-int.h'</TT> (these files are included in the
+header file <TT>`octave/oct.h'</TT>).
+
+</P>
+<P>
+Note that the third parameter to <CODE>DEFUN_DLD</CODE> (<CODE>nargout</CODE>) is
+not used, so it is omitted from the list of arguments to in order to
+avoid  the warning from gcc about an unused function parameter.
+
+</P>
+<P>
+simply declares an object to store the right hand sides of the
+differential equation, and
+
+</P>
+<P>
+The statement
+
+</P>
+
+<PRE>
+ColumnVector x = args(0).vector_value ();
+</PRE>
+
+<P>
+extracts a column vector from the input arguments.  The variable
+<CODE>args</CODE> is passed to functions defined with <CODE>DEFUN_DLD</CODE> as an
+<CODE>octave_value_list</CODE> object, which includes methods for getting the
+length of the list and extracting individual elements.
+
+</P>
+<P>
+In this example, we don't check for errors, but that is not difficult.
+All of the Octave's built-in functions do some form of checking on their
+arguments, so you can check the source code for those functions for
+examples of various strategies for verifying that the correct number and
+types of arguments have been supplied.
+
+</P>
+<P>
+The next statements
+
+</P>
+
+<PRE>
+ColumnVector dx (3);
+
+dx(0) = 77.27 * (x(1) - x(0)*x(1) + x(0)
+                 - 8.375e-06*pow (x(0), 2));
+
+dx(1) = (x(2) - x(0)*x(1) - x(1)) / 77.27;
+
+dx(2) = 0.161*(x(0) - x(2));
+</PRE>
+
+<P>
+define the right hand side of the differential equation.  Finally, we
+can return <CODE>dx</CODE>:
+
+</P>
+
+<PRE>
+return octave_value (dx);
+</PRE>
+
+<P>
+The actual return type is <CODE>octave_value_list</CODE>, but it is only
+necessary to convert the return type to an <CODE>octave_value</CODE> because
+there is a default constructor that can automatically create an object
+of that type from an <CODE>octave_value</CODE> object, so we can just use that
+instead.
+
+</P>
+<P>
+To use this file, your version of Octave must support dynamic linking.
+To find out if it does, type the command
+<KBD>octave_config_info ("dld")</KBD> at the Octave prompt.  Support for
+dynamic linking is included if this command returns 1.
+
+</P>
+<P>
+To compile the example file, type the command <SAMP>`mkoctfile
+oregonator.cc'</SAMP> at the shell prompt.  The script <CODE>mkoctfile</CODE> should
+have been installed along with Octave.  Running it will create a file
+called <TT>`oregonator.oct'</TT> that can be loaded by Octave.  To test the
+<TT>`oregonator.oct'</TT> file, start Octave and type the command
+
+</P>
+
+<PRE>
+oregonator ([1, 2, 3], 0)
+</PRE>
+
+<P>
+at the Octave prompt.  Octave should respond by printing
+
+</P>
+
+<PRE>
+ans =
+
+   77.269353
+   -0.012942
+   -0.322000
+</PRE>
+
+<P>
+You can now use the <TT>`oregonator.oct'</TT> file just as you would the
+<CODE>oregonator.m</CODE> file to solve the set of differential equations.
+
+</P>
+<P>
+On a 133 MHz Pentium running Linux, Octave can solve the problem shown
+in section <A HREF="octave_21.html#SEC152">Ordinary Differential Equations</A> in about 1.4 second using the
+dynamically linked function, compared to about 19 seconds using the
+M-file.  Similar decreases in execution time can be expected for other
+functions, particularly those that rely on functions like <CODE>lsode</CODE>
+that require user-supplied functions.
+
+</P>
+<P>
+Just as for M-files, Octave will automatically reload dynamically linked
+functions when the files that define them are more recent than the last
+time that the function was loaded.  Two variables are available to
+control how Octave behaves when dynamically linked functions are cleared
+or reloaded.
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>auto_unload_dot_oct_files</B>
+<DD><A NAME="IDX450"></A>
+If the value of <CODE>auto_unload_dot_oct_files</CODE> is nonzero, Octave will
+automatically unload any <TT>`.oct'</TT> files when there are no longer any
+functions in the symbol table that reference them.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>warn_reload_forces_clear</B>
+<DD><A NAME="IDX451"></A>
+If several functions have been loaded from the same file, Octave must
+clear all the functions before any one of them can be reloaded.  If
+<CODE>warn_reload_forces_clear</CODE>, Octave will warn you when this happens,
+and print a list of the additional functions that it is forced to clear.
+</DL>
+
+</P>
+<P>
+Additional examples for writing dynamically linked functions are
+available in the files in the <TT>`src'</TT> directory of the Octave
+distribution.  Currently, this includes the files
+
+</P>
+
+<PRE>
+balance.cc   fft2.cc      inv.cc       qzval.cc
+chol.cc      filter.cc    log.cc       schur.cc
+colloc.cc    find.cc      lsode.cc     sort.cc 
+dassl.cc     fsolve.cc    lu.cc        svd.cc
+det.cc       givens.cc    minmax.cc    syl.cc
+eig.cc       hess.cc      pinv.cc      
+expm.cc      ifft.cc      qr.cc     
+fft.cc       ifft2.cc     quad.cc
+</PRE>
+
+<P>
+These files use the macro <CODE>DEFUN_DLD_BUILTIN</CODE> instead of
+<CODE>DEFUN_DLD</CODE>.  The difference between these two macros is just that
+<CODE>DEFUN_DLD_BUILTIN</CODE> can define a built-in function that is not
+dynamically loaded if the operating system does not support dynamic
+linking.  To define your own dynamically linked functions you should use
+<CODE>DEFUN_DLD</CODE>.
+
+</P>
+<P>
+There is currently no detailed description of all the functions that you
+can call in a built-in function.  For the time being, you will have to
+read the source code for Octave.
+
+</P>
+
+
+<H2><A NAME="SEC98" HREF="octave_toc.html#TOC98">Organization of Functions Distributed with Octave</A></H2>
+
+<P>
+Many of Octave's standard functions are distributed as function files.
+They are loosely organized by topic, in subdirectories of
+<TT>`<VAR>octave-home</VAR>/lib/octave/<VAR>version</VAR>/m'</TT>, to make it easier
+to find them.
+
+</P>
+<P>
+The following is a list of all the function file subdirectories, and the
+types of functions you will find there.
+
+</P>
+<DL COMPACT>
+
+<DT><TT>`audio'</TT>
+<DD>
+Functions for playing and recording sounds.
+
+<DT><TT>`control'</TT>
+<DD>
+Functions for design and simulation of automatic control systems.
+
+<DT><TT>`elfun'</TT>
+<DD>
+Elementary functions.
+
+<DT><TT>`general'</TT>
+<DD>
+Miscellaneous matrix manipulations, like <CODE>flipud</CODE>, <CODE>rot90</CODE>,
+and <CODE>triu</CODE>, as well as other basic functions, like
+<CODE>is_matrix</CODE>, <CODE>nargchk</CODE>, etc.
+
+<DT><TT>`image'</TT>
+<DD>
+Image processing tools.  These functions require the X Window System.
+
+<DT><TT>`io'</TT>
+<DD>
+Input-ouput functions.
+
+<DT><TT>`linear-algebra'</TT>
+<DD>
+Functions for linear algebra.
+
+<DT><TT>`miscellaneous'</TT>
+<DD>
+Functions that don't really belong anywhere else.
+
+<DT><TT>`plot'</TT>
+<DD>
+A set of functions that implement the MATLAB-like plotting functions.
+
+<DT><TT>`polynomial'</TT>
+<DD>
+Functions for manipulating polynomials.
+
+<DT><TT>`set'</TT>
+<DD>
+Functions for creating and manipulating sets of unique values.
+
+<DT><TT>`signal'</TT>
+<DD>
+Functions for signal processing applications.
+
+<DT><TT>`specfun'</TT>
+<DD>
+Special functions.
+
+<DT><TT>`special-matrix'</TT>
+<DD>
+Functions that create special matrix forms.
+
+<DT><TT>`startup'</TT>
+<DD>
+Octave's system-wide startup file.
+
+<DT><TT>`statistics'</TT>
+<DD>
+Statistical functions.
+
+<DT><TT>`strings'</TT>
+<DD>
+Miscellaneous string-handling functions.
+
+<DT><TT>`time'</TT>
+<DD>
+Functions related to time keeping.
+</DL>
+
+<P><HR><P>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_11.html">previous</A>, <A HREF="octave_13.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+</BODY>
+</HTML>

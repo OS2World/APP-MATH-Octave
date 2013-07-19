@@ -1,0 +1,180 @@
+# Makefile for Octave 2.09 for OS/2
+# (c) Klaus Gebhardt, 1994 - 1995
+
+TOPDIR = .
+HOME = /
+
+include $(TOPDIR)/makeconf.os2
+
+PAT = PATOS2.ZIP
+DLF = DLFCN.ZIP
+SCR = SCRIPTS.ZIP
+
+all:
+	cd doc       ; $(MAKE) ; cd ..
+	cd doc       ; $(MAKE) ; cd ..
+	cd libcruft  ; $(MAKE) ; cd ..
+	cd liboctave ; $(MAKE) ; cd ..
+	cd src       ; $(MAKE) ; cd ..
+	$(MAKE) script-files
+
+install:
+	rm -f $(OCTDIR)/doc/* $(OCTDIR)/lisp/*
+	rm -f $(OCTDIR)/dlfcn/examples/* $(OCTDIR)/dlfcn/lib/*
+	rm -f $(OCTDIR)/dlfcn/octave/*
+	rm -f $(OCTDIR)/dll/octave?.dll $(OCTDIR)/dll/cruft?.dll
+	rm -f $(OCTDIR)/*.exe $(OCTDIR)/*.cmd
+	rm -rf $(OCTDIR)/scripts
+	cp doc/faq/oct-faq doc/faq/*.dvi doc/faq/*.ps $(OCTDIR)/doc
+	cp doc/faq/*.INF $(OCTDIR)/doc
+	cp doc/refcard/*.dvi doc/refcard/*.ps $(OCTDIR)/doc
+	cp doc/interpreter/*.dvi doc/interpreter/*.ps $(OCTDIR)/doc
+	cp doc/interpreter/*.1 doc/interpreter/octave doc/interpreter/octave-* $(OCTDIR)/doc
+	cp doc/interpreter/*.INF $(OCTDIR)/doc
+	cp doc/liboctave/*.dvi doc/liboctave/*.ps $(OCTDIR)/doc
+	cp doc/liboctave/liboct doc/liboctave/liboct-* $(OCTDIR)/doc
+	cp doc/liboctave/*.inf $(OCTDIR)/doc
+	cp dlfcn/examples/* $(OCTDIR)/dlfcn/examples
+	cp dlfcn/lib/* $(OCTDIR)/dlfcn/lib
+	cp dlfcn/octave/* $(OCTDIR)/dlfcn/octave
+	cp lisp/*.el $(OCTDIR)/lisp
+	cp lisp/*.elc $(OCTDIR)/lisp
+	cp dll/*.dll $(OCTDIR)/dll
+	cp octave.exe oct-view.exe inst-octave.cmd make-octfile.cmd $(OCTDIR)
+	cp -r scripts $(OCTDIR)
+
+script-files: dlfcn-files
+	rm -f $(SCR)
+	cd scripts/image/codecs ; for FILE in `ls *.cc` ; do cmd /c "..\\..\\..\\make-octfile $$FILE /d $(MSTDIR)" ; done ; cd ../../..
+	cd scripts.fat/image/codecs ; for FILE in `ls *.cc` ; do cmd /c "..\\..\\..\\make-octfile $$FILE /d $(MSTDIR)" ; done ; cd ../../..
+	zip -r9 $(SCR) scripts scripts.fat
+	unzip -t $(SCR)
+
+dlfcn-files:
+	rm -f dlfcn/octave/*.h dlfcn/lib/*.lib $(DLF)
+	cp libcruft/cruft?.lib dlfcn/lib
+	cp liboctave/octave2.lib src/octave1.lib dlfcn/lib
+	cp $(LIBDIR)/f2cdll.lib $(LIBDIR)/gnuinfo.lib dlfcn/lib
+	cp $(LIBDIR)/gnuinfo.lib $(LIBDIR)/kpathsea.lib dlfcn/lib
+	cp $(LIBDIR)/merlin.lib $(LIBDIR)/readline.lib dlfcn/lib
+	cp $(EMXDIR)/lib/gpp2.lib $(EMXDIR)/lib/stdcpp2.lib dlfcn/lib
+	cp liboctave/*.h liboctave/mx-inlines.cc src/*.h dlfcn/octave
+	cp config.emx dlfcn/octave/config.h
+	cd ../octave-codecs ; make octave ; cd $(MSTDIR)
+	cd dlfcn/examples ; for FILE in `ls *.cc` ; do cmd /c "..\\..\\make-octfile $$FILE /d $(MSTDIR)" ; done ; cd ../..
+	zip -r9 $(DLF) dlfcn
+	unzip -t $(DLF)
+
+patches:
+	rm -f PATCHES.OS2 $(PAT)
+	-diff -cwr $(ORIGDIR)/liboctave $(MSTDIR)/liboctave | sed -f patches.sed >PATCHES.OS2
+	-diff -cwr $(ORIGDIR)/libcruft $(MSTDIR)/libcruft | sed -f patches.sed >>PATCHES.OS2
+	-diff -cwr $(ORIGDIR)/src $(MSTDIR)/src | sed -f patches.sed >>PATCHES.OS2
+	-diff -cwr $(ORIGDIR)/scripts $(MSTDIR)/scripts | sed -f patches.sed >>PATCHES.OS2
+	-diff -cwr $(ORIGDIR)/doc $(MSTDIR)/doc | sed -f patches.sed >>PATCHES.OS2
+	zip -r9 $(PAT) libcruft/*.os2 libcruft/*.def libcruft/misc/gen-d1mach.c
+	zip -r9 $(PAT) liboctave/*.os2
+	zip -r9 $(PAT) scripts.fat/*.fat scripts.fat/*.sed scripts.fat/*.cmd
+	zip -r9 $(PAT) doc/*.os2 src/*.os2 src/octave.def *.os2 *.emx *.sed *.cmd *.ico
+	unzip -t $(PAT)
+
+clean:
+	cd liboctave ; $(MAKE) clean ; cd ..
+	cd libcruft  ; $(MAKE) clean ; cd ..
+	cd src       ; $(MAKE) clean ; cd ..
+	rm -f *.exe *.zip dll/*.dll
+
+dist: binary-dist source-dist
+
+binary-dist:
+	deltree /Q /Y ..\\rollout\\octave
+	rm -f ../rollout/octave-$(OCTVER)-b$(OCTBUILD).zip
+	mkdir ../rollout/octave
+	mkdir ../rollout/octave/dll
+	mkdir ../rollout/octave/doc
+	mkdir ../rollout/octave/etc
+	mkdir ../rollout/octave/lisp
+	cp $(ORIGDIR)/BUGS $(ORIGDIR)/ChangeLog.* ../rollout/octave
+	cp $(ORIGDIR)/COPYING $(ORIGDIR)/NEWS.*   ../rollout/octave
+	cp $(ORIGDIR)/PROJECTS $(ORIGDIR)/README  ../rollout/octave
+	cp $(ORIGDIR)/ROADMAP $(ORIGDIR)/THANKS   ../rollout/octave
+	cp $(ORIGDIR)/SENDING-PATCHES             ../rollout/octave/SENDING.PAT
+	cp $(EMXDIR)/doc/COPYING.EMX              ../rollout/octave
+	cp $(EMXDIR)/dll/emx.dll $(EMXDIR)/dll/emxlibcs.dll ../rollout/octave/dll
+	cp $(EMXDIR)/etc/termcap.*                ../rollout/octave/etc
+	cp ../../utils/texinfo-$(TEXIVER)/info/*.dll       ../rollout/octave/dll
+	cp ../../utils/texinfo-$(TEXIVER)/view/gnuview.exe ../rollout/octave
+	cp ../../utils/texinfo-$(TEXIVER)/info/info.exe    ../rollout/octave
+	cp ../../utils/texinfo-$(TEXIVER)/info/info.ico    ../rollout/octave
+	cp ../../libs/f2c/f2c.dll    ../rollout/octave/dll
+	cp ../../libs/stdcpp/*.dll   ../rollout/octave/dll
+	cp ../../libs/kpathsea/*.dll ../rollout/octave/dll
+	cp ../../libs/readline/*.dll ../rollout/octave/dll
+	cp ../../utils/mkfifo/mkfifo.exe  ../rollout/octave
+	cp ../../utils/mkfifo/nmpserv.exe ../rollout/octave
+	cp Changes.OS2 README.OS2           ../rollout/octave
+	cp DLFCN.ZIP PATOS2.ZIP SCRIPTS.ZIP ../rollout/octave
+	cp dll/*.dll ../rollout/octave/dll
+	cp doc/dir                                         ../rollout/octave/doc
+	cp doc/faq/oct-faq doc/faq/*.dvi doc/faq/*.ps      ../rollout/octave/doc
+	cp doc/faq/*.INF                                   ../rollout/octave/doc
+	cp doc/refcard/*.dvi doc/refcard/*.ps              ../rollout/octave/doc
+	cp doc/interpreter/*.dvi doc/interpreter/*.ps      ../rollout/octave/doc
+	cp doc/interpreter/octave doc/interpreter/octave-* ../rollout/octave/doc
+	cp doc/interpreter/*.INF doc/interpreter/*.1       ../rollout/octave/doc
+	cp doc/liboctave/*.dvi doc/liboctave/*.ps          ../rollout/octave/doc
+	cp doc/liboctave/liboct doc/liboctave/liboct-*     ../rollout/octave/doc
+	cp doc/liboctave/*.inf                             ../rollout/octave/doc
+	cp lisp/* ../rollout/octave/lisp
+	cp inst-octave.cmd make-octfile.cmd   ../rollout/octave
+	cp oct-view.exe octave.exe octave.ico ../rollout/octave
+	cp h:/bin/unzip.exe                   ../rollout/octave
+	cd ../rollout ; zip -r9 octave-$(OCTVER)-b$(OCTBUILD).zip octave ; cd $(MSTDIR)
+	cd ../rollout ; unzip -t octave-$(OCTVER)-b$(OCTBUILD).zip       ; cd $(MSTDIR)
+	deltree /Q /Y ..\\rollout\\octave
+
+source-dist:
+	deltree /Q /Y ..\\rollout\\octave
+	rm -f ../rollout/octave-$(OCTVER)-s$(OCTBUILD).zip
+	mkdir ../rollout/octave
+	mkdir ../rollout/octave/.make
+	mkdir ../rollout/octave/libs
+	mkdir ../rollout/octave/octave
+	mkdir ../rollout/octave/utils
+	cp -r ../../.make ../rollout/octave
+	cp -r ../../libs/f2c      ../rollout/octave/libs
+	cp -r ../../libs/kpathsea ../rollout/octave/libs
+	cp -r ../../libs/merlin   ../rollout/octave/libs
+	cp -r ../../libs/readline ../rollout/octave/libs
+	cp -r ../../libs/stdcpp   ../rollout/octave/libs
+	cp -r ../../utils/mkfifo             ../rollout/octave/utils
+	cp -r ../../utils/texinfo-$(TEXIVER) ../rollout/octave/utils
+	cp -r ../../octave/octave-$(OCTVER) ../rollout/octave/octave
+	cp -r ../../octave/octave-codecs    ../rollout/octave/octave
+	cp $(ORIGDIR)/BUGS $(ORIGDIR)/ChangeLog.* ../rollout/octave/octave/octave-$(OCTVER)
+	cp $(ORIGDIR)/COPYING $(ORIGDIR)/NEWS.*   ../rollout/octave/octave/octave-$(OCTVER)
+	cp $(ORIGDIR)/PROJECTS $(ORIGDIR)/README  ../rollout/octave/octave/octave-$(OCTVER)
+	cp $(ORIGDIR)/ROADMAP $(ORIGDIR)/THANKS   ../rollout/octave/octave/octave-$(OCTVER)
+	cp $(ORIGDIR)/SENDING-PATCHES             ../rollout/octave/octave/octave-$(OCTVER)/SENDING.PAT
+	cd ../rollout/octave/libs/f2c         ; make clean ; cd $(MSTDIR)
+	cd ../rollout/octave/libs/kpathsea    ; make clean ; cd $(MSTDIR)
+	cd ../rollout/octave/libs/merlin      ; make clean ; cd $(MSTDIR)
+	cd ../rollout/octave/libs/readline    ; make clean ; cd $(MSTDIR)
+	cd ../rollout/octave/libs/stdcpp      ; make clean ; cd $(MSTDIR)
+	cd ../rollout/octave/libs/stdcpp/test ; make clean ; cd $(MSTDIR)
+	cd ../rollout/octave/utils/mkfifo             ; make clean                 ; cd $(MSTDIR)
+	cd ../rollout/octave/utils/texinfo-$(TEXIVER) ; make -f makefile.os2 clean ; cd $(MSTDIR)
+	cd ../rollout/octave/octave/octave-$(OCTVER)      ; make -f makefile.os2 clean ; cd $(MSTDIR)
+	cd ../rollout/octave/octave/octave-$(OCTVER)/doc  ; make -f makefile.os2 clean ; cd $(MSTDIR)
+	cd ../rollout/octave/octave/octave-codecs         ; make clean                 ; cd $(MSTDIR)
+	rm -rf ../rollout/octave/octave/octave-$(OCTVER)/scripts.fat
+	mkdir ../rollout/octave/octave/octave-$(OCTVER)/scripts.fat
+	-cp scripts.fat/* ../rollout/octave/octave/octave-$(OCTVER)/scripts.fat
+	rm -f ../rollout/octave/octave/octave-$(OCTVER)/dlfcn/octave/*
+	rm -f ../rollout/octave/octave/octave-$(OCTVER)/dlfcn/lib/*
+	rm -f ../rollout/octave/octave/octave-$(OCTVER)/scripts/image/codecs/*.oct
+	rm -f  ../rollout/octave/octave/octave-codecs/Blume.BMP
+	rm -f  ../rollout/octave/octave/octave-codecs/Jupiter.PNM
+	cd ../rollout ; zip -r9 octave-$(OCTVER)-s$(OCTBUILD).zip octave ; cd $(MSTDIR)
+	cd ../rollout ; unzip -t octave-$(OCTVER)-s$(OCTBUILD).zip       ; cd $(MSTDIR)
+	deltree /Q /Y ..\\rollout\\octave

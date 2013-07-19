@@ -1,0 +1,152 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from ./octave.texi on 9 October 1998 -->
+
+<TITLE>GNU Octave - Evaluation</TITLE>
+</HEAD>
+<BODY>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_9.html">previous</A>, <A HREF="octave_11.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC77" HREF="octave_toc.html#TOC77">Evaluation</A></H1>
+
+<P>
+Normally, you evaluate expressions simply by typing them at the Octave
+prompt, or by asking Octave to interpret commands that you have saved in
+a file.
+
+</P>
+<P>
+Sometimes, you may find it necessary to evaluate an expression that has
+been computed and stored in a string, or use a string as the name of a
+function to call.  The <CODE>eval</CODE> and <CODE>feval</CODE> functions allow you
+to do just that, and are necessary in order to evaluate commands that
+are not known until run time, or to write functions that will need to
+call user-supplied functions.
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>eval</B> <I>(<VAR>command</VAR>)</I>
+<DD><A NAME="IDX385"></A>
+Parse the string <VAR>command</VAR> and evaluate it as if it were an Octave
+program, returning the last value computed.  The <VAR>command</VAR> is
+evaluated in the current context, so any results remain available after
+<CODE>eval</CODE> returns.  For example,
+
+</P>
+
+<PRE>
+eval ("a = 13")
+     -| a = 13
+     => 13
+</PRE>
+
+<P>
+In this case, the value of the evaluated expression is printed and it is
+also returned returned from <CODE>eval</CODE>.  Just as with any other
+expression, you can turn printing off by ending the expression in a
+semicolon.  For example,
+
+</P>
+
+<PRE>
+eval ("a = 13;")
+     => 13
+</PRE>
+
+<P>
+In this example, the variable <CODE>a</CODE> has been given the value 13, but
+the value of the expression is not printed.  You can also turn off
+automatic printing for all expressions executed by <CODE>eval</CODE> using the
+variable <CODE>default_eval_print_flag</CODE>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>default_eval_print_flag</B>
+<DD><A NAME="IDX386"></A>
+If the value of this variable is nonzero, Octave prints the results of
+commands executed by <CODE>eval</CODE> that do not end with semicolons.  If it
+is zero, automatic printing is suppressed.  The default value is 1.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>feval</B> <I>(<VAR>name</VAR>, ...)</I>
+<DD><A NAME="IDX387"></A>
+Evaluate the function named <VAR>name</VAR>.  Any arguments after the first
+are passed on to the named function.  For example,
+
+</P>
+
+<PRE>
+feval ("acos", -1)
+     => 3.1416
+</PRE>
+
+<P>
+calls the function <CODE>acos</CODE> with the argument <SAMP>`-1'</SAMP>.
+
+</P>
+<P>
+The function <CODE>feval</CODE> is necessary in order to be able to write
+functions that call user-supplied functions, because Octave does not
+have a way to declare a pointer to a function (like C) or to declare a
+special kind of variable that can be used to hold the name of a function
+(like <CODE>EXTERNAL</CODE> in Fortran).  Instead, you must refer to functions
+by name, and use <CODE>feval</CODE> to call them.
+</DL>
+
+</P>
+<P>
+Here is a simple-minded function using <CODE>feval</CODE> that finds the root
+of a user-supplied function of one variable using Newton's method.
+
+</P>
+
+<PRE>
+<A NAME="IDX388"></A><A NAME="IDX389"></A>function result = newtroot (fname, x)
+
+# usage: newtroot (fname, x)
+#
+#   fname : a string naming a function f(x).
+#   x     : initial guess
+
+  delta = tol = sqrt (eps);
+  maxit = 200;
+  fx = feval (fname, x);
+  for i = 1:maxit
+    if (abs (fx) &#60; tol)
+      result = x;
+      return;
+    else
+      fx_new = feval (fname, x + delta);
+      deriv = (fx_new - fx) / delta;
+      x = x - fx / deriv;
+      fx = fx_new;
+    endif
+  endfor
+
+  result = x;
+
+endfunction
+</PRE>
+
+<P>
+Note that this is only meant to be an example of calling user-supplied
+functions and should not be taken too seriously.  In addition to using a
+more robust algorithm, any serious code would check the number and type
+of all the arguments, ensure that the supplied function really was a
+function, etc.  See See section <A HREF="octave_5.html#SEC52">Predicates for Numeric Objects</A>, for example,
+for a list of predicates for numeric objects, and See section <A HREF="octave_8.html#SEC61">Status of Variables</A>, for a description of the <CODE>exist</CODE> function.
+
+</P>
+<P><HR><P>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_9.html">previous</A>, <A HREF="octave_11.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+</BODY>
+</HTML>

@@ -1,0 +1,35 @@
+# Common rules for octave's libcruft directories.
+# Modified by Klaus Gebhardt, 1994 - 1995
+
+CFLAGS := -mprobe $(CFLAGS)
+FFLAGS := -mprobe $(FFLAGS)
+
+SOURCES = *.f
+
+CRUFT_FSRC = $(wildcard *.f)
+CRUFT_BASE = $(notdir $(CRUFT_FSRC))
+CRUFT_CSRC = $(patsubst %.f, %.c, $(CRUFT_BASE))
+CRUFT_OBJ = $(patsubst %.f, %.o, $(CRUFT_BASE))
+CRUFT_OMF = $(patsubst %.f, %.obj, $(CRUFT_BASE))
+
+DEP = $(CRUFT_OMF)
+
+ifeq ($(DLLNAME),misc)
+CRUFT_COBJ = machar.obj dostop.obj lo-error.obj f77-fcn.obj
+DLLDEP = $(DEP) $(CRUFT_COBJ)
+else
+DLLDEP = $(DEP)
+endif
+
+all: $(CRUFT_OBJ)
+
+omf: $(DLLDEP)
+
+lib: ../$(DLLNAME).lib
+
+../$(DLLNAME).lib: $(DLLDEP)
+	rm -f $@
+	emxomfar r $@ $(DLLDEP)
+
+clean:
+	rm -f *.a *.lib *.o *.obj *.exe

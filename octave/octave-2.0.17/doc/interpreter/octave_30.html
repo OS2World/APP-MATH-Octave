@@ -1,0 +1,1771 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from ./octave.texi on 9 October 1998 -->
+
+<TITLE>GNU Octave - System Utilities</TITLE>
+</HEAD>
+<BODY>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_29.html">previous</A>, <A HREF="octave_31.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC165" HREF="octave_toc.html#TOC165">System Utilities</A></H1>
+
+<P>
+This chapter describes the functions that are available to allow you to
+get information about what is happening outside of Octave, while it is
+still running, and use this information in your program.  For example,
+you can get information about environment variables, the current time,
+and even start other programs from the Octave prompt.
+
+</P>
+
+
+
+<H2><A NAME="SEC166" HREF="octave_toc.html#TOC166">Timing Utilities</A></H2>
+
+<P>
+Octave's core set of functions for manipulating time values are
+patterned after the corresponding functions from the standard C library.
+Several of these functions use a data structure for time that includes
+the following elements:
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>usec</CODE>
+<DD>
+Microseconds after the second (0-999999).
+
+<DT><CODE>sec</CODE>
+<DD>
+Seconds after the minute (0-61).  This number can be 61 to account
+for leap seconds.
+
+<DT><CODE>min</CODE>
+<DD>
+Minutes after the hour (0-59).
+
+<DT><CODE>hour</CODE>
+<DD>
+Hours since midnight (0-23).
+
+<DT><CODE>mday</CODE>
+<DD>
+Day of the month (1-31).
+
+<DT><CODE>mon</CODE>
+<DD>
+Months since January (0-11).
+
+<DT><CODE>year</CODE>
+<DD>
+Years since 1900.
+
+<DT><CODE>wday</CODE>
+<DD>
+Days since Sunday (0-6).
+
+<DT><CODE>yday</CODE>
+<DD>
+Days since January 1 (0-365).
+
+<DT><CODE>isdst</CODE>
+<DD>
+Daylight Savings Time flag.
+
+<DT><CODE>zone</CODE>
+<DD>
+Time zone.
+</DL>
+
+<P>
+In the descriptions of the following functions, this structure is
+referred to as a <VAR>tm_struct</VAR>.
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U>  <B>time</B> <I>()</I>
+<DD><A NAME="IDX838"></A>
+Return the current time as the number of seconds since the epoch.  The
+epoch is referenced to 00:00:00 CUT (Coordinated Universal Time) 1 Jan
+1970.  For example, on Monday February 17, 1997 at 07:15:06 CUT, the
+value returned by <CODE>time</CODE> was 856163706.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>ctime</B> <I>(<VAR>t</VAR>)</I>
+<DD><A NAME="IDX839"></A>
+Convert a value returned from <CODE>time</CODE> (or any other nonnegative
+integer), to the local time and return a string of the same form as
+<CODE>asctime</CODE>.  The function <CODE>ctime (time)</CODE> is equivalent to
+<CODE>asctime (localtime (time))</CODE>.  For example,
+
+</P>
+
+<PRE>
+ctime (time ())
+     => "Mon Feb 17 01:15:06 1997"
+</PRE>
+
+</DL>
+
+<P>
+<DL>
+<DT><U>Loadable Function:</U>  <B>gmtime</B> <I>(<VAR>t</VAR>)</I>
+<DD><A NAME="IDX840"></A>
+Given a value returned from time (or any nonnegative integer),
+return a time structure corresponding to CUT.  For example,
+
+</P>
+
+<PRE>
+gmtime (time ())
+     => {
+           usec = 0
+           year = 97
+           mon = 1
+           mday = 17
+           sec = 6
+           zone = CST
+           min = 15
+           wday = 1
+           hour = 7
+           isdst = 0
+           yday = 47
+         }
+</PRE>
+
+</DL>
+
+<P>
+<DL>
+<DT><U>Loadable Function:</U>  <B>localtime</B> <I>(<VAR>t</VAR>)</I>
+<DD><A NAME="IDX841"></A>
+Given a value returned from time (or any nonnegative integer),
+return a time structure corresponding to the local time zone.
+
+</P>
+
+<PRE>
+localtime (time ())
+     => {
+           usec = 0
+           year = 97
+           mon = 1
+           mday = 17
+           sec = 6
+           zone = CST
+           min = 15
+           wday = 1
+           hour = 1
+           isdst = 0
+           yday = 47
+         }
+</PRE>
+
+</DL>
+
+<P>
+<DL>
+<DT><U>Loadable Function:</U>  <B>mktime</B> <I>(<VAR>tm_struct</VAR>)</I>
+<DD><A NAME="IDX842"></A>
+Convert a time structure corresponding to the local time to the number
+of seconds since the epoch.  For example,
+
+</P>
+
+<PRE>
+mktime (localtime (time ())
+     => 856163706
+</PRE>
+
+</DL>
+
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>asctime</B> <I>(<VAR>tm_struct</VAR>)</I>
+<DD><A NAME="IDX843"></A>
+Convert a time structure to a string using the following five-field
+format: Thu Mar 28 08:40:14 1996.  For example,
+
+</P>
+
+<PRE>
+asctime (localtime (time ())
+     => "Mon Feb 17 01:15:06 1997\n"
+</PRE>
+
+<P>
+This is equivalent to <CODE>ctime (time ())</CODE>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U>  <B>strftime</B> <I>(<VAR>tm_struct</VAR>)</I>
+<DD><A NAME="IDX844"></A>
+Format a time structure in a flexible way using <SAMP>`%'</SAMP> substitutions
+similar to those in <CODE>printf</CODE>.  Except where noted, substituted
+fields have a fixed size; numeric fields are padded if necessary.
+Padding is with zeros by default; for fields that display a single
+number, padding can be changed or inhibited by following the <SAMP>`%'</SAMP>
+with one of the modifiers described below.  Unknown field specifiers are
+copied as normal characters.  All other characters are copied to the
+output without change.  For example,
+
+</P>
+
+<PRE>
+strftime ("%r (%Z) %A %e %B %Y", localtime (time ())
+     => "01:15:06 AM (CST) Monday 17 February 1997"
+</PRE>
+
+<P>
+Octave's <CODE>strftime</CODE> function supports a superset of the ANSI C
+field specifiers.
+
+</P>
+<P>
+Literal character fields:
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>%</CODE>
+<DD>
+% character.
+
+<DT><CODE>n</CODE>
+<DD>
+Newline character.
+
+<DT><CODE>t</CODE>
+<DD>
+Tab character.
+</DL>
+
+<P>
+Numeric modifiers (a nonstandard extension):
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>- (dash)</CODE>
+<DD>
+Do not pad the field.
+
+<DT><CODE>_ (underscore)</CODE>
+<DD>
+Pad the field with spaces.
+</DL>
+
+<P>
+Time fields:
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>%H</CODE>
+<DD>
+Hour (00-23).
+
+<DT><CODE>%I</CODE>
+<DD>
+Hour (01-12).
+
+<DT><CODE>%k</CODE>
+<DD>
+Hour (0-23).
+
+<DT><CODE>%l</CODE>
+<DD>
+Hour (1-12).
+
+<DT><CODE>%M</CODE>
+<DD>
+Minute (00-59).
+
+<DT><CODE>%p</CODE>
+<DD>
+Locale's AM or PM.
+
+<DT><CODE>%r</CODE>
+<DD>
+Time, 12-hour (hh:mm:ss [AP]M).
+
+<DT><CODE>%R</CODE>
+<DD>
+Time, 24-hour (hh:mm).
+
+<DT><CODE>%s</CODE>
+<DD>
+Time in seconds since 00:00:00, Jan 1, 1970 (a nonstandard extension).
+
+<DT><CODE>%S</CODE>
+<DD>
+Second (00-61).
+
+<DT><CODE>%T</CODE>
+<DD>
+Time, 24-hour (hh:mm:ss).
+
+<DT><CODE>%X</CODE>
+<DD>
+Locale's time representation (%H:%M:%S).
+
+<DT><CODE>%Z</CODE>
+<DD>
+Time zone (EDT), or nothing if no time zone is determinable.
+</DL>
+
+<P>
+Date fields:
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>%a</CODE>
+<DD>
+Locale's abbreviated weekday name (Sun-Sat).
+
+<DT><CODE>%A</CODE>
+<DD>
+Locale's full weekday name, variable length (Sunday-Saturday).
+
+<DT><CODE>%b</CODE>
+<DD>
+Locale's abbreviated month name (Jan-Dec).
+
+<DT><CODE>%B</CODE>
+<DD>
+Locale's full month name, variable length (January-December).
+
+<DT><CODE>%c</CODE>
+<DD>
+Locale's date and time (Sat Nov 04 12:02:33 EST 1989).
+
+<DT><CODE>%C</CODE>
+<DD>
+Century (00-99).
+
+<DT><CODE>%d</CODE>
+<DD>
+Day of month (01-31).
+
+<DT><CODE>%e</CODE>
+<DD>
+Day of month ( 1-31).
+
+<DT><CODE>%D</CODE>
+<DD>
+Date (mm/dd/yy).
+
+<DT><CODE>%h</CODE>
+<DD>
+Same as %b.
+
+<DT><CODE>%j</CODE>
+<DD>
+Day of year (001-366).
+
+<DT><CODE>%m</CODE>
+<DD>
+Month (01-12).
+
+<DT><CODE>%U</CODE>
+<DD>
+Week number of year with Sunday as first day of week (00-53).
+
+<DT><CODE>%w</CODE>
+<DD>
+Day of week (0-6).
+
+<DT><CODE>%W</CODE>
+<DD>
+Week number of year with Monday as first day of week (00-53).
+
+<DT><CODE>%x</CODE>
+<DD>
+Locale's date representation (mm/dd/yy).
+
+<DT><CODE>%y</CODE>
+<DD>
+Last two digits of year (00-99).
+
+<DT><CODE>%Y</CODE>
+<DD>
+Year (1970-).
+</DL>
+</DL>
+
+<P>
+Most of the remaining functions described in this section are not
+patterned after the standard C library.  Some are available for
+compatiblity with MATLAB and others are provided because they are
+useful.
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>clock</B> <I>()</I>
+<DD><A NAME="IDX845"></A>
+Return a vector containing the current year, month (1-12), day (1-31),
+hour (0-23), minute (0-59) and second (0-61).  For example,
+
+</P>
+
+<PRE>
+clock ()
+     => [ 1993, 8, 20, 4, 56, 1 ]
+</PRE>
+
+<P>
+The function clock is more accurate on systems that have the
+<CODE>gettimeofday</CODE> function.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>date</B> <I>()</I>
+<DD><A NAME="IDX846"></A>
+Return the date as a character string in the form DD-MMM-YY.  For
+example,
+
+</P>
+
+<PRE>
+date ()
+     => "20-Aug-93"
+</PRE>
+
+</DL>
+
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>etime</B> <I>(<VAR>t1</VAR>, <VAR>t2</VAR>)</I>
+<DD><A NAME="IDX847"></A>
+Return the difference (in seconds) between two time values returned from
+<CODE>clock</CODE>.  For example:
+
+</P>
+
+<PRE>
+t0 = clock ();
+# many computations later...
+elapsed_time = etime (clock (), t0);
+</PRE>
+
+<P>
+will set the variable <CODE>elapsed_time</CODE> to the number of seconds since
+the variable <CODE>t0</CODE> was set.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U> [<VAR>total</VAR>, <VAR>user</VAR>, <VAR>system</VAR>] = <B>cputime</B> <I>();</I>
+<DD><A NAME="IDX848"></A>
+Return the CPU time used by your Octave session.  The first output is
+the total time spent executing your process and is equal to the sum of
+second and third outputs, which are the number of CPU seconds spent
+executing in user mode and the number of CPU seconds spent executing in
+system mode, respectively.  If your system does not have a way to report
+CPU time usage, <CODE>cputime</CODE> returns 0 for each of its output values.
+Note that because Octave used some CPU time to start, it is reasonable
+to check to see if <CODE>cputime</CODE> works by checking to see if the total
+CPU time used is nonzero.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>is_leap_year</B> <I>(<VAR>year</VAR>)</I>
+<DD><A NAME="IDX849"></A>
+Return 1 if the given year is a leap year and 0 otherwise.  If no
+arguments are provided, <CODE>is_leap_year</CODE> will use the current year.
+For example,
+
+</P>
+
+<PRE>
+is_leap_year (2000)
+     => 1
+</PRE>
+
+</DL>
+
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>tic</B> <I>()</I>
+<DD><A NAME="IDX850"></A>
+<DT><U>Function File:</U>  <B>toc</B> <I>()</I>
+<DD><A NAME="IDX851"></A>
+These functions set and check a wall-clock timer.  For example,
+
+</P>
+
+<PRE>
+tic ();
+# many computations later...
+elapsed_time = toc ();
+</PRE>
+
+<P>
+will set the variable <CODE>elapsed_time</CODE> to the number of seconds since
+the most recent call to the function <CODE>tic</CODE>.
+
+</P>
+<P>
+If you are more interested in the CPU time that your process used, you
+should use the <CODE>cputime</CODE> function instead.  The <CODE>tic</CODE> and
+<CODE>toc</CODE> functions report the actual wall clock time that elapsed
+between the calls.  This may include time spent processing other jobs or
+doing nothing at all.  For example,
+
+</P>
+
+<PRE>
+tic (); sleep (5); toc ()
+     => 5
+t = cputime (); sleep (5); cputime () - t
+     => 0
+</PRE>
+
+<P>
+(This example also illustrates that the CPU timer may have a fairly
+coarse resolution.)
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>pause</B> <I>(<VAR>seconds</VAR>)</I>
+<DD><A NAME="IDX852"></A>
+Suspend the execution of the program.  If invoked without any arguments,
+Octave waits until you type a character.  With a numeric argument, it
+pauses for the given number of seconds.  For example, the following
+statement prints a message and then waits 5 seconds before clearing the
+screen.
+
+</P>
+
+<PRE>
+fprintf (stderr, "wait please...\n");
+pause (5);
+clc;
+</PRE>
+
+</DL>
+
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>sleep</B> <I>(<VAR>seconds</VAR>)</I>
+<DD><A NAME="IDX853"></A>
+Suspend the execution of the program for the given number of seconds.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>usleep</B> <I>(<VAR>microseconds</VAR>)</I>
+<DD><A NAME="IDX854"></A>
+Suspend the execution of the program for the given number of
+microseconds.  On systems where it is not possible to sleep for periods
+of time less than one second, <CODE>usleep</CODE> will pause the execution for
+<CODE>round (<VAR>microseconds</VAR> / 1e6)</CODE> seconds.
+</DL>
+
+</P>
+
+
+<H2><A NAME="SEC167" HREF="octave_toc.html#TOC167">Filesystem Utilities</A></H2>
+
+<P>
+Octave includes the following functions for renaming and deleting files,
+creating, deleting, and reading directories, and for getting information
+about the status of files.
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U> [<VAR>err</VAR>, <VAR>msg</VAR>] = <B>rename</B> <I>(<VAR>old</VAR>, <VAR>new</VAR>)</I>
+<DD><A NAME="IDX855"></A>
+Change the name of file <VAR>old</VAR> to <VAR>new</VAR>.
+
+</P>
+<P>
+If successful, <VAR>err</VAR> is 0 and <VAR>msg</VAR> is an empty string.
+Otherwise, <VAR>err</VAR> is nonzero and <VAR>msg</VAR> contains a
+system-dependent error message.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U> [<VAR>err</VAR>, <VAR>msg</VAR>] = <B>unlink</B> <I>(<VAR>file</VAR>)</I>
+<DD><A NAME="IDX856"></A>
+Delete <VAR>file</VAR>.
+
+</P>
+<P>
+If successful, <VAR>err</VAR> is 0 and <VAR>msg</VAR> is an empty string.
+Otherwise, <VAR>err</VAR> is nonzero and <VAR>msg</VAR> contains a
+system-dependent error message.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U> [<VAR>files</VAR>, <VAR>err</VAR>, <VAR>msg</VAR>] = <B>readdir</B> <I>(<VAR>dir</VAR>)</I>
+<DD><A NAME="IDX857"></A>
+Return names of the files in the directory <VAR>dir</VAR> as an array of
+strings.  If an error occurs, return an empty matrix in <VAR>files</VAR>.
+
+</P>
+<P>
+If successful, <VAR>err</VAR> is 0 and <VAR>msg</VAR> is an empty string.
+Otherwise, <VAR>err</VAR> is nonzero and <VAR>msg</VAR> contains a
+system-dependent error message.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U> [<VAR>err</VAR>, <VAR>msg</VAR>] = <B>mkdir</B> <I>(<VAR>dir</VAR>)</I>
+<DD><A NAME="IDX858"></A>
+Create a directory named <VAR>dir</VAR>.
+
+</P>
+<P>
+If successful, <VAR>err</VAR> is 0 and <VAR>msg</VAR> is an empty string.
+Otherwise, <VAR>err</VAR> is nonzero and <VAR>msg</VAR> contains a
+system-dependent error message.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U> [<VAR>err</VAR>, <VAR>msg</VAR>] = <B>rmdir</B> <I>(<VAR>dir</VAR>)</I>
+<DD><A NAME="IDX859"></A>
+Remove the directory named <VAR>dir</VAR>.
+
+</P>
+<P>
+If successful, <VAR>err</VAR> is 0 and <VAR>msg</VAR> is an empty string.
+Otherwise, <VAR>err</VAR> is nonzero and <VAR>msg</VAR> contains a
+system-dependent error message.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U> [<VAR>err</VAR>, <VAR>msg</VAR>] = <B>mkfifo</B> <I>(<VAR>name</VAR>)</I>
+<DD><A NAME="IDX860"></A>
+Create a FIFO special file.
+
+</P>
+<P>
+If successful, <VAR>err</VAR> is 0 and <VAR>msg</VAR> is an empty string.
+Otherwise, <VAR>err</VAR> is nonzero and <VAR>msg</VAR> contains a
+system-dependent error message.
+</DL>
+
+</P>
+
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>umask</B> <I>(<VAR>mask</VAR>)</I>
+<DD><A NAME="IDX861"></A>
+Set the permission mask for file creation.  The parameter <VAR>mask</VAR> is
+interpreted as an octal number.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U> [<VAR>info</VAR>, <VAR>err</VAR>, <VAR>msg</VAR>] = <B>stat</B> <I>(<VAR>file</VAR>)</I>
+<DD><A NAME="IDX862"></A>
+<DT><U>Built-in Function:</U> [<VAR>info</VAR>, <VAR>err</VAR>, <VAR>msg</VAR>] = <B>lstat</B> <I>(<VAR>file</VAR>)</I>
+<DD><A NAME="IDX863"></A>
+Return a structure <VAR>s</VAR> containing the following information about
+<VAR>file</VAR>.
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>dev</CODE>
+<DD>
+ID of device containing a directory entry for this file.
+
+<DT><CODE>ino</CODE>
+<DD>
+File number of the file.
+
+<DT><CODE>modestr</CODE>
+<DD>
+File mode, as a string of ten letters or dashes as would be returned by
+<KBD>ls -l</KBD>.
+
+<DT><CODE>nlink</CODE>
+<DD>
+Number of links.
+
+<DT><CODE>uid</CODE>
+<DD>
+User ID of file's owner.
+
+<DT><CODE>gid</CODE>
+<DD>
+Group ID of file's group.
+
+<DT><CODE>rdev</CODE>
+<DD>
+ID of device for block or character special files.
+
+<DT><CODE>size</CODE>
+<DD>
+Size in bytes.
+
+<DT><CODE>atime</CODE>
+<DD>
+Time of last access in the same form as time values returned from
+<CODE>time</CODE>.  See section <A HREF="octave_30.html#SEC166">Timing Utilities</A>.
+
+<DT><CODE>mtime</CODE>
+<DD>
+Time of last modification in the same form as time values returned from
+<CODE>time</CODE>.  See section <A HREF="octave_30.html#SEC166">Timing Utilities</A>.
+
+<DT><CODE>ctime</CODE>
+<DD>
+Time of last file status change in the same form as time values returned from
+<CODE>time</CODE>.  See section <A HREF="octave_30.html#SEC166">Timing Utilities</A>.
+
+<DT><CODE>blksize</CODE>
+<DD>
+Size of blocks in the file.
+
+<DT><CODE>blocks</CODE>
+<DD>
+Number of blocks allocated for file.
+</DL>
+
+<P>
+If the call is successful <VAR>err</VAR> is 0 and <VAR>msg</VAR> is an empty
+string.  If the file does not exist, or some other error occurs, <VAR>s</VAR>
+is an empty matrix, <VAR>err</VAR> is -1, and <VAR>msg</VAR> contains the
+corresponding system error message.
+
+</P>
+<P>
+If <VAR>file</VAR> is a symbolic link, <CODE>stat</CODE> will return information
+about the actual file the is referenced by the link.  Use <CODE>lstat</CODE>
+if you want information about the symbolic link itself.
+
+</P>
+<P>
+For example,
+
+</P>
+
+<PRE>
+[s, err, msg] = stat ("/vmlinuz")
+     => s =
+        {
+          atime = 855399756
+          rdev = 0
+          ctime = 847219094
+          uid = 0
+          size = 389218
+          blksize = 4096
+          mtime = 847219094
+          gid = 6
+          nlink = 1
+          blocks = 768
+          modestr = -rw-r--r--
+          ino = 9316
+          dev = 2049
+        }
+     => err = 0
+     => msg = 
+</PRE>
+
+</DL>
+
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>glob</B> <I>(<VAR>pattern</VAR>)</I>
+<DD><A NAME="IDX864"></A>
+Given an array of strings in <VAR>pattern</VAR>, return the list of file
+names that any of them, or an empty string if no patterns match.  Tilde
+expansion is performed on each of the patterns before looking for
+matching file names.  For example,
+
+</P>
+
+<PRE>
+glob ("/vm*")
+     => "/vmlinuz"
+</PRE>
+
+<P>
+Note that multiple values are returned in a string matrix with the fill
+character set to ASCII NUL.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>fnmatch</B> <I>(<VAR>pattern</VAR>, <VAR>string</VAR>)</I>
+<DD><A NAME="IDX865"></A>
+Return 1 or zero for each element of <VAR>string</VAR> that matches any of
+the elements of the string array <VAR>pattern</VAR>, using the rules of
+filename pattern matching.  For example,
+
+</P>
+
+<PRE>
+fnmatch ("a*b", ["ab"; "axyzb"; "xyzab"])
+     => [ 1; 1; 0 ]
+</PRE>
+
+</DL>
+
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>file_in_path</B> <I>(<VAR>path</VAR>, <VAR>file</VAR>)</I>
+<DD><A NAME="IDX866"></A>
+Return the absolute name name of <VAR>file</VAR> if it can be found in
+<VAR>path</VAR>.  The value of <VAR>path</VAR> should be a colon-separated list of
+directories in the format described for the built-in variable
+<CODE>LOADPATH</CODE>.
+
+</P>
+<P>
+If the file cannot be found in the path, an empty matrix is returned.
+For example,
+
+</P>
+
+<PRE>
+file_in_path (LOADPATH, "nargchk.m")
+     => "/usr/local/share/octave/2.0/m/general/nargchk.m"
+</PRE>
+
+</DL>
+
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>tilde_expand</B> <I>(<VAR>string</VAR>)</I>
+<DD><A NAME="IDX867"></A>
+Performs tilde expansion on <VAR>string</VAR>.  If <VAR>string</VAR> begins with a
+tilde character, (<SAMP>`~'</SAMP>), all of the characters preceding the first
+slash (or all characters, if there is no slash) are treated as a
+possible user name, and the tilde and the following characters up to the
+slash are replaced by the home directory of the named user.  If the
+tilde is followed immediately by a slash, the tilde is replaced by the
+home directory of the user running Octave.  For example,
+
+</P>
+
+<PRE>
+tilde_expand ("~joeuser/bin")
+     => "/home/joeuser/bin"
+tilde_expand ("~/bin")
+     => "/home/jwe/bin"
+</PRE>
+
+</DL>
+
+
+
+<H2><A NAME="SEC168" HREF="octave_toc.html#TOC168">Controlling Subprocesses</A></H2>
+
+<P>
+Octave includes some high-level commands like <CODE>system</CODE> and
+<CODE>popen</CODE> for starting subprocesses.  If you want to run another
+program to perform some task and then look at its output, you will
+probably want to use these functions.
+
+</P>
+<P>
+Octave also provides several very low-level Unix-like functions which
+can also be used for starting subprocesses, but you should probably only
+use them if you can't find any way to do what you need with the
+higher-level functions.
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>system</B> <I>(<VAR>string</VAR>, <VAR>return_output</VAR>, <VAR>type</VAR>)</I>
+<DD><A NAME="IDX868"></A>
+Execute a shell command specified by <VAR>string</VAR>.  The second argument is optional.
+If <VAR>type</VAR> is <CODE>"async"</CODE>, the process is started in the
+background and the process id of the child process is returned
+immediately.  Otherwise, the process is started, and Octave waits until
+it exits.  If <VAR>type</VAR> argument is omitted, a value of <CODE>"sync"</CODE>
+is assumed.
+
+</P>
+<P>
+If two input arguments are given (the actual value of
+<VAR>return_output</VAR> is irrelevant) and the subprocess is started
+synchronously, or if <VAR>system</VAR> is called with one input argument and
+one or more output arguments, the output from the command is returned.
+Otherwise, if the subprocess is executed synchronously, it's output is
+sent to the standard output.  To send the output of a command executed
+with <VAR>system</VAR> through the pager, use a command like
+
+</P>
+
+<PRE>
+disp (system (cmd, 1));
+</PRE>
+
+<P>
+or
+
+</P>
+
+<PRE>
+printf ("%s\n", system (cmd, 1));
+</PRE>
+
+<P>
+The <CODE>system</CODE> function can return two values.  The first is any
+output from the command that was written to the standard output stream,
+and the second is the output status of the command.  For example,
+
+</P>
+
+<PRE>
+[output, status] = system ("echo foo; exit 2");
+</PRE>
+
+<P>
+will set the variable <CODE>output</CODE> to the string <SAMP>`foo'</SAMP>, and the
+variable <CODE>status</CODE> to the integer <SAMP>`2'</SAMP>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U> fid = <B>popen</B> <I>(<VAR>command</VAR>, <VAR>mode</VAR>)</I>
+<DD><A NAME="IDX869"></A>
+Start a process and create a pipe.  The name of the command to run is
+given by <VAR>command</VAR>.  The file identifier corresponding to the input
+or output stream of the process is returned in <VAR>fid</VAR>.  The argument
+<VAR>mode</VAR> may be
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>"r"</CODE>
+<DD>
+The pipe will be connected to the standard output of the process, and
+open for reading.
+
+<DT><CODE>"w"</CODE>
+<DD>
+The pipe will be connected to the standard input of the process, and
+open for writing.
+</DL>
+
+<P>
+For example,
+
+</P>
+
+<PRE>
+fid = popen ("ls -ltr / | tail -3", "r");
+while (isstr (s = fgets (fid)))
+  fputs (stdout, s);
+endwhile
+     -| drwxr-xr-x  33 root  root  3072 Feb 15 13:28 etc
+     -| drwxr-xr-x   3 root  root  1024 Feb 15 13:28 lib
+     -| drwxrwxrwt  15 root  root  2048 Feb 17 14:53 tmp
+</PRE>
+
+</DL>
+
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>pclose</B> <I>(<VAR>fid</VAR>)</I>
+<DD><A NAME="IDX870"></A>
+Close a file identifier that was opened by <CODE>popen</CODE>.  You may also
+use <CODE>fclose</CODE> for the same purpose.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U> [<VAR>in</VAR>, <VAR>out</VAR>, <VAR>pid</VAR>] = <B>popen2</B> <I>(<VAR>command</VAR>, <VAR>args</VAR>)</I>
+<DD><A NAME="IDX871"></A>
+Start a subprocess with two-way communication.  The name of the process
+is given by <VAR>command</VAR>, and <VAR>args</VAR> is an array of strings
+containing options for the command.  The file identifiers for the input
+and output streams of the subprocess are returned in <VAR>in</VAR> and
+<VAR>out</VAR>.  If execution of the command is successful, <VAR>pid</VAR>
+contains the process ID of the subprocess.  Otherwise, <VAR>pid</VAR> is
+-1.
+
+</P>
+<P>
+For example,
+
+</P>
+
+<PRE>
+[in, out, pid] = popen2 ("sort", "-nr");
+fputs (in, "these\nare\nsome\nstrings\n");
+fclose (in);
+while (isstr (s = fgets (out)))
+  fputs (stdout, s);
+endwhile
+fclose (out);
+     -| are
+     -| some
+     -| strings
+     -| these
+</PRE>
+
+</DL>
+
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>EXEC_PATH</B>
+<DD><A NAME="IDX872"></A>
+The variable <CODE>EXEC_PATH</CODE> is a colon separated list of directories
+to search when executing subprograms.  Its initial value is taken from
+the environment variable <CODE>OCTAVE_EXEC_PATH</CODE> (if it exists) or
+<CODE>PATH</CODE>, but that value can be overridden by the command line
+argument <CODE>--exec-path PATH</CODE>, or by setting the value of
+<CODE>EXEC_PATH</CODE> in a startup script.  If the value of <CODE>EXEC_PATH</CODE>
+begins (ends) with a colon, the directories
+
+</P>
+
+<PRE>
+<VAR>octave-home</VAR>/libexec/octave/site/exec/<VAR>arch</VAR>
+<VAR>octave-home</VAR>/libexec/octave/<VAR>version</VAR>/exec/<VAR>arch</VAR>
+</PRE>
+
+<P>
+are prepended (appended) to <CODE>EXEC_PATH</CODE>, where <VAR>octave-home</VAR>
+is the top-level directory where all of Octave is installed
+(the default value is <TT>`/usr/local'</TT>).  If you don't specify
+a value for <CODE>EXEC_PATH</CODE> explicitly, these special directories are
+prepended to your shell path.
+</DL>
+
+</P>
+<P>
+In most cases, the following functions simply decode their arguments and
+make the corresponding Unix system calls.  For a complete example of how
+they can be used, look at the definition of the function <CODE>popen2</CODE>.
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U> [<VAR>pid</VAR>, <VAR>msg</VAR>] = <B>fork</B> <I>()</I>
+<DD><A NAME="IDX873"></A>
+Create a copy of the current process.
+
+</P>
+<P>
+Fork can return one of the following values:
+
+</P>
+<DL COMPACT>
+
+<DT>&#62; 0
+<DD>
+You are in the parent process.  The value returned from <CODE>fork</CODE> is
+the process id of the child process.  You should probably arrange to
+wait for any child processes to exit.
+
+<DT>0
+<DD>
+You are in the child process.  You can call <CODE>exec</CODE> to start another
+process.  If that fails, you should probably call <CODE>exit</CODE>.
+
+<DT>&#60; 0
+<DD>
+The call to <CODE>fork</CODE> failed for some reason.  You must take evasive
+action.  A system dependent error message will be waiting in <VAR>msg</VAR>.
+</DL>
+</DL>
+
+<P>
+<DL>
+<DT><U>Built-in Function:</U> [<VAR>err</VAR>, <VAR>msg</VAR>] = <B>exec</B> <I>(<VAR>file</VAR>, <VAR>args</VAR>)</I>
+<DD><A NAME="IDX874"></A>
+Replace current process with a new process.  Calling <CODE>exec</CODE> without
+first calling <CODE>fork</CODE> will terminate your current Octave process and
+replace it with the program named by <VAR>file</VAR>.  For example,
+
+</P>
+
+<PRE>
+exec ("ls" "-l")
+</PRE>
+
+<P>
+will run <CODE>ls</CODE> and return you to your shell prompt.
+
+</P>
+<P>
+If successful, <CODE>exec</CODE> does not return.  If <CODE>exec</CODE> does return,
+<VAR>err</VAR> will be nonzero, and <VAR>msg</VAR> will contain a system-dependent
+error message.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U> [<VAR>file_ids</VAR>, <VAR>err</VAR>, <VAR>msg</VAR>] = <B>pipe</B> <I>()</I>
+<DD><A NAME="IDX875"></A>
+Create a pipe and return the vector <VAR>file_ids</VAR>, which corresponding
+to the reading and writing ends of the pipe.
+
+</P>
+<P>
+If successful, <VAR>err</VAR> is 0 and <VAR>msg</VAR> is an empty string.
+Otherwise, <VAR>err</VAR> is nonzero and <VAR>msg</VAR> contains a
+system-dependent error message.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U> [<VAR>fid</VAR>, <VAR>msg</VAR>] = <B>dup2</B> <I>(<VAR>old</VAR>, <VAR>new</VAR>)</I>
+<DD><A NAME="IDX876"></A>
+Duplicate a file descriptor.
+
+</P>
+<P>
+If successful, <VAR>fid</VAR> is greater than zero and contains the new file
+ID.  Otherwise, <VAR>fid</VAR> is negative and <VAR>msg</VAR> contains a
+system-dependent error message.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U> [<VAR>pid</VAR>, <VAR>msg</VAR>] = <B>waitpid</B> <I>(<VAR>pid</VAR>, <VAR>options</VAR>)</I>
+<DD><A NAME="IDX877"></A>
+Wait for process <VAR>pid</VAR> to terminate.  The <VAR>pid</VAR> argument can be:
+
+</P>
+<DL COMPACT>
+
+<DT>-1
+<DD>
+Wait for any child process.
+
+<DT>0
+<DD>
+Wait for any child process whose process group ID is equal to that of
+the Octave interpreter process.
+
+<DT>&#62; 0
+<DD>
+Wait for termination of the child process with ID <VAR>pid</VAR>.
+</DL>
+
+<P>
+The <VAR>options</VAR> argument can be:
+
+</P>
+<DL COMPACT>
+
+<DT>0
+<DD>
+Wait until signal is received or a child process exits (this is the
+default if the <VAR>options</VAR> argument is missing).
+
+<DT>1
+<DD>
+Do not hang if status is not immediately available.
+
+<DT>2
+<DD>
+Report the status of any child processes that are stopped, and whose
+status has not yet been reported since they stopped.
+
+<DT>3
+<DD>
+Implies both 1 and 2.
+</DL>
+
+<P>
+If the returned value of <VAR>pid</VAR> is greater than 0, it is the process
+ID of the child process that exited.  If an error occurs, <VAR>pid</VAR> will
+be less than zero and <VAR>msg</VAR> will contain a system-dependent error
+message.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U> [<VAR>err</VAR>, <VAR>msg</VAR>] = <B>fcntl</B> <I>(<VAR>fid</VAR>, <VAR>request</VAR>, <VAR>arg</VAR>)</I>
+<DD><A NAME="IDX878"></A>
+Change the properties of the open file <VAR>fid</VAR>.  The following values
+may be passed as <VAR>request</VAR>:
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>F_DUPFD</CODE>
+<DD>
+<A NAME="IDX879"></A>
+Return a duplicate file descriptor.
+
+<DT><CODE>F_GETFD</CODE>
+<DD>
+<A NAME="IDX880"></A>
+Return the file descriptor flags for <VAR>fid</VAR>.
+
+<DT><CODE>F_SETFD</CODE>
+<DD>
+<A NAME="IDX881"></A>
+Set the file descriptor flags for <VAR>fid</VAR>.
+
+<DT><CODE>F_GETFL</CODE>
+<DD>
+<A NAME="IDX882"></A>
+Return the file status flags for <VAR>fid</VAR>.  The following codes may be
+returned (some of the flags may be undefined on some systems).
+
+<DL COMPACT>
+
+<DT><CODE>O_RDONLY</CODE>
+<DD>
+<A NAME="IDX883"></A>
+Open for reading only.
+
+<DT><CODE>O_WRONLY</CODE>
+<DD>
+<A NAME="IDX884"></A>
+Open for writing only.
+
+<DT><CODE>O_RDWR</CODE>
+<DD>
+<A NAME="IDX885"></A>
+Open for reading and writing.
+
+<DT><CODE>O_APPEND</CODE>
+<DD>
+<A NAME="IDX886"></A>
+Append on each write.
+
+<DT><CODE>O_NONBLOCK</CODE>
+<DD>
+<A NAME="IDX887"></A>
+Nonblocking mode.
+
+<DT><CODE>O_SYNC</CODE>
+<DD>
+<A NAME="IDX888"></A>
+Wait for writes to complete.
+
+<DT><CODE>O_ASYNC</CODE>
+<DD>
+<A NAME="IDX889"></A>
+Asynchronous I/O.
+</DL>
+
+<DT><CODE>F_SETFL</CODE>
+<DD>
+<A NAME="IDX890"></A>
+Set the file status flags for <VAR>fid</VAR> to the value specified by
+<VAR>arg</VAR>.  The only flags that can be changed are <CODE>O_APPEND</CODE> and
+<CODE>O_NONBLOCK</CODE>.
+</DL>
+
+<P>
+If successful, <VAR>err</VAR> is 0 and <VAR>msg</VAR> is an empty string.
+Otherwise, <VAR>err</VAR> is nonzero and <VAR>msg</VAR> contains a
+system-dependent error message.
+</DL>
+
+</P>
+
+
+<H2><A NAME="SEC169" HREF="octave_toc.html#TOC169">Process, Group, and User IDs</A></H2>
+
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>getpgrp</B> <I>()</I>
+<DD><A NAME="IDX891"></A>
+Return the process group id of the current process.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>getpid</B> <I>()</I>
+<DD><A NAME="IDX892"></A>
+Return the process id of the current process.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>getppid</B> <I>()</I>
+<DD><A NAME="IDX893"></A>
+Return the process id of the parent process.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>geteuid</B> <I>()</I>
+<DD><A NAME="IDX894"></A>
+Return the effective user id of the current process.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>getuid</B> <I>()</I>
+<DD><A NAME="IDX895"></A>
+Return the real user id of the current process.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>getegid</B> <I>()</I>
+<DD><A NAME="IDX896"></A>
+Return the effective group id of the current process.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>getgid</B> <I>()</I>
+<DD><A NAME="IDX897"></A>
+Return the real group id of the current process.
+</DL>
+
+</P>
+
+
+<H2><A NAME="SEC170" HREF="octave_toc.html#TOC170">Environment Variables</A></H2>
+
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>getenv</B> <I>(<VAR>var</VAR>)</I>
+<DD><A NAME="IDX898"></A>
+Return the value of the environment variable <VAR>var</VAR>.  For example,
+
+</P>
+
+<PRE>
+getenv ("PATH")
+</PRE>
+
+<P>
+returns a string containing the value of your path.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>putenv</B> <I>(<VAR>var</VAR>, <VAR>value</VAR>)</I>
+<DD><A NAME="IDX899"></A>
+Set the value of the environment variable <VAR>var</VAR> to <VAR>value</VAR>.
+</DL>
+
+</P>
+
+
+<H2><A NAME="SEC171" HREF="octave_toc.html#TOC171">Current Working Directory</A></H2>
+
+<P>
+<DL>
+<DT><U>Command:</U> <B>cd</B> <I>dir</I>
+<DD><A NAME="IDX900"></A>
+<DT><U>Command:</U> <B>chdir</B> <I>dir</I>
+<DD><A NAME="IDX901"></A>
+Change the current working directory to <VAR>dir</VAR>.  For example,
+
+</P>
+
+<PRE>
+cd ~/octave
+</PRE>
+
+<P>
+Changes the current working directory to <TT>`~/octave'</TT>.  If the
+directory does not exist, an error message is printed and the working
+directory is not changed.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>pwd</B> <I>()</I>
+<DD><A NAME="IDX902"></A>
+Return the current working directory.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>PWD</B>
+<DD><A NAME="IDX903"></A>
+The current working directory.  The value of <CODE>PWD</CODE> is updated each
+time the current working directory is changed with the <SAMP>`cd'</SAMP>
+command.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Command:</U> <B>ls</B> <I>options</I>
+<DD><A NAME="IDX904"></A>
+<DT><U>Command:</U> <B>dir</B> <I>options</I>
+<DD><A NAME="IDX905"></A>
+List directory contents.  For example,
+
+</P>
+
+<PRE>
+ls -l
+     -| total 12
+     -| -rw-r--r--   1 jwe  users  4488 Aug 19 04:02 foo.m
+     -| -rw-r--r--   1 jwe  users  1315 Aug 17 23:14 bar.m
+</PRE>
+
+<P>
+The <CODE>dir</CODE> and <CODE>ls</CODE> commands are implemented by calling your
+system's directory listing command, so the available options may vary
+from system to system.
+</DL>
+
+</P>
+
+
+<H2><A NAME="SEC172" HREF="octave_toc.html#TOC172">Password Database Functions</A></H2>
+
+<P>
+Octave's password database functions return information in a structure
+with the following fields.
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>name</CODE>
+<DD>
+The user name.
+
+<DT><CODE>passwd</CODE>
+<DD>
+The encrypted password, if available.
+
+<DT><CODE>uid</CODE>
+<DD>
+The numeric user id.
+
+<DT><CODE>gid</CODE>
+<DD>
+The numeric group id.
+
+<DT><CODE>gecos</CODE>
+<DD>
+The GECOS field.
+
+<DT><CODE>dir</CODE>
+<DD>
+The home directory.
+
+<DT><CODE>shell</CODE>
+<DD>
+The initial shell.
+</DL>
+
+<P>
+In the descriptions of the following functions, this data structure is
+referred to as a <VAR>pw_struct</VAR>.
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U> <VAR>pw_struct</VAR> =  <B>getpwent</B> <I>()</I>
+<DD><A NAME="IDX906"></A>
+Return a structure containing an entry from the password database,
+opening it if necessary. Once the end of the data has been reached,
+<CODE>getpwent</CODE> returns 0.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U> <VAR>pw_struct</VAR> =  <B>getpwuid</B> <I>(<VAR>uid</VAR>).</I>
+<DD><A NAME="IDX907"></A>
+Return a structure containing the first entry from the password database
+with the user ID <VAR>uid</VAR>.  If the user ID does not exist in the
+database, <CODE>getpwuid</CODE> returns 0.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U> <VAR>pw_struct</VAR> =  <B>getpwnam</B> <I>(<VAR>name</VAR>)</I>
+<DD><A NAME="IDX908"></A>
+Return a structure containing the first entry from the password database
+with the user name <VAR>name</VAR>.  If the user name does not exist in the
+database, <CODE>getpwname</CODE> returns 0.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U>  <B>setpwent</B> <I>()</I>
+<DD><A NAME="IDX909"></A>
+Return the internal pointer to the beginning of the password database.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U>  <B>endpwent</B> <I>()</I>
+<DD><A NAME="IDX910"></A>
+Close the password database.
+</DL>
+
+</P>
+
+
+<H2><A NAME="SEC173" HREF="octave_toc.html#TOC173">Group Database Functions</A></H2>
+
+<P>
+Octave's group database functions return information in a structure
+with the following fields.
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>name</CODE>
+<DD>
+The user name.
+
+<DT><CODE>passwd</CODE>
+<DD>
+The encrypted password, if available.
+
+<DT><CODE>gid</CODE>
+<DD>
+The numeric group id.
+
+<DT><CODE>mem</CODE>
+<DD>
+The members of the group.
+</DL>
+
+<P>
+In the descriptions of the following functions, this data structure is
+referred to as a <VAR>grp_struct</VAR>.
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U> <VAR>grp_struct</VAR> = <B>getgrent</B> <I>()</I>
+<DD><A NAME="IDX911"></A>
+Return an entry from the group database, opening it if necessary.
+Once the end of the data has been reached, <CODE>getgrent</CODE> returns 0.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U> <VAR>grp_struct</VAR> = <B>getgrgid</B> <I>(<VAR>gid</VAR>).</I>
+<DD><A NAME="IDX912"></A>
+Return the first entry from the group database with the group ID
+<VAR>gid</VAR>.  If the group ID does not exist in the database,
+<CODE>getgrgid</CODE> returns 0.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U> <VAR>grp_struct</VAR> = <B>getgrnam</B> <I>(<VAR>name</VAR>)</I>
+<DD><A NAME="IDX913"></A>
+Return the first entry from the group database with the group name
+<VAR>name</VAR>.  If the group name does not exist in the database,
+<CODE>getgrname</CODE> returns 0.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U>  <B>setgrent</B> <I>()</I>
+<DD><A NAME="IDX914"></A>
+Return the internal pointer to the beginning of the group database.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U>  <B>endgrent</B> <I>()</I>
+<DD><A NAME="IDX915"></A>
+Close the group database.
+</DL>
+
+</P>
+
+
+<H2><A NAME="SEC174" HREF="octave_toc.html#TOC174">System Information</A></H2>
+
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>computer</B> <I>()</I>
+<DD><A NAME="IDX916"></A>
+Print or return a string of the form <VAR>cpu</VAR>-<VAR>vendor</VAR>-<VAR>os</VAR>
+that identifies the kind of computer Octave is running on.  If invoked
+with an output argument, the value is returned instead of printed.  For
+example,
+
+</P>
+
+<PRE>
+computer ()
+     -| i586-pc-linux-gnu
+
+x = computer ()
+     => x = "i586-pc-linux-gnu"
+</PRE>
+
+</DL>
+
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>isieee</B> <I>()</I>
+<DD><A NAME="IDX917"></A>
+Return 1 if your computer claims to conform to the IEEE standard for
+floating point calculations.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>version</B> <I>()</I>
+<DD><A NAME="IDX918"></A>
+Return Octave's version number as a string.  This is also the value of
+the built-in variable <CODE>OCTAVE_VERSION</CODE>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>OCTAVE_VERSION</B>
+<DD><A NAME="IDX919"></A>
+The version number of Octave, as a string.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>octave_config_info</B> <I>()</I>
+<DD><A NAME="IDX920"></A>
+Return a structure containing configuration and installation
+information.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U>  <B>getrusage</B> <I>()</I>
+<DD><A NAME="IDX921"></A>
+Return a structure containing a number of statistics about the current
+Octave process.  Not all fields are available on all systems.  If it is
+not possible to get CPU time statistics, the CPU time slots are set to
+zero.  Other missing data are replaced by NaN.  Here is a list of all
+the possible fields that can be present in the structure returned by
+<CODE>getrusage</CODE>:
+
+</P>
+<DL COMPACT>
+
+<DT><CODE></CODE>
+<DD>
+<DT><CODE>idrss</CODE>
+<DD>
+Unshared data size.
+
+<DT><CODE>inblock</CODE>
+<DD>
+Number of block input operations.
+
+<DT><CODE>isrss</CODE>
+<DD>
+Unshared stack size.
+
+<DT><CODE>ixrss</CODE>
+<DD>
+Shared memory size.
+
+<DT><CODE>majflt</CODE>
+<DD>
+Number of major page faults.
+
+<DT><CODE>maxrss</CODE>
+<DD>
+Maximum data size.
+
+<DT><CODE>minflt</CODE>
+<DD>
+Number of minor page faults.
+
+<DT><CODE>msgrcv</CODE>
+<DD>
+Number of messages received.
+
+<DT><CODE>msgsnd</CODE>
+<DD>
+Number of messages sent.
+
+<DT><CODE>nivcsw</CODE>
+<DD>
+Number of involuntary context switches.
+
+<DT><CODE>nsignals</CODE>
+<DD>
+Number of signals received.
+
+<DT><CODE>nswap</CODE>
+<DD>
+Number of swaps.
+
+<DT><CODE>nvcsw</CODE>
+<DD>
+Number of voluntary context switches.
+
+<DT><CODE>oublock</CODE>
+<DD>
+Number of block output operations.
+
+<DT><CODE>stime</CODE>
+<DD>
+A structure containing the system CPU time used.  The structure has the
+elements <CODE>sec</CODE> (seconds) <CODE>usec</CODE> (microseconds).
+
+<DT><CODE>utime</CODE>
+<DD>
+A structure containing the user CPU time used.  The structure has the
+elements <CODE>sec</CODE> (seconds) <CODE>usec</CODE> (microseconds).
+</DL>
+</DL>
+
+<P><HR><P>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_29.html">previous</A>, <A HREF="octave_31.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+</BODY>
+</HTML>

@@ -1,0 +1,274 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from ./liboctave.texi on 9 October 1998 -->
+
+<TITLE>Octave C++ Classes - Quadrature</TITLE>
+</HEAD>
+<BODY>
+Go to the <A HREF="liboctave_1.html">first</A>, <A HREF="liboctave_10.html">previous</A>, <A HREF="liboctave_12.html">next</A>, <A HREF="liboctave_18.html">last</A> section, <A HREF="liboctave_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC22" HREF="liboctave_toc.html#TOC22">Quadrature</A></H1>
+<P>
+<A NAME="IDX916"></A>
+<A NAME="IDX917"></A>
+<A NAME="IDX918"></A>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> {}Quad <B>(integrand_fcn</B> <I><VAR>fcn</VAR>)</I>
+<DD><A NAME="IDX919"></A>
+<DT><U>:</U> {}Quad <B>(integrand_fcn</B> <I><VAR>fcn</VAR>, double <VAR>abs</VAR>, double <VAR>rel</VAR>)</I>
+<DD><A NAME="IDX920"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> virtual double <B>integrate</B> <I>(void)</I>
+<DD><A NAME="IDX921"></A>
+<DT><U>:</U> virtual double <B>integrate</B> <I>(int &#38;<VAR>ier</VAR>)</I>
+<DD><A NAME="IDX922"></A>
+<DT><U>:</U> virtual double <B>integrate</B> <I>(int &#38;<VAR>ier</VAR>, int &#38;<VAR>neval</VAR>)</I>
+<DD><A NAME="IDX923"></A>
+<DT><U>:</U> virtual double <B>integrate</B> <I>(int &#38;<VAR>ier</VAR>, int &#38;<VAR>neval</VAR>, double &#38;<VAR>abserr</VAR>) = 0</I>
+<DD><A NAME="IDX924"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> Quad_options <B>(void)</B>
+<DD><A NAME="IDX925"></A>
+<DT><U>:</U> Quad_options <B>(const</B> <I>Quad_options &#38;<VAR>opt</VAR>)</I>
+<DD><A NAME="IDX926"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> Quad_options&#38; <B>operator =</B> <I>(const Quad_options &#38;<VAR>opt</VAR>)</I>
+<DD><A NAME="IDX927"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> void <B>init</B> <I>(void)</I>
+<DD><A NAME="IDX928"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> void <B>copy</B> <I>(const Quad_options &#38;<VAR>opt</VAR>)</I>
+<DD><A NAME="IDX929"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> void <B>set_default_options</B> <I>(void)</I>
+<DD><A NAME="IDX930"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> void <B>set_absolute_tolerance</B> <I>(double <VAR>val</VAR>)</I>
+<DD><A NAME="IDX931"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> void <B>set_relative_tolerance</B> <I>(double <VAR>val</VAR>)</I>
+<DD><A NAME="IDX932"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> double <B>absolute_tolerance</B> <I>(void)</I>
+<DD><A NAME="IDX933"></A>
+<DT><U>:</U> double <B>relative_tolerance</B> <I>(void)</I>
+<DD><A NAME="IDX934"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> {}DefQuad <B>(integrand_fcn</B> <I><VAR>fcn</VAR>)</I>
+<DD><A NAME="IDX935"></A>
+<DT><U>:</U> {}DefQuad <B>(integrand_fcn</B> <I><VAR>fcn</VAR>, double <VAR>ll</VAR>, double <VAR>ul</VAR>)</I>
+<DD><A NAME="IDX936"></A>
+<DT><U>:</U> {}DefQuad <B>(integrand_fcn</B> <I><VAR>fcn</VAR>, double <VAR>ll</VAR>, double <VAR>ul</VAR>, double <VAR>abs</VAR>, double <VAR>rel</VAR>)</I>
+<DD><A NAME="IDX937"></A>
+<DT><U>:</U> {}DefQuad <B>(integrand_fcn</B> <I><VAR>fcn</VAR>, double <VAR>ll</VAR>, double <VAR>ul</VAR>, const ColumnVector &#38;<VAR>sing</VAR>)</I>
+<DD><A NAME="IDX938"></A>
+<DT><U>:</U> {}DefQuad <B>(integrand_fcn</B> <I><VAR>fcn</VAR>, const ColumnVector &#38;<VAR>sing</VAR>, double <VAR>abs</VAR>, double <VAR>rel</VAR>)</I>
+<DD><A NAME="IDX939"></A>
+<DT><U>:</U> {}DefQuad <B>(integrand_fcn</B> <I><VAR>fcn</VAR>, const ColumnVector &#38;<VAR>sing</VAR>)</I>
+<DD><A NAME="IDX940"></A>
+<DT><U>:</U> {}DefQuad <B>(integrand_fcn</B> <I><VAR>fcn</VAR>, double <VAR>ll</VAR>, double <VAR>ul</VAR>, const ColumnVector &#38;<VAR>sing</VAR>, double <VAR>abs</VAR>, double <VAR>rel</VAR>)</I>
+<DD><A NAME="IDX941"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> {}IndefQuad <B>(integrand_fcn</B> <I><VAR>fcn</VAR>)</I>
+<DD><A NAME="IDX942"></A>
+<DT><U>:</U> {}IndefQuad <B>(integrand_fcn</B> <I><VAR>fcn</VAR>, double <VAR>b</VAR>, IntegralType <VAR>t</VAR>)</I>
+<DD><A NAME="IDX943"></A>
+<DT><U>:</U> {}IndefQuad <B>(integrand_fcn</B> <I><VAR>fcn</VAR>, double <VAR>b</VAR>, IntegralType <VAR>t</VAR>, double <VAR>abs</VAR>, double <VAR>rel</VAR>)</I>
+<DD><A NAME="IDX944"></A>
+<DT><U>:</U> {}IndefQuad <B>(integrand_fcn</B> <I><VAR>fcn</VAR>, double <VAR>abs</VAR>, double <VAR>rel</VAR>)</I>
+<DD><A NAME="IDX945"></A>
+</DL>
+
+</P>
+
+
+
+<H2><A NAME="SEC23" HREF="liboctave_toc.html#TOC23">Collocation Weights</A></H2>
+<P>
+<A NAME="IDX946"></A>
+<A NAME="IDX947"></A>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> {}CollocWt <B>(void)</B>
+<DD><A NAME="IDX948"></A>
+<DT><U>:</U> {}CollocWt <B>(int</B> <I><VAR>n</VAR>, int <VAR>inc_l</VAR>, int <VAR>inc_r</VAR>)</I>
+<DD><A NAME="IDX949"></A>
+<DT><U>:</U> {}CollocWt <B>(int</B> <I><VAR>n</VAR>, int <VAR>inc_l</VAR>, int <VAR>inc_r</VAR>, double <VAR>l</VAR>, double <VAR>r</VAR>)</I>
+<DD><A NAME="IDX950"></A>
+<DT><U>:</U> {}CollocWt <B>(int</B> <I><VAR>n</VAR>, double <VAR>a</VAR>, double <VAR>b</VAR>, int <VAR>inc_l</VAR>, int <VAR>inc_r</VAR>)</I>
+<DD><A NAME="IDX951"></A>
+<DT><U>:</U> {}CollocWt <B>(int</B> <I><VAR>n</VAR>, int <VAR>inc_l</VAR>, int <VAR>inc_r</VAR>, double <VAR>l</VAR>, double <VAR>r</VAR>)</I>
+<DD><A NAME="IDX952"></A>
+<DT><U>:</U> {}CollocWt <B>(const</B> <I>CollocWt&#38;)</I>
+<DD><A NAME="IDX953"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> CollocWt&#38; <B>operator =</B> <I>(const CollocWt&#38;)</I>
+<DD><A NAME="IDX954"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> CollocWt&#38; <B>resize</B> <I>(int <VAR>ncol</VAR>)</I>
+<DD><A NAME="IDX955"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> CollocWt&#38; <B>add_left</B> <I>(void)</I>
+<DD><A NAME="IDX956"></A>
+<DT><U>:</U> CollocWt&#38; <B>add_right</B> <I>(void)</I>
+<DD><A NAME="IDX957"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> CollocWt&#38; <B>delete_left</B> <I>(void)</I>
+<DD><A NAME="IDX958"></A>
+<DT><U>:</U> CollocWt&#38; <B>delete_right</B> <I>(void)</I>
+<DD><A NAME="IDX959"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> CollocWt&#38; <B>set_left</B> <I>(double <VAR>val</VAR>)</I>
+<DD><A NAME="IDX960"></A>
+<DT><U>:</U> CollocWt&#38; <B>set_right</B> <I>(double <VAR>val</VAR>)</I>
+<DD><A NAME="IDX961"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> CollocWt&#38; <B>set_alpha</B> <I>(double <VAR>val</VAR>)</I>
+<DD><A NAME="IDX962"></A>
+<DT><U>:</U> CollocWt&#38; <B>set_beta</B> <I>(double <VAR>val</VAR>)</I>
+<DD><A NAME="IDX963"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> int <B>ncol</B> <I>(void) const</I>
+<DD><A NAME="IDX964"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> int <B>left_included</B> <I>(void) const</I>
+<DD><A NAME="IDX965"></A>
+<DT><U>:</U> int <B>right_included</B> <I>(void) const</I>
+<DD><A NAME="IDX966"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> double <B>left</B> <I>(void) const</I>
+<DD><A NAME="IDX967"></A>
+<DT><U>:</U> double <B>right</B> <I>(void) const</I>
+<DD><A NAME="IDX968"></A>
+<DT><U>:</U> double <B>width</B> <I>(void) const</I>
+<DD><A NAME="IDX969"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> double <B>alpha</B> <I>(void) const</I>
+<DD><A NAME="IDX970"></A>
+<DT><U>:</U> double <B>beta</B> <I>(void) const</I>
+<DD><A NAME="IDX971"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ColumnVector <B>roots</B> <I>(void)</I>
+<DD><A NAME="IDX972"></A>
+<DT><U>:</U> ColumnVector <B>quad</B> <I>(void)</I>
+<DD><A NAME="IDX973"></A>
+<DT><U>:</U> ColumnVector <B>quad_weights</B> <I>(void)</I>
+<DD><A NAME="IDX974"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> Matrix <B>first</B> <I>(void)</I>
+<DD><A NAME="IDX975"></A>
+<DT><U>:</U> Matrix <B>second</B> <I>(void)</I>
+<DD><A NAME="IDX976"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ostream&#38; <B>operator &#60;&#60;</B> <I>(ostream &#38;<VAR>os</VAR>, const CollocWt &#38;<VAR>c</VAR>)</I>
+<DD><A NAME="IDX977"></A>
+</DL>
+<P><HR><P>
+Go to the <A HREF="liboctave_1.html">first</A>, <A HREF="liboctave_10.html">previous</A>, <A HREF="liboctave_12.html">next</A>, <A HREF="liboctave_18.html">last</A> section, <A HREF="liboctave_toc.html">table of contents</A>.
+</BODY>
+</HTML>

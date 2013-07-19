@@ -1,0 +1,685 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from ./liboctave.texi on 9 October 1998 -->
+
+<TITLE>Octave C++ Classes - Matrix Factorizations</TITLE>
+</HEAD>
+<BODY>
+Go to the <A HREF="liboctave_1.html">first</A>, <A HREF="liboctave_5.html">previous</A>, <A HREF="liboctave_7.html">next</A>, <A HREF="liboctave_18.html">last</A> section, <A HREF="liboctave_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC11" HREF="liboctave_toc.html#TOC11">Matrix Factorizations</A></H1>
+<P>
+<A NAME="IDX624"></A>
+<A NAME="IDX625"></A>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> {}AEPBALANCE <B>(void)</B>
+<DD><A NAME="IDX626"></A>
+<DT><U>:</U> {}AEPBALANCE <B>(const</B> <I>Matrix &#38;<VAR>a</VAR>, const char *<VAR>balance_job</VAR>)</I>
+<DD><A NAME="IDX627"></A>
+<DT><U>:</U> {}AEPBALANCE <B>(const</B> <I>AEPBALANCE &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX628"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> AEPBALANCE&#38; <B>operator =</B> <I>(const AEPBALANCE &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX629"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> Matrix <B>balanced_matrix</B> <I>(void) const</I>
+<DD><A NAME="IDX630"></A>
+<DT><U>:</U> Matrix <B>balancing_matrix</B> <I>(void) const</I>
+<DD><A NAME="IDX631"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ostream&#38; <B>operator &#60;&#60;</B> <I>(ostream &#38;<VAR>os</VAR>, const AEPBALANCE &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX632"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ComplexAEPBALANCE <B>(void)</B>
+<DD><A NAME="IDX633"></A>
+<DT><U>:</U> ComplexAEPBALANCE <B>(const</B> <I>ComplexMatrix &#38;<VAR>a</VAR>, const char *<VAR>balance_job</VAR>)</I>
+<DD><A NAME="IDX634"></A>
+<DT><U>:</U> ComplexAEPBALANCE <B>(const</B> <I>ComplexAEPBALANCE &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX635"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ComplexAEPBALANCE&#38; <B>operator =</B> <I>(const ComplexAEPBALANCE &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX636"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ComplexMatrix <B>balanced_matrix</B> <I>(void) const</I>
+<DD><A NAME="IDX637"></A>
+<DT><U>:</U> ComplexMatrix <B>balancing_matrix</B> <I>(void) const</I>
+<DD><A NAME="IDX638"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ostream&#38; <B>operator &#60;&#60;</B> <I>(ostream &#38;<VAR>os</VAR>, const ComplexAEPBALANCE &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX639"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> {}DET <B>(void)</B>
+<DD><A NAME="IDX640"></A>
+<DT><U>:</U> {}DET <B>(const</B> <I>DET &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX641"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> DET&#38; <B>operator =</B> <I>(const DET &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX642"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> int <B>value_will_overflow</B> <I>(void) const</I>
+<DD><A NAME="IDX643"></A>
+<DT><U>:</U> int <B>value_will_underflow</B> <I>(void) const</I>
+<DD><A NAME="IDX644"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> double <B>coefficient</B> <I>(void) const</I>
+<DD><A NAME="IDX645"></A>
+<DT><U>:</U> int <B>exponent</B> <I>(void) const</I>
+<DD><A NAME="IDX646"></A>
+<DT><U>:</U> double <B>value</B> <I>(void) const</I>
+<DD><A NAME="IDX647"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ostream&#38; <B>operator &#60;&#60;</B> <I>(ostream &#38;<VAR>os</VAR>, const DET &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX648"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> {}ComplexDET <B>(void)</B>
+<DD><A NAME="IDX649"></A>
+<DT><U>:</U> {}ComplexDET <B>(const</B> <I>ComplexDET &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX650"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ComplexDET&#38; <B>operator =</B> <I>(const ComplexDET &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX651"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> int <B>value_will_overflow</B> <I>(void) const</I>
+<DD><A NAME="IDX652"></A>
+<DT><U>:</U> int <B>value_will_underflow</B> <I>(void) const</I>
+<DD><A NAME="IDX653"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> Complex <B>coefficient</B> <I>(void) const</I>
+<DD><A NAME="IDX654"></A>
+<DT><U>:</U> int <B>exponent</B> <I>(void) const</I>
+<DD><A NAME="IDX655"></A>
+<DT><U>:</U> Complex <B>value</B> <I>(void) const</I>
+<DD><A NAME="IDX656"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ostream&#38; <B>operator &#60;&#60;</B> <I>(ostream &#38;<VAR>os</VAR>, const ComplexDET &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX657"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> {}GEPBALANCE <B>(void)</B>
+<DD><A NAME="IDX658"></A>
+<DT><U>:</U> {}GEPBALANCE <B>(const</B> <I>Matrix &#38;<VAR>a</VAR>, const Matrix &#38;, const char *<VAR>balance_job</VAR>)</I>
+<DD><A NAME="IDX659"></A>
+<DT><U>:</U> {}GEPBALANCE <B>(const</B> <I>GEPBALANCE &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX660"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> GEPBALANCE&#38; <B>operator =</B> <I>(const GEPBALANCE &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX661"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> Matrix <B>balanced_a_matrix</B> <I>(void) const</I>
+<DD><A NAME="IDX662"></A>
+<DT><U>:</U> Matrix <B>balanced_b_matrix</B> <I>(void) const</I>
+<DD><A NAME="IDX663"></A>
+<DT><U>:</U> Matrix <B>left_balancing_matrix</B> <I>(void) const</I>
+<DD><A NAME="IDX664"></A>
+<DT><U>:</U> Matrix <B>right_balancing_matrix</B> <I>(void) const</I>
+<DD><A NAME="IDX665"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ostream&#38; <B>operator &#60;&#60;</B> <I>(ostream &#38;<VAR>os</VAR>, const GEPBALANCE &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX666"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> {}CHOL <B>(void)</B>
+<DD><A NAME="IDX667"></A>
+<DT><U>:</U> {}CHOL <B>(const</B> <I>Matrix &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX668"></A>
+<DT><U>:</U> {}CHOL <B>(const</B> <I>Matrix &#38;<VAR>a</VAR>, int &#38;<VAR>info</VAR>)</I>
+<DD><A NAME="IDX669"></A>
+<DT><U>:</U> {}CHOL <B>(const</B> <I>CHOL &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX670"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> CHOL&#38; <B>operator =</B> <I>(const CHOL &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX671"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> Matrix <B>chol_matrix</B> <I>(void) const</I>
+<DD><A NAME="IDX672"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ostream&#38; <B>operator &#60;&#60;</B> <I>(ostream &#38;<VAR>os</VAR>, const CHOL &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX673"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> {}ComplexCHOL <B>(void)</B>
+<DD><A NAME="IDX674"></A>
+<DT><U>:</U> {}ComplexCHOL <B>(const</B> <I>ComplexMatrix &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX675"></A>
+<DT><U>:</U> {}ComplexCHOL <B>(const</B> <I>ComplexMatrix &#38;<VAR>a</VAR>, int &#38;<VAR>info</VAR>)</I>
+<DD><A NAME="IDX676"></A>
+<DT><U>:</U> {}ComplexCHOL <B>(const</B> <I>ComplexCHOL &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX677"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ComplexCHOL&#38; <B>operator =</B> <I>(const ComplexCHOL &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX678"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ComplexMatrix <B>chol_matrix</B> <I>(void) const</I>
+<DD><A NAME="IDX679"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ostream&#38; <B>operator &#60;&#60;</B> <I>(ostream &#38;<VAR>os</VAR>, const ComplexCHOL &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX680"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> {}HESS <B>(void)</B>
+<DD><A NAME="IDX681"></A>
+<DT><U>:</U> {}HESS <B>(const</B> <I>Matrix &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX682"></A>
+<DT><U>:</U> {}HESS <B>(const</B> <I>Matrix&#38;a, int &#38;<VAR>info</VAR>)</I>
+<DD><A NAME="IDX683"></A>
+<DT><U>:</U> {}HESS <B>(const</B> <I>HESS &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX684"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> HESS&#38; <B>operator =</B> <I>(const HESS &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX685"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> Matrix <B>hess_matrix</B> <I>(void) const</I>
+<DD><A NAME="IDX686"></A>
+<DT><U>:</U> Matrix <B>unitary_hess_matrix</B> <I>(void) const</I>
+<DD><A NAME="IDX687"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ostream&#38; <B>operator &#60;&#60;</B> <I>(ostream &#38;<VAR>os</VAR>, const HESS &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX688"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> {}ComplexHESS <B>(void)</B>
+<DD><A NAME="IDX689"></A>
+<DT><U>:</U> {}ComplexHESS <B>(const</B> <I>ComplexMatrix &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX690"></A>
+<DT><U>:</U> {}ComplexHESS <B>(const</B> <I>ComplexMatrix &#38;<VAR>a</VAR>, int &#38;<VAR>info</VAR>)</I>
+<DD><A NAME="IDX691"></A>
+<DT><U>:</U> {}ComplexHESS <B>(const</B> <I>ComplexHESS &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX692"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ComplexHESS&#38; <B>operator =</B> <I>(const ComplexHESS &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX693"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ComplexMatrix <B>hess_matrix</B> <I>(void) const</I>
+<DD><A NAME="IDX694"></A>
+<DT><U>:</U> ComplexMatrix <B>unitary_hess_matrix</B> <I>(void) const</I>
+<DD><A NAME="IDX695"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ostream&#38; <B>operator &#60;&#60;</B> <I>(ostream &#38;<VAR>os</VAR>, const ComplexHESS &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX696"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> {}SCHUR <B>(void)</B>
+<DD><A NAME="IDX697"></A>
+<DT><U>:</U> {}SCHUR <B>(const</B> <I>Matrix &#38;<VAR>a</VAR>, const char *<VAR>ord</VAR>)</I>
+<DD><A NAME="IDX698"></A>
+<DT><U>:</U> {}SCHUR <B>(const</B> <I>Matrix &#38;<VAR>a</VAR>, const char *<VAR>ord</VAR>, int &#38;<VAR>info</VAR>)</I>
+<DD><A NAME="IDX699"></A>
+<DT><U>:</U> {}SCHUR <B>(const</B> <I>SCHUR &#38;<VAR>a</VAR>, const char *<VAR>ord</VAR>)</I>
+<DD><A NAME="IDX700"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> SCHUR&#38; <B>operator =</B> <I>(const SCHUR &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX701"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> Matrix <B>schur_matrix</B> <I>(void) const</I>
+<DD><A NAME="IDX702"></A>
+<DT><U>:</U> Matrix <B>unitary_matrix</B> <I>(void) const</I>
+<DD><A NAME="IDX703"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ostream&#38; <B>operator &#60;&#60;</B> <I>(ostream &#38;<VAR>os</VAR>, const SCHUR &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX704"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> {}ComplexSCHUR <B>(void)</B>
+<DD><A NAME="IDX705"></A>
+<DT><U>:</U> {}ComplexSCHUR <B>(const</B> <I>ComplexMatrix &#38;<VAR>a</VAR>, const char *<VAR>ord</VAR>)</I>
+<DD><A NAME="IDX706"></A>
+<DT><U>:</U> {}ComplexSCHUR <B>(const</B> <I>ComplexMatrix &#38;<VAR>a</VAR>, const char *<VAR>ord</VAR>, int &#38;<VAR>info</VAR>)</I>
+<DD><A NAME="IDX707"></A>
+<DT><U>:</U> {}ComplexSCHUR <B>(const</B> <I>ComplexSCHUR &#38;<VAR>a</VAR>, const char *<VAR>ord</VAR>)</I>
+<DD><A NAME="IDX708"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ComplexSCHUR&#38; <B>operator =</B> <I>(const ComplexSCHUR &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX709"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ComplexMatrix <B>schur_matrix</B> <I>(void) const</I>
+<DD><A NAME="IDX710"></A>
+<DT><U>:</U> ComplexMatrix <B>unitary_matrix</B> <I>(void) const</I>
+<DD><A NAME="IDX711"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ostream&#38; <B>operator &#60;&#60;</B> <I>(ostream &#38;<VAR>os</VAR>, const ComplexSCHUR &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX712"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> {}SVD <B>(void)</B>
+<DD><A NAME="IDX713"></A>
+<DT><U>:</U> {}SVD <B>(const</B> <I>Matrix &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX714"></A>
+<DT><U>:</U> {}SVD <B>(const</B> <I>Matrix &#38;<VAR>a</VAR>, int &#38;<VAR>info</VAR>)</I>
+<DD><A NAME="IDX715"></A>
+<DT><U>:</U> {}SVD <B>(const</B> <I>SVD &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX716"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> SVD&#38; <B>operator =</B> <I>(const SVD &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX717"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> DiagMatrix <B>singular_values</B> <I>(void) const</I>
+<DD><A NAME="IDX718"></A>
+<DT><U>:</U> Matrix <B>left_singular_matrix</B> <I>(void) const</I>
+<DD><A NAME="IDX719"></A>
+<DT><U>:</U> Matrix <B>right_singular_matrix</B> <I>(void) const</I>
+<DD><A NAME="IDX720"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ostream&#38; <B>operator &#60;&#60;</B> <I>(ostream &#38;<VAR>os</VAR>, const SVD &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX721"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> {}ComplexSVD <B>(void)</B>
+<DD><A NAME="IDX722"></A>
+<DT><U>:</U> {}ComplexSVD <B>(const</B> <I>ComplexMatrix &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX723"></A>
+<DT><U>:</U> {}ComplexSVD <B>(const</B> <I>ComplexMatrix &#38;<VAR>a</VAR>, int &#38;<VAR>info</VAR>)</I>
+<DD><A NAME="IDX724"></A>
+<DT><U>:</U> {}ComplexSVD <B>(const</B> <I>ComplexSVD &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX725"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ComplexSVD&#38; <B>operator =</B> <I>(const ComplexSVD &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX726"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> DiagMatrix <B>singular_values</B> <I>(void) const</I>
+<DD><A NAME="IDX727"></A>
+<DT><U>:</U> ComplexMatrix <B>left_singular_matrix</B> <I>(void) const</I>
+<DD><A NAME="IDX728"></A>
+<DT><U>:</U> ComplexMatrix <B>right_singular_matrix</B> <I>(void) const</I>
+<DD><A NAME="IDX729"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ostream&#38; <B>operator &#60;&#60;</B> <I>(ostream &#38;<VAR>os</VAR>, const ComplexSVD &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX730"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> {}EIG <B>(void)</B>
+<DD><A NAME="IDX731"></A>
+<DT><U>:</U> {}EIG <B>(const</B> <I>Matrix &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX732"></A>
+<DT><U>:</U> {}EIG <B>(const</B> <I>Matrix &#38;<VAR>a</VAR>, int &#38;<VAR>info</VAR>)</I>
+<DD><A NAME="IDX733"></A>
+<DT><U>:</U> {}EIG <B>(const</B> <I>ComplexMatrix &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX734"></A>
+<DT><U>:</U> {}EIG <B>(const</B> <I>ComplexMatrix &#38;<VAR>a</VAR>, int &#38;<VAR>info</VAR>)</I>
+<DD><A NAME="IDX735"></A>
+<DT><U>:</U> {}EIG <B>(const</B> <I>EIG &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX736"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> EIG&#38; <B>operator =</B> <I>(const EIG &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX737"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ComplexColumnVector <B>eigenvalues</B> <I>(void) const</I>
+<DD><A NAME="IDX738"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ComplexMatrix <B>eigenvectors</B> <I>(void) const</I>
+<DD><A NAME="IDX739"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ostream&#38; <B>operator &#60;&#60;</B> <I>(ostream &#38;<VAR>os</VAR>, const EIG &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX740"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> {}LU <B>(void)</B>
+<DD><A NAME="IDX741"></A>
+<DT><U>:</U> {}LU <B>(const</B> <I>Matrix &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX742"></A>
+<DT><U>:</U> {}LU <B>(const</B> <I>LU &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX743"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> LU&#38; <B>operator =</B> <I>(const LU &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX744"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> Matrix <B>L</B> <I>(void) const</I>
+<DD><A NAME="IDX745"></A>
+<DT><U>:</U> Matrix <B>U</B> <I>(void) const</I>
+<DD><A NAME="IDX746"></A>
+<DT><U>:</U> Matrix <B>P</B> <I>(void) const</I>
+<DD><A NAME="IDX747"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ostream&#38; <B>operator &#60;&#60;</B> <I>(ostream &#38;<VAR>os</VAR>, const LU &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX748"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> {}ComplexLU <B>(void)</B>
+<DD><A NAME="IDX749"></A>
+<DT><U>:</U> {}ComplexLU <B>(const</B> <I>ComplexMatrix &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX750"></A>
+<DT><U>:</U> {}ComplexLU <B>(const</B> <I>ComplexLU &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX751"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ComplexLU&#38; <B>operator =</B> <I>(const ComplexLU &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX752"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ComplexMatrix <B>L</B> <I>(void) const</I>
+<DD><A NAME="IDX753"></A>
+<DT><U>:</U> ComplexMatrix <B>U</B> <I>(void) const</I>
+<DD><A NAME="IDX754"></A>
+<DT><U>:</U> Matrix <B>P</B> <I>(void) const</I>
+<DD><A NAME="IDX755"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ostream&#38; <B>operator &#60;&#60;</B> <I>(ostream &#38;<VAR>os</VAR>, const ComplexLU &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX756"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> {}QR <B>(void)</B>
+<DD><A NAME="IDX757"></A>
+<DT><U>:</U> {}QR <B>(const</B> <I>Matrix &#38;<VAR>A</VAR>)</I>
+<DD><A NAME="IDX758"></A>
+<DT><U>:</U> {}QR <B>(const</B> <I>QR &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX759"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> QR&#38; <B>operator =</B> <I>(const QR &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX760"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> Matrix <B>Q</B> <I>(void) const</I>
+<DD><A NAME="IDX761"></A>
+<DT><U>:</U> Matrix <B>R</B> <I>(void) const</I>
+<DD><A NAME="IDX762"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ostream&#38; <B>operator &#60;&#60;</B> <I>(ostream &#38;<VAR>os</VAR>, const QR &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX763"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> {}ComplexQR <B>(void)</B>
+<DD><A NAME="IDX764"></A>
+<DT><U>:</U> {}ComplexQR <B>(const</B> <I>ComplexMatrix &#38;<VAR>A</VAR>)</I>
+<DD><A NAME="IDX765"></A>
+<DT><U>:</U> {}ComplexQR <B>(const</B> <I>ComplexQR &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX766"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ComplexQR&#38; <B>operator =</B> <I>(const ComplexQR &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX767"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ComplexMatrix <B>Q</B> <I>(void) const</I>
+<DD><A NAME="IDX768"></A>
+<DT><U>:</U> ComplexMatrix <B>R</B> <I>(void) const</I>
+<DD><A NAME="IDX769"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ostream&#38; <B>operator &#60;&#60;</B> <I>(ostream &#38;<VAR>os</VAR>, const ComplexQR &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX770"></A>
+</DL>
+<P><HR><P>
+Go to the <A HREF="liboctave_1.html">first</A>, <A HREF="liboctave_5.html">previous</A>, <A HREF="liboctave_7.html">next</A>, <A HREF="liboctave_18.html">last</A> section, <A HREF="liboctave_toc.html">table of contents</A>.
+</BODY>
+</HTML>

@@ -1,0 +1,20 @@
+# This is the OS/2 makefile for texinfos lib directory.
+# (c) Klaus Gebhardt, 1999
+
+include ../makeconf.os2
+
+SOURCES = texindex.c
+
+INCL = 
+
+OBJECTS = texindex.obj
+
+LIBS = -ltexinfo
+
+all: texindex.exe
+
+texindex.exe: $(OBJECTS)
+	$(CC) $(LDFLAGS) -o texindex.exe $(OBJECTS) $(LIBS) $(ZFLAGS)
+
+clean:
+	rm -f *.o *.obj *.a *.lib *.dll *.exe

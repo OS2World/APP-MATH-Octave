@@ -1,0 +1,37 @@
+## System-wide startup file for Octave.
+##
+## This file should contain any commands that should be executed each
+## time Octave starts for every user at this site.
+
+## System-wide startup file
+## Octave 2.0.13 for OS/2
+## (c) 1996, Klaus Gebhardt
+
+PS1 = "octave:\\#>";
+
+EDITOR = "e";
+
+oct_home = "j:/apps2/science/octave";
+if length(getenv("OCTAVE_HOME"))
+  oct_home = getenv("OCTAVE_HOME");
+endif
+
+LOADPATH  = sprintf ("%s/scripts//;%s/dlfcn/examples", oct_home, oct_home);
+INFO_FILE = sprintf ("%s/doc/octave", oct_home);
+
+if length(file_in_path(getenv("PATH"),"less.exe"))
+  PAGER = sprintf("%s -ce",file_in_path(getenv("PATH"),"less.exe"));
+else
+  PAGER = "more";
+endif
+
+if length(getenv("GNUPLOT"))
+  gnuplot_binary = sprintf ("%s/gnuplot.exe", getenv("GNUPLOT"));
+else
+  gnuplot_binary = "gnuplot";
+endif
+
+implicit_str_to_num_ok     = 1;
+ok_to_lose_imaginary_part  = 1;
+ignore_function_time_stamp = 1;
+auto_unload_dot_oct_files  = 1;

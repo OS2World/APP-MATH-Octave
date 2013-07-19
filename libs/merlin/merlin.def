@@ -1,0 +1,66 @@
+LIBRARY MERLIN INITINSTANCE TERMINSTANCE
+DESCRIPTION 'merlin.dll v0.1, Klaus Gebhardt 2001'
+
+DATA
+   MULTIPLE NONSHARED
+
+EXPORTS
+
+; VIO
+  merlin_setctype					@1000
+
+; MEMORY
+  merlin_xmalloc					@1200
+  merlin_xrealloc					@1201
+  merlin_flex_alloc					@1202
+  merlin_flex_realloc					@1203
+  merlin_flex_free					@1204
+  merlin_xstrdup					@1205
+
+; MATH
+  merlin_dorand48					@1400
+  merlin_srand48					@1401
+  merlin_erand48					@1402
+  merlin_drand48					@1403
+  merlin_rand48_seed					@1404
+  merlin_rand48_mult					@1405
+  merlin_rand48_add					@1406
+  merlin_erf						@1407
+  merlin_erfc						@1408
+  merlin_j0						@1409
+  merlin_y0						@1410
+  merlin_j1						@1411
+  merlin_y1						@1412
+  merlin_jn						@1413
+  merlin_yn						@1414
+  merlin_acosh						@1415
+  merlin_asinh						@1416
+  merlin_atanh						@1417
+  merlin_gamma						@1418
+  merlin_lgamma						@1419
+  merlin_logb						@1420
+
+; STD
+  merlin_list						@2000
+  merlin_list_add_entry					@2001
+  merlin_list_iterate					@2002
+  merlin_list_find					@2003
+  merlin_list_array					@2004
+  merlin_list_index_of					@2005
+  merlin_list_element_at				@2006
+  merlin_properties					@2020
+  merlin_properties_set					@2021
+  merlin_properties_get					@2022
+  merlin_properties_save				@2023
+  merlin_properties_load				@2024
+  merlin_properties_scan				@2025
+
+; PROCESS
+  merlin_dlopen						@1600
+  merlin_dlsym						@1601
+  merlin_dlerror					@1602
+  merlin_dlclose					@1603
+  merlin_mkfifo						@1610
+  merlin_mkfifo_remove					@1611
+  merlin_mkfifo_list					@1612
+  merlin_mkfifo_exit					@1613

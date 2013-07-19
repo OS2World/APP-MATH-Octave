@@ -1,0 +1,20 @@
+# Makefile for octave's doc directory
+# (c) Klaus Gebhardt, 1994 - 1997
+
+TOPDIR = ..
+
+include $(TOPDIR)/Makeconf.os2
+
+srcdir = .
+
+MAKE_SUB = make -f ../makefile-subdirs.os2
+
+all:
+	cd faq         ; $(MAKE_SUB) FILE=oct-faq all ; cd ..
+	cd interpreter ; $(MAKE_SUB) FILE=octave  all ; cd ..
+	cd liboctave   ; $(MAKE_SUB) FILE=liboct  all ; cd ..
+
+clean:
+	cd faq         ; $(MAKE_SUB) FILE=oct-faq clean ; cd ..
+	cd interpreter ; $(MAKE_SUB) FILE=octave  clean ; cd ..
+	cd liboctave   ; $(MAKE_SUB) FILE=liboct  clean ; cd ..

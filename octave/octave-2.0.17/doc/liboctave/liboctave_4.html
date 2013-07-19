@@ -1,0 +1,528 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from ./liboctave.texi on 9 October 1998 -->
+
+<TITLE>Octave C++ Classes - Arrays</TITLE>
+</HEAD>
+<BODY>
+Go to the <A HREF="liboctave_1.html">first</A>, <A HREF="liboctave_3.html">previous</A>, <A HREF="liboctave_5.html">next</A>, <A HREF="liboctave_18.html">last</A> section, <A HREF="liboctave_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC8" HREF="liboctave_toc.html#TOC8">Arrays</A></H1>
+<P>
+<A NAME="IDX6"></A>
+
+</P>
+
+
+
+<H2><A NAME="SEC9" HREF="liboctave_toc.html#TOC9">Constructors and Assignment</A></H2>
+
+<P>
+<DL>
+<DT><U>Constructor:</U>  <B>Array&#60;T&#62;::Array</B> <I>(void)</I>
+<DD><A NAME="IDX7"></A>
+Create an array with no elements.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Constructor:</U>  <B>Array&#60;T&#62;::Array</B> <I>(int <VAR>n</VAR> [, const T &#38;<VAR>val</VAR>])</I>
+<DD><A NAME="IDX8"></A>
+Create an array with <VAR>n</VAR> elements.  If the optional argument
+<VAR>val</VAR> is supplied, the elements are initialized to <VAR>val</VAR>;
+otherwise, they are left uninitialized.  If <VAR>n</VAR> is less than zero,
+the current error handler is invoked (see section <A HREF="liboctave_14.html#SEC26">Error Handling</A>).
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Constructor:</U>  <B>Array&#60;T&#62;::Array</B> <I>(const Array&#60;T&#62; &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX9"></A>
+Create a copy of the <VAR>Array&#60;T&#62;</VAR> object <VAR>a</VAR>.  Memory for the
+<VAR>Array&#60;T&#62;</VAR> class is managed using a reference counting scheme, so
+the cost of this operation is independent of the size of the array.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Operator:</U> Array&#60;T&#62;&#38; <B>Array&#60;T&#62;::operator =</B> <I>(const Array&#60;T&#62; &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX10"></A>
+Assignment operator.  Memory for the <VAR>Array&#60;T&#62;</VAR> class is managed
+using a reference counting scheme, so the cost of this operation is
+independent of the size of the array.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Method:</U> int <B>Array&#60;T&#62;::capacity</B> <I>(void) const</I>
+<DD><A NAME="IDX11"></A>
+<DT><U>Method:</U> int <B>Array&#60;T&#62;::length</B> <I>(void) const</I>
+<DD><A NAME="IDX12"></A>
+Return the length of the array.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Method:</U> T&#38; <B>Array&#60;T&#62;::elem</B> <I>(int <VAR>n</VAR>)</I>
+<DD><A NAME="IDX13"></A>
+<DT><U>Method:</U> T&#38; <B>Array&#60;T&#62;::checkelem</B> <I>(int <VAR>n</VAR>)</I>
+<DD><A NAME="IDX14"></A>
+<DT><U>Method:</U> T&#38; <B>Array&#60;T&#62;::operator ()</B> <I>(int <VAR>n</VAR>)</I>
+<DD><A NAME="IDX15"></A>
+If <VAR>n</VAR> is within the bounds of the array, return a reference to the
+element indexed by <VAR>n</VAR>; otherwise, the current error handler is
+invoked (see section <A HREF="liboctave_14.html#SEC26">Error Handling</A>).
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Method:</U> T <B>Array&#60;T&#62;::elem</B> <I>(int <VAR>n</VAR>) const</I>
+<DD><A NAME="IDX16"></A>
+<DT><U>Method:</U> T <B>Array&#60;T&#62;::checkelem</B> <I>(int <VAR>n</VAR>) const</I>
+<DD><A NAME="IDX17"></A>
+<DT><U>Method:</U> T <B>Array&#60;T&#62;::operator</B> <I>() (int <VAR>n</VAR>) const</I>
+<DD><A NAME="IDX18"></A>
+If <VAR>n</VAR> is within the bounds of the array, return the value indexed
+by <VAR>n</VAR>; otherwise, call the current error handler.
+See section <A HREF="liboctave_14.html#SEC26">Error Handling</A>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Method:</U> T&#38; <B>Array&#60;T&#62;::xelem</B> <I>(int <VAR>n</VAR>)</I>
+<DD><A NAME="IDX19"></A>
+<DT><U>Method:</U> T <B>Array&#60;T&#62;::xelem</B> <I>(int <VAR>n</VAR>) const</I>
+<DD><A NAME="IDX20"></A>
+Return a reference to, or the value of, the element indexed by <VAR>n</VAR>.
+These methods never perform bounds checking.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Method:</U> void <B>Array&#60;T&#62;::resize</B> <I>(int <VAR>n</VAR> [, const T &#38;<VAR>val</VAR>])</I>
+<DD><A NAME="IDX21"></A>
+Change the size of the array to be <VAR>n</VAR> elements.  All elements are
+unchanged, except that if <VAR>n</VAR> is greater than the current size and
+the optional argument <VAR>val</VAR> is provided, the additional elements are
+initialized to <VAR>val</VAR>; otherwise, any additional elements are left
+uninitialized.  In the current implementation, if <VAR>n</VAR> is less than
+the current size, the length is updated but no memory is released.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Method:</U> const T* <B>Array&#60;T&#62;::data</B> <I>(void) const</I>
+<DD><A NAME="IDX22"></A>
+</DL>
+
+</P>
+
+<P>
+<DL>
+<DT><U>:</U>  <B>Array2</B> <I>(void)</I>
+<DD><A NAME="IDX23"></A>
+<DT><U>:</U>  <B>Array2</B> <I>(int <VAR>n</VAR>, int <VAR>m</VAR>)</I>
+<DD><A NAME="IDX24"></A>
+<DT><U>:</U>  <B>Array2</B> <I>(int <VAR>n</VAR>, int <VAR>m</VAR>, const T &#38;<VAR>val</VAR>)</I>
+<DD><A NAME="IDX25"></A>
+<DT><U>:</U>  <B>Array2</B> <I>(const Array2&#60;T&#62; &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX26"></A>
+<DT><U>:</U>  <B>Array2</B> <I>(const DiagArray&#60;T&#62; &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX27"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> Array2&#60;T&#62;&#38; <B>operator =</B> <I>(const Array2&#60;T&#62; &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX28"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> int <B>dim1</B> <I>(void) const</I>
+<DD><A NAME="IDX29"></A>
+<DT><U>:</U> int <B>rows</B> <I>(void) const</I>
+<DD><A NAME="IDX30"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> int <B>dim2</B> <I>(void) const</I>
+<DD><A NAME="IDX31"></A>
+<DT><U>:</U> int <B>cols</B> <I>(void) const</I>
+<DD><A NAME="IDX32"></A>
+<DT><U>:</U> int <B>columns</B> <I>(void) const</I>
+<DD><A NAME="IDX33"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> T&#38; <B>elem</B> <I>(int <VAR>i</VAR>, int <VAR>j</VAR>)</I>
+<DD><A NAME="IDX34"></A>
+<DT><U>:</U> T&#38; <B>checkelem</B> <I>(int <VAR>i</VAR>, int <VAR>j</VAR>)</I>
+<DD><A NAME="IDX35"></A>
+<DT><U>:</U> T&#38; <B>operator ()</B> <I>(int <VAR>i</VAR>, int <VAR>j</VAR>)</I>
+<DD><A NAME="IDX36"></A>
+</DL>
+
+</P>
+
+<P>
+<DL>
+<DT><U>:</U> void <B>resize</B> <I>(int <VAR>n</VAR>, int <VAR>m</VAR>)</I>
+<DD><A NAME="IDX37"></A>
+<DT><U>:</U> void <B>resize</B> <I>(int <VAR>n</VAR>, int <VAR>m</VAR>, const T &#38;<VAR>val</VAR>)</I>
+<DD><A NAME="IDX38"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> Array3 <B>(void)</B>
+<DD><A NAME="IDX39"></A>
+<DT><U>:</U> Array3 <B>(int</B> <I><VAR>n</VAR>, int <VAR>m</VAR>, int <VAR>k</VAR>)</I>
+<DD><A NAME="IDX40"></A>
+<DT><U>:</U> Array3 <B>(int</B> <I><VAR>n</VAR>, int <VAR>m</VAR>, int <VAR>k</VAR>, const T &#38;<VAR>val</VAR>)</I>
+<DD><A NAME="IDX41"></A>
+<DT><U>:</U> Array3 <B>(const</B> <I>Array3&#60;T&#62; &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX42"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> Array3&#60;T&#62;&#38; <B>operator =</B> <I>(const Array3&#60;T&#62; &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX43"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> int <B>dim1</B> <I>(void) const</I>
+<DD><A NAME="IDX44"></A>
+<DT><U>:</U> int <B>dim2</B> <I>(void) const</I>
+<DD><A NAME="IDX45"></A>
+<DT><U>:</U> int <B>dim3</B> <I>(void) const</I>
+<DD><A NAME="IDX46"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> T&#38; <B>elem</B> <I>(int <VAR>i</VAR>, int <VAR>j</VAR>, int <VAR>k</VAR>)</I>
+<DD><A NAME="IDX47"></A>
+<DT><U>:</U> T&#38; <B>checkelem</B> <I>(int <VAR>i</VAR>, int <VAR>j</VAR>, int <VAR>k</VAR>)</I>
+<DD><A NAME="IDX48"></A>
+<DT><U>:</U> T&#38; <B>operator ()</B> <I>(int <VAR>i</VAR>, int <VAR>j</VAR>, int <VAR>k</VAR>)</I>
+<DD><A NAME="IDX49"></A>
+</DL>
+
+</P>
+
+<P>
+<DL>
+<DT><U>:</U> void <B>resize</B> <I>(int <VAR>n</VAR>, int <VAR>m</VAR>, int <VAR>k</VAR>)</I>
+<DD><A NAME="IDX50"></A>
+<DT><U>:</U> void <B>resize</B> <I>(int <VAR>n</VAR>, int <VAR>m</VAR>, int <VAR>k</VAR>, const T &#38;<VAR>val</VAR>)</I>
+<DD><A NAME="IDX51"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> {}DiagArray <B>(void)</B>
+<DD><A NAME="IDX52"></A>
+<DT><U>:</U> {}DiagArray <B>(int</B> <I><VAR>n</VAR>)</I>
+<DD><A NAME="IDX53"></A>
+<DT><U>:</U> {}DiagArray <B>(int</B> <I><VAR>n</VAR>, const T &#38;<VAR>val</VAR>)</I>
+<DD><A NAME="IDX54"></A>
+<DT><U>:</U> {}DiagArray <B>(int</B> <I><VAR>r</VAR>, int <VAR>c</VAR>)</I>
+<DD><A NAME="IDX55"></A>
+<DT><U>:</U> {}DiagArray <B>(int</B> <I><VAR>r</VAR>, int <VAR>c</VAR>, const T &#38;<VAR>val</VAR>)</I>
+<DD><A NAME="IDX56"></A>
+<DT><U>:</U> {}DiagArray <B>(const</B> <I>Array&#60;T&#62; &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX57"></A>
+<DT><U>:</U> {}DiagArray <B>(const</B> <I>DiagArray&#60;T&#62; &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX58"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> DiagArray&#60;T&#62;&#38; <B>operator =</B> <I>(const DiagArray&#60;T&#62; &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX59"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> int <B>dim1</B> <I>(void) const</I>
+<DD><A NAME="IDX60"></A>
+<DT><U>:</U> int <B>rows</B> <I>(void) const</I>
+<DD><A NAME="IDX61"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> int <B>dim2</B> <I>(void) const</I>
+<DD><A NAME="IDX62"></A>
+<DT><U>:</U> int <B>cols</B> <I>(void) const</I>
+<DD><A NAME="IDX63"></A>
+<DT><U>:</U> int <B>columns</B> <I>(void) const</I>
+<DD><A NAME="IDX64"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> T&#38; <B>elem</B> <I>(int <VAR>r</VAR>, int <VAR>c</VAR>)</I>
+<DD><A NAME="IDX65"></A>
+<DT><U>:</U> T&#38; <B>checkelem</B> <I>(int <VAR>r</VAR>, int <VAR>c</VAR>)</I>
+<DD><A NAME="IDX66"></A>
+<DT><U>:</U> T&#38; <B>operator ()</B> <I>(int <VAR>r</VAR>, int <VAR>c</VAR>)</I>
+<DD><A NAME="IDX67"></A>
+</DL>
+
+</P>
+
+<P>
+<DL>
+<DT><U>:</U> void <B>resize</B> <I>(int <VAR>n</VAR>, int <VAR>m</VAR>)</I>
+<DD><A NAME="IDX68"></A>
+<DT><U>:</U> void <B>resize</B> <I>(int <VAR>n</VAR>, int <VAR>m</VAR>, const T &#38;<VAR>val</VAR>)</I>
+<DD><A NAME="IDX69"></A>
+</DL>
+The real and complex <CODE>ColumnVector</CODE> and <CODE>RowVector</CODE> classes
+all have the following functions.  These will eventually be part of an
+<CODE>MArray&#60;T&#62;</CODE> class, derived from the <CODE>Array&#60;T&#62;</CODE> class.  Then
+the <CODE>ColumnVector</CODE> and <CODE>RowVector</CODE> classes will be derived
+from the <CODE>MArray&#60;T&#62;</CODE> class.
+
+</P>
+<P>
+Element by element vector by scalar ops.
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> RowVector <B>operator +</B> <I>(const RowVector &#38;<VAR>a</VAR>, const double &#38;<VAR>s</VAR>)</I>
+<DD><A NAME="IDX70"></A>
+<DT><U>:</U> RowVector <B>operator -</B> <I>(const RowVector &#38;<VAR>a</VAR>, const double &#38;<VAR>s</VAR>)</I>
+<DD><A NAME="IDX71"></A>
+<DT><U>:</U> RowVector <B>operator *</B> <I>(const RowVector &#38;<VAR>a</VAR>, const double &#38;<VAR>s</VAR>)</I>
+<DD><A NAME="IDX72"></A>
+<DT><U>:</U> RowVector <B>operator /</B> <I>(const RowVector &#38;<VAR>a</VAR>, const double &#38;<VAR>s</VAR>)</I>
+<DD><A NAME="IDX73"></A>
+</DL>
+
+</P>
+<P>
+Element by element scalar by vector ops.
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> RowVector <B>operator +</B> <I>(const double &#38;<VAR>s</VAR>, const RowVector &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX74"></A>
+<DT><U>:</U> RowVector <B>operator -</B> <I>(const double &#38;<VAR>s</VAR>, const RowVector &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX75"></A>
+<DT><U>:</U> RowVector <B>operator *</B> <I>(const double &#38;<VAR>s</VAR>, const RowVector &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX76"></A>
+<DT><U>:</U> RowVector <B>operator /</B> <I>(const double &#38;<VAR>s</VAR>, const RowVector &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX77"></A>
+</DL>
+
+</P>
+<P>
+Element by element vector by vector ops.
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> RowVector <B>operator +</B> <I>(const RowVector &#38;<VAR>a</VAR>, const RowVector &#38;<VAR>b</VAR>)</I>
+<DD><A NAME="IDX78"></A>
+<DT><U>:</U> RowVector <B>operator -</B> <I>(const RowVector &#38;<VAR>a</VAR>, const RowVector &#38;<VAR>b</VAR>)</I>
+<DD><A NAME="IDX79"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> RowVector <B>product</B> <I>(const RowVector &#38;<VAR>a</VAR>, const RowVector &#38;<VAR>b</VAR>)</I>
+<DD><A NAME="IDX80"></A>
+<DT><U>:</U> RowVector <B>quotient</B> <I>(const RowVector &#38;<VAR>a</VAR>, const RowVector &#38;<VAR>b</VAR>)</I>
+<DD><A NAME="IDX81"></A>
+</DL>
+
+</P>
+<P>
+Unary MArray ops.
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> RowVector <B>operator -</B> <I>(const RowVector &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX82"></A>
+</DL>
+
+</P>
+
+<P>
+The <CODE>Matrix</CODE> classes share the following functions.  These will
+eventually be part of an <CODE>MArray2&#60;T&#62;</CODE> class, derived from the
+<CODE>Array2&#60;T&#62;</CODE> class.  Then the <CODE>Matrix</CODE> class will be derived
+from the <CODE>MArray&#60;T&#62;</CODE> class.
+
+</P>
+<P>
+Element by element matrix by scalar ops.
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> Matrix <B>operator +</B> <I>(const Matrix &#38;<VAR>a</VAR>, const double &#38;<VAR>s</VAR>)</I>
+<DD><A NAME="IDX83"></A>
+<DT><U>:</U> Matrix <B>operator -</B> <I>(const Matrix &#38;<VAR>a</VAR>, const double &#38;<VAR>s</VAR>)</I>
+<DD><A NAME="IDX84"></A>
+<DT><U>:</U> Matrix <B>operator *</B> <I>(const Matrix &#38;<VAR>a</VAR>, const double &#38;<VAR>s</VAR>)</I>
+<DD><A NAME="IDX85"></A>
+<DT><U>:</U> Matrix <B>operator /</B> <I>(const Matrix &#38;<VAR>a</VAR>, const double &#38;<VAR>s</VAR>)</I>
+<DD><A NAME="IDX86"></A>
+</DL>
+
+</P>
+<P>
+Element by element scalar by matrix ops.
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> Matrix <B>operator +</B> <I>(const double &#38;<VAR>s</VAR>, const Matrix &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX87"></A>
+<DT><U>:</U> Matrix <B>operator -</B> <I>(const double &#38;<VAR>s</VAR>, const Matrix &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX88"></A>
+<DT><U>:</U> Matrix <B>operator *</B> <I>(const double &#38;<VAR>s</VAR>, const Matrix &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX89"></A>
+<DT><U>:</U> Matrix <B>operator /</B> <I>(const double &#38;<VAR>s</VAR>, const Matrix &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX90"></A>
+</DL>
+
+</P>
+<P>
+Element by element matrix by matrix ops.
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> Matrix <B>operator +</B> <I>(const Matrix &#38;<VAR>a</VAR>, const Matrix &#38;<VAR>b</VAR>)</I>
+<DD><A NAME="IDX91"></A>
+<DT><U>:</U> Matrix <B>operator -</B> <I>(const Matrix &#38;<VAR>a</VAR>, const Matrix &#38;<VAR>b</VAR>)</I>
+<DD><A NAME="IDX92"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> Matrix <B>product</B> <I>(const Matrix &#38;<VAR>a</VAR>, const Matrix &#38;<VAR>b</VAR>)</I>
+<DD><A NAME="IDX93"></A>
+<DT><U>:</U> Matrix <B>quotient</B> <I>(const Matrix &#38;<VAR>a</VAR>, const Matrix &#38;<VAR>b</VAR>)</I>
+<DD><A NAME="IDX94"></A>
+</DL>
+
+</P>
+<P>
+Unary matrix ops.
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> Matrix <B>operator -</B> <I>(const Matrix &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX95"></A>
+</DL>
+
+</P>
+
+<P>
+The <CODE>DiagMatrix</CODE> classes share the following functions.  These will
+eventually be part of an <CODE>MDiagArray&#60;T&#62;</CODE> class, derived from the
+<CODE>DiagArray&#60;T&#62;</CODE> class.  Then the <CODE>DiagMatrix</CODE> class will be
+derived from the <CODE>MDiagArray&#60;T&#62;</CODE> class.
+
+</P>
+<P>
+Element by element MDiagArray by scalar ops.
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> DiagMatrix <B>operator *</B> <I>(const DiagMatrix &#38;<VAR>a</VAR>, const double &#38;<VAR>s</VAR>)</I>
+<DD><A NAME="IDX96"></A>
+<DT><U>:</U> DiagMatrix <B>operator /</B> <I>(const DiagMatrix &#38;<VAR>a</VAR>, const double &#38;<VAR>s</VAR>)</I>
+<DD><A NAME="IDX97"></A>
+</DL>
+
+</P>
+<P>
+Element by element scalar by MDiagArray ops.
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> DiagMatrix <B>operator *</B> <I>(const double &#38;<VAR>s</VAR>, const DiagMatrix &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX98"></A>
+</DL>
+
+</P>
+<P>
+Element by element MDiagArray by MDiagArray ops.
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> DiagMatrix <B>operator +</B> <I>(const DiagMatrix &#38;<VAR>a</VAR>, const DiagMatrix &#38;<VAR>b</VAR>)</I>
+<DD><A NAME="IDX99"></A>
+<DT><U>:</U> DiagMatrix <B>operator -</B> <I>(const DiagMatrix &#38;<VAR>a</VAR>, const DiagMatrix &#38;<VAR>b</VAR>)</I>
+<DD><A NAME="IDX100"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> DiagMatrix <B>product</B> <I>(const DiagMatrix &#38;<VAR>a</VAR>, const DiagMatrix &#38;<VAR>b</VAR>)</I>
+<DD><A NAME="IDX101"></A>
+</DL>
+
+</P>
+<P>
+Unary MDiagArray ops.
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> DiagMatrix <B>operator -</B> <I>(const DiagMatrix &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX102"></A>
+</DL>
+
+</P>
+
+<P><HR><P>
+Go to the <A HREF="liboctave_1.html">first</A>, <A HREF="liboctave_3.html">previous</A>, <A HREF="liboctave_5.html">next</A>, <A HREF="liboctave_18.html">last</A> section, <A HREF="liboctave_toc.html">table of contents</A>.
+</BODY>
+</HTML>

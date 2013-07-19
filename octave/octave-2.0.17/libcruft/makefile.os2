@@ -1,0 +1,48 @@
+# Makefile for octave's libcruft directory
+# Modified by Klaus Gebhardt, 1994 - 1999
+
+TOPDIR = ..
+
+include $(TOPDIR)/makeconf.os2
+
+MAKE_SUB = make -f ../makefile-subdirs.os2
+
+CRUFT_DEF = $(wildcard *.def)
+CRUFT_LIB = $(patsubst %.def, %.lib, $(CRUFT_DEF))
+CRUFT_A   = $(patsubst %.def, %.a, $(CRUFT_DEF))
+
+# balgen, eispack and specfun added.
+CRUFT_DIRS = amos balgen blas dassl eispack fftpack lapack linpack minpack misc odepack \
+	quadpack ranlib slatec-err slatec-fn specfun villad
+
+SUBDIRS = $(CRUFT_DIRS)
+
+CRUFT1 = cruft1.def balgen.lib eispack.lib fftpack.lib
+CRUFT2 = cruft2.def amos.lib misc.lib blas.lib dassl.lib linpack.lib \
+	slatec-err.lib slatec-fn.lib specfun.lib
+CRUFT3 = cruft3.def minpack.lib odepack.lib quadpack.lib ranlib.lib villad.lib
+CRUFT4 = cruft4.def lapack.lib
+
+all: $(CRUFT_LIB) $(CRUFT_A)
+	@for CRFTDIR in $(SUBDIRS) ; do cd $$CRFTDIR ; $(MAKE_SUB) omf                       ; cd .. ; done
+	@for CRFTDIR in $(SUBDIRS) ; do cd $$CRFTDIR ; $(MAKE_SUB) DLLNAME=$$CRFTDIR lib omf ; cd .. ; done
+	$(MAKE) $(TOPDIR)/dll/cruft1.dll
+	$(MAKE) $(TOPDIR)/dll/cruft2.dll
+	$(MAKE) $(TOPDIR)/dll/cruft3.dll
+	$(MAKE) $(TOPDIR)/dll/cruft4.dll
+
+$(TOPDIR)/dll/cruft1.dll: $(CRUFT1)
+	$(CC) -o $@ $(CRUFT1) -Zdll -Zomf -Zcrtdll
+
+$(TOPDIR)/dll/cruft2.dll: $(CRUFT2)
+	$(CC) -o $@ $(CRUFT2) -Zdll -Zomf -Zcrtdll
+
+$(TOPDIR)/dll/cruft3.dll: $(CRUFT3)
+	$(CC) -o $@ $(CRUFT3) -Zdll -Zomf -Zcrtdll
+
+$(TOPDIR)/dll/cruft4.dll: $(CRUFT4)
+	$(CC) -o $@ $(CRUFT4) -Zdll -Zomf -Zcrtdll
+
+clean:
+	@for CRFTDIR in $(SUBDIRS) ; do cd $$CRFTDIR ; $(MAKE_SUB) clean ; cd .. ; done
+	rm -f *.lib *.a *.imp *.obj *.o $(TOPDIR)/dll/cruft*.dll

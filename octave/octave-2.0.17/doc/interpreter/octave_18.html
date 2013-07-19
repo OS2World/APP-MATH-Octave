@@ -1,0 +1,700 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from ./octave.texi on 9 October 1998 -->
+
+<TITLE>GNU Octave - Linear Algebra</TITLE>
+</HEAD>
+<BODY>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_17.html">previous</A>, <A HREF="octave_19.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC143" HREF="octave_toc.html#TOC143">Linear Algebra</A></H1>
+
+<P>
+This chapter documents the linear algebra functions of Octave.
+Reference material for many of these functions may be found in
+Golub and Van Loan, <CITE>Matrix Computations, 2nd Ed.</CITE>, Johns Hopkins,
+1989, and in <CITE>LAPACK Users' Guide</CITE>, SIAM, 1992.
+
+</P>
+
+
+
+<H2><A NAME="SEC144" HREF="octave_toc.html#TOC144">Basic Matrix Functions</A></H2>
+
+<P>
+<DL>
+<DT><U>Loadable Function:</U> <VAR>aa</VAR> = <B>balance</B> <I>(<VAR>a</VAR>, <VAR>opt</VAR>)</I>
+<DD><A NAME="IDX696"></A>
+<DT><U>Loadable Function:</U> [<VAR>dd</VAR>, <VAR>aa</VAR>] = <B>balance</B> <I>(<VAR>a</VAR>, <VAR>opt</VAR>)</I>
+<DD><A NAME="IDX697"></A>
+<DT><U>Loadable Function:</U> [<VAR>cc</VAR>, <VAR>dd</VAR>, <VAR>aa</VAR>, <VAR>bb]</VAR> = <B>balance</B> <I>(<VAR>a</VAR>, <VAR>b</VAR>, <VAR>opt</VAR>)</I>
+<DD><A NAME="IDX698"></A>
+
+</P>
+<P>
+<CODE>[dd, aa] = balance (a)</CODE> returns <CODE>aa = dd \ a * dd</CODE>.
+<CODE>aa</CODE> is a matrix whose row and column norms are roughly equal in
+magnitude, and <CODE>dd</CODE> = <CODE>p * d</CODE>, where <CODE>p</CODE> is a permutation
+matrix and <CODE>d</CODE> is a diagonal matrix of powers of two.  This allows
+the equilibration to be computed without roundoff.  Results of
+eigenvalue calculation are typically improved by balancing first.
+
+</P>
+<P>
+<CODE>[cc, dd, aa, bb] = balance (a, b)</CODE> returns <CODE>aa = cc*a*dd</CODE> and
+<CODE>bb = cc*b*dd)</CODE>, where <CODE>aa</CODE> and <CODE>bb</CODE> have non-zero
+elements of approximately the same magnitude and <CODE>cc</CODE> and <CODE>dd</CODE>
+are permuted diagonal matrices as in <CODE>dd</CODE> for the algebraic
+eigenvalue problem.
+
+</P>
+<P>
+The eigenvalue balancing option <CODE>opt</CODE> is selected as follows:
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>"N"</CODE>, <CODE>"n"</CODE>
+<DD>
+No balancing; arguments copied, transformation(s) set to identity.
+
+<DT><CODE>"P"</CODE>, <CODE>"p"</CODE>
+<DD>
+Permute argument(s) to isolate eigenvalues where possible.
+
+<DT><CODE>"S"</CODE>, <CODE>"s"</CODE>
+<DD>
+Scale to improve accuracy of computed eigenvalues.
+
+<DT><CODE>"B"</CODE>, <CODE>"b"</CODE>
+<DD>
+Permute and scale, in that order. Rows/columns of a (and b)
+that are isolated by permutation are not scaled.  This is the default
+behavior.
+</DL>
+
+<P>
+Algebraic eigenvalue balancing uses standard LAPACK routines.
+
+</P>
+<P>
+Generalized eigenvalue problem balancing uses Ward's algorithm
+(SIAM Journal on Scientific and Statistical Computing, 1981).
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U>  <B>cond</B> <I>(<VAR>a</VAR>)</I>
+<DD><A NAME="IDX699"></A>
+Compute the (two-norm) condition number of a matrix. <CODE>cond (a)</CODE> is
+defined as <CODE>norm (a) * norm (inv (a))</CODE>, and is computed via a
+singular value decomposition.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U>  <B>det</B> <I>(<VAR>a</VAR>)</I>
+<DD><A NAME="IDX700"></A>
+Compute the determinant of <VAR>a</VAR> using LINPACK.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U> <VAR>lambda</VAR> = <B>eig</B> <I>(<VAR>a</VAR>)</I>
+<DD><A NAME="IDX701"></A>
+<DT><U>Loadable Function:</U> [<VAR>v</VAR>, <VAR>lambda</VAR>] = <B>eig</B> <I>(<VAR>a</VAR>)</I>
+<DD><A NAME="IDX702"></A>
+The eigenvalues (and eigenvectors) of a matrix are computed in a several
+step process which begins with a Hessenberg decomposition, followed by a
+Schur decomposition, from which the eigenvalues are apparent.  The
+eigenvectors, when desired, are computed by further manipulations of the
+Schur decomposition.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U> <VAR>G</VAR> = <B>givens</B> <I>(<VAR>x</VAR>, <VAR>y</VAR>)</I>
+<DD><A NAME="IDX703"></A>
+<DT><U>Loadable Function:</U> [<VAR>c</VAR>, <VAR>s</VAR>] = <B>givens</B> <I>(<VAR>x</VAR>, <VAR>y</VAR>)</I>
+<DD><A NAME="IDX704"></A>
+
+</P>
+<P>
+For example,
+
+</P>
+
+<PRE>
+givens (1, 1)
+     =>   0.70711   0.70711
+         -0.70711   0.70711
+</PRE>
+
+</DL>
+
+<P>
+<DL>
+<DT><U>Loadable Function:</U>  <B>inv</B> <I>(<VAR>a</VAR>)</I>
+<DD><A NAME="IDX705"></A>
+<DT><U>Loadable Function:</U>  <B>inverse</B> <I>(<VAR>a</VAR>)</I>
+<DD><A NAME="IDX706"></A>
+Compute the inverse of the square matrix <VAR>a</VAR>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>norm</B> <I>(<VAR>a</VAR>, <VAR>p</VAR>)</I>
+<DD><A NAME="IDX707"></A>
+Compute the p-norm of the matrix <VAR>a</VAR>.  If the second argument is
+missing, <CODE>p = 2</CODE> is assumed.
+
+</P>
+<P>
+If <VAR>a</VAR> is a matrix:
+
+</P>
+<DL COMPACT>
+
+<DT><VAR>p</VAR> = <CODE>1</CODE>
+<DD>
+1-norm, the largest column sum of <VAR>a</VAR>.
+
+<DT><VAR>p</VAR> = <CODE>2</CODE>
+<DD>
+Largest singular value of <VAR>a</VAR>.
+
+<DT><VAR>p</VAR> = <CODE>Inf</CODE>
+<DD>
+<A NAME="IDX708"></A>
+Infinity norm, the largest row sum of <VAR>a</VAR>.
+
+<DT><VAR>p</VAR> = <CODE>"fro"</CODE>
+<DD>
+<A NAME="IDX709"></A>
+Frobenius norm of <VAR>a</VAR>, <CODE>sqrt (sum (diag (<VAR>a</VAR>' * <VAR>a</VAR>)))</CODE>.
+</DL>
+
+<P>
+If <VAR>a</VAR> is a vector or a scalar:
+
+</P>
+<DL COMPACT>
+
+<DT><VAR>p</VAR> = <CODE>Inf</CODE>
+<DD>
+<CODE>max (abs (<VAR>a</VAR>))</CODE>.
+
+<DT><VAR>p</VAR> = <CODE>-Inf</CODE>
+<DD>
+<CODE>min (abs (<VAR>a</VAR>))</CODE>.
+
+<DT>other
+<DD>
+p-norm of <VAR>a</VAR>, <CODE>(sum (abs (<VAR>a</VAR>) .^ <VAR>p</VAR>)) ^ (1/<VAR>p</VAR>)</CODE>.
+</DL>
+</DL>
+
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>null</B> <I>(<VAR>a</VAR>, <VAR>tol</VAR>)</I>
+<DD><A NAME="IDX710"></A>
+Return an orthonormal basis of the null space of <VAR>a</VAR>.
+
+</P>
+<P>
+The dimension of the null space is taken as the number of singular
+values of <VAR>a</VAR> not greater than <VAR>tol</VAR>.  If the argument <VAR>tol</VAR>
+is missing, it is computed as
+
+</P>
+
+<PRE>
+max (size (<VAR>a</VAR>)) * max (svd (<VAR>a</VAR>)) * eps
+</PRE>
+
+</DL>
+
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>orth</B> <I>(<VAR>a</VAR>, <VAR>tol</VAR>)</I>
+<DD><A NAME="IDX711"></A>
+Return an orthonormal basis of the range space of <VAR>a</VAR>.
+
+</P>
+<P>
+The dimension of the range space is taken as the number of singular
+values of <VAR>a</VAR> greater than <VAR>tol</VAR>.  If the argument <VAR>tol</VAR> is
+missing, it is computed as
+
+</P>
+
+<PRE>
+max (size (<VAR>a</VAR>)) * max (svd (<VAR>a</VAR>)) * eps
+</PRE>
+
+</DL>
+
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>pinv</B> <I>(<VAR>x</VAR>, <VAR>tol</VAR>)</I>
+<DD><A NAME="IDX712"></A>
+Return the pseudoinverse of <VAR>x</VAR>.  Singular values less than
+<VAR>tol</VAR> are ignored. 
+
+</P>
+<P>
+If the second argument is omitted, it is assumed that
+
+</P>
+
+<PRE>
+tol = max (size (<VAR>x</VAR>)) * sigma_max (<VAR>x</VAR>) * eps,
+</PRE>
+
+<P>
+where <CODE>sigma_max (<VAR>x</VAR>)</CODE> is the maximal singular value of <VAR>x</VAR>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>rank</B> <I>(<VAR>a</VAR>, <VAR>tol</VAR>)</I>
+<DD><A NAME="IDX713"></A>
+Compute the rank of <VAR>a</VAR>, using the singular value decomposition.
+The rank is taken to be the number  of singular values of <VAR>a</VAR> that
+are greater than the specified tolerance <VAR>tol</VAR>.  If the second
+argument is omitted, it is taken to be
+
+</P>
+
+<PRE>
+tol = max (size (<VAR>a</VAR>)) * sigma (1) * eps;
+</PRE>
+
+<P>
+where <CODE>eps</CODE> is machine precision and <CODE>sigma</CODE> is the largest
+singular value of <VAR>a</VAR>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>trace</B> <I>(<VAR>a</VAR>)</I>
+<DD><A NAME="IDX714"></A>
+Compute the trace of <VAR>a</VAR>, <CODE>sum (diag (<VAR>a</VAR>))</CODE>.
+</DL>
+
+</P>
+
+
+<H2><A NAME="SEC145" HREF="octave_toc.html#TOC145">Matrix Factorizations</A></H2>
+
+<P>
+<DL>
+<DT><U>Loadable Function:</U>  <B>chol</B> <I>(<VAR>a</VAR>)</I>
+<DD><A NAME="IDX715"></A>
+<A NAME="IDX716"></A>
+Compute the Cholesky factor, <VAR>r</VAR>, of the symmetric positive definite
+matrix <VAR>a</VAR>, where
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U> <VAR>h</VAR> = <B>hess</B> <I>(<VAR>a</VAR>)</I>
+<DD><A NAME="IDX717"></A>
+<DT><U>Loadable Function:</U> [<VAR>p</VAR>, <VAR>h</VAR>] = <B>hess</B> <I>(<VAR>a</VAR>)</I>
+<DD><A NAME="IDX718"></A>
+<A NAME="IDX719"></A>
+Compute the Hessenberg decomposition of the matrix <VAR>a</VAR>.
+
+</P>
+<P>
+The Hessenberg decomposition is usually used as the first step in an
+eigenvalue computation, but has other applications as well (see Golub,
+Nash, and Van Loan, IEEE Transactions on Automatic Control, 1979.  The
+Hessenberg decomposition is
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U> [<VAR>l</VAR>, <VAR>u</VAR>, <VAR>p</VAR>] = <B>lu</B> <I>(<VAR>a</VAR>)</I>
+<DD><A NAME="IDX720"></A>
+<A NAME="IDX721"></A>
+Compute the LU decomposition of <VAR>a</VAR>, using subroutines from
+LAPACK.  The result is returned in a permuted form, according to
+the optional return value <VAR>p</VAR>.  For example, given the matrix
+<CODE>a = [1, 2; 3, 4]</CODE>,
+
+</P>
+
+<PRE>
+[l, u, p] = lu (a)
+</PRE>
+
+<P>
+returns
+
+</P>
+
+<PRE>
+l =
+
+  1.00000  0.00000
+  0.33333  1.00000
+
+u =
+
+  3.00000  4.00000
+  0.00000  0.66667
+
+p =
+
+  0  1
+  1  0
+</PRE>
+
+</DL>
+
+<P>
+<DL>
+<DT><U>Loadable Function:</U> [<VAR>q</VAR>, <VAR>r</VAR>, <VAR>p</VAR>] = <B>qr</B> <I>(<VAR>a</VAR>)</I>
+<DD><A NAME="IDX722"></A>
+<A NAME="IDX723"></A>
+Compute the QR factorization of <VAR>a</VAR>, using standard LAPACK
+subroutines.  For example, given the matrix <CODE>a = [1, 2; 3, 4]</CODE>,
+
+</P>
+
+<PRE>
+[q, r] = qr (a)
+</PRE>
+
+<P>
+returns
+
+</P>
+
+<PRE>
+q =
+
+  -0.31623  -0.94868
+  -0.94868   0.31623
+
+r =
+
+  -3.16228  -4.42719
+   0.00000  -0.63246
+</PRE>
+
+<P>
+The <CODE>qr</CODE> factorization has applications in the solution of least
+squares problems
+for overdetermined systems of equations (i.e.,
+ is a tall, thin matrix).  The QR factorization is
+
+</P>
+<P>
+The permuted QR factorization <CODE>[<VAR>q</VAR>, <VAR>r</VAR>, <VAR>p</VAR>] =
+qr (<VAR>a</VAR>)</CODE> forms the QR factorization such that the diagonal
+entries of <CODE>r</CODE> are decreasing in magnitude order.  For example,
+given the matrix <CODE>a = [1, 2; 3, 4]</CODE>,
+
+</P>
+
+<PRE>
+[q, r, pi] = qr(a)
+</PRE>
+
+<P>
+returns
+
+</P>
+
+<PRE>
+q = 
+
+  -0.44721  -0.89443
+  -0.89443   0.44721
+
+r =
+
+  -4.47214  -3.13050
+   0.00000   0.44721
+
+p =
+
+   0  1
+   1  0
+</PRE>
+
+<P>
+The permuted <CODE>qr</CODE> factorization <CODE>[q, r, p] = qr (a)</CODE>
+factorization allows the construction of an orthogonal basis of
+<CODE>span (a)</CODE>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U> <VAR>s</VAR> = <B>schur</B> <I>(<VAR>a</VAR>)</I>
+<DD><A NAME="IDX724"></A>
+<DT><U>Loadable Function:</U> [<VAR>u</VAR>, <VAR>s</VAR>] = <B>schur</B> <I>(<VAR>a</VAR>, <VAR>opt</VAR>)</I>
+<DD><A NAME="IDX725"></A>
+<A NAME="IDX726"></A>
+The Schur decomposition is used to compute eigenvalues of a
+square matrix, and has applications in the solution of algebraic
+Riccati equations in control (see <CODE>are</CODE> and <CODE>dare</CODE>).
+<CODE>schur</CODE> always returns
+where
+ is a unitary matrix
+and
+is upper triangular.  The eigenvalues of
+are the diagonal elements of
+If the matrix
+is real, then the real Schur decomposition is computed, in which the
+matrix
+is orthogonal and
+is block upper triangular
+with blocks of size at most
+blocks along the diagonal.  The diagonal elements of
+(or the eigenvalues of the
+blocks, when
+appropriate) are the eigenvalues of
+and
+
+</P>
+<P>
+The eigenvalues are optionally ordered along the diagonal according to
+the value of <CODE>opt</CODE>.  <CODE>opt = "a"</CODE> indicates that all
+eigenvalues with negative real parts should be moved to the leading
+block of
+(used in <CODE>are</CODE>), <CODE>opt = "d"</CODE> indicates that all eigenvalues
+with magnitude less than one should be moved to the leading block of
+(used in <CODE>dare</CODE>), and <CODE>opt = "u"</CODE>, the default, indicates that
+no ordering of eigenvalues should occur.  The leading
+columns of
+always span the
+subspace corresponding to the
+leading eigenvalues of
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U> <VAR>s</VAR> = <B>svd</B> <I>(<VAR>a</VAR>)</I>
+<DD><A NAME="IDX727"></A>
+<DT><U>Loadable Function:</U> [<VAR>u</VAR>, <VAR>s</VAR>, <VAR>v</VAR>] = <B>svd</B> <I>(<VAR>a</VAR>)</I>
+<DD><A NAME="IDX728"></A>
+<A NAME="IDX729"></A>
+Compute the singular value decomposition of <VAR>a</VAR>
+
+</P>
+<P>
+The function <CODE>svd</CODE> normally returns the vector of singular values.
+If asked for three return values, it computes
+For example,
+
+</P>
+
+<PRE>
+svd (hilb (3))
+</PRE>
+
+<P>
+returns
+
+</P>
+
+<PRE>
+ans =
+
+  1.4083189
+  0.1223271
+  0.0026873
+</PRE>
+
+<P>
+and
+
+</P>
+
+<PRE>
+[u, s, v] = svd (hilb (3))
+</PRE>
+
+<P>
+returns
+
+</P>
+
+<PRE>
+u =
+
+  -0.82704   0.54745   0.12766
+  -0.45986  -0.52829  -0.71375
+  -0.32330  -0.64901   0.68867
+
+s =
+
+  1.40832  0.00000  0.00000
+  0.00000  0.12233  0.00000
+  0.00000  0.00000  0.00269
+
+v =
+
+  -0.82704   0.54745   0.12766
+  -0.45986  -0.52829  -0.71375
+  -0.32330  -0.64901   0.68867
+</PRE>
+
+<P>
+If given a second argument, <CODE>svd</CODE> returns an economy-sized
+decomposition, eliminating the unnecessary rows or columns of <VAR>u</VAR> or
+<VAR>v</VAR>.
+</DL>
+
+</P>
+
+
+<H2><A NAME="SEC146" HREF="octave_toc.html#TOC146">Functions of a Matrix</A></H2>
+
+<P>
+<DL>
+<DT><U>Loadable Function:</U>  <B>expm</B> <I>(<VAR>a</VAR>)</I>
+<DD><A NAME="IDX730"></A>
+Return the exponential of a matrix, defined as the infinite Taylor
+series
+The Taylor series is <EM>not</EM> the way to compute the matrix
+exponential; see Moler and Van Loan, <CITE>Nineteen Dubious Ways to
+Compute the Exponential of a Matrix</CITE>, SIAM Review, 1978.  This routine
+uses Ward's diagonal
+approximation method with three step preconditioning (SIAM Journal on
+Numerical Analysis, 1977).  Diagonal
+ approximations are rational polynomials of matrices
+ whose Taylor series matches the first
+terms of the Taylor series above; direct evaluation of the Taylor series
+(with the same preconditioning steps) may be desirable in lieu of the
+approximation when
+is ill-conditioned.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U>  <B>logm</B> <I>(<VAR>a</VAR>)</I>
+<DD><A NAME="IDX731"></A>
+Compute the matrix logarithm of the square matrix <VAR>a</VAR>.  Note that
+this is currently implemented in terms of an eigenvalue expansion and
+needs to be improved to be more robust.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U>  <B>sqrtm</B> <I>(<VAR>a</VAR>)</I>
+<DD><A NAME="IDX732"></A>
+Compute the matrix square root of the square matrix <VAR>a</VAR>.  Note that
+this is currently implemented in terms of an eigenvalue expansion and
+needs to be improved to be more robust.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>kron</B> <I>(<VAR>a</VAR>, <VAR>b</VAR>)</I>
+<DD><A NAME="IDX733"></A>
+Form the kronecker product of two matrices, defined block by block as
+
+</P>
+
+<PRE>
+x = [a(i, j) b]
+</PRE>
+
+<P>
+For example,
+
+</P>
+
+<PRE>
+kron (1:4, ones (3, 1))
+     =>  1  2  3  4
+         1  2  3  4
+         1  2  3  4
+</PRE>
+
+</DL>
+
+<P>
+<DL>
+<DT><U>Function File:</U> [<VAR>aa</VAR>, <VAR>bb</VAR>, <VAR>q</VAR>, <VAR>z</VAR>] = <B>qzhess</B> <I>(<VAR>a</VAR>, <VAR>b</VAR>)</I>
+<DD><A NAME="IDX734"></A>
+Compute the Hessenberg-triangular decomposition of the matrix pencil
+<CODE>(<VAR>a</VAR>, <VAR>b</VAR>)</CODE>, returning
+<CODE><VAR>aa</VAR> = <VAR>q</VAR> * <VAR>a</VAR> * <VAR>z</VAR></CODE>, 
+<CODE><VAR>bb</VAR> = <VAR>q</VAR> * <VAR>b</VAR> * <VAR>z</VAR></CODE>, with <VAR>q</VAR> and <VAR>z</VAR>
+orthogonal.  For example,
+
+</P>
+
+<PRE>
+[aa, bb, q, z] = qzhess ([1, 2; 3, 4], [5, 6; 7, 8])
+     => aa = [ -3.02244, -4.41741;  0.92998,  0.69749 ]
+     => bb = [ -8.60233, -9.99730;  0.00000, -0.23250 ]
+     =>  q = [ -0.58124, -0.81373; -0.81373,  0.58124 ]
+     =>  z = [ 1, 0; 0, 1 ]
+</PRE>
+
+<P>
+The Hessenberg-triangular decomposition is the first step in
+Moler and Stewart's QZ decomposition algorithm.
+
+</P>
+<P>
+Algorithm taken from Golub and Van Loan, <CITE>Matrix Computations, 2nd
+edition</CITE>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U>  <B>qzval</B> <I>(<VAR>a</VAR>, <VAR>b</VAR>)</I>
+<DD><A NAME="IDX735"></A>
+Compute generalized eigenvalues of the matrix pencil 
+
+</P>
+<P>
+The arguments <VAR>a</VAR> and <VAR>b</VAR> must be real matrices.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U> <VAR>x</VAR> = <B>syl</B> <I>(<VAR>a</VAR>, <VAR>b</VAR>, <VAR>c</VAR>)</I>
+<DD><A NAME="IDX736"></A>
+Solve the Sylvester equation
+using standard LAPACK subroutines.  For example,
+
+</P>
+
+<PRE>
+syl ([1, 2; 3, 4], [5, 6; 7, 8], [9, 10; 11, 12])
+     => [ -0.50000, -0.66667; -0.66667, -0.50000 ]
+</PRE>
+
+</DL>
+
+<P><HR><P>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_17.html">previous</A>, <A HREF="octave_19.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+</BODY>
+</HTML>

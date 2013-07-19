@@ -1,0 +1,435 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from ./octave.texi on 9 October 1998 -->
+
+<TITLE>GNU Octave - Control Theory</TITLE>
+</HEAD>
+<BODY>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_25.html">previous</A>, <A HREF="octave_27.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC161" HREF="octave_toc.html#TOC161">Control Theory</A></H1>
+
+<P>
+Most of the functions described in this chapter were contributed by
+A. Scottedward Hodel @email{A.S.Hodel@eng.auburn.edu} and R. Bruce Tenison
+@email{Bruce.Tenison@eng.auburn.edu}.  They have also written a larger
+collection of functions for solving linear control problems.  It is
+currently being updated for Octave version 2, with snapshots of the
+sources available from @url{ftp://ftp.eng.auburn.edu/pub/hodel}.
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U> [<VAR>n</VAR>, <VAR>m</VAR>, <VAR>p</VAR>] = <B>abcddim</B> <I>(<VAR>a</VAR>, <VAR>b</VAR>, <VAR>c</VAR>, <VAR>d</VAR>)</I>
+<DD><A NAME="IDX785"></A>
+Check for compatibility of the dimensions of the matrices defining
+the linear system
+or a similar discrete-time system.
+
+</P>
+<P>
+If the matrices are compatibly dimensioned, then <CODE>abcddim</CODE> returns
+
+</P>
+<DL COMPACT>
+
+<DT><VAR>n</VAR>
+<DD>
+The number of system states.
+
+<DT><VAR>m</VAR>
+<DD>
+The number of system inputs.
+
+<DT><VAR>p</VAR>
+<DD>
+The number of system outputs.
+</DL>
+
+<P>
+Otherwise <CODE>abcddim</CODE> returns <VAR>n</VAR> = <VAR>m</VAR> = <VAR>p</VAR> = -1.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>are</B> <I>(<VAR>a</VAR>, <VAR>b</VAR>, <VAR>c</VAR>, <VAR>opt</VAR>)</I>
+<DD><A NAME="IDX786"></A>
+
+</P>
+<P>
+Return the solution, <VAR>x</VAR>, of the algebraic Riccati equation
+
+</P>
+<P>
+for identically dimensioned square matrices <VAR>a</VAR>, <VAR>b</VAR>, and
+<VAR>c</VAR>.  If <VAR>b</VAR> is not square, <CODE>are</CODE> attempts to use
+<CODE><VAR>b</VAR>*<VAR>b</VAR>'</CODE> instead.  If <VAR>c</VAR> is not square, <CODE>are</CODE>
+attempts to use <CODE><VAR>c</VAR>'*<VAR>c</VAR></CODE>) instead.
+
+</P>
+<P>
+To form the solution, Laub's Schur method (IEEE Transactions on
+Automatic Control, 1979) is applied to the appropriate Hamiltonian
+matrix.
+
+</P>
+<P>
+The optional argument <VAR>opt</VAR> is passed to the eigenvalue balancing
+routine.  If it is omitted, a value of <CODE>"B"</CODE> is assumed.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>c2d</B> <I>(<VAR>a</VAR>, <VAR>b</VAR>, <VAR>t</VAR>)</I>
+<DD><A NAME="IDX787"></A>
+Convert the continuous time system described by:
+into a discrete time equivalent model
+
+</P>
+<P>
+via the matrix exponential assuming a zero-order hold on the input and
+sample time <VAR>t</VAR>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>dare</B> <I>(<VAR>a</VAR>, <VAR>b</VAR>, <VAR>c</VAR>, <VAR>r</VAR>, <VAR>opt</VAR>)</I>
+<DD><A NAME="IDX788"></A>
+
+</P>
+<P>
+Return the solution, <VAR>x</VAR> of the discrete-time algebraic Riccati
+equation
+
+</P>
+<P>
+for matrices with dimensions:
+
+</P>
+<DL COMPACT>
+
+<DT><VAR>a</VAR>
+<DD>
+<VAR>n</VAR> by <VAR>n</VAR>.
+
+<DT><VAR>b</VAR>
+<DD>
+<VAR>n</VAR> by <VAR>m</VAR>.
+
+<DT><VAR>c</VAR>
+<DD>
+<VAR>n</VAR> by <VAR>n</VAR>, symmetric positive semidefinite.
+
+<DT><VAR>r</VAR>
+<DD>
+<VAR>m</VAR> by <VAR>m</VAR>, symmetric positive definite (invertible).
+</DL>
+
+<P>
+If <VAR>c</VAR> is not square, then the function attempts to use
+<CODE><VAR>c</VAR>'*<VAR>c</VAR></CODE> instead.
+
+</P>
+<P>
+To form the solution, Laub's Schur method (IEEE Transactions on
+Automatic Control, 1979) is applied to the appropriate symplectic
+matrix.
+
+</P>
+<P>
+See also Ran and Rodman, <CITE>Stable Hermitian Solutions of Discrete
+Algebraic Riccati Equations</CITE>, Mathematics of Control, Signals and 
+Systems, Volume 5, Number 2 (1992).
+
+</P>
+<P>
+The optional argument <VAR>opt</VAR> is passed to the eigenvalue balancing
+routine.  If it is omitted, a value of <CODE>"B"</CODE> is assumed.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>dgram</B> <I>(<VAR>a</VAR>, <VAR>b</VAR>)</I>
+<DD><A NAME="IDX789"></A>
+Return the discrete controllability or observability gramian for the
+discrete time system described by
+
+</P>
+<P>
+For example, <CODE>dgram (<VAR>a</VAR>, <VAR>b</VAR>)</CODE> returns the discrete
+controllability gramian and <CODE>dgram (<VAR>a</VAR>', <VAR>c</VAR>')</CODE> returns
+the observability gramian.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U> [<VAR>l</VAR>, <VAR>m</VAR>, <VAR>p</VAR>, <VAR>e</VAR>] = <B>dlqe</B> <I>(<VAR>a</VAR>, <VAR>g</VAR>, <VAR>c</VAR>, <VAR>sigw</VAR>, <VAR>sigv</VAR>, <VAR>z</VAR>)</I>
+<DD><A NAME="IDX790"></A>
+Construct the linear quadratic estimator (Kalman filter) for the
+discrete time system
+where <VAR>w</VAR>, <VAR>v</VAR> are zero-mean gaussian noise processes with
+respective intensities <CODE><VAR>sigw</VAR> = cov (<VAR>w</VAR>, <VAR>w</VAR>)</CODE> and
+<CODE><VAR>sigv</VAR> = cov (<VAR>v</VAR>, <VAR>v</VAR>)</CODE>.
+
+</P>
+<P>
+If specified, <VAR>z</VAR> is <CODE>cov (<VAR>w</VAR>, <VAR>v</VAR>)</CODE>.  Otherwise
+<CODE>cov (<VAR>w</VAR>, <VAR>v</VAR>) = 0</CODE>.
+
+</P>
+<P>
+The observer structure is
+
+</P>
+<P>
+The following values are returned:
+
+</P>
+<DL COMPACT>
+
+<DT><VAR>l</VAR>
+<DD>
+The observer gain, 
+is stable.
+
+<DT><VAR>m</VAR>
+<DD>
+The Riccati equation solution.
+
+<DT><VAR>p</VAR>
+<DD>
+The estimate error covariance after the measurement update.
+
+<DT><VAR>e</VAR>
+<DD>
+The closed loop poles of
+</DL>
+</DL>
+
+<P>
+<DL>
+<DT><U>Function File:</U> [<VAR>k</VAR>, <VAR>p</VAR>, <VAR>e</VAR>] = <B>dlqr</B> <I>(<VAR>a</VAR>, <VAR>b</VAR>, <VAR>q</VAR>, <VAR>r</VAR>, <VAR>z</VAR>)</I>
+<DD><A NAME="IDX791"></A>
+Construct the linear quadratic regulator for the discrete time system
+to minimize the cost functional
+
+</P>
+<P>
+<VAR>z</VAR> omitted or
+<VAR>z</VAR> included.
+
+</P>
+<P>
+The following values are returned:
+
+</P>
+<DL COMPACT>
+
+<DT><VAR>k</VAR>
+<DD>
+The state feedback gain,
+is stable.
+
+<DT><VAR>p</VAR>
+<DD>
+The solution of algebraic Riccati equation.
+
+<DT><VAR>e</VAR>
+<DD>
+The closed loop poles of
+</DL>
+</DL>
+
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>dlyap</B> <I>(<VAR>a</VAR>, <VAR>b</VAR>)</I>
+<DD><A NAME="IDX792"></A>
+Solve the discrete-time Lyapunov equation
+for square matrices <VAR>a</VAR>, <VAR>b</VAR>.  If <VAR>b</VAR> is not square, then the
+function attempts to solve either
+whichever is appropriate.
+
+</P>
+<P>
+Uses Schur decomposition method as in Kitagawa 
+International Journal of Control, Volume 25, Number 5, pages 745--753
+(1977); column-by-column solution method as suggested in
+Hammerling, <CITE>Numerical Solution of the Stable, Non-Negative
+Definite Lyapunov Equation</CITE>, IMA Journal of Numerical Analysis, Volume
+2, pages 303--323 (1982).
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>is_controllable</B> <I>(<VAR>a</VAR>, <VAR>b</VAR>, <VAR>tol</VAR>)</I>
+<DD><A NAME="IDX793"></A>
+Return 1 if the pair (<VAR>a</VAR>, <VAR>b</VAR>) is controllable.  Otherwise,
+return 0.
+
+</P>
+<P>
+The optional argument <VAR>tol</VAR> is a roundoff parameter.  If it is
+omitted, a value of <CODE>2*eps</CODE> is used.
+
+</P>
+<P>
+Currently, <CODE>is_controllable</CODE> just constructs the controllability
+matrix and checks rank.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>is_observable</B> <I>(<VAR>a</VAR>, <VAR>c</VAR>, <VAR>tol</VAR>)</I>
+<DD><A NAME="IDX794"></A>
+
+</P>
+<P>
+Return 1 if the pair (<VAR>a</VAR>, <VAR>c</VAR>) is observable.
+Otherwise, return 0.
+
+</P>
+<P>
+The optional argument <VAR>tol</VAR> is a roundoff parameter.  If it is
+omitted, a value of <CODE>2*eps</CODE> is used.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U> [<VAR>k</VAR>, <VAR>p</VAR>, <VAR>e</VAR>] = <B>lqe</B> <I>(<VAR>a</VAR>, <VAR>g</VAR>, <VAR>c</VAR>, <VAR>sigw</VAR>, <VAR>sigv</VAR>, <VAR>z</VAR>)</I>
+<DD><A NAME="IDX795"></A>
+Construct the linear quadratic estimator (Kalman filter) for the
+continuous time system
+where <VAR>w</VAR> and <VAR>v</VAR> are zero-mean gaussian noise processes with
+respective intensities
+
+</P>
+
+<PRE>
+sigw = cov (w, w)
+sigv = cov (v, v)
+</PRE>
+
+<P>
+The optional argument <VAR>z</VAR> is the cross-covariance
+<CODE>cov (<VAR>w</VAR>, <VAR>v</VAR>)</CODE>.  If it is omitted,
+<CODE>cov (<VAR>w</VAR>, <VAR>v</VAR>) = 0</CODE> is assumed.
+
+</P>
+<P>
+Observer structure is <CODE>dz/dt = A z + B u + k (y - C z - D u)</CODE>
+
+</P>
+<P>
+The following values are returned:
+
+</P>
+<DL COMPACT>
+
+<DT><VAR>k</VAR>
+<DD>
+The observer gain,
+is stable.
+
+<DT><VAR>p</VAR>
+<DD>
+The solution of algebraic Riccati equation.
+
+<DT><VAR>e</VAR>
+<DD>
+The vector of closed loop poles of
+</DL>
+</DL>
+
+<P>
+<DL>
+<DT><U>Function File:</U> [<VAR>k</VAR>, <VAR>p</VAR>, <VAR>e</VAR>] = <B>lqr</B> <I>(<VAR>a</VAR>, <VAR>b</VAR>, <VAR>q</VAR>, <VAR>r</VAR>, <VAR>z</VAR>)</I>
+<DD><A NAME="IDX796"></A>
+construct the linear quadratic regulator for the continuous time system
+to minimize the cost functional
+
+</P>
+<P>
+<VAR>z</VAR> omitted or
+<VAR>z</VAR> included.
+
+</P>
+<P>
+The following values are returned:
+
+</P>
+<DL COMPACT>
+
+<DT><VAR>k</VAR>
+<DD>
+The state feedback gain,
+is stable.
+
+<DT><VAR>p</VAR>
+<DD>
+The stabilizing solution of appropriate algebraic Riccati equation.
+
+<DT><VAR>e</VAR>
+<DD>
+The vector of the closed loop poles of
+</DL>
+</DL>
+
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>lyap</B> <I>(<VAR>a</VAR>, <VAR>b</VAR>, <VAR>c</VAR>)</I>
+<DD><A NAME="IDX797"></A>
+Solve the Lyapunov (or Sylvester) equation via the Bartels-Stewart
+algorithm (Communications of the ACM, 1972).
+
+</P>
+<P>
+If <VAR>a</VAR>, <VAR>b</VAR>, and <VAR>c</VAR> are specified, then <CODE>lyap</CODE> returns
+the solution of the  Sylvester equation
+
+</P>
+<P>
+If only <CODE>(a, b)</CODE> are specified, then <CODE>lyap</CODE> returns the
+solution of the Lyapunov equation
+
+</P>
+<P>
+If <VAR>b</VAR> is not square, then <CODE>lyap</CODE> returns the solution of either
+
+</P>
+<P>
+or
+
+</P>
+<P>
+whichever is appropriate.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>tzero</B> <I>(<VAR>a</VAR>, <VAR>b</VAR>, <VAR>c</VAR>, <VAR>d</VAR>, <VAR>opt</VAR>)</I>
+<DD><A NAME="IDX798"></A>
+Compute the transmission zeros of
+
+</P>
+<P>
+The optional argument <VAR>opt</VAR> is passed to the eigenvalue balancing
+routine.  If it is omitted, a value of <CODE>"B"</CODE> is assumed.
+</DL>
+
+</P>
+<P><HR><P>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_25.html">previous</A>, <A HREF="octave_27.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+</BODY>
+</HTML>

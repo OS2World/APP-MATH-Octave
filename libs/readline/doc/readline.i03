@@ -1,0 +1,220 @@
+This is Info file readline.info, produced by Makeinfo-1.64 from the
+input file rlman.tex.
+
+   This document describes the GNU Readline Library, a utility which
+aids in the consistency of user interface across discrete programs that
+need to provide a command line interface.
+
+   Copyright (C) 1988, 1991 Free Software Foundation, Inc.
+
+   Permission is granted to make and distribute verbatim copies of this
+manual provided the copyright notice and this permission notice pare
+preserved on all copies.
+
+   Permission is granted to copy and distribute modified versions of
+this manual under the conditions for verbatim copying, provided that
+the entire resulting derived work is distributed under the terms of a
+permission notice identical to this one.
+
+   Permission is granted to copy and distribute translations of this
+manual into another language, under the above conditions for modified
+versions, except that this permission notice may be stated in a
+translation approved by the Foundation.
+
+
+File: readline,  Node: Function and Variable Index,  Prev: Concept Index,  Up: Top
+
+Function and Variable Index
+***************************
+
+* Menu:
+
+* (:                                    Utility Functions.
+* abort (C-g):                          Miscellaneous Commands.
+* accept-line (Newline, Return):        Commands For History.
+* alphabetic:                           Utility Functions.
+* backward-char (C-b):                  Commands For Moving.
+* backward-delete-char (Rubout):        Commands For Text.
+* backward-kill-line (C-x Rubout):      Commands For Killing.
+* backward-kill-word (M-DEL):           Commands For Killing.
+* backward-word (M-b):                  Commands For Moving.
+* beginning-of-history (M-<):           Commands For History.
+* beginning-of-line (C-a):              Commands For Moving.
+* bell-style:                           Readline Init File Syntax.
+* call-last-kbd-macro (C-x e):          Keyboard Macros.
+* capitalize-word (M-c):                Commands For Text.
+* character-search (C-]):               Miscellaneous Commands.
+* character-search-backward (M-C-]):    Miscellaneous Commands.
+* clear-screen (C-l):                   Commands For Moving.
+* comment-begin:                        Readline Init File Syntax.
+* complete (TAB):                       Commands For Completion.
+* completion-query-items:               Readline Init File Syntax.
+* completion_matches:                   Completion Functions.
+* convert-meta:                         Readline Init File Syntax.
+* copy-backward-word ():                Commands For Killing.
+* copy-forward-word ():                 Commands For Killing.
+* copy-region-as-kill ():               Commands For Killing.
+* delete-char (C-d):                    Commands For Text.
+* delete-horizontal-space ():           Commands For Killing.
+* digit-argument (M-0, M-1, ... M-):    Numeric Arguments.
+* digit_p:                              Utility Functions.
+* digit_value:                          Utility Functions.
+* ding:                                 Utility Functions.
+* disable-completion:                   Readline Init File Syntax.
+* do-uppercase-version (M-a, M-b, M-X, ...): Miscellaneous Commands.
+* downcase-word (M-l):                  Commands For Text.
+* dump-functions ():                    Miscellaneous Commands.
+* dump-macros ():                       Miscellaneous Commands.
+* dump-variables ():                    Miscellaneous Commands.
+* editing-mode:                         Readline Init File Syntax.
+* enable-keypad:                        Readline Init File Syntax.
+* end-kbd-macro (C-x )):                Keyboard Macros.
+* end-of-history (M->):                 Commands For History.
+* end-of-line (C-e):                    Commands For Moving.
+* exchange-point-and-mark (C-x C-x):    Miscellaneous Commands.
+* expand-tilde:                         Readline Init File Syntax.
+* filename_completion_function:         Completion Functions.
+* forward-char (C-f):                   Commands For Moving.
+* forward-search-history (C-s):         Commands For History.
+* forward-word (M-f):                   Commands For Moving.
+* free_undo_list:                       Allowing Undoing.
+* history-search-backward ():           Commands For History.
+* history-search-forward ():            Commands For History.
+* horizontal-scroll-mode:               Readline Init File Syntax.
+* input-meta:                           Readline Init File Syntax.
+* insert-comment (M-#):                 Miscellaneous Commands.
+* insert-completions (M-*):             Commands For Completion.
+* keymap:                               Readline Init File Syntax.
+* kill-line (C-k):                      Commands For Killing.
+* kill-region ():                       Commands For Killing.
+* kill-whole-line ():                   Commands For Killing.
+* kill-word (M-d):                      Commands For Killing.
+* lowercase_p:                          Utility Functions.
+* mark-modified-lines:                  Readline Init File Syntax.
+* meta-flag:                            Readline Init File Syntax.
+* next-history (C-n):                   Commands For History.
+* non-incremental-forward-search-history (M-n): Commands For History.
+* non-incremental-reverse-search-history (M-p): Commands For History.
+* numeric:                              Utility Functions.
+* output-meta:                          Readline Init File Syntax.
+* possible-completions (M-?):           Commands For Completion.
+* prefix-meta (ESC):                    Miscellaneous Commands.
+* previous-history (C-p):               Commands For History.
+* quoted-insert (C-q, C-v):             Commands For Text.
+* re-read-init-file (C-x C-r):          Miscellaneous Commands.
+* readline:                             Basic Behavior.
+* redraw-current-line ():               Commands For Moving.
+* reverse-search-history (C-r):         Commands For History.
+* revert-line (M-r):                    Miscellaneous Commands.
+* rl_add_defun:                         Function Naming.
+* rl_add_undo:                          Allowing Undoing.
+* rl_attempted_completion_function:     Completion Variables.
+* rl_basic_quote_characters:            Completion Variables.
+* rl_basic_word_break_characters:       Completion Variables.
+* rl_begin_undo_group:                  Allowing Undoing.
+* rl_binding_keymap:                    Readline Variables.
+* rl_bind_key:                          Binding Keys.
+* rl_bind_key_in_map:                   Binding Keys.
+* rl_callback_handler_install:          Alternate Interface.
+* rl_callback_handler_remove:           Alternate Interface.
+* rl_callback_read_char:                Alternate Interface.
+* rl_char_is_quoted_p:                  Completion Variables.
+* rl_clear_message:                     Redisplay.
+* rl_complete <1>:                      How Completing Works.
+* rl_complete:                          Completion Functions.
+* rl_completer_quote_characters:        Completion Variables.
+* rl_completer_word_break_characters:   Completion Variables.
+* rl_complete_internal:                 Completion Functions.
+* rl_completion_append_character:       Completion Variables.
+* rl_completion_entry_function <1>:     How Completing Works.
+* rl_completion_entry_function:         Completion Variables.
+* rl_completion_query_items:            Completion Variables.
+* rl_copy_keymap:                       Keymaps.
+* rl_copy_text:                         Modifying Text.
+* rl_delete_text:                       Modifying Text.
+* rl_directory_completion_hook:         Completion Variables.
+* rl_discard_keymap:                    Keymaps.
+* rl_done:                              Readline Variables.
+* rl_do_undo:                           Allowing Undoing.
+* rl_end:                               Readline Variables.
+* rl_end_undo_group:                    Allowing Undoing.
+* rl_event_hook:                        Readline Variables.
+* rl_executing_keymap:                  Readline Variables.
+* rl_filename_completion_desired:       Completion Variables.
+* rl_filename_dequoting_function:       Completion Variables.
+* rl_filename_quote_characters:         Completion Variables.
+* rl_filename_quoting_desired:          Completion Variables.
+* rl_filename_quoting_function:         Completion Variables.
+* rl_forced_update_display:             Redisplay.
+* rl_function_dumper:                   Associating Function Names and Bindings.
+* rl_function_of_keyseq:                Associating Function Names and Bindings.
+* rl_generic_bind:                      Binding Keys.
+* rl_getc:                              Utility Functions.
+* rl_getc_function:                     Readline Variables.
+* rl_get_keymap:                        Keymaps.
+* rl_get_keymap_by_name:                Keymaps.
+* rl_get_keymap_name:                   Keymaps.
+* rl_ignore_completion_duplicates:      Completion Variables.
+* rl_ignore_some_completions_function:  Completion Variables.
+* rl_inhibit_completion:                Completion Variables.
+* rl_initialize:                        Utility Functions.
+* rl_insert_completions:                Completion Functions.
+* rl_insert_text:                       Modifying Text.
+* rl_instream:                          Readline Variables.
+* rl_invoking_keyseqs:                  Associating Function Names and Bindings.
+* rl_invoking_keyseqs_in_map:           Associating Function Names and Bindings.
+* rl_kill_text:                         Modifying Text.
+* rl_library_version:                   Readline Variables.
+* rl_line_buffer:                       Readline Variables.
+* rl_list_funmap_names:                 Associating Function Names and Bindings.
+* rl_make_bare_keymap:                  Keymaps.
+* rl_make_keymap:                       Keymaps.
+* rl_mark:                              Readline Variables.
+* rl_message:                           Redisplay.
+* rl_modifying:                         Allowing Undoing.
+* rl_named_function:                    Associating Function Names and Bindings.
+* rl_on_new_line:                       Redisplay.
+* rl_outstream:                         Readline Variables.
+* rl_parse_and_bind:                    Binding Keys.
+* rl_pending_input:                     Readline Variables.
+* rl_point:                             Readline Variables.
+* rl_possible_completions:              Completion Functions.
+* rl_prompt:                            Readline Variables.
+* rl_readline_name:                     Readline Variables.
+* rl_read_init_file:                    Binding Keys.
+* rl_read_key:                          Utility Functions.
+* rl_redisplay:                         Redisplay.
+* rl_redisplay_function:                Readline Variables.
+* rl_reset_line_state:                  Redisplay.
+* rl_reset_terminal:                    Utility Functions.
+* rl_set_keymap:                        Keymaps.
+* rl_special_prefixes:                  Completion Variables.
+* rl_startup_hook:                      Readline Variables.
+* rl_stuff_char:                        Utility Functions.
+* rl_terminal_name:                     Readline Variables.
+* rl_unbind_key:                        Binding Keys.
+* rl_unbind_key_in_map:                 Binding Keys.
+* self-insert (a, b, A, 1, !, ...):     Commands For Text.
+* set-mark (C-@):                       Miscellaneous Commands.
+* show-all-if-ambiguous:                Readline Init File Syntax.
+* start-kbd-macro (C-x ():              Keyboard Macros.
+* tab-insert (M-TAB):                   Commands For Text.
+* tilde-expand (M-~):                   Miscellaneous Commands.
+* to_lower:                             Utility Functions.
+* to_upper:                             Utility Functions.
+* transpose-chars (C-t):                Commands For Text.
+* transpose-words (M-t):                Commands For Text.
+* undo (C-_, C-x C-u):                  Miscellaneous Commands.
+* universal-argument ():                Numeric Arguments.
+* unix-line-discard (C-u):              Commands For Killing.
+* unix-word-rubout (C-w):               Commands For Killing.
+* upcase-word (M-u):                    Commands For Text.
+* uppercase_p:                          Utility Functions.
+* username_completion_function:         Completion Functions.
+* visible-stats:                        Readline Init File Syntax.
+* yank (C-y):                           Commands For Killing.
+* yank-last-arg (M-., M-_):             Commands For History.
+* yank-nth-arg (M-C-y):                 Commands For History.
+* yank-pop (M-y):                       Commands For Killing.
+
+

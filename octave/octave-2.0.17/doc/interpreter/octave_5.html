@@ -1,0 +1,683 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from ./octave.texi on 9 October 1998 -->
+
+<TITLE>GNU Octave - Numeric Data Types</TITLE>
+</HEAD>
+<BODY>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_4.html">previous</A>, <A HREF="octave_6.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC48" HREF="octave_toc.html#TOC48">Numeric Data Types</A></H1>
+<P>
+<A NAME="IDX140"></A>
+<A NAME="IDX141"></A>
+
+</P>
+<P>
+A <STRONG>numeric constant</STRONG> may be a scalar, a vector, or a matrix, and it
+may contain complex values.
+
+</P>
+<P>
+The simplest form of a numeric constant, a scalar, is a single number
+that can be an integer, a decimal fraction, a number in scientific
+(exponential) notation, or a complex number.  Note that all numeric
+constants are represented within Octave in double-precision floating
+point format (complex constants are stored as pairs of double-precision
+floating point values).  Here are some examples of real-valued numeric
+constants, which all have the same value:
+
+</P>
+
+<PRE>
+105
+1.05e+2
+1050e-1
+</PRE>
+
+<P>
+To specify complex constants, you can write an expression of the form
+
+</P>
+
+<PRE>
+3 + 4i
+3.0 + 4.0i
+0.3e1 + 40e-1i
+</PRE>
+
+<P>
+all of which are equivalent.  The letter <SAMP>`i'</SAMP> in the previous example
+stands for the pure imaginary constant, defined as
+
+</P>
+<P>
+For Octave to recognize a value as the imaginary part of a complex
+constant, a space must not appear between the number and the <SAMP>`i'</SAMP>.
+If it does, Octave will print an error message, like this:
+
+</P>
+
+<PRE>
+octave:13&#62; 3 + 4 i
+
+parse error:
+
+  3 + 4 i
+        ^
+</PRE>
+
+<P>
+You may also use <SAMP>`j'</SAMP>, <SAMP>`I'</SAMP>, or <SAMP>`J'</SAMP> in place of the
+<SAMP>`i'</SAMP> above.  All four forms are equivalent.
+
+</P>
+
+
+
+<H2><A NAME="SEC49" HREF="octave_toc.html#TOC49">Matrices</A></H2>
+<P>
+<A NAME="IDX142"></A>
+
+</P>
+<P>
+<A NAME="IDX143"></A>
+<A NAME="IDX144"></A>
+<A NAME="IDX145"></A>
+<A NAME="IDX146"></A>
+
+</P>
+<P>
+It is easy to define a matrix of values in Octave.  The size of the
+matrix is determined automatically, so it is not necessary to explicitly
+state the dimensions.  The expression
+
+</P>
+
+<PRE>
+a = [1, 2; 3, 4]
+</PRE>
+
+<P>
+results in the matrix
+
+</P>
+<P>
+Elements of a matrix may be arbitrary expressions, provided that the
+dimensions all make sense when combining the various pieces.  For
+example, given the above matrix, the expression
+
+</P>
+
+<PRE>
+[ a, a ]
+</PRE>
+
+<P>
+produces the matrix
+
+</P>
+
+<PRE>
+ans =
+
+  1  2  1  2
+  3  4  3  4
+</PRE>
+
+<P>
+but the expression
+
+</P>
+
+<PRE>
+[ a, 1 ]
+</PRE>
+
+<P>
+produces the error
+
+</P>
+
+<PRE>
+error: number of rows must match near line 13, column 6
+</PRE>
+
+<P>
+(assuming that this expression was entered as the first thing on line
+13, of course).
+
+</P>
+<P>
+Inside the square brackets that delimit a matrix expression, Octave
+looks at the surrounding context to determine whether spaces and newline
+characters should be converted into element and row separators, or
+simply ignored, so commands like
+
+</P>
+
+<PRE>
+[ linspace (1, 2) ]
+</PRE>
+
+<P>
+and
+
+</P>
+
+<PRE>
+a = [ 1 2
+      3 4 ]
+</PRE>
+
+<P>
+will work.  However, some possible sources of confusion remain.  For
+example, in the expression
+
+</P>
+
+<PRE>
+[ 1 - 1 ]
+</PRE>
+
+<P>
+the <SAMP>`-'</SAMP> is treated as a binary operator and the result is the
+scalar 0, but in the expression
+
+</P>
+
+<PRE>
+[ 1 -1 ]
+</PRE>
+
+<P>
+the <SAMP>`-'</SAMP> is treated as a unary operator and the result is the
+vector <CODE>[ 1, -1 ]</CODE>.
+
+</P>
+<P>
+Given <CODE>a = 1</CODE>, the expression
+
+</P>
+
+<PRE>
+[ 1 a' ]
+</PRE>
+
+<P>
+results in the single quote character <SAMP>`''</SAMP> being treated as a
+transpose operator and the result is the vector <CODE>[ 1, 1 ]</CODE>, but the
+expression
+
+</P>
+
+<PRE>
+[ 1 a ' ]
+</PRE>
+
+<P>
+produces the error message
+
+</P>
+
+<PRE>
+error: unterminated string constant
+</PRE>
+
+<P>
+because to not do so would make it impossible to correctly parse the
+valid expression
+
+</P>
+
+<PRE>
+[ a 'foo' ]
+</PRE>
+
+<P>
+For clarity, it is probably best to always use commas and semicolons to
+separate matrix elements and rows.  It is possible to enforce this style
+by setting the built-in variable <CODE>whitespace_in_literal_matrix</CODE> to
+<CODE>"ignore"</CODE>.
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>whitespace_in_literal_matrix</B>
+<DD><A NAME="IDX147"></A>
+This variable allows some control over how Octave decides to convert
+spaces to commas and semicolons in matrix expressions like
+<CODE>[m (1)]</CODE> or
+
+</P>
+
+<PRE>
+[ 1, 2,
+  3, 4 ]
+</PRE>
+
+<P>
+If the value of <CODE>whitespace_in_literal_matrix</CODE> is <CODE>"ignore"</CODE>,
+Octave will never insert a comma or a semicolon in a literal matrix
+list.  For example, the expression <CODE>[1 2]</CODE> will result in an error
+instead of being treated the same as <CODE>[1, 2]</CODE>, and the expression
+
+</P>
+
+<PRE>
+[ 1, 2,
+  3, 4 ]
+</PRE>
+
+<P>
+will result in the vector <CODE>[ 1, 2, 3, 4 ]</CODE> instead of a matrix.
+
+</P>
+<P>
+If the value of <CODE>whitespace_in_literal_matrix</CODE> is <CODE>"traditional"</CODE>,
+Octave will convert spaces to a comma between identifiers and <SAMP>`('</SAMP>.  For
+example, given the matrix
+
+</P>
+
+<PRE>
+m = [3 2]
+</PRE>
+
+<P>
+the expression
+
+</P>
+
+<PRE>
+[m (1)]
+</PRE>
+
+<P>
+will be parsed as
+
+</P>
+
+<PRE>
+[m, (1)]
+</PRE>
+
+<P>
+and will result in
+
+</P>
+
+<PRE>
+[3 2 1]
+</PRE>
+
+<P>
+and the expression
+
+</P>
+
+<PRE>
+[ 1, 2,
+  3, 4 ]
+</PRE>
+
+<P>
+will result in a matrix because the newline character is converted to a
+semicolon (row separator) even though there is a comma at the end of the
+first line (trailing commas or semicolons are ignored).  This is
+apparently how MATLAB behaves.
+
+</P>
+<P>
+Any other value for <CODE>whitespace_in_literal_matrix</CODE> results in behavior
+that is the same as traditional, except that Octave does not
+convert spaces to a comma between identifiers and <SAMP>`('</SAMP>.  For
+example, the expression
+
+</P>
+
+<PRE>
+[m (1)]
+</PRE>
+
+<P>
+will produce <SAMP>`3'</SAMP>.  This is the way Octave has always behaved.
+</DL>
+
+</P>
+<P>
+When you type a matrix or the name of a variable whose value is a
+matrix, Octave responds by printing the matrix in with neatly aligned
+rows and columns.  If the rows of the matrix are too large to fit on the
+screen, Octave splits the matrix and displays a header before each
+section to indicate which columns are being displayed.  You can use the
+following variables to control the format of the output.
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>output_max_field_width</B>
+<DD><A NAME="IDX148"></A>
+This variable specifies the maximum width of a numeric output field.
+The default value is 10.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>output_precision</B>
+<DD><A NAME="IDX149"></A>
+This variable specifies the minimum number of significant figures to
+display for numeric output.  The default value is 5.
+</DL>
+
+</P>
+<P>
+It is possible to achieve a wide range of output styles by using
+different values of <CODE>output_precision</CODE> and
+<CODE>output_max_field_width</CODE>.  Reasonable combinations can be set using
+the <CODE>format</CODE> function.  See section <A HREF="octave_14.html#SEC101">Basic Input and Output</A>.
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>split_long_rows</B>
+<DD><A NAME="IDX150"></A>
+For large matrices, Octave may not be able to display all the columns of
+a given row on one line of your screen.  This can result in missing
+information or output that is nearly impossible to decipher, depending
+on whether your terminal truncates or wraps long lines.
+
+</P>
+<P>
+If the value of <CODE>split_long_rows</CODE> is nonzero, Octave will display
+the matrix in a series of smaller pieces, each of which can fit within
+the limits of your terminal width.  Each set of rows is labeled so that
+you can easily see which columns are currently being displayed.
+For example:
+
+</P>
+
+<PRE>
+octave:13&#62; rand (2,10)
+ans =
+
+ Columns 1 through 6:
+
+  0.75883  0.93290  0.40064  0.43818  0.94958  0.16467
+  0.75697  0.51942  0.40031  0.61784  0.92309  0.40201
+
+ Columns 7 through 10:
+
+  0.90174  0.11854  0.72313  0.73326
+  0.44672  0.94303  0.56564  0.82150
+</PRE>
+
+<P>
+The default value of <CODE>split_long_rows</CODE> is nonzero.
+</DL>
+
+</P>
+<P>
+Octave automatically switches to scientific notation when values become
+very large or very small.  This guarantees that you will see several
+significant figures for every value in a matrix.  If you would prefer to
+see all values in a matrix printed in a fixed point format, you can set
+the built-in variable <CODE>fixed_point_format</CODE> to a nonzero value.  But
+doing so is not recommended, because it can produce output that can
+easily be misinterpreted.
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>fixed_point_format</B>
+<DD><A NAME="IDX151"></A>
+If the value of this variable is nonzero, Octave will scale all values
+in a matrix so that the largest may be written with one leading digit.
+The scaling factor is printed on the first line of output.  For example,
+
+</P>
+
+<PRE>
+octave:1&#62; logspace (1, 7, 5)'
+ans =
+
+  1.0e+07  *
+
+  0.00000
+  0.00003
+  0.00100
+  0.03162
+  1.00000
+</PRE>
+
+<P>
+Notice that first value appears to be zero when it is actually 1.  For
+this reason, you should be careful when setting
+<CODE>fixed_point_format</CODE> to a nonzero value.
+
+</P>
+<P>
+The default value of <CODE>fixed_point_format</CODE> is 0.
+</DL>
+
+</P>
+
+
+
+<H3><A NAME="SEC50" HREF="octave_toc.html#TOC50">Empty Matrices</A></H3>
+
+<P>
+A matrix may have one or both dimensions zero, and operations on empty
+matrices are handled as described by Carl de Boor in <CITE>An Empty
+Exercise</CITE>, SIGNUM, Volume 25, pages 2--6, 1990 and C. N. Nett and W. M.
+Haddad, in <CITE>A System-Theoretic Appropriate Realization of the Empty
+Matrix Concept</CITE>, IEEE Transactions on Automatic Control, Volume 38,
+Number 5, May 1993.
+
+</P>
+<P>
+By default, dimensions of the empty matrix are printed along with the
+empty matrix symbol, <SAMP>`[]'</SAMP>.  The built-in variable
+<CODE>print_empty_dimensions</CODE> controls this behavior.
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>print_empty_dimensions</B>
+<DD><A NAME="IDX152"></A>
+If the value of <CODE>print_empty_dimensions</CODE> is nonzero, the
+dimensions of empty matrices are printed along with the empty matrix
+symbol, <SAMP>`[]'</SAMP>.  For example, the expression
+
+</P>
+
+<PRE>
+zeros (3, 0)
+</PRE>
+
+<P>
+will print
+
+</P>
+
+<PRE>
+ans = [](3x0)
+</PRE>
+
+</DL>
+
+<P>
+Empty matrices may also be used in assignment statements as a convenient
+way to delete rows or columns of matrices.
+See section <A HREF="octave_9.html#SEC74">Assignment Expressions</A>.
+
+</P>
+<P>
+Octave will normally issue a warning if it finds an empty matrix in the
+list of elements that make up another matrix.  You can use the variable
+<CODE>empty_list_elements_ok</CODE> to suppress the warning or to treat it as
+an error.
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>empty_list_elements_ok</B>
+<DD><A NAME="IDX153"></A>
+This variable controls whether Octave ignores empty matrices in a matrix
+list.
+
+</P>
+<P>
+For example, if the value of <CODE>empty_list_elements_ok</CODE> is
+nonzero, Octave will ignore the empty matrices in the expression
+
+</P>
+
+<PRE>
+a = [1, [], 3, [], 5]
+</PRE>
+
+<P>
+and the variable <CODE>a</CODE> will be assigned the value <CODE>[ 1, 3, 5 ]</CODE>.
+
+</P>
+<P>
+The default value is <CODE>"warn"</CODE>.
+</DL>
+
+</P>
+<P>
+When Octave parses a matrix expression, it examines the elements of the
+list to determine whether they are all constants.  If they are, it
+replaces the list with a single matrix constant.
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>propagate_empty_matrices</B>
+<DD><A NAME="IDX154"></A>
+If the value of <CODE>propagate_empty_matrices</CODE> is nonzero,
+functions like <CODE>inverse</CODE> and <CODE>svd</CODE> will return an empty matrix
+if they are given one as an argument.  The default value is 1.
+</DL>
+
+</P>
+
+
+<H2><A NAME="SEC51" HREF="octave_toc.html#TOC51">Ranges</A></H2>
+<P>
+<A NAME="IDX155"></A>
+<A NAME="IDX156"></A>
+
+</P>
+<P>
+<A NAME="IDX157"></A>
+
+</P>
+<P>
+A <STRONG>range</STRONG> is a convenient way to write a row vector with evenly
+spaced elements.  A range expression is defined by the value of the first
+element in the range, an optional value for the increment between
+elements, and a maximum value which the elements of the range will not
+exceed.  The base, increment, and limit are separated by colons (the
+<SAMP>`:'</SAMP> character) and may contain any arithmetic expressions and
+function calls.  If the increment is omitted, it is assumed to be 1.
+For example, the range
+
+</P>
+
+<PRE>
+1 : 5
+</PRE>
+
+<P>
+defines the set of values <SAMP>`[ 1, 2, 3, 4, 5 ]'</SAMP>, and the range
+
+</P>
+
+<PRE>
+1 : 3 : 5
+</PRE>
+
+<P>
+defines the set of values <SAMP>`[ 1, 4 ]'</SAMP>.
+
+</P>
+<P>
+Although a range constant specifies a row vector, Octave does <EM>not</EM>
+convert range constants to vectors unless it is necessary to do so.
+This allows you to write a constant like <SAMP>`1 : 10000'</SAMP> without using
+80,000 bytes of storage on a typical 32-bit workstation.
+
+</P>
+<P>
+Note that the upper (or lower, if the increment is negative) bound on
+the range is not always included in the set of values, and that ranges
+defined by floating point values can produce surprising results because
+Octave uses floating point arithmetic to compute the values in the
+range.  If it is important to include the endpoints of a range and the
+number of elements is known, you should use the <CODE>linspace</CODE> function
+instead (see section <A HREF="octave_16.html#SEC134">Special Utility Matrices</A>).
+
+</P>
+<P>
+When Octave parses a range expression, it examines the elements of the
+expression to determine whether they are all constants.  If they are, it
+replaces the range expression with a single range constant.
+
+</P>
+
+
+<H2><A NAME="SEC52" HREF="octave_toc.html#TOC52">Predicates for Numeric Objects</A></H2>
+
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>is_matrix</B> <I>(<VAR>a</VAR>)</I>
+<DD><A NAME="IDX158"></A>
+Return 1 if <VAR>a</VAR> is a matrix.  Otherwise, return 0.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>is_vector</B> <I>(<VAR>a</VAR>)</I>
+<DD><A NAME="IDX159"></A>
+Return 1 if <VAR>a</VAR> is a vector.  Otherwise, return 0.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>is_scalar</B> <I>(<VAR>a</VAR>)</I>
+<DD><A NAME="IDX160"></A>
+Return 1 if <VAR>a</VAR> is a scalar.  Otherwise, return 0.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>is_square</B> <I>(<VAR>x</VAR>)</I>
+<DD><A NAME="IDX161"></A>
+If <VAR>x</VAR> is a square matrix, then return the dimension of <VAR>x</VAR>.
+Otherwise, return 0.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>is_symmetric</B> <I>(<VAR>x</VAR>, <VAR>tol</VAR>)</I>
+<DD><A NAME="IDX162"></A>
+If <VAR>x</VAR> is symmetric within the tolerance specified by <VAR>tol</VAR>, 
+then return the dimension of <VAR>x</VAR>.  Otherwise, return 0.  If
+<VAR>tol</VAR> is omitted, use a tolerance equal to the machine precision.
+</DL>
+
+</P>
+<P><HR><P>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_4.html">previous</A>, <A HREF="octave_6.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+</BODY>
+</HTML>

@@ -1,0 +1,85 @@
+<html>
+<title>Running Octave</title>
+<body bgcolor=#CFCFCF>
+
+
+<center><table align=center border CELLSPACING=10 CELLPADDING=10>
+<tr>
+<td align=center><font size=5><b>Running Octave</b></font></td>
+<td align=left>
+This document tells you how to start and exit Octave. You will also learn
+how to write your own executable Octave programs.
+<p>
+<menu>
+<img src="bullet.gif" align=bottom>
+<a href="octave.html">Octave for OS/2 Homepage.</a><br>
+<img src="bullet.gif" align=bottom>
+<a href="readme.html">Read Me!</a><br>
+<img src="bullet.gif" align=bottom>
+<a href="changes.html">History of Changes.</a><br>
+</menu>
+</td>
+</table></center>
+
+<hr>
+
+
+On most systems, the way to invoke Octave is with the shell command
+<b>octave</b>.  Octave displays an initial message and then a prompt
+indicating it is ready to accept input.  You can begin typing Octave
+commands immediately afterward.<p>
+
+If you get into trouble, you can usually interrupt Octave by typing
+<b>Control-C</b> (usually written <b>C-c</b> for short).  <b>C-c</b> gets
+its name from the fact that you type it by holding down the <b>CTRL</b>
+key and then pressing <b>c</b>.  Doing this will normally return you to
+Octave's prompt.<p>
+
+To exit Octave, type <b>quit</b>, <b>exit</b> or <b>Control-D</b>
+at the Octave prompt. On systems that support job control, you can
+suspend Octave by sending it a SIGTSTP signal, usually by typing
+<b>C-z</b>.<p>
+
+Once you have learned Octave, you may want to write self-contained
+Octave scripts, using the <b>#!</b> script mechanism.  You can do this
+on GNU systems and on many Unix systems (The <b>#!</b>
+mechanism works on Unix systems derived from Berkeley Unix, System V
+Release 4, and some System V Release 3 systems. On <b>OS/2</b> you must
+replace <b>#!</b> by <b>extproc</b>). For example, you could create a text
+file named <b>hello.cmd</b>, containing the following lines:<p>
+<pre>
+extproc octave -qf
+# a sample Octave program
+printf ("Hello, world!\n");
+</pre><p>
+After making this file executable (with the <b>chmod</b> command, if
+necessary), you can simply type:<p>
+<pre>hello</pre><p>
+at the shell, and the system will arrange to run Octave
+as if you had typed:<p>
+<pre>octave -qf hello.cmd</pre><p>
+The line beginning with <b>extproc</b> lists the full file name of an
+interpreter to be run, and an optional initial command line argument to
+pass to that interpreter.  The operating system then runs the interpreter
+with the given argument and the full argument list of the executed program.
+The first argument in the list is the full file name of the Octave program.
+The rest of the argument list will either be options to Octave, or data
+files, or both.  The <b>-qf</b> option is usually specified in
+stand-alone Octave programs to prevent them from printing the normal
+startup message, and to keep them from behaving differently depending on
+the contents of a particular user's <b>~/.octaverc</b> file.
+Self-contained Octave scripts are useful when you want to write a
+program which users can invoke without knowing that the program is
+written in the Octave language.<p>
+
+
+<hr><center><address><em>
+<a href="copyrigh.html">Copyright &copy; 1996, 1997 John W. Eaton.</a>
+</em></address></center>
+<center><address>Modified by 
+<a href="mailto:gebhkla@t-online.de">Klaus Gebhardt</a>
+, 1997</em></address></center>
+
+
+</body>
+</html>

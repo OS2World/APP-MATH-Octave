@@ -1,0 +1,67 @@
+# This is the OS/2 makefile for texinfos info directory.
+# (c) Klaus Gebhardt, 1999
+
+include ../makeconf.os2
+
+SOURCES = dir.c display.c doc.c dribble.c echo-area.c filesys.c footnotes.c \
+	gc.c index-search.c indices.c info-utils.c info.c infodoc.c infomap.c \
+	m-x.c man.c nodemenu.c nodes.c pc.c search.c session.c \
+	signals.c terminal.c tilde.c variables.c window.c
+
+INCL = display.h doc.h dribble.h echo-area.h filesys.h footnotes.h funs.h gc.h \
+	indices.h info-utils.h info.h infomap.h man.h nodes.h pc.h search.h session.h \
+	signals.h termdep.h terminal.h tilde.h variables.h window.h
+
+OBJECTS = dir.obj display.obj doc.obj dribble.obj echo-area.obj filesys.obj footnotes.obj \
+	gc.obj index-search.obj indices.obj info-utils.obj info.obj infodoc.obj infomap.obj \
+	m-x.obj man.obj nodemenu.obj nodes.obj pc.obj search.obj session.obj \
+	signals.obj terminal.obj tilde.obj variables.obj window.obj
+
+OBJS = info.obj
+
+LIBS = -ltexinfo
+
+# The names of files which declare info commands.
+CMDFILES = echo-area.c footnotes.c indices.c infodoc.c m-x.c nodemenu.c session.c variables.c
+
+# The name of the program which builds documentation structure from CMDFILES.
+MAKEDOC_OBJECTS = makedoc.obj
+MAKEDOC_SOURCE = makedoc.c
+
+all: info.exe gnuinfo.dll gnuinfo.a gnuinfo.lib
+
+clean:
+	rm -f *.o *.obj *.a *.lib *.dll *.exe
+
+gnuinfo.imp: gnuinfo.def
+	emximp -o gnuinfo.imp gnuinfo.def
+
+gnuinfo.a: gnuinfo.imp
+	emximp -o gnuinfo.a gnuinfo.imp
+
+gnuinfo.lib: gnuinfo.imp
+	emximp -o gnuinfo.lib gnuinfo.imp
+
+gnuinfo.dll: $(OBJECTS) gnuinfo.def
+	gcc $(LDFLAGS) -o gnuinfo.dll gnuinfo.def $(OBJECTS) -ltermcap $(LIBS) -Zdll $(ZFLAGS)
+
+info.exe: gnuinfo.lib gnuinfo.dll $(OBJS) info.res
+	$(CC) $(LDFLAGS) -o info.exe $(OBJS) info.res gnuinfo.lib $(LIBS) $(ZFLAGS)
+
+makedoc.exe: $(MAKEDOC_OBJECTS)
+	$(CC) $(LDFLAGS) -o makedoc.exe $(MAKEDOC_OBJECTS) $(LIBS) $(ZFLAGS)
+
+makedoc.obj:	makedoc.c;		$(CC) $(EFLAGS) -c $< -o $@ -Zomf
+info.obj:	info.c;			$(CC) $(EFLAGS) -c $< -o $@ -Zomf
+info.res:	info.rc
+
+# The files `doc.c' and `funs.h' are created by ./makedoc run over the source
+# files which contain DECLARE_INFO_COMMAND.  `funs.h' is a header file
+# listing the functions found.  `doc.c' is a structure containing pointers
+# to those functions along with completable names and documentation strings.
+funs.h: makedoc.exe $(CMDFILES)
+	makedoc $(CMDFILES)
+
+doc.obj:        doc.c
+doc.c:          funs.h
+infomap.obj:    infomap.h funs.h

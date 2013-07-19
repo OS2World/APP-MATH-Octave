@@ -1,0 +1,411 @@
+Octave -- a high-level language for numerical computations.
+
+
+  **************************************************************************
+  **                    P L E A S E   N O T E                             **
+  **************************************************************************
+  **  Because i no longer work for the Technical University of            **
+  **  Darmstadt, my email address has changed:                            **
+  **                                                                      **
+  **    100114.1371@compuserve.com                                        **
+  **    gebhkla@t-online.de                                               **
+  **                                                                      **
+  **  Sorry for the inconvenience,                                        **
+  **  Klaus Gebhardt                                                      **
+  **************************************************************************
+
+
+
+
+Overview
+--------
+
+Octave is a high-level language, primarily intended for numerical
+computations.  It provides a convenient command line interface for
+solving linear and nonlinear problems numerically.
+
+Octave is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the
+Free Software Foundation; either version 2, or (at your option) any
+later version.
+
+Octave is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the file COPYING for more
+details.
+
+
+
+Used Compiler and Libraries
+---------------------------
+
+Octave for OS/2 is compiled using EMX-GCC 0.9C (with EMXFIX04) and
+libg++ 2.7.2.
+
+The fortran routines are translated to C using f2c.
+
+
+
+Binary Distribution
+-------------------
+
+Why a binary distribution?
+
+1. There are only minor changes made in the source files of octave. The main
+   job was patching stdcpp, info, kpathsea and readline.
+
+2. octave is big (40 MB with the source, object files and libraries) and it
+   takes time to compile the program. (ca. 50 minutes on my
+   133 MHz Pentium-Overdrive system = ca. 8 hours on a 486DX-33).
+
+
+
+Compiling Octave
+----------------
+
+If you want to compile Octave yourself you must download the patched sources and
+unpack them. Modify the paths in the file makeversions depending on your
+system setup an run 'make octave'.
+
+
+
+Files
+-----
+
+The files BUGS, CHANGELO, CHANGELO.1, COPYING, NEWS, NEWS.1, PROJECTS, README,
+ROADMAP, SENDING.PAT and THANKS are part of the octave 2.0.17 source code.
+
+In the zip file scripts.zip are the scripts coming with octave 2.0.17.
+The installation script will unzip the correct set of script files for
+your file system.
+
+The files COPYING.EMX, emx.dll, emxlibcs.dll and termcap.dat are part of the
+emx 0.9c package  (with EMXFIX04 applied, see COPYING.EMX).
+
+octave.exe and octave.ico are the executable and the icon of the main program.
+The file octave.exe must no longer be build by the install program!
+
+info.exe is the standalone info browser coming with EMX. It was recompiled
+so that info.exe and octave.exe uses the same DLL (gnuinfo.dll). And it is
+patched so that info.exe accepts the '--index-search' option.
+
+gnuview.exe is a replacement for info.exe: It accepts the same command
+line option, but it starts OS/2s view.exe.
+
+mkfifo.exe is the utility for creating, removing and listing named pipes. It
+starts the program nmpserv.exe, if neccessary.
+
+The program oct-view.exe is used for starting the image viewer.
+
+README.OS2 is the file you are reading.
+
+In the directory 'lisp' you find the elisp files (and the compiled elisp files)
+you need to run Octave in an Emacs subshell and the files for editing script
+files or temporary files of octave using the Emacs editor.
+
+In the directory 'doc' you can find the documentation in dvi, postscript,
+and also the info files and the INF files.
+
+In the directory 'dll' you can find the Dynamic Link Libraries of octave and
+emx, and the file termcap.dat is in the directory etc.
+
+All files you need for using the dynamic loading in Octave for loading your
+own C++ routines into Octave are in 'dlfcn' and its subdirectories.
+
+
+
+Other Files of Interest
+-----------------------
+
+
+octa20Hb.zip or octave-2.0.17-b??.zip:
+               The binary distribution of Octave-2.0.17.
+octa20Hp.zip or octave-2.0.17-p??.zip:
+               This archive contains always the update to the newest build.
+octa20Hs.zip or octave-2.0.17-s??.zip:
+               The patched source code for octave (including info, kpathsea,
+               iostream, readline and pnm).
+
+You need also the following packages. They are available on ftp.cdrom.com,
+hobbes.nmsu.edu and wotan.ikp.physik.tu-darmstadt.de. less and gnufutil
+should be also on ftp.uni-stuttgart.de and ftp.leo.org, and the gnuplot
+beta on cmpc1.phys.soton.ac.uk.
+
+less252-2.zip: The less pager ported by Kai Uwe Rommel.
+               (I know there is a newer version, but i forgot the number :-))
+gp315os2b.zip: GNUPLOT 3.6 (beta 315)
+gnufutil.zip : The GNU file utilities.
+pmvu93.zip   : PM View 0.93.
+
+
+Updating to the most recent build level
+---------------------------------------
+
+  **************************************************************************
+  **  BEFORE APPLYING A PATCH MAKE SURE THAT THE PATCH IS FOR YOUR        **
+  **  INSTALLED OCTAVE VERSION (CHECK THE TIMESTAMPS OF THE FILES).       **
+  **************************************************************************
+  **  DO NOT INSTALL AN OLDER PATCH OVER A NEWER VERSION OF OCTAVE!       **
+  **************************************************************************
+
+1. First you must install Octave. See Installation below.
+2. Unzip the patches into the directory you have Octave/2 installed in.
+3. Change into that directory and type 'updt-octave'
+4. Type 'inst-octave /clean'
+
+
+Installation
+------------
+
+Change to the directory of octave and run install (REXX must be installed!):
+
+1.  Type 'inst-octave /install':
+    The script make changes in the config.sys, .octaverc, .emacs and dir.
+    It unzips the scriptfiles, removes older emx-dlls, copies the info-files
+    to the INFO directory and creates an object on the desktop!
+    For all modified or deleted files it will create backups in the current
+    directory.
+
+  **************************************************************************
+  **  BEFORE REBOOTING CONFIRM THE CHANGES THIS SCRIPT WILL HAVE DONE     **
+  **  IN YOUR CONFIG.SYS!                                                 **
+  **************************************************************************
+  **  IF THERE IS SOMETHING WRONG PLEASE SEND ME A NOTE!                  **
+  **************************************************************************
+
+2.  If necessary the script will ask you to reboot. Do so.
+
+3.  To save disk space you can use 'inst-octave /clean'. All the files you
+    don't need for running octave are deleted. All backup files are also
+    removed.
+
+The setup script modify the following parts of the config.sys, if necessary:
+
+  PATH=...;h:\apps\science\octave;
+  LIBPATH=...;h:\apps\science\octave\dll;
+The directory you have Octave installed in:
+  SET OCTAVE_HOME=c:/octave
+Terminal type and a pointer to the TERMCAP.DAT file:
+  SET TERM=ansi
+  SET TERMCAP=h:/apps/science/octave/etc/termcap.dat
+Your home directory (place of your initialization files)
+  SET HOME=h:/.
+The name of the initialization file:
+  SET OCTAVE_INITFILE=octave.ini
+The directory for your info files:
+  SET INFOPATH=.;h:/apps/science/octave/doc
+The directory of Gnuplot:
+  SET GNUPLOT=h:/apps/science/gnuplot
+
+
+Running Octave
+--------------
+
+When you start octave (without -f, --norc or --ignore-init-file), octave will
+execute the following files:
+
+1. scripts\startup\octaverc:
+  Octave will use the editor 'emacsclient' and the pager 'less'. The info
+  files are located using the environment variable INFOPATH and the
+  gnuplot_binary using the environment variable GNUPLOT.
+
+2. The file, which name is given by the environment variable OCTAVE_INITFILE,
+  or .octaverc, if there is no OCTAVE_INITFILE. Both are searched in your
+  HOME directory.
+
+You can use octave as an external processor in an batch file, if the first
+line in the batch file is
+  extproc octave -q
+or
+  EXTPROC octave -q.
+This is the same as using octave -q file.cmd.
+
+
+
+GNUPLOT
+-------
+
+Octave uses GNUPLOT to display plots. I have tested octave with GNUPLOT 3.6
+(beta 315). The system-wide startup file octaverc in the directory
+scripts/startup reads the environment variable GNUPLOT and appends
+"/gnuplot.exe". This should be the path and name of GNUPLOT. So if the
+executable (gnuplot.exe) is in the directory h:\apps\science\gnuplot
+add the following line to your config.sys:
+
+  SET GNUPLOT=h:/apps/science/gnuplot
+
+You must use the beta of GNUPLOT because it supports multiple plots.
+
+
+
+PAGER
+-----
+
+If you want to use the less pager, you need the file less252-2.zip or newer.
+This less port does not use the termcap library, so it is unable to work with
+ansi-color-2, ansi-color-3,...
+
+If you want to use ansi-color-3, you must recompile less after deleting
+termcap.c and adding the termcap-library in the makefile, or you must edit
+the file termcap.dat: Replace every tc=ansi in the termcap.dat by the lines
+following ansi.
+
+
+
+EMACS
+-----
+
+You can use emacs to edit the script files of octave. To do so add the lines 
+
+  (setq load-path (append '("h:/apps/science/octave/lisp") load-path))
+  (autoload 'octave-mode "octave-mode" "Enter Octave mode." t)
+  (setq auto-mode-alist (cons '("\\.[Mm]$" . octave-mode) auto-mode-alist))
+  (defun my-octave-mode-hook ()
+    (setq fill-column 76)
+    (auto-fill-mode 1))
+  (setq octave-mode-hook 'my-octave-mode-hook)
+  (setq octave-prog-filename "h:/apps/science/octave/octave.exe")
+
+to your .emacs.
+
+
+If you run emacs in server mode, octave can use the emacsclient for editing
+temporary files. Add the following lines to .emacs:
+
+  (autoload 'octave-tmp-mode "octave-tmp-mode" "Enter Octave's tmp mode." t)
+  (setq auto-mode-alist
+    (cons '("[Oo][Cc][Tt]-....\\.[Tt][Mm][Pp]$" . tmp-mode)
+	 auto-mode-alist))
+
+The tmp mode is the normal text mode with one exception: If you finished
+editing by pressing C-x # the buffer is killed. So octave can delete the file.
+
+
+If you want to run Octave in a special shell mode under Emacs you must also
+add the following line to .emacs:
+
+  (require 'octave)
+
+There is also another octave shell mode, which is normally part of
+Octave. The file is called octave.el. I do not use it, because it created
+a lot of problems on my system AND it won't work correctly.
+
+For example your .emacs file should look like this:
+
+  (setq load-path (append '("h:/apps/science/octave/lisp") load-path))
+  (require 'octave)
+  (autoload 'octave-mode "octave-mode" "Enter Octave mode." t)
+  (setq auto-mode-alist (cons '("\\.[Mm]$" . octave-mode) auto-mode-alist))
+  (defun my-octave-mode-hook ()
+    (setq fill-column 76)
+    (auto-fill-mode 1))
+  (setq octave-mode-hook 'my-octave-mode-hook)
+  (setq octave-prog-filename "h:/apps/science/octave/octave.exe")
+  (autoload 'octave-tmp-mode "octave-tmp-mode" "Enter Octave's tmp mode." t)
+  (setq auto-mode-alist
+        (cons '("[Oo][Cc][Tt]-....\\.[Tt][Mm][Pp]$" . octave-tmp-mode)
+              auto-mode-alist))
+
+
+
+Dynamic Loading of C++ Functions
+--------------------------------
+
+This port now supports the dynamic loading. Use the script MAKE-OCTFILE to
+compile your scripts EVERY time you installed a new version of Octave! The
+script MAKE-OCTFILE is created by INST-OCTAVE.
+
+For example:
+
+  cd dlfcn\examples
+  make-octfile hello.cc
+
+and add the path '.../dlfcn/examples' to Octave's LOADPATH; start Octave and
+type 'hello (1,2,3)'.
+
+You can find examples in the directories '.../dlfcn/examples' and
+'scripts/image/codecs'.
+
+
+
+Images
+------
+
+Octave for OS/2 uses the excellent PM View. If you want to use a different
+viewer or if your PM View is installed in directory other then
+h:\apps\graphics\pmview, set the environment variable OCTAVE_IMAGE_VIEWER.
+You can use the environment variable OCTAVE_IMAGE_VIEWER_OPT for specifying
+command line options: For example:
+
+SET OCTAVE_IMAGE_VIEWER=c:\pmview\pmview.exe
+SET OCTAVE_IMAGE_VIEWER_OPT=/WPos(,,,,ForAct)
+
+For loading and saving images Octave uses now the DLFCN feature. Octave can
+read and write BMP, PNM, IMG formats and write Postscript.
+
+
+
+MKFIFO
+------
+
+The mkfifo command is now supported! You can use Octave's mkfifo command
+to create a named pipe for communication with another program (local or
+in a LAN). There is also a utility called mkfifo, which can be used for
+creating, removing, listing named pipes, you have created with mkfifo.
+The names of the pipes must start with '\PIPE' or with '/PIPE'. If you want
+access to a pipe on another computer in your LAN you must prepend
+'\\HOSTNAME', where HOSTNAME stands for the name of the computer.
+
+For example:
+1) Start octave.
+2) Open an OS/2 window.
+3) Run mkfifo \PIPE\TEST
+4) Type 'echo abcdef >\PIPE\TEST' in the OS/2 window
+5) In Octave execute the following commands:
+   fid = fopen ("/PIPE/TEST", "r");
+   fgets (fid)
+   fclose (fid);
+6) Run mkfifo -d \PIPE\TEST in the OS/2 window
+
+To speed up the execution of the first mkfifo command you can add the
+following in your STARTUP.CMD:
+
+detach [DRIVE:]\[PATH]\nmpserv --noexit
+
+
+
+
+Known Limitations, Modifications and Bugs
+-----------------------------------------
+
+1) fork is not supported, use spawn instead. Compare the script file popen2.m
+   with the original version (popen2.org).
+
+2) dup2 has been renamed to _dup2
+
+3) Because of an OS/2 limitation dynamic loading of C++ functions will only
+   work, if the length of the function name is less than 8 characters.
+
+
+
+Comments, Bugs, Problems, Ideas, ...
+------------------------------------
+
+If you have any problem installing or using this port, let me know!
+
+If have any idea to make octave for OS/2 a better program, send me a mail.
+Also any comments are welcome.
+
+And thanks for all your nice mails i received, and thanks to all of you
+helping me to remove the bugs.
+
+My email addresses are:
+
+INTERNET:    100114.1371@compuserve.com
+             gebhkla@t-online.de
+
+CompuServe:  100114,1371
+
+Klaus Gebhardt [TEAM OS/2]
+Competence Center Architecture and Technology
+Deutsche Boerse Systems

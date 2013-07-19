@@ -1,0 +1,630 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from ./octave.texi on 9 October 1998 -->
+
+<TITLE>GNU Octave - Emacs Octave Support</TITLE>
+</HEAD>
+<BODY>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_33.html">previous</A>, <A HREF="octave_35.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC195" HREF="octave_toc.html#TOC195">Emacs Octave Support</A></H1>
+
+<P>
+The development of Octave code can greatly be facilitated using Emacs
+with Octave mode, a major mode for editing Octave files which can e.g.
+automatically indent the code, do some of the typing (with Abbrev mode)
+and show keywords, comments, strings, etc. in different faces (with
+Font-lock mode on devices that support it).
+
+</P>
+<P>
+It is also possible to run Octave from within Emacs, either by directly
+entering commands at the prompt in a buffer in Inferior Octave mode, or
+by interacting with Octave from within a file with Octave code.  This is
+useful in particular for debugging Octave code.
+
+</P>
+<P>
+Finally, you can convince Octave to use the Emacs info reader for
+<KBD>help -i</KBD>.
+
+</P>
+<P>
+All functionality is provided by the Emacs Lisp package EOS (for "Emacs
+Octave Support").  This chapter describes how to set up and use this
+package.
+
+</P>
+<P>
+Please contact &#60;Kurt.Hornik@ci.tuwien.ac.at&#62; if you have any questions
+or suggestions on using EOS.
+
+</P>
+
+
+
+<H2><A NAME="SEC196" HREF="octave_toc.html#TOC196">Installing EOS</A></H2>
+
+<P>
+The Emacs package EOS consists of the three files <TT>`octave-mod.el'</TT>,
+<TT>`octave-inf.el'</TT>, and <TT>`octave-hlp.el'</TT>.  These files, or better
+yet their byte-compiled versions, should be somewhere in your Emacs
+load-path.
+
+</P>
+<P>
+If you have GNU Emacs with a version number at least as high as 19.35,
+you are all set up, because EOS is respectively will be part of GNU
+Emacs as of version 19.35.
+
+</P>
+<P>
+Otherwise, copy the three files from the <TT>`emacs'</TT> subdirectory of
+the Octave distribution to a place where Emacs can find them (this
+depends on how your Emacs was installed).  Byte-compile them for speed
+if you want.
+
+</P>
+
+
+<H2><A NAME="SEC197" HREF="octave_toc.html#TOC197">Using Octave Mode</A></H2>
+
+<P>
+If you are lucky, your sysadmins have already arranged everything so
+that Emacs automatically goes into Octave mode whenever you visit an
+Octave code file as characterized by its extension <TT>`.m'</TT>.  If not,
+proceed as follows.
+
+</P>
+
+<OL>
+<LI>
+
+To begin using Octave mode for all <TT>`.m'</TT> files you visit, add the
+following lines to a file loaded by Emacs at startup time, typically
+your <TT>`~/.emacs'</TT> file:
+
+
+<PRE>
+(autoload 'octave-mode "octave-mod" nil t)
+(setq auto-mode-alist
+      (cons '("\\.m$" . octave-mode) auto-mode-alist))
+</PRE>
+
+<LI>
+
+Finally, to turn on the abbrevs, auto-fill and font-lock features
+automatically, also add the following lines to one of the Emacs startup
+files:
+
+<PRE>
+(add-hook 'octave-mode-hook
+          (lambda ()
+            (abbrev-mode 1)
+            (auto-fill-mode 1)
+            (if (eq window-system 'x)
+                (font-lock-mode 1))))
+</PRE>
+
+See the Emacs manual for more information about how to customize
+Font-lock mode.
+</OL>
+
+<P>
+In Octave mode, the following special Emacs commands can be used in
+addition to the standard Emacs commands.
+
+</P>
+<DL COMPACT>
+
+<DT><KBD>C-h m</KBD>
+<DD>
+Describe the features of Octave mode.
+
+<DT><KBD>LFD</KBD>
+<DD>
+Reindent the current Octave line, insert a newline and indent the new
+line (<CODE>octave-reindent-then-newline-and-indent</CODE>).  An abbrev before
+point is expanded if <CODE>abbrev-mode</CODE> is non-<CODE>nil</CODE>.
+
+<DT><KBD>TAB</KBD>
+<DD>
+Indents current Octave line based on its contents and on previous
+lines (<CODE>indent-according-to-mode</CODE>). 
+
+<DT><KBD>;</KBD>
+<DD>
+Insert an "electric" semicolon (<CODE>octave-electric-semi</CODE>).  If
+<CODE>octave-auto-indent</CODE> is non-<CODE>nil</CODE>, reindent the current line.
+If <CODE>octave-auto-newline</CODE> is non-<CODE>nil</CODE>, automagically insert a
+newline and indent the new line.
+
+<DT><KBD>`</KBD>
+<DD>
+Start entering an abbreviation (<CODE>octave-abbrev-start</CODE>).  If Abbrev
+mode is turned on, typing <KBD>`C-h</KBD> or <KBD>`?</KBD> lists all abbrevs.
+Any other key combination is executed normally.  Note that all Octave
+abbrevs start with a grave accent.
+
+<DT><KBD>M-LFD</KBD>
+<DD>
+Break line at point and insert continuation marker and alignment
+(<CODE>octave-split-line</CODE>).
+
+<DT><KBD>M-TAB</KBD>
+<DD>
+Perform completion on Octave symbol preceding point, comparing that
+symbol against Octave's reserved words and builtin variables
+(<CODE>octave-complete-symbol</CODE>). 
+
+<DT><KBD>M-C-a</KBD>
+<DD>
+Move backward to the beginning of a function
+(<CODE>octave-beginning-of-defun</CODE>).
+With prefix argument <VAR>N</VAR>, do it that many times if <VAR>N</VAR> is
+positive;  otherwise, move forward to the <VAR>N</VAR>-th following beginning
+of a function.
+
+<DT><KBD>M-C-e</KBD>
+<DD>
+Move forward to the end of a function (<CODE>octave-end-of-defun</CODE>).
+With prefix argument <VAR>N</VAR>, do it that many times if <VAR>N</VAR> is
+positive;  otherwise, move back to the <VAR>N</VAR>-th preceding end of a
+function.
+
+<DT><KBD>M-C-h</KBD>
+<DD>
+Puts point at beginning and mark at the end of the current Octave
+function, i.e., the one containing point or following point
+(<CODE>octave-mark-defun</CODE>).
+
+<DT><KBD>M-C-q</KBD>
+<DD>
+Properly indents the Octave function which contains point
+(<CODE>octave-indent-defun</CODE>).
+
+<DT><KBD>M-;</KBD>
+<DD>
+If there is no comment already on this line, create a code-level comment
+(started by two comment characters) if the line is empty, or an in-line
+comment (started by one comment character) otherwise
+(<CODE>octave-indent-for-comment</CODE>).
+Point is left after the start of the comment which is properly aligned.
+
+<DT><KBD>C-c ;</KBD>
+<DD>
+Puts the comment character <SAMP>`#'</SAMP> (more precisely, the string value of
+<CODE>octave-comment-start</CODE>) at the beginning of every line in the
+region (<CODE>octave-comment-region</CODE>).  With just <KBD>C-u</KBD> prefix
+argument, uncomment each line in the region.  A numeric prefix argument
+<VAR>N</VAR> means use <VAR>N</VAR> comment characters.
+
+<DT><KBD>C-c :</KBD>
+<DD>
+Uncomments every line in the region (<CODE>octave-uncomment-region</CODE>).
+
+<DT><KBD>C-c C-p</KBD>
+<DD>
+Move one line of Octave code backward, skipping empty and comment lines
+(<CODE>octave-previous-code-line</CODE>).  With numeric prefix argument
+<VAR>N</VAR>, move that many code lines backward (forward if <VAR>N</VAR> is
+negative).
+
+<DT><KBD>C-c C-n</KBD>
+<DD>
+Move one line of Octave code forward, skipping empty and comment lines
+(<CODE>octave-next-code-line</CODE>).  With numeric prefix argument <VAR>N</VAR>,
+move that many code lines forward (backward if <VAR>N</VAR> is negative).
+
+<DT><KBD>C-c C-a</KBD>
+<DD>
+Move to the `real' beginning of the current line
+(<CODE>octave-beginning-of-line</CODE>).  If point is in an empty or comment
+line, simply go to its beginning;  otherwise, move backwards to the
+beginning of the first code line which is not inside a continuation
+statement,  i.e., which does not follow a code line ending in <SAMP>`...'</SAMP>
+or <SAMP>`\'</SAMP>, or is inside an open parenthesis list.
+
+<DT><KBD>C-c C-e</KBD>
+<DD>
+Move to the `real' end of the current line (<CODE>octave-end-of-line</CODE>).
+If point is in a code line, move forward to the end of the first Octave
+code line which does not end in <SAMP>`...'</SAMP> or <SAMP>`\'</SAMP> or is inside an
+open parenthesis list.  Otherwise, simply go to the end of the current
+line.
+
+<DT><KBD>C-c M-C-n</KBD>
+<DD>
+Move forward across one balanced begin-end block of Octave code
+(<CODE>octave-forward-block</CODE>).  With numeric prefix argument <VAR>N</VAR>,
+move forward across <VAR>n</VAR> such blocks (backward if <VAR>N</VAR> is
+negative).
+
+<DT><KBD>C-c M-C-p</KBD>
+<DD>
+Move back across one balanced begin-end block of Octave code
+(<CODE>octave-backward-block</CODE>).  With numeric prefix argument <VAR>N</VAR>,
+move backward across <VAR>N</VAR> such blocks (forward if <VAR>N</VAR> is
+negative).
+
+<DT><KBD>C-c M-C-d</KBD>
+<DD>
+Move forward down one begin-end block level of Octave code
+(<CODE>octave-down-block</CODE>).  With numeric prefix argument, do it that
+many times;  a negative argument means move backward, but still go down
+one level.
+
+<DT><KBD>C-c M-C-u</KBD>
+<DD>
+Move backward out of one begin-end block level of Octave code
+(<CODE>octave-backward-up-block</CODE>).  With numeric prefix argument, do it
+that many times; a negative argument means move forward, but still to a
+less deep spot.
+
+<DT><KBD>C-c M-C-h</KBD>
+<DD>
+Put point at the beginning of this block, mark at the end
+(<CODE>octave-mark-block</CODE>).
+The block marked is the one that contains point or follows point.
+
+<DT><KBD>C-c ]</KBD>
+<DD>
+Close the current block on a separate line (<CODE>octave-close-block</CODE>).
+An error is signaled if no block to close is found.
+
+<DT><KBD>C-c f</KBD>
+<DD>
+Insert a function skeleton, prompting for the function's name, arguments
+and return values which have to be entered without parens
+(<CODE>octave-insert-defun</CODE>).
+
+<DT><KBD>C-c C-h</KBD>
+<DD>
+Search the function, operator and variable indices of all info files
+with documentation for Octave for entries (<CODE>octave-help</CODE>).  If used
+interactively, the entry is prompted for with completion.  If multiple
+matches are found, one can cycle through them using the standard
+<SAMP>`,'</SAMP> (<CODE>Info-index-next</CODE>) command of the Info reader.
+
+The variable <CODE>octave-help-files</CODE> is a list of files to search
+through and defaults to <CODE>'("octave")</CODE>.  If there is also an Octave
+Local Guide with corresponding info file, say, <TT>`octave-LG'</TT>, you can
+have <CODE>octave-help</CODE> search both files by 
+
+<PRE>
+(setq octave-help-files '("octave" "octave-LG"))
+</PRE>
+
+in one of your Emacs startup files.
+
+</DL>
+
+<P>
+A common problem is that the <KBD>RET</KBD> key does <EM>not</EM> indent the
+line to where the new text should go after inserting the newline.  This
+is because the standard Emacs convention is that <KBD>RET</KBD> (aka
+<KBD>C-m</KBD>) just adds a newline, whereas <KBD>LFD</KBD> (aka <KBD>C-j</KBD>) adds a
+newline and indents it.  This is particularly inconvenient for users with
+keyboards which do not have a special <KBD>LFD</KBD> key at all;  in such
+cases, it is typically more convenient to use <KBD>RET</KBD> as the <KBD>LFD</KBD>
+key (rather than typing <KBD>C-j</KBD>).  
+
+</P>
+<P>
+You can make <KBD>RET</KBD> do this by adding
+
+<PRE>
+(define-key octave-mode-map "\C-m"
+  'octave-reindent-then-newline-and-indent)
+</PRE>
+
+<P>
+to one of your Emacs startup files.  Another, more generally applicable
+solution is
+
+<PRE>
+(defun RET-behaves-as-LFD ()
+  (let ((x (key-binding "\C-j")))
+    (local-set-key "\C-m" x)))
+(add-hook 'octave-mode-hook 'RET-behaves-as-LFD)
+</PRE>
+
+<P>
+(this works for all modes by adding to the startup hooks, without having
+to know the particular binding of <KBD>RET</KBD> in that mode!).  Similar
+considerations apply for using <KBD>M-RET</KBD> as <KBD>M-LFD</KBD>.  As Barry
+A. Warsaw &#60;bwarsaw@cnri.reston.va.us&#62; says in the documentation for his
+<CODE>cc-mode</CODE>, "This is a very common question. <CODE>:-)</CODE> If you want
+this to be the default behavior, don't lobby me, lobby RMS!"
+
+</P>
+<P>
+The following variables can be used to customize Octave mode.
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>octave-auto-indent</CODE>
+<DD>
+Non-<CODE>nil</CODE> means auto-indent the current line after a semicolon or
+space.  Default is <CODE>nil</CODE>.
+
+<DT><CODE>octave-auto-newline</CODE>
+<DD>
+Non-<CODE>nil</CODE> means auto-insert a newline and indent after semicolons
+are typed.  The default value is <CODE>nil</CODE>.
+
+<DT><CODE>octave-blink-matching-block</CODE>
+<DD>
+Non-<CODE>nil</CODE> means show matching begin of block when inserting a space,
+newline or <SAMP>`;'</SAMP> after an else or end keyword.  Default is <CODE>t</CODE>.
+This is an extremely useful feature for automatically verifying that the
+keywords match--if they don't, an error message is displayed.
+
+<DT><CODE>octave-block-offset</CODE>
+<DD>
+Extra indentation applied to statements in block structures.
+Default is 2.
+
+<DT><CODE>octave-continuation-offset</CODE>
+<DD>
+Extra indentation applied to Octave continuation lines.
+Default is 4. 
+
+<DT><CODE>octave-continuation-string</CODE>
+<DD>
+String used for Octave continuation lines.
+Normally <SAMP>`\'</SAMP>.
+
+<DT><CODE>octave-mode-startup-message</CODE>
+<DD>
+If <CODE>t</CODE> (default), a startup message is displayed when Octave mode
+is called.
+
+</DL>
+
+<P>
+If Font Lock mode is enabled, Octave mode will display
+
+<UL>
+<LI>
+
+strings in <CODE>font-lock-string-face</CODE>
+<LI>
+
+comments in <CODE>font-lock-comment-face</CODE>
+<LI>
+
+the Octave reserved words (such as all block keywords) and the text
+functions (such as <SAMP>`cd'</SAMP> or <SAMP>`who'</SAMP>) which are also reserved
+using <CODE>font-lock-keyword-face</CODE>
+<LI>
+
+the builtin operators (<SAMP>`&#38;&#38;'</SAMP>, <SAMP>`&#60;&#62;'</SAMP>, ...) using
+<CODE>font-lock-reference-face</CODE>
+<LI>
+
+the builtin variables (such as <SAMP>`prefer_column_vectors'</SAMP>, <SAMP>`NaN'</SAMP>
+or <SAMP>`LOADPATH'</SAMP>) in <CODE>font-lock-variable-name-face</CODE>
+<LI>
+
+and the function names in function declarations in
+<CODE>font-lock-function-name-face</CODE>.
+</UL>
+
+<P>
+There is also rudimentary support for Imenu (currently, function names
+can be indexed).
+
+</P>
+<P>
+Customization of Octave mode can be performed by modification of the
+variable <CODE>octave-mode-hook</CODE>.  It the value of this variable is
+non-<CODE>nil</CODE>, turning on Octave mode calls its value.
+
+</P>
+<P>
+If you discover a problem with Octave mode, you can conveniently send a
+bug report using <KBD>C-c C-b</KBD> (<CODE>octave-submit-bug-report</CODE>).  This
+automatically sets up a mail buffer with version information already
+added.  You just need to add a description of the problem, including a
+reproducible test case and send the message.
+
+</P>
+
+
+<H2><A NAME="SEC198" HREF="octave_toc.html#TOC198">Running Octave From Within Emacs</A></H2>
+
+<P>
+The package <TT>`octave'</TT> provides commands for running an inferior
+Octave process in a special Emacs buffer.  Use 
+
+<PRE>
+M-x run-octave
+</PRE>
+
+<P>
+to directly start an inferior Octave process.  If Emacs does not know
+about this command, add the line
+
+<PRE>
+(autoload 'run-octave "octave-inf" nil t)
+</PRE>
+
+<P>
+to your <TT>`.emacs'</TT> file.
+
+</P>
+<P>
+This will start Octave in a special buffer the name of which is
+specified by the variable <CODE>inferior-octave-buffer</CODE> and defaults to
+<CODE>"*Inferior Octave*"</CODE>.  From within this buffer, you can
+interact with the inferior Octave process `as usual', i.e., by entering
+Octave commands at the prompt.  The buffer is in Inferior Octave mode,
+which is derived from the standard Comint mode, a major mode for
+interacting with an inferior interpreter.  See the documentation for
+<CODE>comint-mode</CODE> for more details, and use <KBD>C-h b</KBD> to find out
+about available special keybindings.
+
+</P>
+<P>
+You can also communicate with an inferior Octave process from within
+files with Octave code (i.e., buffers in Octave mode), using the
+following commands.
+
+</P>
+<DL COMPACT>
+
+<DT><KBD>C-c i l</KBD>
+<DD>
+Send the current line to the inferior Octave process
+(<CODE>octave-send-line</CODE>).
+With positive prefix argument <VAR>N</VAR>, send that many lines.
+If <CODE>octave-send-line-auto-forward</CODE> is non-<CODE>nil</CODE>, go to the
+next unsent code line.
+<DT><KBD>C-c i b</KBD>
+<DD>
+Send the current block to the inferior Octave process
+(<CODE>octave-send-block</CODE>).
+<DT><KBD>C-c i f</KBD>
+<DD>
+Send the current function to the inferior Octave process
+(<CODE>octave-send-defun</CODE>).
+<DT><KBD>C-c i r</KBD>
+<DD>
+Send the region to the inferior Octave process
+(<CODE>octave-send-region</CODE>).
+<DT><KBD>C-c i s</KBD>
+<DD>
+Make sure that `inferior-octave-buffer' is displayed
+(<CODE>octave-show-process-buffer</CODE>).
+<DT><KBD>C-c i h</KBD>
+<DD>
+Delete all windows that display the inferior Octave buffer
+(<CODE>octave-hide-process-buffer</CODE>).
+<DT><KBD>C-c i k</KBD>
+<DD>
+Kill the inferior Octave process and its buffer
+(<CODE>octave-kill-process</CODE>).
+</DL>
+
+<P>
+The effect of the commands which send code to the Octave process can be
+customized by the following variables.
+<DL COMPACT>
+
+<DT><CODE>octave-send-echo-input</CODE>
+<DD>
+Non-<CODE>nil</CODE> means echo input sent to the inferior Octave process.
+Default is <CODE>t</CODE>.
+
+<DT><CODE>octave-send-show-buffer</CODE>
+<DD>
+Non-<CODE>nil</CODE> means display the buffer running the Octave process after
+sending a command (but without selecting it).
+Default is <CODE>t</CODE>.
+</DL>
+
+<P>
+If you send code and there is no inferior Octave process yet, it will be
+started automatically.
+
+</P>
+<P>
+The startup of the inferior Octave process is highly customizable.
+The variable <CODE>inferior-octave-startup-args</CODE> can be used for
+specifying command lines arguments to be passed to Octave on startup
+as a list of strings.  For example, to suppress the startup message and
+use `traditional' mode, set this to <CODE>'("-q" "--traditional")</CODE>.
+You can also specify a startup file of Octave commands to be loaded on
+startup;  note that these commands will not produce any visible output
+in the process buffer.  Which file to use is controlled by the variable
+<CODE>inferior-octave-startup-file</CODE>.  If this is <CODE>nil</CODE>, the file
+<TT>`~/.emacs-octave'</TT> is used if it exists.
+
+</P>
+<P>
+And finally, <CODE>inferior-octave-mode-hook</CODE> is run after starting the
+process and putting its buffer into Inferior Octave mode.  Hence, if you
+like the up and down arrow keys to behave in the interaction buffer as
+in the shell, and you want this buffer to use nice colors, add
+
+<PRE>
+(add-hook 'inferior-octave-mode-hook
+          (lambda ()
+            (turn-on-font-lock)
+            (define-key inferior-octave-mode-map [up]
+              'comint-previous-input)
+            (define-key inferior-octave-mode-map [down]
+              'comint-next-input)))
+</PRE>
+
+<P>
+to your <TT>`.emacs'</TT> file.  You could also swap the roles of <KBD>C-a</KBD>
+(<CODE>beginning-of-line</CODE>) and <CODE>C-c C-a</CODE> (<CODE>comint-bol</CODE>) using
+this hook.
+
+</P>
+
+<BLOCKQUOTE>
+<P>
+<STRONG>Note:</STRONG>
+If you set your Octave prompts to something different from the defaults,
+make sure that <CODE>inferior-octave-prompt</CODE> matches them.
+Otherwise, <EM>nothing</EM> will work, because Emacs will have no idea
+when Octave is waiting for input, or done sending output.
+</BLOCKQUOTE>
+
+
+
+<H2><A NAME="SEC199" HREF="octave_toc.html#TOC199">Using the Emacs Info Reader for Octave</A></H2>
+
+<P>
+You can also set up the Emacs Info reader for dealing with the results
+of Octave's <SAMP>`help -i'</SAMP>.  For this, the package <TT>`gnuserv'</TT> needs
+to be installed, which unfortunately still does not come with GNU Emacs
+(it does with XEmacs).  It can be retrieved from any GNU Emacs Lisp Code
+Directory archive, e.g.
+@url{ftp://ftp.cis.ohio-state.edu/pub/gnu/emacs/elisp-archive},
+in the <TT>`packages'</TT> subdirectory.  The alpha version of an enhanced
+version of gnuserv is available at 
+@url{ftp://ftp.wellfleet.com/netman/psmith/emacs/gnuserv-2.1alpha.tar.gz}.
+
+</P>
+<P>
+If <TT>`gnuserv'</TT> is installed, add the lines
+
+<PRE>
+(autoload 'octave-help "octave-hlp" nil t)
+(require 'gnuserv)
+(gnuserv-start)
+</PRE>
+
+<P>
+to your <TT>`.emacs'</TT> file.
+
+</P>
+<P>
+You can use either `plain' Emacs Info or the function <CODE>octave-help</CODE>
+as your Octave info reader (for <SAMP>`help -i'</SAMP>).  In the former case,
+set the Octave variable <CODE>INFO_PROGRAM</CODE> to <CODE>"info-emacs-info"</CODE>.
+The latter is perhaps more attractive because it allows to look up keys
+in the indices of <EM>several</EM> info files related to Octave (provided
+that the Emacs variable <CODE>octave-help-files</CODE> is set correctly).  In
+this case, set <CODE>INFO_PROGRAM</CODE> to <CODE>"info-emacs-octave-help"</CODE>.
+
+</P>
+<P>
+If you use Octave from within Emacs, these settings are best done in the
+<TT>`~/.emacs-octave'</TT> startup file (or the file pointed to by the Emacs
+variable <CODE>inferior-octave-startup-file</CODE>).
+
+</P>
+
+<P><HR><P>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_33.html">previous</A>, <A HREF="octave_35.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+</BODY>
+</HTML>

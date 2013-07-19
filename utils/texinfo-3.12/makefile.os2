@@ -1,0 +1,45 @@
+# This is the OS/2 makefile for texinfo-3.12.
+# (c) Klaus Gebhardt, 1999
+
+PAT = PATOS2.ZIP
+
+include makeconf.os2
+
+all:
+	cd lib      ; make -f makefile.os2 ; cd ..
+	cd info     ; make -f makefile.os2 ; cd ..
+	cd makeinfo ; make -f makefile.os2 ; cd ..
+	cd texindex ; make -f makefile.os2 ; cd ..
+	cd view     ; make -f makefile.os2 ; cd ..
+
+clean:
+	cd lib      ; make -f makefile.os2 clean ; cd ..
+	cd info     ; make -f makefile.os2 clean ; cd ..
+	cd makeinfo ; make -f makefile.os2 clean ; cd ..
+	cd texindex ; make -f makefile.os2 clean ; cd ..
+	cd view     ; make -f makefile.os2 clean ; cd ..
+
+build: clean all
+
+patches:
+	rm -f PATCHES.OS2 $(PAT)
+	-diff -cwr $(ORIGDIR)/lib $(MSTDIR)/lib | sed -f patches.sed >PATCHES.OS2
+	-diff -cwr $(ORIGDIR)/info $(MSTDIR)/info | sed -f patches.sed >>PATCHES.OS2
+	-diff -cwr $(ORIGDIR)/makeinfo $(MSTDIR)/makeinfo | sed -f patches.sed >>PATCHES.OS2
+	-diff -cwr $(ORIGDIR)/util $(MSTDIR)/texindex | sed -f patches.sed >>PATCHES.OS2
+	zip -r9 $(PAT) config.h *.os2 *.sed
+	zip -r9 $(PAT) lib/*.os2 intl/*.os2 makeinfo/*.os2 texindex/*.os2
+	zip -r9 $(PAT) info/*.os2 info/*.def info/*.rc info/pc.h info/pc.c info/index-search.c
+	zip -r9 $(PAT) view/*.c view/*.os2
+	unzip -t $(PAT)
+
+install: all
+	cp doc/texinfo.tex $(TEXDIR)/texinput
+	cp makeinfo/makeinfo.exe texindex/texindex.exe $(BINDIR)
+	cp info/info.exe view/gnuview.exe $(BINDIR)
+	cp info/info.exe view/gnuview.exe $(BINDIR)
+	cp info/gnuinfo.dll $(DLLDIR)
+	cp info/gnuinfo.a info/gnuinfo.lib $(LIBDIR)
+	rm -f $(INCLDIR)/info/*.h
+	cp info/*.h $(INCLDIR)/info
+	cp lib/*.h $(INCLDIR)/info

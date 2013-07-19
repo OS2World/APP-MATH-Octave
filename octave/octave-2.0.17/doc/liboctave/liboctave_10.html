@@ -1,0 +1,427 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from ./liboctave.texi on 9 October 1998 -->
+
+<TITLE>Octave C++ Classes - Optimization</TITLE>
+</HEAD>
+<BODY>
+Go to the <A HREF="liboctave_1.html">first</A>, <A HREF="liboctave_9.html">previous</A>, <A HREF="liboctave_11.html">next</A>, <A HREF="liboctave_18.html">last</A> section, <A HREF="liboctave_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC15" HREF="liboctave_toc.html#TOC15">Optimization</A></H1>
+<P>
+<A NAME="IDX820"></A>
+
+</P>
+
+
+
+<H2><A NAME="SEC16" HREF="liboctave_toc.html#TOC16">Objective Functions</A></H2>
+<P>
+<A NAME="IDX821"></A>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> {}Objective <B>(void)</B>
+<DD><A NAME="IDX822"></A>
+<DT><U>:</U> {}Objective <B>(const</B> <I><VAR>objective_fcn</VAR>)</I>
+<DD><A NAME="IDX823"></A>
+<DT><U>:</U> {}Objective <B>(const</B> <I><VAR>objective_fcn</VAR>, const <VAR>gradient_fcn</VAR>)</I>
+<DD><A NAME="IDX824"></A>
+<DT><U>:</U> {}Objective <B>(const</B> <I>Objective &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX825"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> Objective&#38; <B>operator =</B> <I>(const Objective &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX826"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> objective_fcn <B>objective_function</B> <I>(void) const;</I>
+<DD><A NAME="IDX827"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> Objective&#38; <B>set_objective_function</B> <I>(const <VAR>objective_fcn</VAR>)</I>
+<DD><A NAME="IDX828"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> gradient_fcn <B>gradient_function</B> <I>(void) const;</I>
+<DD><A NAME="IDX829"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> Objective&#38; <B>set_gradient_function</B> <I>(const <VAR>gradient_fcn</VAR>)</I>
+<DD><A NAME="IDX830"></A>
+</DL>
+
+</P>
+
+
+
+<H2><A NAME="SEC17" HREF="liboctave_toc.html#TOC17">Bounds</A></H2>
+<P>
+<A NAME="IDX831"></A>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> {}Bounds <B>(void)</B>
+<DD><A NAME="IDX832"></A>
+<DT><U>:</U> {}Bounds <B>(int</B> <I><VAR>n</VAR>)</I>
+<DD><A NAME="IDX833"></A>
+<DT><U>:</U> {}Bounds <B>(const</B> <I>ColumnVector <VAR>lb</VAR>, const ColumnVector <VAR>ub</VAR>)</I>
+<DD><A NAME="IDX834"></A>
+<DT><U>:</U> {}Bounds <B>(const</B> <I>Bounds &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX835"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> Bounds&#38; <B>operator =</B> <I>(const Bounds &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX836"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> Bounds&#38; <B>resize</B> <I>(int <VAR>n</VAR>)</I>
+<DD><A NAME="IDX837"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> double <B>lower_bound</B> <I>(int <VAR>index</VAR>) const;</I>
+<DD><A NAME="IDX838"></A>
+<DT><U>:</U> double <B>upper_bound</B> <I>(int <VAR>index</VAR>) const;</I>
+<DD><A NAME="IDX839"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ColumnVector <B>lower_bounds</B> <I>(void) const;</I>
+<DD><A NAME="IDX840"></A>
+<DT><U>:</U> ColumnVector <B>upper_bounds</B> <I>(void) const;</I>
+<DD><A NAME="IDX841"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> int <B>size</B> <I>(void) const;</I>
+<DD><A NAME="IDX842"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> Bounds&#38; <B>set_bound</B> <I>(int <VAR>index</VAR>, double <VAR>low</VAR>, double <VAR>high</VAR>)</I>
+<DD><A NAME="IDX843"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> Bounds&#38; <B>set_bounds</B> <I>(double <VAR>low</VAR>, double <VAR>high</VAR>)</I>
+<DD><A NAME="IDX844"></A>
+<DT><U>:</U> Bounds&#38; <B>set_bounds</B> <I>(const ColumnVector <VAR>lb</VAR>, const ColumnVector <VAR>ub</VAR>)</I>
+<DD><A NAME="IDX845"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> Bounds&#38; <B>set_lower_bound</B> <I>(int <VAR>index</VAR>, double <VAR>low</VAR>)</I>
+<DD><A NAME="IDX846"></A>
+<DT><U>:</U> Bounds&#38; <B>set_upper_bound</B> <I>(int <VAR>index</VAR>, double <VAR>high</VAR>)</I>
+<DD><A NAME="IDX847"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> Bounds&#38; <B>set_lower_bounds</B> <I>(double <VAR>low</VAR>)</I>
+<DD><A NAME="IDX848"></A>
+<DT><U>:</U> Bounds&#38; <B>set_upper_bounds</B> <I>(double <VAR>high</VAR>)</I>
+<DD><A NAME="IDX849"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> Bounds&#38; <B>set_lower_bounds</B> <I>(const ColumnVector <VAR>lb</VAR>)</I>
+<DD><A NAME="IDX850"></A>
+<DT><U>:</U> Bounds&#38; <B>set_upper_bounds</B> <I>(const ColumnVector <VAR>ub</VAR>)</I>
+<DD><A NAME="IDX851"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ostream&#38; <B>operator &#60;&#60;</B> <I>(ostream &#38;<VAR>os</VAR>, const Bounds &#38;<VAR>b</VAR>)</I>
+<DD><A NAME="IDX852"></A>
+</DL>
+
+</P>
+
+
+
+<H2><A NAME="SEC18" HREF="liboctave_toc.html#TOC18">Linear Constraints</A></H2>
+<P>
+<A NAME="IDX853"></A>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> {}LinConst <B>(void)</B>
+<DD><A NAME="IDX854"></A>
+<DT><U>:</U> {}LinConst <B>(int</B> <I><VAR>nclin</VAR>, int <VAR>nx</VAR>)</I>
+<DD><A NAME="IDX855"></A>
+<DT><U>:</U> {}LinConst <B>(int</B> <I><VAR>nclin_eq</VAR>, int <VAR>nclin_ineq</VAR>, int <VAR>nx</VAR>)</I>
+<DD><A NAME="IDX856"></A>
+<DT><U>:</U> {}LinConst <B>(const</B> <I>ColumnVector &#38;<VAR>lb</VAR>, const Matrix &#38;<VAR>A</VAR>, const ColumnVector &#38;<VAR>ub</VAR>)</I>
+<DD><A NAME="IDX857"></A>
+<DT><U>:</U> {}LinConst <B>(const</B> <I>Matrix &#38;<VAR>A_eq</VAR>, const ColumnVector &#38;<VAR>b_eq</VAR>, const Matrix &#38;<VAR>A_ineq</VAR>, const ColumnVector &#38;<VAR>b_ineq</VAR>)</I>
+<DD><A NAME="IDX858"></A>
+<DT><U>:</U> {}LinConst <B>(const</B> <I>LinConst &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX859"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> LinConst&#38; <B>operator =</B> <I>(const LinConst &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX860"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> LinConst&#38; <B>resize</B> <I>(int <VAR>nclin</VAR>, int <VAR>n</VAR>)</I>
+<DD><A NAME="IDX861"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> Matrix <B>constraint_matrix</B> <I>(void) const;</I>
+<DD><A NAME="IDX862"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> LinConst&#38; <B>set_constraint_matrix</B> <I>(const Matrix &#38;<VAR>A</VAR>)</I>
+<DD><A NAME="IDX863"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> Matrix <B>eq_constraint_matrix</B> <I>(void) const;</I>
+<DD><A NAME="IDX864"></A>
+<DT><U>:</U> Matrix <B>ineq_constraint_matrix</B> <I>(void) const;</I>
+<DD><A NAME="IDX865"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ColumnVector <B>eq_constraint_vector</B> <I>(void) const;</I>
+<DD><A NAME="IDX866"></A>
+<DT><U>:</U> ColumnVector <B>ineq_constraint_vector</B> <I>(void) const;</I>
+<DD><A NAME="IDX867"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ostream&#38; <B>operator &#60;&#60;</B> <I>(ostream &#38;<VAR>os</VAR>, const LinConst &#38;<VAR>b</VAR>)</I>
+<DD><A NAME="IDX868"></A>
+</DL>
+
+</P>
+
+
+
+<H2><A NAME="SEC19" HREF="liboctave_toc.html#TOC19">Nonlinear Constraints</A></H2>
+<P>
+<A NAME="IDX869"></A>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> {}NLConst <B>(void)</B>
+<DD><A NAME="IDX870"></A>
+<DT><U>:</U> {}NLConst <B>(int</B> <I><VAR>n</VAR>)</I>
+<DD><A NAME="IDX871"></A>
+<DT><U>:</U> {}NLConst <B>(const</B> <I>ColumnVector <VAR>lb</VAR>, const NLFunc <VAR>f</VAR>, const ColumnVector <VAR>ub</VAR>)</I>
+<DD><A NAME="IDX872"></A>
+<DT><U>:</U> {}NLConst <B>(const</B> <I>NLConst &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX873"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> NLConst&#38; <B>operator =</B> <I>(const NLConst &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX874"></A>
+</DL>
+
+</P>
+
+
+<H2><A NAME="SEC20" HREF="liboctave_toc.html#TOC20">Quadratic Programming</A></H2>
+<P>
+<A NAME="IDX875"></A>
+<A NAME="IDX876"></A>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> {}QP <B>(void)</B>
+<DD><A NAME="IDX877"></A>
+<DT><U>:</U> {}QP <B>(const</B> <I>ColumnVector &#38;<VAR>x</VAR>, const Matrix &#38;<VAR>H</VAR>)</I>
+<DD><A NAME="IDX878"></A>
+<DT><U>:</U> {}QP <B>(const</B> <I>ColumnVector &#38;<VAR>x</VAR>, const Matrix &#38;<VAR>H</VAR>, const ColumnVector &#38;<VAR>c</VAR>)</I>
+<DD><A NAME="IDX879"></A>
+<DT><U>:</U> {}QP <B>(const</B> <I>ColumnVector &#38;<VAR>x</VAR>, const Matrix &#38;<VAR>H</VAR>, const Bounds &#38;<VAR>b</VAR>)</I>
+<DD><A NAME="IDX880"></A>
+<DT><U>:</U> {}QP <B>(const</B> <I>ColumnVector &#38;<VAR>x</VAR>, const Matrix &#38;<VAR>H</VAR>, const LinConst &#38;<VAR>lc</VAR>)</I>
+<DD><A NAME="IDX881"></A>
+<DT><U>:</U> {}QP <B>(const</B> <I>ColumnVector &#38;<VAR>x</VAR>, const Matrix &#38;<VAR>H</VAR>, const ColumnVector &#38;<VAR>c</VAR>, const Bounds &#38;<VAR>b</VAR>)</I>
+<DD><A NAME="IDX882"></A>
+<DT><U>:</U> {}QP <B>(const</B> <I>ColumnVector &#38;<VAR>x</VAR>, const Matrix &#38;<VAR>H</VAR>, const ColumnVector &#38;<VAR>c</VAR>, const LinConst &#38;<VAR>lc</VAR>)</I>
+<DD><A NAME="IDX883"></A>
+<DT><U>:</U> {}QP <B>(const</B> <I>ColumnVector &#38;<VAR>x</VAR>, const Matrix &#38;<VAR>H</VAR>, const Bounds &#38;<VAR>b</VAR>, const LinConst &#38;<VAR>lc</VAR>)</I>
+<DD><A NAME="IDX884"></A>
+<DT><U>:</U> {}QP <B>(const</B> <I>ColumnVector &#38;<VAR>x</VAR>, const Matrix &#38;<VAR>H</VAR>, const ColumnVector &#38;<VAR>c</VAR>, const Bounds &#38;<VAR>b</VAR>, const LinConst &#38;<VAR>lc</VAR>)</I>
+<DD><A NAME="IDX885"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> virtual ColumnVector <B>minimize</B> <I>(void)</I>
+<DD><A NAME="IDX886"></A>
+<DT><U>:</U> virtual ColumnVector <B>minimize</B> <I>(double &#38;<VAR>objf</VAR>)</I>
+<DD><A NAME="IDX887"></A>
+<DT><U>:</U> virtual ColumnVector <B>minimize</B> <I>(double &#38;<VAR>objf</VAR>, int &#38;<VAR>inform</VAR>)</I>
+<DD><A NAME="IDX888"></A>
+<DT><U>:</U> virtual ColumnVector <B>minimize</B> <I>(double &#38;<VAR>objf</VAR>, int &#38;<VAR>inform</VAR>, ColumnVector &#38;<VAR>lambda</VAR>) = 0;</I>
+<DD><A NAME="IDX889"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> virtual ColumnVector <B>minimize</B> <I>(const ColumnVector &#38;<VAR>x</VAR>)</I>
+<DD><A NAME="IDX890"></A>
+<DT><U>:</U> virtual ColumnVector <B>minimize</B> <I>(const ColumnVector &#38;<VAR>x</VAR>, double &#38;<VAR>objf</VAR>)</I>
+<DD><A NAME="IDX891"></A>
+<DT><U>:</U> virtual ColumnVector <B>minimize</B> <I>(const ColumnVector &#38;<VAR>x</VAR>, double &#38;<VAR>objf</VAR>, int &#38;<VAR>inform</VAR>)</I>
+<DD><A NAME="IDX892"></A>
+<DT><U>:</U> virtual ColumnVector <B>minimize</B> <I>(const ColumnVector &#38;<VAR>x</VAR>, double &#38;<VAR>objf</VAR>, int &#38;<VAR>inform</VAR>, ColumnVector &#38;<VAR>lambda</VAR>)</I>
+<DD><A NAME="IDX893"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ColumnVector <B>minimize</B> <I>(double &#38;<VAR>objf</VAR>, int &#38;<VAR>inform</VAR>, ColumnVector &#38;<VAR>lambda</VAR>)</I>
+<DD><A NAME="IDX894"></A>
+</DL>
+
+</P>
+
+
+
+<H2><A NAME="SEC21" HREF="liboctave_toc.html#TOC21">Nonlinear Programming</A></H2>
+<P>
+<A NAME="IDX895"></A>
+<A NAME="IDX896"></A>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> {}NLP <B>(void)</B>
+<DD><A NAME="IDX897"></A>
+<DT><U>:</U> {}NLP <B>(const</B> <I>ColumnVector &#38;<VAR>x</VAR>, const Objective &#38;<VAR>phi</VAR>)</I>
+<DD><A NAME="IDX898"></A>
+<DT><U>:</U> {}NLP <B>(const</B> <I>ColumnVector &#38;<VAR>x</VAR>, const Objective &#38;<VAR>phi</VAR>, const Bounds &#38;<VAR>b</VAR>)</I>
+<DD><A NAME="IDX899"></A>
+<DT><U>:</U> {}NLP <B>(const</B> <I>ColumnVector &#38;<VAR>x</VAR>, const Objective &#38;<VAR>phi</VAR>, const Bounds &#38;<VAR>b</VAR>, const LinConst &#38;<VAR>lc</VAR>)</I>
+<DD><A NAME="IDX900"></A>
+<DT><U>:</U> {}NLP <B>(const</B> <I>ColumnVector &#38;<VAR>x</VAR>, const Objective &#38;<VAR>phi</VAR>, const Bounds &#38;<VAR>b</VAR>, const LinConst &#38;<VAR>lc</VAR>, const NLConst &#38;<VAR>nlc</VAR>)</I>
+<DD><A NAME="IDX901"></A>
+<DT><U>:</U> {}NLP <B>(const</B> <I>ColumnVector &#38;<VAR>x</VAR>, const Objective &#38;<VAR>phi</VAR>, const LinConst &#38;<VAR>lc</VAR>)</I>
+<DD><A NAME="IDX902"></A>
+<DT><U>:</U> {}NLP <B>(const</B> <I>ColumnVector &#38;<VAR>x</VAR>, const Objective &#38;<VAR>phi</VAR>, const LinConst &#38;<VAR>lc</VAR>, const NLConst &#38;<VAR>nlc</VAR>)</I>
+<DD><A NAME="IDX903"></A>
+<DT><U>:</U> {}NLP <B>(const</B> <I>ColumnVector &#38;<VAR>x</VAR>, const Objective &#38;<VAR>phi</VAR>, const NLConst &#38;<VAR>nlc</VAR>)</I>
+<DD><A NAME="IDX904"></A>
+<DT><U>:</U> {}NLP <B>(const</B> <I>ColumnVector &#38;<VAR>x</VAR>, const Objective &#38;<VAR>phi</VAR>, const Bounds &#38;<VAR>b</VAR>, const NLConst &#38;<VAR>nlc</VAR>)</I>
+<DD><A NAME="IDX905"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> NLP&#38; <B>operator =</B> <I>(const NLP &#38;<VAR>a</VAR>)</I>
+<DD><A NAME="IDX906"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> int <B>size</B> <I>(void) const</I>
+<DD><A NAME="IDX907"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ColumnVector <B>minimize</B> <I>(void)</I>
+<DD><A NAME="IDX908"></A>
+<DT><U>:</U> ColumnVector <B>minimize</B> <I>(double &#38;<VAR>objf</VAR>)</I>
+<DD><A NAME="IDX909"></A>
+<DT><U>:</U> ColumnVector <B>minimize</B> <I>(double &#38;<VAR>objf</VAR>, int &#38;<VAR>inform</VAR>)</I>
+<DD><A NAME="IDX910"></A>
+<DT><U>:</U> ColumnVector <B>minimize</B> <I>(double &#38;<VAR>objf</VAR>, int &#38;<VAR>inform</VAR>, ColumnVector &#38;<VAR>lambda</VAR>)</I>
+<DD><A NAME="IDX911"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ColumnVector <B>minimize</B> <I>(const ColumnVector &#38;<VAR>x</VAR>)</I>
+<DD><A NAME="IDX912"></A>
+<DT><U>:</U> ColumnVector <B>minimize</B> <I>(const ColumnVector &#38;<VAR>x</VAR>, double &#38;<VAR>objf</VAR>)</I>
+<DD><A NAME="IDX913"></A>
+<DT><U>:</U> ColumnVector <B>minimize</B> <I>(const ColumnVector &#38;<VAR>x</VAR>, double &#38;<VAR>objf</VAR>, int &#38;<VAR>inform</VAR>)</I>
+<DD><A NAME="IDX914"></A>
+<DT><U>:</U> ColumnVector <B>minimize</B> <I>(const ColumnVector &#38;<VAR>x</VAR>, double &#38;<VAR>objf</VAR>, int &#38;<VAR>inform</VAR>, ColumnVector &#38;<VAR>lambda</VAR>)</I>
+<DD><A NAME="IDX915"></A>
+</DL>
+<P><HR><P>
+Go to the <A HREF="liboctave_1.html">first</A>, <A HREF="liboctave_9.html">previous</A>, <A HREF="liboctave_11.html">next</A>, <A HREF="liboctave_18.html">last</A> section, <A HREF="liboctave_toc.html">table of contents</A>.
+</BODY>
+</HTML>

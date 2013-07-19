@@ -1,0 +1,282 @@
+<html>
+<title>Simple Examples</title>
+<body bgcolor=#CFCFCF>
+
+
+<center><table align=center border CELLSPACING=10 CELLPADDING=10>
+<tr>
+<td align=center><font size=5><b>Simple Examples</b></font></td>
+<td align=left>
+This is an overview over Octaves numerical features. Here you will
+learn how to work with matrices, how to integrate differential equations,
+how to plot functions, how to edit what you have typed, how to get
+help and how to work with script or function files.
+<p>
+<menu>
+<img src="bullet.gif" align=bottom>
+<a href="octave.html">Octave for OS/2 Homepage.</a><br>
+<img src="bullet.gif" align=bottom>
+<a href="readme.html">Read Me!</a><br>
+<img src="bullet.gif" align=bottom>
+<a href="changes.html">History of Changes.</a><br>
+</menu>
+</td>
+</table></center>
+
+<hr>
+
+
+If you are new to Octave, I recommend that you try these examples to
+begin learning Octave by using it.  Lines marked with <b>octave:13></b>
+are lines you type, ending each with a carriage return.  Octave will
+respond with an answer, or by displaying a graph.<p>
+
+<ol>
+<li> <b>Creating a Matrix</b><hr>
+
+To create a new matrix and store it in a variable so that it you can
+refer to it later, type the command<p>
+<pre>octave:1> a = [ 1, 1, 2; 3, 5, 8; 13, 21, 34 ]</pre><p>
+Octave will respond by printing the matrix in neatly aligned columns.
+Ending a command with a semicolon tells Octave to not print the result
+of a command.  For example<p>
+<pre>octave:2> b = rand (3, 2);</pre><p>
+will create a 3 row, 2 column matrix with each element set to a random
+value between zero and one.<p>
+To display the value of any variable, simply type the name of the
+variable.  For example, to display the value stored in the matrix
+<b>b</b>, type the command<p>
+<pre>octave:3> b</pre><p>
+<center><img src="octave7.gif" align=middle></center><hr><p>
+
+<li><b>Matrix Arithmetic</b><hr>
+
+Octave has a convenient operator notation for performing matrix
+arithmetic.  For example, to multiply the matrix <b>a</b> by a scalar
+value, type the command<p>
+<pre>octave:4> 2 * a</pre><p>
+To multiply the two matrices <b>a</b> and <b>b</b>, type the command<p>
+<pre>octave:5> a * b</pre><p>
+To form the matrix product <b>a' * a</b>, type the command<p>
+<pre>octave:6> a' * a</pre><p>
+<center><img src="octave8.gif" align=middle></center><hr><p>
+
+<li><b>Solving Linear Equations</b><hr>
+
+To solve the set of linear equations <b>Ax = b</b>,
+use the left division operator, <b>\</b>:<p>
+<center><img src="octave9.gif" align=middle></center><p>
+This is conceptually equivalent to <b>inv(A) * b</b>,
+but avoids computing the inverse of a matrix directly.
+If the coefficient matrix is singular, Octave will print a warning
+message and compute a minimum norm solution.<hr><p>
+
+<li><b>Integrating Differential Equations</b><hr>
+
+Octave has built-in functions for solving nonlinear differential
+equations of the form<p>
+<pre>dx / dt = f (x, t)</pre><p>
+ with the initial condition<p>
+<pre>x(t = t0) = x0</pre><p>
+For Octave to integrate equations of this form, you must first provide a
+definition of the function <b>f(x,t)</b>.<p>
+This is straightforward, and may be accomplished by entering the
+function body directly on the command line.  For example, the following
+commands define the right hand side function for an interesting pair of
+nonlinear differential equations.  Note that while you are entering a
+function, Octave responds with a different prompt, to indicate that it
+is waiting for you to complete your input.<p>
+<pre>
+octave:8> function xdot = f (x, t)
+>
+>  r = 0.25;
+>  k = 1.4;
+>  a = 1.5;
+>  b = 0.16;
+>  c = 0.9;
+>  d = 0.8;
+>
+>  xdot(1) = r*x(1)*(1 - x(1)/k) - a*x(1)*x(2)/(1 + b*x(1));
+>  xdot(2) = c*a*x(1)*x(2)/(1 + b*x(1)) - d*x(2);
+>
+> endfunction
+</pre><p>
+
+Given the initial condition<p>
+<pre>x0 = [1; 2];</pre><p>
+and the set of output times as a column vector (note that the first
+output time corresponds to the initial condition given above)<p>
+<pre>t = linspace (0, 50, 200)';</pre><p>
+it is easy to integrate the set of differential equations:<p>
+<pre>x = lsode ("f", x0, t);</pre><p>
+The function <b>lsode</b> uses the Livermore Solver for Ordinary
+Differential Equations, described in A. C. Hindmarsh, <b>ODEPACK, a
+Systematized Collection of ODE Solvers</b>, in: Scientific Computing, R. S.
+Stepleman et al. (Eds.), North-Holland, Amsterdam, 1983, pages 55--64.
+<hr><p>
+
+<li><b>Producing Graphical Output</b><hr>
+
+To display the solution of the previous example graphically, use the
+command<p>
+<pre>plot (t, x)</pre><p>
+
+<table align=center CELLSPACING=2 CELLPADDING=2>
+<tr>
+<td align=center><a href="octave3.html"><img src=octave3s.gif></a></td>
+<td align=left valign=top>
+<ol>
+<li>Integrating the above differential equation.
+<li>The plot command will start Gnuplot, which will display
+the plot in a seperate window.
+<li>The Gnuplot window.
+</ol>
+<p>
+To see the left screenshot in its original (large) size, please click
+on the picture.<p>
+If you are using the X Window System, Octave will automatically create
+a separate window to display the plot.  If you are using a terminal that
+supports some other graphics commands, you will need to tell Octave what
+kind of terminal you have.  Type the command<p>
+<pre>gset term</pre><p>
+to see a list of the supported terminal types.  Octave uses
+<b>gnuplot</b> to display graphics, and can display graphics on any
+terminal that is supported by <b>gnuplot</b>.
+</td>
+</table><p>
+
+To capture the output of the plot command in a file rather than sending
+the output directly to your terminal, you can use a set of commands like
+this<p>
+<pre>
+gset term postscript
+gset output "foo.ps"
+replot
+</pre><p>
+This will work for other types of output devices as well.  Octave's
+<b>gset</b> command is really just piped to the <b>gnuplot</b>
+subprocess, so that once you have a plot on the screen that you like,
+you should be able to do something like this to create an output file
+suitable for your graphics printer.<p>
+
+Or, you can eliminate the intermediate file by using commands like this<p>
+<pre>
+gset term postscript
+gset output "|lpr -Pname_of_your_graphics_printer"
+replot
+</pre><hr><p>
+
+<li><b>Editing What You Have Typed</b><hr>
+
+At the Octave prompt, you can recall, edit, and reissue previous
+commands using Emacs- or vi-style editing commands.  The default
+keybindings use Emacs-style commands.  For example, to recall the
+previous command, type <b>Control-P</b> (usually written <b>C-p</b> for
+short).  <b>C-p</b> gets  its name from the fact that you type it by
+holding down the <b>CTRL</b> key and then pressing <b>p</b>.  Doing this
+will normally bring back the previous line of input.  <b>C-n</b> will
+bring up the next line of input, <b>C-b</b> will move the cursor backward
+on the line, <b>C-f</b> will move the cursor forward on the line, etc.<hr><p>
+
+<li><b>Getting Help</b><hr>
+
+Octave has an extensive help facility.  The same documentation that is
+available in printed form is also available from the Octave prompt,
+because both forms of the documentation are created from the same input
+file.
+
+In order to get good help you first need to know the name of the command
+that you want to use.  This name of the function may not always be
+obvious, but a good place to start is to just type <b>help</b>.
+This will show you all the operators, reserved words, functions,
+built-in variables, and function files.  You can then get more
+help on anything that is listed by simply including the name as an
+argument to help.  For example,<p>
+<pre>help plot</pre><p>
+will display the help text for the <b>plot</b> function.
+
+Octave sends output that is too long to fit on one screen through a
+pager like <b>less</b> or <b>more</b>.  Type a carriage return to
+advance one line, a space character to advance one page, and </b>q</b> to
+exit the pager.<hr><p>
+
+<li><b>Help via Info</b><hr>
+
+<table align=center CELLSPACING=2 CELLPADDING=2>
+<tr>
+<td align=center><a href="octave4.html"><img src=octave4s.gif></a></td>
+<td align=left valign=top>
+The part of Octave's help facility that allows you to read the complete
+text of the printed manual from within Octave uses a program called
+Info.  When you invoke Info you will be put into a menu driven program
+that contains the entire Octave manual.<p>
+<ol>
+<li>If you type <b>help -i asi</b> Octave will open a second
+buffer and start the Emacs info browser.
+<li>The buffer with the Emacs info browser.
+</ol><p>
+To see the left screenshot in its original (large) size, please click
+on the picture.
+</td>
+</table><hr><p>
+
+<li><b>Function and Script files</b><hr>
+
+Except for simple one-shot programs, it is not practical to have to
+define all the functions you need each time you need them.  Instead, you
+will normally want to save them in a file so that you can easily edit
+them, and save them for use at a later time.<p>
+
+<table align=center CELLSPACING=2 CELLPADDING=2>
+<tr>
+<td align=center><a href="octave2.html"><img src=octave2s.gif></a></td>
+<td align=left valign=top>
+Octave does not require you to load function definitions from files
+before using them.  You simply need to put the function definitions in a
+place where Octave can find them.<p>
+When Octave encounters an identifier that is undefined, it first looks
+for variables or functions that are already compiled and currently
+listed in its symbol table.  If it fails to find a definition there, it
+searches the list of directories specified by the built-in variable
+<b>LOADPATH</b> for files ending in <b>.m</b> that have the same base
+name as the undefined identifier (The <b>.m</b> suffix was
+chosen for compatibility with <b>Matlab</b>).  Once Octave finds a file
+with a name that matches, the contents of the file are read.  If it
+defines a <b>single</b> function, it is compiled and executed.<p>
+To see the left screenshot in its original (large) size, please click
+on the picture.
+</td>
+</table>
+
+A script file is a file containing (almost) any sequence of Octave
+commands.  It is read and evaluated just as if you had typed each
+command at the Octave prompt, and provides a convenient way to perform a
+sequence of commands that do not logically belong inside a function.<p>
+
+Unlike a function file, a script file must <b>not</b> begin with the
+keyword <b>function</b>.  If it does, Octave will assume that it is a
+function file, and that it defines a single function that should be
+evaluated as soon as it is defined.<p>
+
+A script file also differs from a function file in that the variables
+named in a script file are not local variables, but are in the same
+scope as the other variables that are visible on the command line.<p>
+
+Even though a script file may not begin with the <b>function</b>
+keyword, it is possible to define more than one function in a single
+script file and load (but not execute) all of them at once.  To do 
+this, the first token in the file (ignoring comments and other white
+space) must be something other than <b>function</b>.<p>
+</ol>
+
+
+<hr><center><address><em>
+<a href="copyrigh.html">Copyright &copy; 1996, 1997 John W. Eaton.</a>
+</em></address></center>
+<center><address>Modified by 
+<a href="mailto:gebhkla@t-online.de">Klaus Gebhardt</a>
+, 1997</em></address></center>
+
+
+</body>
+</html>

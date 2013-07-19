@@ -1,0 +1,87 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from ./octave.texi on 9 October 1998 -->
+
+<TITLE>GNU Octave - Sets</TITLE>
+</HEAD>
+<BODY>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_23.html">previous</A>, <A HREF="octave_25.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC159" HREF="octave_toc.html#TOC159">Sets</A></H1>
+
+<P>
+Octave has a limited set of functions for managing sets of data, where a
+set is defined as a collection unique elements.
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>create_set</B> <I>(<VAR>x</VAR>)</I>
+<DD><A NAME="IDX768"></A>
+Return a row vector containing the unique values in <VAR>x</VAR>, sorted in
+ascending order.  For example,
+
+</P>
+
+<PRE>
+create_set ([ 1, 2; 3, 4; 4, 2 ])
+     => [ 1, 2, 3, 4 ]
+</PRE>
+
+</DL>
+
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>union</B> <I>(<VAR>x</VAR>, <VAR>y</VAR>)</I>
+<DD><A NAME="IDX769"></A>
+Return the set of elements that are in either of the sets <VAR>x</VAR> and
+<VAR>y</VAR>.  For example,
+
+</P>
+
+<PRE>
+union ([ 1, 2, 4 ], [ 2, 3, 5 ])
+     => [ 1, 2, 3, 4, 5 ]
+</PRE>
+
+</DL>
+
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>intersection</B> <I>(<VAR>x</VAR>, <VAR>y</VAR>)</I>
+<DD><A NAME="IDX770"></A>
+Return the set of elements that are in both sets <VAR>x</VAR> and <VAR>y</VAR>.
+For example,
+
+</P>
+
+<PRE>
+intersection ([ 1, 2, 3 ], [ 2, 3, 5 ])
+     => [ 2, 3 ]
+</PRE>
+
+</DL>
+
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>complement</B> <I>(<VAR>x</VAR>, <VAR>y</VAR>)</I>
+<DD><A NAME="IDX771"></A>
+Return the elements of set <VAR>y</VAR> that are not in set <VAR>x</VAR>.  For
+example,
+
+</P>
+
+<PRE>
+complement ([ 1, 2, 3 ], [ 2, 3, 5 ])
+     => 5
+</PRE>
+
+</DL>
+
+<P><HR><P>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_23.html">previous</A>, <A HREF="octave_25.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+</BODY>
+</HTML>

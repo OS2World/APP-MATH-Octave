@@ -1,0 +1,369 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from ./octave.texi on 9 October 1998 -->
+
+<TITLE>GNU Octave - Preface</TITLE>
+</HEAD>
+<BODY>
+Go to the first, previous, <A HREF="octave_2.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+<P><HR><P>
+<P>
+% Copyright (C) 1996, 1997 John W. Eaton
+% This is part of the Octave manual.
+% For copying conditions, see the file gpl.texi.
+
+</P>
+<P>
+\input texinfo
+
+</P>
+
+<P>
+Copyright (C) 1996, 1997 John W. Eaton.
+
+</P>
+<P>
+This is the third edition of the Octave documentation, and is consistent
+with version 2.0.13 of Octave.
+
+</P>
+<P>
+Permission is granted to make and distribute verbatim copies of
+this manual provided the copyright notice and this permission notice
+are preserved on all copies.
+
+</P>
+<P>
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions for verbatim copying, provided that the entire
+resulting derived work is distributed under the terms of a permission
+notice identical to this one.
+
+</P>
+<P>
+Permission is granted to copy and distribute translations of this manual
+into another language, under the same conditions as for modified versions.
+
+</P>
+<P>
+Portions of this document have been adapted from the <CODE>gawk</CODE>,
+<CODE>readline</CODE>, <CODE>gcc</CODE>, and C library manuals, published by the Free
+Software Foundation, 59 Temple Place--Suite 330, Boston, MA
+02111--1307, USA.
+
+</P>
+
+
+
+<H1><A NAME="SEC1" HREF="octave_toc.html#TOC1">Preface</A></H1>
+<P>
+<A NAME="IDX1"></A>
+<A NAME="IDX2"></A>
+
+</P>
+<P>
+Octave was originally intended to be companion software for an
+undergraduate-level textbook on chemical reactor design being written by
+James B. Rawlings of the University of Wisconsin-Madison and John
+G. Ekerdt of the University of Texas.
+
+</P>
+<P>
+Clearly, Octave is now much more than just another `courseware' package
+with limited utility beyond the classroom.  Although our initial goals
+were somewhat vague, we knew that we wanted to create something that
+would enable students to solve realistic problems, and that they could
+use for many things other than chemical reactor design problems.
+
+</P>
+<P>
+There are those who would say that we should be teaching the students
+Fortran instead, because that is the computer language of engineering,
+but every time we have tried that, the students have spent far too much
+time trying to figure out why their Fortran code crashes and not enough
+time learning about chemical engineering.  With Octave, most students
+pick up the basics quickly, and are using it confidently in just a few
+hours.
+
+</P>
+<P>
+Although it was originally intended to be used to teach reactor design,
+it has been used in several other undergraduate and graduate
+courses in the Chemical Engineering Department at the University of
+Texas, and the math department at the University of Texas has been using
+it for teaching differential equations and linear algebra as well.  If
+you find it useful, please let us know.  We are always interested to
+find out how Octave is being used in other places.
+
+</P>
+<P>
+Virtually everyone thinks that the name Octave has something to do with
+music, but it is actually the name of a former professor of mine who
+wrote a famous textbook on chemical reaction engineering, and who was
+also well known for his ability to do quick `back of the envelope'
+calculations.  We hope that this software will make it possible for many
+people to do more ambitious computations just as easily.
+
+</P>
+<P>
+Everyone is encouraged to share this software with others under the
+terms of the GNU General Public License (see section <A HREF="octave_36.html#SEC202">GNU GENERAL PUBLIC LICENSE</A>) as described
+at the beginning of this manual.  You are also encouraged to help make
+Octave more useful by writing and contributing additional functions for
+it, and by reporting any problems you may have.
+
+</P>
+
+
+
+<H2><A NAME="SEC2" HREF="octave_toc.html#TOC2">Acknowledgements</A></H2>
+<P>
+<A NAME="IDX3"></A>
+
+</P>
+<P>
+Many people have already contributed to Octave's development.  In
+addition to John W. Eaton, the following people have helped write parts
+of Octave or helped out in various other ways.
+
+</P>
+
+
+<UL>
+<LI>
+
+Thomas Baier @email{baier@ci.tuwien.ac.at} wrote the original versions
+of <CODE>popen</CODE>, <CODE>pclose</CODE>, <CODE>execute</CODE>, <CODE>sync_system</CODE>, and
+<CODE>async_system</CODE>.
+
+<LI>
+
+Karl Berry @email{karl@cs.umb.edu} wrote the <CODE>kpathsea</CODE> library
+that allows Octave to recursively search directory paths for function
+and script files.
+
+<LI>
+
+Georg Beyerle @email{gbeyerle@awi-potsdam.de} contributed code to save
+values in MATLAB's <TT>`.mat'</TT>-file format, and has provided many
+useful bug reports and suggestions.
+
+<LI>
+
+John Campbell @email{jcc@bevo.che.wisc.edu} wrote most of the file and
+C-style input and output functions.
+
+<LI>
+
+Brian Fox @email{bfox@gnu.ai.mit.edu} wrote the <CODE>readline</CODE> library
+used for command history editing, and the portion of this manual that
+documents it.
+
+<LI>
+
+Klaus Gebhardt @email{gebhardt@crunch.ikp.physik.th-darmstadt.de}
+ported Octave to OS/2.
+
+<LI>
+
+A. Scottedward Hodel @email{A.S.Hodel@eng.auburn.edu} contributed a number
+of functions including <CODE>expm</CODE>, <CODE>qzval</CODE>, <CODE>qzhess</CODE>,
+<CODE>syl</CODE>, <CODE>lyap</CODE>, and <CODE>balance</CODE>.
+
+<LI>
+
+Kurt Hornik @email{Kurt.Hornik@ci.tuwien.ac.at} provided the
+<CODE>corrcoef</CODE>, <CODE>cov</CODE>, <CODE>fftconv</CODE>, <CODE>fftfilt</CODE>, <CODE>gcd</CODE>,
+<CODE>lcd</CODE>, <CODE>kurtosis</CODE>, <CODE>null</CODE>, <CODE>orth</CODE>, <CODE>poly</CODE>,
+<CODE>polyfit</CODE>, <CODE>roots</CODE>, and <CODE>skewness</CODE> functions, supplied
+documentation for these and numerous other functions, rewrote the Emacs
+mode for editing Octave code and provided its documentation, and has
+helped tremendously with testing.  He has also been a constant source of
+new ideas for improving Octave.
+
+<LI>
+
+Phil Johnson @email{johnsonp@nicco.sscnet.ucla.edu} has helped to make
+Linux releases available.
+
+<LI>
+
+Friedrich Leisch @email{leisch@ci.tuwien.ac.at} provided the
+<CODE>mahalanobis</CODE> function.
+
+<LI>
+
+Ken Neighbors @email{wkn@leland.stanford.edu} has provided many useful
+bug reports and comments on MATLAB compatibility.
+
+<LI>
+
+Rick Niles @email{niles@axp745.gsfc.nasa.gov} rewrote Octave's plotting
+functions to add line styles and the ability to specify an unlimited
+number of lines in a single call.  He also continues to track down odd
+incompatibilities and bugs.
+
+<LI>
+
+Mark Odegard @email{meo@sugarland.unocal.com} provided the initial
+implementation of <CODE>fread</CODE>, <CODE>fwrite</CODE>, <CODE>feof</CODE>, and
+<CODE>ferror</CODE>.
+
+<LI>
+
+Tony Richardson @email{tony@guts.biomed.uakron.edu} wrote Octave's
+image processing functions as well as most of the original polynomial
+functions.
+
+<LI>
+
+R. Bruce Tenison @email{Bruce.Tenison@eng.auburn.edu} wrote the
+<CODE>hess</CODE> and <CODE>schur</CODE> functions.
+
+<LI>
+
+Teresa Twaroch @email{twaroch@ci.tuwien.ac.at} provided the functions
+<CODE>gls</CODE> and <CODE>ols</CODE>.
+
+<LI>
+
+Andreas Weingessel @email{Andreas.Weingessel@ci.tuwien.ac.at} wrote the
+audio functions <CODE>lin2mu</CODE>, <CODE>loadaudio</CODE>, <CODE>mu2lin</CODE>,
+<CODE>playaudio</CODE>, <CODE>record</CODE>, <CODE>saveaudio</CODE>, and <CODE>setaudio</CODE>.
+
+<LI>
+
+Fook Fah Yap @email{ffy@eng.cam.ac.uk} provided the <CODE>fft</CODE> and
+<CODE>ifft</CODE> functions and valuable bug reports for early versions.
+</UL>
+
+<P>
+Special thanks to the following people and organizations for
+supporting the development of Octave:
+
+</P>
+
+<UL>
+<LI>
+
+Digital Equipment Corporation, for an equipment grant as part of their
+External Research Program.
+
+<LI>
+
+Sun Microsystems, Inc., for an Academic Equipment grant.
+
+<LI>
+
+International Business Machines, Inc., for providing equipment as part
+of a grant to the University of Texas College of Engineering.
+
+<LI>
+
+Texaco Chemical Company, for providing funding to continue the
+development of this software.
+
+<LI>
+
+The University of Texas College of Engineering, for providing a
+Challenge for Excellence Research Supplement, and for providing an
+Academic Development Funds grant.
+
+<LI>
+
+The State of Texas, for providing funding through the Texas
+Advanced Technology Program under Grant No. 003658-078.
+
+<LI>
+
+Noel Bell, Senior Engineer, Texaco Chemical Company, Austin Texas.
+
+<LI>
+
+James B. Rawlings, Professor, University of Wisconsin-Madison,
+Department of Chemical Engineering.
+
+<LI>
+
+Richard Stallman, for writing GNU.
+</UL>
+
+<P>
+This project would not have been possible without the GNU software used
+in and used to produce Octave.
+
+</P>
+
+
+<H2><A NAME="SEC3" HREF="octave_toc.html#TOC3">How You Can Contribute to Octave</A></H2>
+<P>
+<A NAME="IDX4"></A>
+<A NAME="IDX5"></A>
+
+</P>
+<P>
+There are a number of ways that you can contribute to help make Octave a
+better system.  Perhaps the most important way to contribute is to write
+high-quality code for solving new problems, and to make your code freely
+available for others to use.
+
+</P>
+<P>
+If you find Octave useful, consider providing additional funding to
+continue its development.  Even a modest amount of additional funding
+could make a significant difference in the amount of time that is
+available for development and support.
+
+</P>
+<P>
+If you cannot provide funding or contribute code, you can still help
+make Octave better and more reliable by reporting any bugs you find and
+by offering suggestions for ways to improve Octave.  See section <A HREF="octave_32.html#SEC181">Known Causes of Trouble</A>, for
+tips on how to write useful bug reports.
+
+</P>
+
+
+<H2><A NAME="SEC4" HREF="octave_toc.html#TOC4">Distribution</A></H2>
+<P>
+<A NAME="IDX6"></A>
+
+</P>
+<P>
+Octave is <STRONG>free</STRONG> software.  This means that everyone is free to
+use it and free to redistribute it on certain conditions.  Octave is not
+in the public domain.  It is copyrighted and there are restrictions on
+its distribution, but the restrictions are designed to ensure that
+others will have the same freedom to use and redistribute Octave that
+you have.  The precise conditions can be found in the GNU General Public
+License that comes with Octave and that also appears in section <A HREF="octave_36.html#SEC202">GNU GENERAL PUBLIC LICENSE</A>.
+
+</P>
+<P>
+Octave is available on CD-ROM with various collections of other free
+software, and from the Free Software Foundation.  Ordering a copy of
+Octave from the Free Software Foundation helps to fund the development
+of more free software.  For more information, write to
+
+</P>
+
+<BLOCKQUOTE>
+<P>
+Free Software Foundation<BR>
+59 Temple Place--Suite 330<BR>
+Boston, MA 02111--1307<BR>
+USA
+</BLOCKQUOTE>
+
+<P>
+ 
+Octave is also available on the Internet from
+@url{ftp://ftp.che.wisc.edu/pub/octave}, and additional information is
+available from @url{http://www.che.wisc.edu/octave}.
+
+</P>
+<P><HR><P>
+Go to the first, previous, <A HREF="octave_2.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+</BODY>
+</HTML>

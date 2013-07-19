@@ -1,0 +1,692 @@
+This is Info file octave, produced by Makeinfo version 1.68 from the
+input file octave.tex.
+
+START-INFO-DIR-ENTRY
+* Octave: (octave).	Interactive language for numerical computations.
+END-INFO-DIR-ENTRY
+
+   Copyright (C) 1996, 1997 John W. Eaton.
+
+   Permission is granted to make and distribute verbatim copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies.
+
+   Permission is granted to copy and distribute modified versions of
+this manual under the conditions for verbatim copying, provided that
+the entire resulting derived work is distributed under the terms of a
+permission notice identical to this one.
+
+   Permission is granted to copy and distribute translations of this
+manual into another language, under the above conditions for modified
+versions.
+
+
+File: octave,  Node: Variable Index,  Next: Function Index,  Prev: Concept Index,  Up: Top
+
+Variable Index
+**************
+
+* Menu:
+
+*  <1>:                                  Global Variables.
+* :                                      Recursion.
+* all_va_args:                           Variable-length Argument Lists.
+* ans:                                   Terminal Output.
+* argv:                                  Command Line Options.
+* automatic_replot <1>:                  Summary of Built-in Variables.
+* automatic_replot:                      Two-Dimensional Plotting.
+* auto_unload_dot_oct_files <1>:         Dynamically Linked Functions.
+* auto_unload_dot_oct_files:             Summary of Built-in Variables.
+* beep_on_error <1>:                     Error Handling.
+* beep_on_error:                         Summary of Built-in Variables.
+* completion_append_char <1>:            Summary of Built-in Variables.
+* completion_append_char:                Commands For Completion.
+* crash_dumps_octave_core <1>:           Simple File I/O.
+* crash_dumps_octave_core:               Summary of Built-in Variables.
+* default_eval_print_flag <1>:           Evaluation.
+* default_eval_print_flag:               Summary of Built-in Variables.
+* DEFAULT_LOADPATH <1>:                  Function Files.
+* DEFAULT_LOADPATH:                      Summary of Built-in Variables.
+* default_return_value <1>:              Multiple Return Values.
+* default_return_value:                  Summary of Built-in Variables.
+* default_save_format <1>:               Simple File I/O.
+* default_save_format:                   Summary of Built-in Variables.
+* define_all_return_values <1>:          Multiple Return Values.
+* define_all_return_values:              Summary of Built-in Variables.
+* do_fortran_indexing <1>:               Summary of Built-in Variables.
+* do_fortran_indexing:                   Index Expressions.
+* do_what_i_mean_not_what_i_say:         A Sample Variable Description.
+* e:                                     Mathematical Constants.
+* echo_executing_commands:               Diary and Echo Commands.
+* EDITOR <1>:                            Commands For History.
+* EDITOR <2>:                            Defaults from the Environment.
+* EDITOR:                                Summary of Built-in Variables.
+* empty_list_elements_ok <1>:            Summary of Built-in Variables.
+* empty_list_elements_ok:                Empty Matrices.
+* eps:                                   Mathematical Constants.
+* error_text:                            Error Handling.
+* EXEC_PATH <1>:                         Summary of Built-in Variables.
+* EXEC_PATH:                             Controlling Subprocesses.
+* fixed_point_format <1>:                Matrices.
+* fixed_point_format:                    Summary of Built-in Variables.
+* F_DUPFD:                               Controlling Subprocesses.
+* F_GETFD:                               Controlling Subprocesses.
+* F_GETFL:                               Controlling Subprocesses.
+* F_SETFD:                               Controlling Subprocesses.
+* F_SETFL:                               Controlling Subprocesses.
+* gnuplot_binary <1>:                    Summary of Built-in Variables.
+* gnuplot_binary:                        Three-Dimensional Plotting.
+* gnuplot_has_frames:                    Three-Dimensional Plotting.
+* gnuplot_has_multiplot:                 Three-Dimensional Plotting.
+* history_file <1>:                      Commands For History.
+* history_file:                          Summary of Built-in Variables.
+* history_size <1>:                      Commands For History.
+* history_size:                          Summary of Built-in Variables.
+* i:                                     Mathematical Constants.
+* I:                                     Mathematical Constants.
+* ignore_function_time_stamp <1>:        Function Files.
+* ignore_function_time_stamp:            Summary of Built-in Variables.
+* IMAGEPATH:                             Image Processing.
+* implicit_num_to_str_ok <1>:            String Conversions.
+* implicit_num_to_str_ok:                Summary of Built-in Variables.
+* implicit_str_to_num_ok <1>:            String Conversions.
+* implicit_str_to_num_ok:                Summary of Built-in Variables.
+* inf:                                   Mathematical Constants.
+* Inf:                                   Mathematical Constants.
+* INFO_FILE <1>:                         Summary of Built-in Variables.
+* INFO_FILE:                             Getting Help.
+* INFO_PROGRAM <1>:                      Summary of Built-in Variables.
+* INFO_PROGRAM:                          Getting Help.
+* j:                                     Mathematical Constants.
+* J:                                     Mathematical Constants.
+* LOADPATH <1>:                          Summary of Built-in Variables.
+* LOADPATH:                              Function Files.
+* max_recursion_depth:                   Summary of Built-in Variables.
+* nan:                                   Mathematical Constants.
+* NaN:                                   Mathematical Constants.
+* nargin:                                Defining Functions.
+* nargout:                               Multiple Return Values.
+* OCTAVE_EXEC_PATH:                      Defaults from the Environment.
+* OCTAVE_HISTFILE:                       Defaults from the Environment.
+* OCTAVE_HISTSIZE:                       Defaults from the Environment.
+* OCTAVE_HOME:                           Summary of Built-in Variables.
+* OCTAVE_INFO_FILE:                      Defaults from the Environment.
+* OCTAVE_INFO_PROGRAM:                   Defaults from the Environment.
+* OCTAVE_PATH:                           Defaults from the Environment.
+* OCTAVE_VERSION:                        System Information.
+* ok_to_lose_imaginary_part:             Summary of Built-in Variables.
+* output_max_field_width <1>:            Summary of Built-in Variables.
+* output_max_field_width:                Matrices.
+* output_precision <1>:                  Matrices.
+* output_precision:                      Summary of Built-in Variables.
+* O_APPEND:                              Controlling Subprocesses.
+* O_ASYNC:                               Controlling Subprocesses.
+* O_NONBLOCK:                            Controlling Subprocesses.
+* O_RDONLY:                              Controlling Subprocesses.
+* O_RDWR:                                Controlling Subprocesses.
+* O_SYNC:                                Controlling Subprocesses.
+* O_WRONLY:                              Controlling Subprocesses.
+* PAGER <1>:                             Input and Output.
+* PAGER:                                 Summary of Built-in Variables.
+* page_output_immediately:               Input and Output.
+* page_screen_output <1>:                Input and Output.
+* page_screen_output:                    Summary of Built-in Variables.
+* pi:                                    Mathematical Constants.
+* prefer_column_vectors <1>:             Summary of Built-in Variables.
+* prefer_column_vectors:                 Index Expressions.
+* prefer_zero_one_indexing:              Index Expressions.
+* print_answer_id_name <1>:              Terminal Output.
+* print_answer_id_name:                  Summary of Built-in Variables.
+* print_empty_dimensions <1>:            Empty Matrices.
+* print_empty_dimensions:                Summary of Built-in Variables.
+* program_invocation_name:               Command Line Options.
+* program_name:                          Command Line Options.
+* propagate_empty_matrices:              Empty Matrices.
+* PS1 <1>:                               Summary of Built-in Variables.
+* PS1:                                   Customizing the Prompt.
+* PS2 <1>:                               Customizing the Prompt.
+* PS2:                                   Summary of Built-in Variables.
+* PS4 <1>:                               Customizing the Prompt.
+* PS4:                                   Summary of Built-in Variables.
+* realmax:                               Mathematical Constants.
+* realmin:                               Mathematical Constants.
+* resize_on_range_error <1>:             Summary of Built-in Variables.
+* resize_on_range_error:                 Index Expressions.
+* return:                                Returning From a Function.
+* return_last_computed_value <1>:        Returning From a Function.
+* return_last_computed_value:            Summary of Built-in Variables.
+* save_precision <1>:                    Simple File I/O.
+* save_precision:                        Summary of Built-in Variables.
+* saving_history <1>:                    Summary of Built-in Variables.
+* saving_history:                        Commands For History.
+* SEEK_CUR:                              File Positioning.
+* SEEK_END:                              File Positioning.
+* SEEK_SET:                              File Positioning.
+* silent_functions <1>:                  Defining Functions.
+* silent_functions:                      Summary of Built-in Variables.
+* split_long_rows <1>:                   Matrices.
+* split_long_rows:                       Summary of Built-in Variables.
+* stderr:                                C-Style I/O Functions.
+* stdin:                                 C-Style I/O Functions.
+* stdout:                                C-Style I/O Functions.
+* string_fill_char:                      Creating Strings.
+* struct_levels_to_print <1>:            Summary of Built-in Variables.
+* struct_levels_to_print:                Data Structures.
+* suppress_verbose_help_message <1>:     Getting Help.
+* suppress_verbose_help_message:         Summary of Built-in Variables.
+* treat_neg_dim_as_zero <1>:             Summary of Built-in Variables.
+* treat_neg_dim_as_zero:                 Special Utility Matrices.
+* warn_assign_as_truth_value <1>:        The if Statement.
+* warn_assign_as_truth_value:            Summary of Built-in Variables.
+* warn_comma_in_global_decl <1>:         Global Variables.
+* warn_comma_in_global_decl:             Summary of Built-in Variables.
+* warn_divide_by_zero <1>:               Arithmetic Ops.
+* warn_divide_by_zero:                   Summary of Built-in Variables.
+* warn_function_name_clash <1>:          Summary of Built-in Variables.
+* warn_function_name_clash:              Function Files.
+* warn_missing_semicolon:                Defining Functions.
+* warn_reload_forces_clear <1>:          Dynamically Linked Functions.
+* warn_reload_forces_clear:              Summary of Built-in Variables.
+* warn_variable_switch_label <1>:        The switch Statement.
+* warn_variable_switch_label:            Summary of Built-in Variables.
+* whitespace_in_literal_matrix <1>:      Matrices.
+* whitespace_in_literal_matrix:          Summary of Built-in Variables.
+
+
+File: octave,  Node: Function Index,  Next: Operator Index,  Prev: Variable Index,  Up: Top
+
+Function Index
+**************
+
+* Menu:
+
+* abcddim:                               Control Theory.
+* abs:                                   Complex Arithmetic.
+* acos:                                  Trigonometry.
+* acosh:                                 Trigonometry.
+* acot:                                  Trigonometry.
+* acoth:                                 Trigonometry.
+* acsc:                                  Trigonometry.
+* acsch:                                 Trigonometry.
+* all:                                   Finding Elements and Checking Conditions.
+* angle:                                 Complex Arithmetic.
+* any:                                   Finding Elements and Checking Conditions.
+* are:                                   Control Theory.
+* arg:                                   Complex Arithmetic.
+* asctime:                               Timing Utilities.
+* asec:                                  Trigonometry.
+* asech:                                 Trigonometry.
+* asin:                                  Trigonometry.
+* asinh:                                 Trigonometry.
+* atan:                                  Trigonometry.
+* atan2:                                 Trigonometry.
+* atanh:                                 Trigonometry.
+* atexit:                                Quitting Octave.
+* axis:                                  Two-Dimensional Plotting.
+* balance:                               Basic Matrix Functions.
+* bar:                                   Specialized Two-Dimensional Plots.
+* besseli:                               Special Functions.
+* besselj:                               Special Functions.
+* besselk:                               Special Functions.
+* bessely:                               Special Functions.
+* beta:                                  Special Functions.
+* betai:                                 Special Functions.
+* bin2dec:                               String Conversions.
+* bincoeff:                              Special Functions.
+* blanks:                                Creating Strings.
+* bottom_title:                          Multiple Plots on One Page.
+* bug_report <1>:                        Bug Lists.
+* bug_report:                            Reporting Bugs.
+* c2d:                                   Control Theory.
+* cd <1>:                                Current Working Directory.
+* cd:                                    A Sample Command Description.
+* ceil:                                  Utility Functions.
+* chdir <1>:                             Current Working Directory.
+* chdir:                                 A Sample Command Description.
+* chol:                                  Matrix Factorizations.
+* clc:                                   Cursor Motion.
+* clear:                                 Status of Variables.
+* clearplot:                             Two-Dimensional Plotting.
+* clg:                                   Two-Dimensional Plotting.
+* clock:                                 Timing Utilities.
+* closeplot:                             Two-Dimensional Plotting.
+* colloc:                                Orthogonal Collocation.
+* colormap:                              Image Processing.
+* columns:                               Object Sizes.
+* common_size:                           Finding Elements and Checking Conditions.
+* commutation_matrix:                    Special Functions.
+* compan:                                Polynomial Manipulations.
+* complement:                            Sets.
+* completion_matches:                    Commands For Completion.
+* computer:                              System Information.
+* cond:                                  Basic Matrix Functions.
+* conj:                                  Complex Arithmetic.
+* contour:                               Specialized Two-Dimensional Plots.
+* conv:                                  Polynomial Manipulations.
+* corrcoef:                              Statistics.
+* cos:                                   Trigonometry.
+* cosh:                                  Trigonometry.
+* cot:                                   Trigonometry.
+* coth:                                  Trigonometry.
+* cov:                                   Statistics.
+* cputime:                               Timing Utilities.
+* create_set:                            Sets.
+* cross:                                 Special Functions.
+* csc:                                   Trigonometry.
+* csch:                                  Trigonometry.
+* ctime:                                 Timing Utilities.
+* cumprod:                               Sums and Products.
+* cumsum:                                Sums and Products.
+* dare:                                  Control Theory.
+* dassl:                                 Differential-Algebraic Equations.
+* dassl_options:                         Differential-Algebraic Equations.
+* date:                                  Timing Utilities.
+* deblank:                               Searching and Replacing.
+* dec2bin:                               String Conversions.
+* dec2hex:                               String Conversions.
+* deconv:                                Polynomial Manipulations.
+* det:                                   Basic Matrix Functions.
+* detrend:                               Signal Processing.
+* dgram:                                 Control Theory.
+* diag:                                  Special Utility Matrices.
+* diary:                                 Diary and Echo Commands.
+* diff:                                  Finding Elements and Checking Conditions.
+* dir:                                   Current Working Directory.
+* disp:                                  Terminal Output.
+* dlqe:                                  Control Theory.
+* dlqr:                                  Control Theory.
+* dlyap:                                 Control Theory.
+* document:                              Status of Variables.
+* dup2:                                  Controlling Subprocesses.
+* duplication_matrix:                    Special Functions.
+* echo:                                  Diary and Echo Commands.
+* edit_history:                          Commands For History.
+* eig:                                   Basic Matrix Functions.
+* endgrent:                              Group Database Functions.
+* endpwent:                              Password Database Functions.
+* erf:                                   Special Functions.
+* erfc:                                  Special Functions.
+* erfinv:                                Special Functions.
+* error:                                 Error Handling.
+* etime:                                 Timing Utilities.
+* eval:                                  Evaluation.
+* exec:                                  Controlling Subprocesses.
+* exist:                                 Status of Variables.
+* exit:                                  Quitting Octave.
+* exp:                                   Utility Functions.
+* expm:                                  Functions of a Matrix.
+* eye:                                   Special Utility Matrices.
+* fclose:                                Opening and Closing Files.
+* fcntl:                                 Controlling Subprocesses.
+* feof:                                  EOF and Errors.
+* ferror:                                EOF and Errors.
+* feval:                                 Evaluation.
+* fflush:                                Input and Output.
+* fft:                                   Signal Processing.
+* fft2:                                  Signal Processing.
+* fftconv:                               Signal Processing.
+* fftfilt:                               Signal Processing.
+* fgetl:                                 Line-Oriented Input.
+* fgets:                                 Line-Oriented Input.
+* figure:                                Three-Dimensional Plotting.
+* file_in_path:                          Filesystem Utilities.
+* filter:                                Signal Processing.
+* find:                                  Finding Elements and Checking Conditions.
+* findstr:                               Searching and Replacing.
+* finite:                                Finding Elements and Checking Conditions.
+* fix:                                   Utility Functions.
+* fliplr:                                Rearranging Matrices.
+* flipud:                                Rearranging Matrices.
+* floor:                                 Utility Functions.
+* fnmatch:                               Filesystem Utilities.
+* foo:                                   A Sample Function Description.
+* fopen:                                 Opening and Closing Files.
+* fork:                                  Controlling Subprocesses.
+* format:                                Terminal Output.
+* fprintf:                               Formatted Output.
+* fputs:                                 Simple Output.
+* fread:                                 Binary I/O.
+* freport:                               EOF and Errors.
+* freqz:                                 Signal Processing.
+* frewind:                               File Positioning.
+* fscanf:                                Formatted Input.
+* fseek:                                 File Positioning.
+* fsolve:                                Nonlinear Equations.
+* fsolve_options:                        Nonlinear Equations.
+* ftell:                                 File Positioning.
+* fwrite:                                Binary I/O.
+* gamma:                                 Special Functions.
+* gammai:                                Special Functions.
+* gammaln:                               Special Functions.
+* gcd:                                   Utility Functions.
+* getegid:                               Process ID Information.
+* getenv:                                Environment Variables.
+* geteuid:                               Process ID Information.
+* getgid:                                Process ID Information.
+* getgrent:                              Group Database Functions.
+* getgrgid:                              Group Database Functions.
+* getgrnam:                              Group Database Functions.
+* getpgrp:                               Process ID Information.
+* getpid:                                Process ID Information.
+* getppid:                               Process ID Information.
+* getpwent:                              Password Database Functions.
+* getpwnam:                              Password Database Functions.
+* getpwuid:                              Password Database Functions.
+* getrusage:                             System Information.
+* getuid:                                Process ID Information.
+* givens:                                Basic Matrix Functions.
+* glob:                                  Filesystem Utilities.
+* gls:                                   Linear Least Squares.
+* gmtime:                                Timing Utilities.
+* gplot:                                 Two-Dimensional Plotting.
+* gray:                                  Image Processing.
+* gray2ind:                              Image Processing.
+* grid:                                  Plot Annotations.
+* gset:                                  Two-Dimensional Plotting.
+* gshow:                                 Two-Dimensional Plotting.
+* gsplot:                                Three-Dimensional Plotting.
+* hankel:                                Famous Matrices.
+* help:                                  Getting Help.
+* hess:                                  Matrix Factorizations.
+* hex2dec:                               String Conversions.
+* hilb:                                  Famous Matrices.
+* hist:                                  Specialized Two-Dimensional Plots.
+* history:                               Commands For History.
+* hold:                                  Two-Dimensional Plotting.
+* home:                                  Cursor Motion.
+* ifft:                                  Signal Processing.
+* ifft2:                                 Signal Processing.
+* imag:                                  Complex Arithmetic.
+* image:                                 Image Processing.
+* imagesc:                               Image Processing.
+* imshow:                                Image Processing.
+* ind2gray:                              Image Processing.
+* ind2rgb:                               Image Processing.
+* index:                                 Searching and Replacing.
+* input:                                 Terminal Input.
+* int2str:                               Creating Strings.
+* intersection:                          Sets.
+* inv:                                   Basic Matrix Functions.
+* inverse:                               Basic Matrix Functions.
+* invhilb:                               Famous Matrices.
+* isalnum:                               Character Class Functions.
+* isalpha:                               Character Class Functions.
+* isascii:                               Character Class Functions.
+* iscntrl:                               Character Class Functions.
+* isdigit:                               Character Class Functions.
+* isempty:                               Object Sizes.
+* isgraph:                               Character Class Functions.
+* ishold:                                Two-Dimensional Plotting.
+* isieee:                                System Information.
+* isinf:                                 Finding Elements and Checking Conditions.
+* islower:                               Character Class Functions.
+* isnan:                                 Finding Elements and Checking Conditions.
+* isprint:                               Character Class Functions.
+* ispunct:                               Character Class Functions.
+* isspace:                               Character Class Functions.
+* isstr:                                 Creating Strings.
+* isupper:                               Character Class Functions.
+* isxdigit:                              Character Class Functions.
+* is_controllable:                       Control Theory.
+* is_global:                             Global Variables.
+* is_leap_year:                          Timing Utilities.
+* is_matrix:                             Predicates for Numeric Objects.
+* is_observable:                         Control Theory.
+* is_scalar:                             Predicates for Numeric Objects.
+* is_square:                             Predicates for Numeric Objects.
+* is_struct:                             Data Structures.
+* is_symmetric:                          Predicates for Numeric Objects.
+* is_vector:                             Predicates for Numeric Objects.
+* kbhit:                                 Terminal Input.
+* keyboard:                              Terminal Input.
+* kron:                                  Functions of a Matrix.
+* kurtosis:                              Statistics.
+* lcm:                                   Utility Functions.
+* length:                                Object Sizes.
+* lgamma:                                Special Functions.
+* lin2mu:                                Audio Processing.
+* linspace:                              Special Utility Matrices.
+* load:                                  Simple File I/O.
+* loadaudio:                             Audio Processing.
+* loadimage:                             Image Processing.
+* localtime:                             Timing Utilities.
+* log:                                   Utility Functions.
+* log10:                                 Utility Functions.
+* log2:                                  Utility Functions.
+* loglog:                                Specialized Two-Dimensional Plots.
+* logm:                                  Functions of a Matrix.
+* logspace:                              Special Utility Matrices.
+* lqe:                                   Control Theory.
+* lqr:                                   Control Theory.
+* ls:                                    Current Working Directory.
+* lsode:                                 Ordinary Differential Equations.
+* lsode_options:                         Ordinary Differential Equations.
+* lstat:                                 Filesystem Utilities.
+* lu:                                    Matrix Factorizations.
+* lyap:                                  Control Theory.
+* mahalanobis:                           Statistics.
+* max:                                   Utility Functions.
+* mean:                                  Statistics.
+* median:                                Statistics.
+* menu:                                  Terminal Input.
+* mesh:                                  Three-Dimensional Plotting.
+* meshdom:                               Three-Dimensional Plotting.
+* min:                                   Utility Functions.
+* mkdir:                                 Filesystem Utilities.
+* mkfifo:                                Filesystem Utilities.
+* mktime:                                Timing Utilities.
+* more:                                  Input and Output.
+* mplot:                                 Multiple Plots on One Page.
+* mu2lin:                                Audio Processing.
+* multiplot:                             Multiple Plots on One Page.
+* nargchk:                               Multiple Return Values.
+* newtroot:                              Evaluation.
+* nextpow2:                              Utility Functions.
+* norm:                                  Basic Matrix Functions.
+* ntsc2rgb:                              Image Processing.
+* null:                                  Basic Matrix Functions.
+* num2str:                               Creating Strings.
+* ocean:                                 Image Processing.
+* octave_config_info:                    System Information.
+* ols:                                   Linear Least Squares.
+* oneplot:                               Multiple Plots on One Page.
+* ones:                                  Special Utility Matrices.
+* orth:                                  Basic Matrix Functions.
+* pause:                                 Timing Utilities.
+* pclose:                                Controlling Subprocesses.
+* perror:                                Error Handling.
+* pinv:                                  Basic Matrix Functions.
+* pipe:                                  Controlling Subprocesses.
+* playaudio:                             Audio Processing.
+* plot:                                  Two-Dimensional Plotting.
+* plot_border:                           Multiple Plots on One Page.
+* polar:                                 Specialized Two-Dimensional Plots.
+* poly:                                  Polynomial Manipulations.
+* polyderiv:                             Polynomial Manipulations.
+* polyfit:                               Polynomial Manipulations.
+* polyinteg:                             Polynomial Manipulations.
+* polyreduce:                            Polynomial Manipulations.
+* polyval:                               Polynomial Manipulations.
+* polyvalm:                              Polynomial Manipulations.
+* popen:                                 Controlling Subprocesses.
+* popen2:                                Controlling Subprocesses.
+* pow2:                                  Utility Functions.
+* printf:                                Formatted Output.
+* prod:                                  Sums and Products.
+* purge_tmp_files:                       Two-Dimensional Plotting.
+* putenv:                                Environment Variables.
+* puts:                                  Simple Output.
+* pwd:                                   Current Working Directory.
+* qr:                                    Matrix Factorizations.
+* quad:                                  Functions of One Variable.
+* quad_options:                          Functions of One Variable.
+* quit:                                  Quitting Octave.
+* qzhess:                                Functions of a Matrix.
+* qzval:                                 Functions of a Matrix.
+* rand:                                  Special Utility Matrices.
+* randn:                                 Special Utility Matrices.
+* rank:                                  Basic Matrix Functions.
+* readdir:                               Filesystem Utilities.
+* real:                                  Complex Arithmetic.
+* record:                                Audio Processing.
+* rem:                                   Utility Functions.
+* rename:                                Filesystem Utilities.
+* replot:                                Two-Dimensional Plotting.
+* reshape:                               Rearranging Matrices.
+* residue:                               Polynomial Manipulations.
+* rgb2ind:                               Image Processing.
+* rgb2ntsc:                              Image Processing.
+* rindex:                                Searching and Replacing.
+* rmdir:                                 Filesystem Utilities.
+* roots:                                 Polynomial Manipulations.
+* rot90:                                 Rearranging Matrices.
+* round:                                 Utility Functions.
+* rows:                                  Object Sizes.
+* run_history:                           Commands For History.
+* save:                                  Simple File I/O.
+* saveaudio:                             Audio Processing.
+* saveimage:                             Image Processing.
+* scanf:                                 Formatted Input.
+* schur:                                 Matrix Factorizations.
+* sec:                                   Trigonometry.
+* sech:                                  Trigonometry.
+* semilogx:                              Specialized Two-Dimensional Plots.
+* semilogy:                              Specialized Two-Dimensional Plots.
+* set:                                   Two-Dimensional Plotting.
+* setaudio:                              Audio Processing.
+* setgrent:                              Group Database Functions.
+* setpwent:                              Password Database Functions.
+* setstr:                                Creating Strings.
+* shg:                                   Two-Dimensional Plotting.
+* shift:                                 Rearranging Matrices.
+* show:                                  Two-Dimensional Plotting.
+* sign:                                  Utility Functions.
+* sin:                                   Trigonometry.
+* sinc:                                  Signal Processing.
+* sinh:                                  Trigonometry.
+* size:                                  Object Sizes.
+* skewness:                              Statistics.
+* sleep:                                 Timing Utilities.
+* sort:                                  Rearranging Matrices.
+* source:                                Script Files.
+* split:                                 Searching and Replacing.
+* sprintf:                               Formatted Output.
+* sqrt:                                  Utility Functions.
+* sqrtm:                                 Functions of a Matrix.
+* sscanf:                                Formatted Input.
+* stairs:                                Specialized Two-Dimensional Plots.
+* stat:                                  Filesystem Utilities.
+* std:                                   Statistics.
+* str2mat:                               Creating Strings.
+* str2num:                               String Conversions.
+* strcat:                                Creating Strings.
+* strcmp:                                Searching and Replacing.
+* strerror:                              Error Handling.
+* strftime:                              Timing Utilities.
+* strrep:                                Searching and Replacing.
+* struct_contains:                       Data Structures.
+* struct_elements:                       Data Structures.
+* subplot:                               Multiple Plots on One Page.
+* substr:                                Searching and Replacing.
+* subwindow:                             Multiple Plots on One Page.
+* sum:                                   Sums and Products.
+* sumsq:                                 Sums and Products.
+* svd:                                   Matrix Factorizations.
+* syl:                                   Functions of a Matrix.
+* sylvester_matrix:                      Famous Matrices.
+* system:                                Controlling Subprocesses.
+* tan:                                   Trigonometry.
+* tanh:                                  Trigonometry.
+* tic:                                   Timing Utilities.
+* tilde_expand:                          Filesystem Utilities.
+* time:                                  Timing Utilities.
+* title:                                 Plot Annotations.
+* tmpnam:                                Temporary Files.
+* toascii:                               String Conversions.
+* toc:                                   Timing Utilities.
+* toeplitz:                              Famous Matrices.
+* tolower:                               String Conversions.
+* top_title:                             Multiple Plots on One Page.
+* toupper:                               String Conversions.
+* trace:                                 Basic Matrix Functions.
+* tril:                                  Rearranging Matrices.
+* triu:                                  Rearranging Matrices.
+* type:                                  Status of Variables.
+* tzero:                                 Control Theory.
+* umask:                                 Filesystem Utilities.
+* undo_string_escapes:                   String Conversions.
+* union:                                 Sets.
+* unlink:                                Filesystem Utilities.
+* usage:                                 Error Handling.
+* usleep:                                Timing Utilities.
+* vander:                                Famous Matrices.
+* va_arg:                                Variable-length Argument Lists.
+* va_start:                              Variable-length Argument Lists.
+* vec:                                   Rearranging Matrices.
+* vech:                                  Rearranging Matrices.
+* version:                               System Information.
+* vr_val:                                Variable-length Return Lists.
+* waitpid:                               Controlling Subprocesses.
+* warning:                               Error Handling.
+* which:                                 Status of Variables.
+* who:                                   Status of Variables.
+* whos:                                  Status of Variables.
+* xlabel:                                Plot Annotations.
+* xor:                                   Utility Functions.
+* ylabel:                                Plot Annotations.
+* zeros:                                 Special Utility Matrices.
+* zlabel:                                Plot Annotations.
+
+
+File: octave,  Node: Operator Index,  Prev: Function Index,  Up: Top
+
+Operator Index
+**************
+
+* Menu:
+
+* !:                                     Element-by-element Boolean Operators.
+* !=:                                    Comparison Ops.
+* " <1>:                                 String Objects.
+* ":                                     Strings.
+* &:                                     Element-by-element Boolean Operators.
+* &&:                                    Short-circuit Boolean Operators.
+* ' <1>:                                 Strings.
+* ' <2>:                                 Arithmetic Ops.
+* ':                                     String Objects.
+* (:                                     Index Expressions.
+* ):                                     Index Expressions.
+* *:                                     Arithmetic Ops.
+* **:                                    Arithmetic Ops.
+* +:                                     Arithmetic Ops.
+* ++:                                    Increment Ops.
+* ,:                                     Matrices.
+* -:                                     Arithmetic Ops.
+* --:                                    Increment Ops.
+* .':                                    Arithmetic Ops.
+* .*:                                    Arithmetic Ops.
+* .**:                                   Arithmetic Ops.
+* .+:                                    Arithmetic Ops.
+* ./:                                    Arithmetic Ops.
+* .\:                                    Arithmetic Ops.
+* .^:                                    Arithmetic Ops.
+* /:                                     Arithmetic Ops.
+* ::                                     Ranges.
+* ;:                                     Matrices.
+* <:                                     Comparison Ops.
+* <=:                                    Comparison Ops.
+* <>:                                    Comparison Ops.
+* =:                                     Assignment Ops.
+* ==:                                    Comparison Ops.
+* >:                                     Comparison Ops.
+* >=:                                    Comparison Ops.
+* [:                                     Matrices.
+* \:                                     Arithmetic Ops.
+* ]:                                     Matrices.
+* ^:                                     Arithmetic Ops.
+* |:                                     Element-by-element Boolean Operators.
+* ||:                                    Short-circuit Boolean Operators.
+* ~:                                     Element-by-element Boolean Operators.
+* ~=:                                    Comparison Ops.
+
+

@@ -1,0 +1,49 @@
+# Common directories of the different projects
+# Copyright by Klaus Gebhardt, 1994 - 2001
+
+SRCDIR  = $(subst \,/,$(_PRJ_SRC_DIR))/C/emx-0.9c/src
+LIBDIR  = $(subst \,/,$(_PRJ_SRC_DIR))/C/emx-0.9c/lib
+INCLDIR = $(subst \,/,$(_PRJ_SRC_DIR))/C/emx-0.9c/include
+ORGDIR  = $(subst \,/,$(_PRJ_ORIG_DIR))/C/emx-0.9c/src.orig
+
+# The directory of the executables:
+BINDIR = $(subst \,/,$(_PRJ_SRC_DIR))/C/emx-0.9c/bin
+DLLDIR = $(subst \,/,$(_PRJ_SRC_DIR))/C/emx-0.9c/bin/dll
+HLPDIR = $(subst \,/,$(_PRJ_SRC_DIR))/C/emx-0.9c/bin/help
+
+# The directory for temporary files:
+TEMPDIR = $(subst \,/,$(TMPDIR))
+
+# The directory of the man pages and info:
+MANDIR  = $(subst \,/,$(_PRJ_SRC_DIR))/C/emx-0.9c/bin/manpages
+INFODIR = $(subst \,/,$(_PRJ_SRC_DIR))/C/emx-0.9c/bin/info
+
+# The directory of the programs:
+EMXDIR   = $(subst \,/,$(_APPS_COMPILER_DIR))/C/$(EMX_INSTANCE)
+TEXDIR   = $(subst \,/,$(_APPS_MATH_DIR))/emtex
+EMACSDIR = $(subst \,/,$(_APPS_MATH_DIR))/emacs/19.33/bin
+OCTDIR   = $(subst \,/,$(_APPS_MATH_DIR))/science/octave
+XPPDIR   = $(subst \,/,$(_APPS_MATH_DIR))/science/xppaut
+PGPDIR   = $(subst \,/,$(_APPS_COMMS_DIR))/comms/pgp
+WGETDIR  = $(subst \,/,$(_APPS_COMMS_DIR))/comms/sslurp
+
+
+
+# Common versions of the different projects
+# Copyright by Klaus Gebhardt, 1994 - 2001
+
+# Version of Octave:
+OCTVER       = 2.0.17
+OCTBUILD     = 01
+
+# Version of Texinfo
+TEXIVER = 3.12
+
+
+
+# Common variables for all makefiles
+# Copyright by Klaus Gebhardt, 1994 - 2001
+
+MC_OFLAGS  = -s -m486 -O3 -mieee-fp -malign-loops=2 -malign-jumps=2 -malign-functions=2
+MC_OOFLAGS = -s -fno-rtti
+MC_LFLAGS  = -L.

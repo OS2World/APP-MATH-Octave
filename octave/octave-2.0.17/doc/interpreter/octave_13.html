@@ -1,0 +1,196 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from ./octave.texi on 9 October 1998 -->
+
+<TITLE>GNU Octave - Error Handling</TITLE>
+</HEAD>
+<BODY>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_12.html">previous</A>, <A HREF="octave_14.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC99" HREF="octave_toc.html#TOC99">Error Handling</A></H1>
+
+<P>
+Octave includes several functions for printing error and warning
+messages.  When you write functions that need to take special action
+when they encounter abnormal conditions, you should print the error
+messages using the functions described in this chapter.
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>error</B> <I>(<VAR>template</VAR>, ...)</I>
+<DD><A NAME="IDX452"></A>
+The <CODE>error</CODE> function formats the optional arguments under the
+control of the template string <VAR>template</VAR> using the same rules as
+the <CODE>printf</CODE> family of functions (see section <A HREF="octave_14.html#SEC109">Formatted Output</A>).
+The resulting message is prefixed by the string <SAMP>`error: '</SAMP> and
+printed on the <CODE>stderr</CODE> stream.
+
+</P>
+<P>
+Calling <CODE>error</CODE> also sets Octave's internal error state such that
+control will return to the top level without evaluating any more
+commands.  This is useful for aborting from functions or scripts.
+
+</P>
+<P>
+If the error message does not end with a new line character, Octave will
+print a traceback of all the function calls leading to the error.  For
+example, given the following function definitions:
+
+</P>
+
+<PRE>
+function f () g () end
+function g () h () end
+function h () nargin == 1 || error ("nargin != 1"); end
+</PRE>
+
+<P>
+calling the function <CODE>f</CODE> will result in a list of messages that
+can help you to quickly locate the exact location of the error:
+
+</P>
+
+<PRE>
+f ()
+error: nargin != 1
+error: evaluating index expression near line 1, column 30
+error: evaluating binary operator `||' near line 1, column 27
+error: called from `h'
+error: called from `g'
+error: called from `f'
+</PRE>
+
+<P>
+If the error message ends in a new line character, Octave will print the
+message but will not display any traceback messages as it returns
+control to the top level.  For example, modifying the error message
+in the previous example to end in a new line causes Octave to only print
+a single message:
+
+</P>
+
+<PRE>
+function h () nargin == 1 || error ("nargin != 1\n"); end
+f ()
+error: nargin != 1
+</PRE>
+
+</DL>
+
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>error_text</B>
+<DD><A NAME="IDX453"></A>
+This variable contains the text of error messages that would have
+been printed in the body of the most recent <CODE>unwind_protect</CODE> or
+<CODE>try</CODE> statement or the <VAR>try</VAR> part of the most recent call to
+the <CODE>eval</CODE> function.  Outside of the <CODE>unwind_protect</CODE> and
+<CODE>try</CODE> statements or the <CODE>eval</CODE> function, or if no error has
+occurred within them, the value of <CODE>error_text</CODE> is guaranteed to be
+the empty string.
+
+</P>
+<P>
+Note that the message does not include the first <SAMP>`error: '</SAMP> prefix,
+so that it may easily be passed to the <CODE>error</CODE> function without
+additional processing<A NAME="DOCF5" HREF="octave_foot.html#FOOT5">(5)</A>.
+
+</P>
+<P>
+See section <A HREF="octave_11.html#SEC87">The <CODE>try</CODE> Statement</A> and section <A HREF="octave_11.html#SEC86">The <CODE>unwind_protect</CODE> Statement</A>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>beep_on_error</B>
+<DD><A NAME="IDX454"></A>
+If the value of <CODE>beep_on_error</CODE> is nonzero, Octave will try
+to ring your terminal's bell before printing an error message.  The
+default value is 0.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>warning</B> <I>(<VAR>msg</VAR>)</I>
+<DD><A NAME="IDX455"></A>
+Print a warning message <VAR>msg</VAR> prefixed by the string <SAMP>`warning: '</SAMP>.  
+After printing the warning message, Octave will continue to execute
+commands.  You should use this function should when you want to notify
+the user of an unusual condition, but only when it makes sense for your
+program to go on.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>usage</B> <I>(<VAR>msg</VAR>)</I>
+<DD><A NAME="IDX456"></A>
+Print the message <VAR>msg</VAR>, prefixed by the string <SAMP>`usage: '</SAMP>, and
+set Octave's internal error state such that control will return to the
+top level without evaluating any more commands.  This is useful for
+aborting from functions.
+
+</P>
+<P>
+After <CODE>usage</CODE> is evaluated, Octave will print a traceback of all
+the function calls leading to the usage message.
+
+</P>
+<P>
+You should use this function for reporting problems errors that result
+from an improper call to a function, such as calling a function with an
+incorrect number of arguments, or with arguments of the wrong type.  For
+example, most functions distributed with Octave begin with code like
+this
+
+</P>
+
+<PRE>
+if (nargin != 2)
+  usage ("foo (a, b)");
+endif
+</PRE>
+
+<P>
+to check for the proper number of arguments.
+</DL>
+
+</P>
+<P>
+The following pair of functions are of limited usefulness, and may be
+removed from future versions of Octave.
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>perror</B> <I>(<VAR>name</VAR>, <VAR>num</VAR>)</I>
+<DD><A NAME="IDX457"></A>
+Print the error message for function <VAR>name</VAR> corresponding to the
+error number <VAR>num</VAR>.  This function is intended to be used to print
+useful error messages for those functions that return numeric error
+codes.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>strerror</B> <I>(<VAR>name</VAR>, <VAR>num</VAR>)</I>
+<DD><A NAME="IDX458"></A>
+Return the text of an error message for function <VAR>name</VAR>
+corresponding to the error number <VAR>num</VAR>.  This function is intended
+to be used to print useful error messages for those functions that
+return numeric error codes.
+</DL>
+
+</P>
+<P><HR><P>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_12.html">previous</A>, <A HREF="octave_14.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+</BODY>
+</HTML>

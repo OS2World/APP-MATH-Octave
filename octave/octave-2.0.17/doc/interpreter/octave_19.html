@@ -1,0 +1,110 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from ./octave.texi on 9 October 1998 -->
+
+<TITLE>GNU Octave - Nonlinear Equations</TITLE>
+</HEAD>
+<BODY>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_18.html">previous</A>, <A HREF="octave_20.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC147" HREF="octave_toc.html#TOC147">Nonlinear Equations</A></H1>
+<P>
+<A NAME="IDX737"></A>
+<A NAME="IDX738"></A>
+
+</P>
+<P>
+Octave can solve sets of nonlinear equations of the form
+
+</P>
+<P>
+using the function <CODE>fsolve</CODE>, which is based on the MINPACK
+subroutine <CODE>hybrd</CODE>.
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U> [<VAR>x</VAR>, <VAR>info</VAR>] = <B>fsolve</B> <I>(<VAR>fcn</VAR>, <VAR>x0</VAR>)</I>
+<DD><A NAME="IDX739"></A>
+Given <VAR>fcn</VAR>, the name of a function of the form <CODE>f (<VAR>x</VAR>)</CODE>
+and an initial starting point <VAR>x0</VAR>, <CODE>fsolve</CODE> solves the set of
+equations such that <CODE>f(<VAR>x</VAR>) == 0</CODE>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U>  <B>fsolve_options</B> <I>(<VAR>opt</VAR>, <VAR>val</VAR>)</I>
+<DD><A NAME="IDX740"></A>
+When called with two arguments, this function allows you set options
+parameters for the function <CODE>fsolve</CODE>.  Given one argument,
+<CODE>fsolve_options</CODE> returns the value of the corresponding option.  If
+no arguments are supplied, the names of all the available options and
+their current values are displayed.
+</DL>
+
+</P>
+<P>
+Here is a complete example.  To solve the set of equations
+
+</P>
+<P>
+you first need to write a function to compute the value of the given
+function.  For example:
+
+</P>
+
+<PRE>
+function y = f (x)
+  y(1) = -2*x(1)^2 + 3*x(1)*x(2)   + 4*sin(x(2)) - 6;
+  y(2) =  3*x(1)^2 - 2*x(1)*x(2)^2 + 3*cos(x(1)) + 4;
+endfunction
+</PRE>
+
+<P>
+Then, call <CODE>fsolve</CODE> with a specified initial condition to find the
+roots of the system of equations.  For example, given the function
+<CODE>f</CODE> defined above,
+
+</P>
+
+<PRE>
+[x, info] = fsolve ("f", [1; 2])
+</PRE>
+
+<P>
+results in the solution
+
+</P>
+
+<PRE>
+x =
+
+  0.57983
+  2.54621
+
+info = 1
+</PRE>
+
+<P>
+A value of <CODE>info = 1</CODE> indicates that the solution has converged.
+
+</P>
+<P>
+The function <CODE>perror</CODE> may be used to print English messages
+corresponding to the numeric error codes.  For example,
+
+</P>
+
+<PRE>
+perror ("fsolve", 1)
+     -| solution converged to requested tolerance
+</PRE>
+
+<P><HR><P>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_18.html">previous</A>, <A HREF="octave_20.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+</BODY>
+</HTML>

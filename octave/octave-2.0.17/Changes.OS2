@@ -1,0 +1,681 @@
+*******************************************************************************
+** Changes since the Version 2.09 of Octave for OS/2                         **
+*******************************************************************************
+
+
+Octave 2.0.17 Build 01:
+***********************
+
+* New Version 2.0.17. This might be the final 2.0.x version.
+
+Octave 2.0.16 Build 01:
+***********************
+
+* New Version 2.0.16
+
+Octave 2.0.15 Build 01:
+***********************
+
+* New Version 2.0.15
+
+Octave 2.1.23 Build 01:
+***********************
+
+* New version:
+
+  ***************************************************************************
+  ** Octave 2.1.14 is a test release!                                      **
+  ** If you have any problems, please report them, so that they can be     **
+  ** fixed in the next version.                                            **
+  ***************************************************************************
+
+Octave 2.1.14 Build 02:
+***********************
+
+* atanh(1) and acoth(1) will no longer crash Octave.
+
+Octave 2.1.14 Build 01:
+***********************
+
+* New version: 
+
+  ***************************************************************************
+  ** Octave 2.1.14 is a test release!                                      **
+  ** If you have any problems, please report them, so that they can be     **
+  ** fixed in the next version.                                            **
+  ***************************************************************************
+
+Octave 2.0.14 Build 02:
+***********************
+
+* atanh(1) and acoth(1) will no longer crash Octave.
+
+Octave 2.0.14 Build 01:
+***********************
+
+* New Version 2.0.14
+
+* diary bug fixed: User input when running a script will now be written into
+  the diary file.
+
+Octave 2.0.13 Build 02:
+***********************
+
+* oregon.cc renamed.
+
+* Patch included:
+  src/file-io.cc and liboctave/data-conv.cc: uint16 and uint32 types supported
+  in fread.
+
+* Complex erf added to examples for dlfcn.
+
+* Patch included:
+  data.cc: is_complex added.
+
+* GNU Info updated to version 2.18.
+
+* kpathsearch version 3.2 used.
+
+* Help in image.m is now correct.
+
+Octave 2.0.13 Build 01:
+***********************
+
+* New Version 2.0.13
+
+* Plot functions patched.
+
+* Patch included:
+  DASSL.cc (DASSL::do_integrate): If an exception occurs in the
+  call to ddassl, set integration_error to 1 before calling the
+  error handler and returning.
+
+* Patch included:
+  Array2-idx.h (assign): Allow A([],[]) = scalar and, if
+  do_fortran_indexing is set, A([]) = scalar.
+  Array-idx.h (assign): Allow A([]) = scalar.
+
+* Patch included:
+  time.cc (extract_tm): Truncate field values instead of rounding.
+  (Fgmtime, Flocaltime): Likewise, for timeval.
+
+Octave 2.0.11 Build 02:
+***********************
+
+* New Version 2.0.11
+
+* Patch included:
+  symtab.cc (symbol_record::variable_value): Avoid dereferencing
+  NULL pointer.
+
+* Patch included:
+  lo-spec-fun: the order of the arguments in the gammai and gammainc.
+
+* Patch included:
+  error.cc (verror): Fix thinko in attempt to skip `error: ' tag
+  when buffering error messages.
+  pt-cmd.cc (tree_try_catch::eval): Reset buffer_error_messages
+  here if just discarding unwind_protect frame.
+
+* Typos in mplot.m fixed.
+
+* __pltopt__ functionality extended:
+  Now, for plot (x, y, fmt) in the cases where either x or y (or both)
+  are matrices, fmt can also be a string array.  The rows of the string
+  array correspond to the lines on the plot:
+  plot/__pltopt1.m__: New file.
+  plot/__pltopt.m__: Handle opt as a string array by calling
+  __pltopt1__ multiple times and returning a string array with rows
+  corresponding to the rows of opt.
+  plot/__plt2ss__.m, plot/__plt2vv__.m, plot/__plt2vm__.m,
+  plot/__plt2mv__.m, plot/__plt2mm__.m: Handle fmt as a string
+  array.
+
+Octave 2.0.10 Build 01:
+***********************
+
+* New Version 2.0.10
+
+* Default install path changed (h:/apps/science/octave).
+
+Octave 2.09.98 Build 01:
+************************
+
+* New Version 2.0.9.98 (Beta)
+
+Octave 2.09.97 Build 01:
+************************
+
+* New Version 2.0.9.97 (Beta)
+
+
+
+*******************************************************************************
+** Changes since the Version 1.9x of Octave for OS/2                         **
+*******************************************************************************
+
+
+Octave 2.09 Build 04:
+*********************
+
+* makefile.os2 modified: This corrects the missing xmalloc.lib problem, when
+  using make-octfile.
+
+* lgamma(-2) no longer aborts Octave.
+
+* Minor changes in the source code.
+
+* Patch for filter.cc included.
+
+* sighandlers.cc (octave_child_list::do_remove) and
+  toplev.cc (run_command_and_return_output) modified:
+  [a,b] = system ("dir") returns the correct return value in b.
+
+* Patch included:
+	* pt-mat.h (tree_matrix_row::preserve_expr): New private data.
+	(tree_matrix_row::~tree_matrix_row): Delete list contents.
+	(tree_matrix::~tree_matrix): Delete list contents.
+	* pt-mat.cc (tree_matrix_row::to_return_list): Set preserve_expr
+	to true if successful.
+
+* get_boot_drive in inst-octave.cmd and updt-octave.cmd patched.
+
+* Patch included:
+        * input.cc (get_user_input): Return an empty string if the user
+	just types RET.
+
+Octave 2.09 Build 03:
+*********************
+
+* mkfifo is now supported.
+
+* inst-octave.cmd creates WPS objects for the documentation.
+
+* The documentation is now also available in OS/2's INF format. You can
+  view them using gnuview as Octave's external info viewer.
+
+* Compiler updated (EMXFIX03).
+
+* Bug in logm (wrong result for a complex scalar argument) fixed.
+
+* Minor changes in the sources and makefiles.
+
+* Workaround for the bug in the fortran routine DGELSS added (in CMatrix.cc).
+
+* Patch included:
+	* idx-vector.cc (IDX_VEC_REP::sort): New function.
+	* idx-vector.h (idx_vector::sort): Ditto.
+	* Array2-idx.h (Array2<T>::maybe_delete_elements): Use it before
+	trying to delete elements specified by the index vectors.
+
+Octave 2.09 Build 02:
+*********************
+
+* Bug in cruft4.def fixed, which caused Octave to crash, when trying to
+  compute eig(A), with a complex matrix A.
+
+Octave 2.09 Build 01:
+*********************
+
+* New Version 2.0.9.
+
+Octave 2.08 Build 01:
+*********************
+
+* New Version 2.0.8.
+
+* Patch for pt-fvc.cc included.
+
+Octave 2.07 Build 01:
+*********************
+
+* New Version 2.0.7.
+
+Octave 2.06 Build 01:
+*********************
+
+* New Version 2.0.6.
+
+* All functions working with FILE IDS (file handles) are renamed:
+  _dup, _dup2, _close, _fdopen, _pipe.
+
+* The function pipe is now returning the octave file streams.
+
+* Minor modifications in the makefiles.
+
+Octave 2.05 Build 04:
+*********************
+
+* inst-octave.cmd and updt-octave.cmd patched.
+
+* Patches included:
+  input.cc (octave_read):
+	Don't forget to free input buffer if it exists and has zero length.
+  (gnu_readline):
+	Free buf if fgets returns 0.
+  parse.y:
+	Parse error will not abort Octave, when forced_interactive "-i"
+  Array2-idx.h (Array2<T>::maybe_delete_elements):
+	Prevent out-of-bounds indexing of the index array.
+  Array-idx.h (Array<T>::maybe_delete_elements): Likewise.
+  idx-vector.cc (IDX_VEC_REP::is_colon_equiv):
+ 	Make it work when the vector is not sorted.
+
+Octave 2.05 Build 03:
+*********************
+
+* lex.l patched:
+  help will work with text mode files, even if the help text is not at the
+  beginning of the file.
+
+* Lisp files modified:
+  hilit19 will not be loaded, when running emacs in normal text mode.
+
+* parse.y patch included:
+  Using formal parameters for functions, the names of which are already
+  being used by builtin functions, will not produce errors. For example:
+  function y=f(type), y=type; end;
+
+* variables.cc patched: <CR>s are not copied into the help text.
+
+* The full name of the executable can be specified in .emacs.
+
+* inst-octave.cmd and updt-octave.cmd patched.
+
+* lex.l patched: Octave reads script and function files with lines like:
+  x = x + ...
+      3;
+
+Octave 2.05 Build 02:
+*********************
+
+* New internal system routine (also used in procbuf):
+  All / in the executable are replaced by \ when using cmd.exe or 4os2.exe
+  as shell and all \ are replaced by / when using a UNIX shell.
+
+* make-octfile.cmd patched: The dynamic loading of function will
+  under OS/2 2.xx.
+
+* nextpow2.m patched: nextpow2(1000) returns 10.
+
+* inst-octave.cmd patched: scripts.fat will be renamed to scripts on FAT.
+
+* The files in the subdirectory doc are FAT compatible.
+
+* Octave reads script and function files with lines like:
+  M = [1 2
+       3 4]
+
+Octave 2.05 Build 01:
+*********************
+
+* New version: Octave 2.0.5
+
+* help will work with text (<CR>>LF>) files.
+
+* No endfunction is needed at the end of a function file.
+
+* Octave uses noncontinous multiple heaps. So the heap size is no longer
+  fixed to 32 MB.
+
+* Image viewer and GNUPlot can be used at the same time again.
+  The environment variable OCTAVE_IMAGE_VIEWER is supported again.
+
+* (require 'hilit19) added in lisp files.
+
+* octave-mode.el modified: switch/case/otherwise/endswitch statement included.
+
+Octave 2.02 Build 02:
+*********************
+
+* Bug in usleep fixed. plot works again.
+
+* erf(x) and erfc(x) are supported. Bug in erfinv.m is fixed.
+
+* gamma(2000) no longer aborts Octave.
+
+* Bugfixes in the installationsscript. Corrected README.OS2
+
+* Default value of IMAGEPATH now points to ../scripts/image.
+
+* Patch included (oct-stream.cc):
+  scanf reads correctly when using %f or %e.
+
+Octave 2.02 Build 01:
+*********************
+
+* POPEN2.M modified: The script now uses the new function spawn to start
+  the child process.
+
+* The environment variable OCTAVE_IMAGE_VIEWER is no longer supported. Modify
+  the script file IMAGE.M, if you want to use another image viewer.
+
+* Function added: child_purge_temp_file. It removes the temporary file
+  when the specified child process dies (used in IMAGE.M).
+
+* The pipe function returns the file handles and not the Octave's file ids.
+  Use fdopen to open the handles!
+
+* Functions added: dup, close, fdopen.
+
+* Function added: spawn.
+
+* Octave reads OS/2 BMP (version 1.0) Windows BMP, PNM (P1 - P6) and
+  Octave's IMG format. It writes OS/2 BMP (version 1.0) Windows BMP,
+  PNM (P5, P6), Postscript and Octave's IMG format. LOADIMAGE.M and
+  SAVEIMAGE.M are modified (the original version are in the archive
+  image.zip).
+
+* New version: Octave 2.0.2
+
+* Bug fixes in dlfcn.lib.
+
+Octave 2.01 Build 01:
+*********************
+
+* Dynamik Linking is now supported! See hello.cc and make_int.cc for
+  example. A small bug in make_int.cc fixed.
+
+* Bug in xor.m fixed.
+
+* Bug in the installation script fixed: The script will not replace the first
+  "\DLL" in LIBPATH, if Octave is installed for the first time on a system.
+
+* The installation script is renamed to inst-octave.cmd.
+
+* New version 2.0.1.
+
+* All C++ Code is now placed in DLLs.
+	
+* GNUPLOT is started as normal VIO, so gshow will work. Also because of other
+  changes in the code, CTRL-C works even when GNUPLOT is started.
+
+* Minor changes in the sources.
+
+Octave 2.00 Build 01:
+*********************
+
+* New version: Octave 2.0.
+
+* Script and function files are loaded correctly even if they contain an
+  End-of-file character. This character will be interpreted as a newline
+  character.
+
+* saveimage saves images in bmp, gif and ps files.
+
+
+
+*******************************************************************************
+** Changes since the Version 1.1.1 of Octave for OS/2                        **
+*******************************************************************************
+
+Octave 1.94 Build 01:
+*********************
+
+* New version 1.94 (pre-2.0). Keep in mind:
+
+  ***************************************************************************
+  ** Octave 1.94 is a test release!                                        **
+  ** If you have any problems, please report them, so that they can be     **
+  ** fixed in version 2.0                                                  **
+  ***************************************************************************
+
+* New command line flag '-I'. It forces interactive behaviour, but
+  deactivates the pager, even if Octave is in interactive mode.
+
+* Every signal which will cause a jump to toplevel (Octave prompt), will
+  be handled differently if a script or function file is executed: It will
+  be handled as an error.
+
+* A new installation script: This script make changes in the config.sys,
+  .octaverc, .emacs and dir. It unzips the scriptfiles and creates an object
+  on the desktop! The info-files will be copied to the correct directory
+  and older DLLs coming with EMX will be removed, if necessary.
+
+Octave 1.93 Build 02:
+*********************
+
+* Script and function files are loaded correctly even if they no text file
+  (CR/LF).
+
+* The sigchld_handler in sighandlers.cc is patched:
+  When no child in octave_child_list has created SIGCHLD, waitpid is
+  executed. This solves problems with displaying images when GNUPLOT is
+  running, and similar problems.
+
+* Octave's system command now correctly returns the output or the pid,
+  depending on the number or values of the arguments.
+
+* The image viewer is started in "async" mode.
+
+Octave 1.93 Build 01:
+*********************
+
+* New version 1.93 (pre-2.0). Keep in mind:
+
+  ***************************************************************************
+  ** Octave 1.93 is a test release!                                        **
+  ** If you have any problems, please report them, so that they can be     **
+  ** fixed in version 2.0                                                  **
+  ***************************************************************************
+
+* Changes in octave.el: hilit19 is used for octave-shell-mode.
+
+Octave 1.92 Build 02:
+*********************
+
+* get_size () in oct-stream.cc patched:
+  fread works with a scalar as second argument.
+
+* Function kbhit () in sysdep.cc calls flush_octave_stdout.
+	
+* sighandlers.cc and toplev.cc patched:
+  Ctrl-C and Ctrl-Break will work more than only once again.
+	
+Octave 1.92 Build 01:
+*********************
+
+* New version 1.92 (pre-2.0). Keep in mind:
+
+  ***************************************************************************
+  ** Octave 1.92 is a test release!                                        **
+  ** If you have any problems, please report them, so that they can be     **
+  ** fixed in version 2.0                                                  **
+  ***************************************************************************
+
+* Minor bug fixes in octave-info.el.
+
+* Changes in octave-mode.el: hilit19 is used for editing script files.
+
+* New command add to the Emacs-Shell-Mode for Octave: warranty, multiplot,
+  close multiplot, subwindow.
+
+* Minor changes in the the makefiles for OS/2. These changes do not 
+  modify the binary.
+
+Octave 1.91 Build 01:
+*********************
+
+* New version 1.91 (pre-2.0). Keep in mind:
+
+  ***************************************************************************
+  ** Octave 1.91 is a test release!                                        **
+  ** If you have any problems, please report them, so that they can be     **
+  ** fixed in version 2.0                                                  **
+  ***************************************************************************
+
+Octave 1.90 Build 01:
+*********************
+
+* New version 1.90 (pre-2.0). Keep in mind:
+
+  ***************************************************************************
+  ** Octave 1.90 is a test release!                                        **
+  ** If you have any problems, please report them, so that they can be     **
+  ** fixed in version 2.0                                                  **
+  ***************************************************************************
+
+* New libraries (readline, kpathsea).
+
+* Octave uses again an internal info viewer. This ensures that it runs
+  correctly under the control of Emacs.
+
+* Signal handler for SIGCHLD gepatcht.
+
+* Octave needs the GNUPLOT 3.6 beta to display multiple plots.
+
+* Since the new compiler supports multiple heaps it is no longer
+  necessary to fix the heap size during the installation.
+
+* The environment variable specifies the name of the init file octave executes
+  on startup.
+
+
+
+*******************************************************************************
+** Changes since the Version 1.1.0 of Octave for OS/2                        **
+*******************************************************************************
+
+Octave 1.1.1 Build 08:
+**********************
+
+* The cursor type will be selected in readline.
+
+* New Compiler (emx-gcc 0.9c) and libraries used.
+
+* The Stacksize has been increased.
+
+* Signal handling is improved: Ctrl-Break always acts in the same way Ctrl-C
+  does. No signal handler for SIGTERM!
+
+Octave 1.1.1 Build 07:
+**********************
+
+* All FPE signals are now explicity masked off. The fixes the bugs when
+  running Octave on systems with GAMESRVR.DLL.
+
+Octave 1.1.1 Build 06:
+**********************
+
+* Pause now works also when running Octave under Emacs.
+
+* The Octave's 'system' (or 'shell_cmd') is fixed. This fixes also the bug in
+  saveimage.
+
+* xvos2 now uses the image viewer specified in the environment variable
+  OCTAVE_IMAGE_VIEWER, if set, or ib.exe if not.
+
+Octave 1.1.1 Build 05:
+**********************
+
+* New Compiler (emx-gcc 0.9B) and libraries (stdcpp, libg++, ...)
+
+* New info browser version 2.14
+
+* parse.y was patched:
+  A parse error will not abort the parser, if octave is forced to be
+  interactive (-i).
+
+* lex.l was patched:
+  SIGINT will not crash Octave, if octave is forced to be interactive (-i).
+
+* info will not kill the octave process, if the terminal type is emacs.
+  It displays a message, so that emacs can start its own info browser.
+
+* The routines read and write in liboctave/dMatrix.cc are patched:
+  The streams are set to binary mode before writing/reading and set back to
+  text mode after.
+
+* Emacs-Shell-Mode for Octave including Info, temporary files, script files.
+
+* New function in Octave: add_to_command_number.
+
+Octave 1.1.1 Build 04:
+**********************
+
+* image uses now ib.exe (the Multimedia Viewer coming with Warp) to view
+  the images. This works also when GNUPLOT is running.
+
+* GNUPLOT is now started as PM program in a different session. Now one can
+  use Ctrl-C to interrupt Octave, when Gnuplot is running.
+
+* Internal Changes in Iostream:
+  New function _io_popen (used in the member functions of the class procbuf):
+  The command is now executed direct, without the command processor cmd.exe
+  (or ...). The way the program is started (PM, Session, ...) is specified
+  in the third argument of _io_popen. If this fails, the command is
+  executed via the command processor.
+
+* A new signal handler (SIGINT) for parse_and_execute: The script files
+  are closed, if the execution is interrupted by the user. The signal works
+  like an error! 
+
+Octave 1.1.1 Build 03:
+**********************
+
+* The signal handler is fixed: Ctrl-C works now more than only ones.
+
+Octave 1.1.1 Build 02:
+**********************
+
+* The function script polyreduce.m is fixed. So the functions deconv and
+  residue are working.
+
+* The Fortran and C routines are now in DLLs. This reduces the size of the
+  executable and octave needs not so much memory at start time.
+
+* The libraries of info, kpathsea and readline are linked using DLLs. The
+  stand-alone info browser (info.exe) uses also that DLLs.
+
+* The heap is not longer fixed to 32 MB (by emx gcc). The user can select the
+  best heap size for his problems and his system.
+
+* The iostream library is fixed: Octave reads binary files (load -b or
+  load -m).
+
+* A few changes in the source code.
+
+* New Version of Octave (1.1.1).
+
+* Octave no longer hangs the WPS, if it is closed by typing quit, while
+  GNUPLOTPM is still running.
+
+
+
+*******************************************************************************
+** Changes since the Version 1.0 of Octave for OS/2                          **
+*******************************************************************************
+
+* Octave now uses ';' as separator in paths.
+
+* Drives are now supported in paths. So you can start octave from a
+  different drive and octave will find the script files.
+
+* Drives are also supported in 'cd' and 'pwd'.
+
+* Control-C works more than once.
+
+* By defining USE_EXTERNAL_TEMPLATES and using emxbind -s I made the file
+  octave.exe much smaller.
+
+* The temporary files created by the commands edit_history and run_history
+  are deleted.
+
+* The info files are changed for FAT.
+
+* I create a second set of script files, patched for FAT.
+
+* Octave uses the file in the environment variable OCTAVE_INITFILE instead
+  of .octaverc, if the variable is set.
+
+* New Version of Octave (Version 1.1.0)
+
+* New Compiler (emx-gcc 0.9A) and libraries (iostream 0.66)
+
+* I add the extproc-statement.
+
+* Octave executes now a interactive script from a file in the command line.
+
+* Images can be viewed using ghostscript.
+
+* Octave uses now GNUPLOT 3.5.

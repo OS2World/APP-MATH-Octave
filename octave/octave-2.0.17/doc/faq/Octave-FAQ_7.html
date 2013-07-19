@@ -1,0 +1,40 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from ./Octave-FAQ.texi on 9 October 1998 -->
+
+<TITLE>Frequently asked questions about Octave (with answers) - Common problems</TITLE>
+</HEAD>
+<BODY>
+Go to the <A HREF="Octave-FAQ_1.html">first</A>, <A HREF="Octave-FAQ_6.html">previous</A>, <A HREF="Octave-FAQ_8.html">next</A>, <A HREF="Octave-FAQ_11.html">last</A> section, <A HREF="Octave-FAQ_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC21" HREF="Octave-FAQ_toc.html#TOC21">Common problems</A></H1>
+
+<P>
+This list is probably far too short.  Feel free to suggest additional
+questions (preferably with answers!)
+
+</P>
+
+<UL>
+<LI>
+
+Octave takes a long time to find symbols.
+
+Octave is probably spending this time recursively searching directories
+for function files.  Check the value of your LOADPATH.  For those
+elements that end in <SAMP>`//'</SAMP>, do any name a very large directory tree?
+Does it contain directories that have a mixture of files and
+directories?  In order for the recursive directory searching code to
+work efficiently, directories that are to be searched recursively should
+have either function files only, or subdirectories only, but not a
+mixture of both.  Check to make sure that Octave's standard set of
+function files is installed this way.
+</UL>
+
+<P><HR><P>
+Go to the <A HREF="Octave-FAQ_1.html">first</A>, <A HREF="Octave-FAQ_6.html">previous</A>, <A HREF="Octave-FAQ_8.html">next</A>, <A HREF="Octave-FAQ_11.html">last</A> section, <A HREF="Octave-FAQ_toc.html">table of contents</A>.
+</BODY>
+</HTML>

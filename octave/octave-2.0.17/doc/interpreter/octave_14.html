@@ -1,0 +1,2065 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from ./octave.texi on 9 October 1998 -->
+
+<TITLE>GNU Octave - Input and Output</TITLE>
+</HEAD>
+<BODY>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_13.html">previous</A>, <A HREF="octave_15.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC100" HREF="octave_toc.html#TOC100">Input and Output</A></H1>
+
+<P>
+There are two distinct classes of input and output functions.  The first
+set are modeled after the functions available in MATLAB.  The
+second set are modeled after the standard I/O library used by the C
+programming language and offer more flexibility and control over the
+output.
+
+</P>
+<P>
+When running interactively, Octave normally sends any output intended
+for your terminal that is more than one screen long to a paging program,
+such as <CODE>less</CODE> or <CODE>more</CODE>.  This avoids the problem of having a
+large volume of output stream by before you can read it.  With
+<CODE>less</CODE> (and some versions of <CODE>more</CODE>) you can also scan forward
+and backward, and search for specific items.
+
+</P>
+<P>
+Normally, no output is displayed by the pager until just before Octave
+is ready to print the top level prompt, or read from the standard input
+(for example, by using the <CODE>fscanf</CODE> or <CODE>scanf</CODE> functions).
+This means that there may be some delay before any output appears on
+your screen if you have asked Octave to perform a significant amount of
+work with a single command statement.  The function <CODE>fflush</CODE> may be
+used to force output to be sent to the pager (or any other stream)
+immediately.
+
+</P>
+<P>
+You can select the program to run as the pager by setting the variable
+<CODE>PAGER</CODE>, and you can turn paging off by setting the value of the
+variable <CODE>page_screen_output</CODE> to 0.
+
+</P>
+<P>
+<DL>
+<DT><U>Command:</U> <B>more</B>
+<DD><A NAME="IDX459"></A>
+<DT><U>Command:</U> <B>more</B> <I>on</I>
+<DD><A NAME="IDX460"></A>
+<DT><U>Command:</U> <B>more</B> <I>off</I>
+<DD><A NAME="IDX461"></A>
+Turn output pagination on or off.  Without an argument, <CODE>more</CODE>
+toggles the current state.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>PAGER</B>
+<DD><A NAME="IDX462"></A>
+The default value is normally <CODE>"less"</CODE>, <CODE>"more"</CODE>, or
+<CODE>"pg"</CODE>, depending on what programs are installed on your system.
+See section <A HREF="octave_33.html#SEC189">Installing Octave</A>.
+
+</P>
+<P>
+When running interactively, Octave sends any output intended for your
+terminal that is more than one screen long to the program named by the
+value of the variable <CODE>PAGER</CODE>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>page_screen_output</B>
+<DD><A NAME="IDX463"></A>
+If the value of <CODE>page_screen_output</CODE> is nonzero, all output
+intended for the screen that is longer than one page is sent through a
+pager.  This allows you to view one screenful at a time.  Some pagers
+(such as <CODE>less</CODE>---see section <A HREF="octave_33.html#SEC189">Installing Octave</A>) are also capable of moving
+backward on the output.  The default value is 1.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>page_output_immediately</B>
+<DD><A NAME="IDX464"></A>
+If the value of <CODE>page_output_immediately</CODE> is nonzero, Octave sends
+output to the pager as soon as it is available.  Otherwise, Octave
+buffers its output and waits until just before the prompt is printed to
+flush it to the pager.  The default value is 0.
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>fflush</B> <I>(<VAR>fid</VAR>)</I>
+<DD><A NAME="IDX465"></A>
+Flush output to <VAR>fid</VAR>.  This is useful for ensuring that all
+pending output makes it to the screen before some other event occurs.
+For example, it is always a good idea to flush the standard output
+stream before calling <CODE>input</CODE>.
+</DL>
+
+</P>
+</DL>
+
+
+
+<H2><A NAME="SEC101" HREF="octave_toc.html#TOC101">Basic Input and Output</A></H2>
+
+
+
+<H3><A NAME="SEC102" HREF="octave_toc.html#TOC102">Terminal Output</A></H3>
+
+<P>
+Since Octave normally prints the value of an expression as soon as it
+has been evaluated, the simplest of all I/O functions is a simple
+expression.  For example, the following expression will display the
+value of pi
+
+</P>
+
+<PRE>
+pi
+     -| pi = 3.1416
+</PRE>
+
+<P>
+This works well as long as it is acceptable to have the name of the
+variable (or <SAMP>`ans'</SAMP>) printed along with the value.  To print the
+value of a variable without printing its name, use the function
+<CODE>disp</CODE>.
+
+</P>
+<P>
+The <CODE>format</CODE> command offers some control over the way Octave prints
+values with <CODE>disp</CODE> and through the normal echoing mechanism.
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>ans</B>
+<DD><A NAME="IDX466"></A>
+This variable holds the most recently computed result that was not
+explicitly assigned to a variable.  For example, after the expression
+
+</P>
+
+<PRE>
+3^2 + 4^2
+</PRE>
+
+<P>
+is evaluated, the value of <CODE>ans</CODE> is 25.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>disp</B> <I>(<VAR>x</VAR>)</I>
+<DD><A NAME="IDX467"></A>
+Display the value of <VAR>x</VAR>.  For example,
+
+</P>
+
+<PRE>
+disp ("The value of pi is:"), disp (pi)
+
+     -| the value of pi is:
+     -| 3.1416
+</PRE>
+
+<P>
+Note that the output from <CODE>disp</CODE> always ends with a newline.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Command:</U> <B>format</B> <I>options</I>
+<DD><A NAME="IDX468"></A>
+Control the format of the output produced by <CODE>disp</CODE> and Octave's
+normal echoing mechanism.  Valid options are listed in the following
+table.
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>short</CODE>
+<DD>
+This is the default format.  Octave will try to print numbers with at
+least 5 significant figures within a field that is a maximum of 10
+characters wide.
+
+If Octave is unable to format a matrix so that columns line up on the
+decimal point and all the numbers fit within the maximum field width,
+it switches to an <SAMP>`e'</SAMP> format.
+
+<DT><CODE>long</CODE>
+<DD>
+Octave will try to print numbers with at least 15 significant figures
+within a field that is a maximum of 24 characters wide.
+
+As will the <SAMP>`short'</SAMP> format, Octave will switch to an <SAMP>`e'</SAMP>
+format if it is unable to format a matrix so that columns line up on the
+decimal point and all the numbers fit within the maximum field width.
+
+<DT><CODE>long e</CODE>
+<DD>
+<DT><CODE>short e</CODE>
+<DD>
+The same as <SAMP>`format long'</SAMP> or <SAMP>`format short'</SAMP> but always display
+output with an <SAMP>`e'</SAMP> format.  For example, with the <SAMP>`short e'</SAMP>
+format, pi is displayed as <CODE>3.14e+00</CODE>.
+
+<DT><CODE>long E</CODE>
+<DD>
+<DT><CODE>short E</CODE>
+<DD>
+The same as <SAMP>`format long e'</SAMP> or <SAMP>`format short e'</SAMP> but always
+display output with an uppercase <SAMP>`E'</SAMP> format.  For example, with
+the <SAMP>`long E'</SAMP> format, pi is displayed as
+<CODE>3.14159265358979E+00</CODE>.
+
+<DT><CODE>free</CODE>
+<DD>
+<DT><CODE>none</CODE>
+<DD>
+Print output in free format, without trying to line up columns of
+matrices on the decimal point.  This also causes complex numbers to be
+formatted like this <SAMP>`(0.604194, 0.607088)'</SAMP> instead of like this
+<SAMP>`0.60419 + 0.60709i'</SAMP>.
+
+<DT><CODE>bank</CODE>
+<DD>
+Print in a fixed format with two places to the right of the decimal
+point.
+
+<DT><CODE>+</CODE>
+<DD>
+Print a <SAMP>`+'</SAMP> symbol for nonzero matrix elements and a space for zero
+matrix elements.  This format can be very useful for examining the
+structure of a large matrix.
+
+<DT><CODE>hex</CODE>
+<DD>
+Print the hexadecimal representation numbers as they are stored in
+memory.  For example, on a workstation which stores 8 byte real values
+in IEEE format with the least significant byte first, the value of
+<CODE>pi</CODE> when printed in <CODE>hex</CODE> format is <CODE>400921fb54442d18</CODE>.
+This format only works for numeric values.
+
+<DT><CODE>bit</CODE>
+<DD>
+Print the bit representation of numbers as stored in memory.
+For example, the value of <CODE>pi</CODE> is
+
+
+<PRE>
+01000000000010010010000111111011
+01010100010001000010110100011000
+</PRE>
+
+(shown here in two 32 bit sections for typesetting purposes) when
+printed in bit format on a workstation which stores 8 byte real values
+in IEEE format with the least significant byte first.  This format only
+works for numeric types.
+</DL>
+</DL>
+
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>print_answer_id_name</B>
+<DD><A NAME="IDX469"></A>
+If the value of <CODE>print_answer_id_name</CODE> is nonzero, variable
+names are printed along with the result.  Otherwise, only the result
+values are printed.  The default value is 1.
+</DL>
+
+</P>
+
+
+<H3><A NAME="SEC103" HREF="octave_toc.html#TOC103">Terminal Input</A></H3>
+
+<P>
+Octave has three functions that make it easy to prompt users for
+input.  The <CODE>input</CODE> and <CODE>menu</CODE> functions are normally
+used for managing an interactive dialog with a user, and the
+<CODE>keyboard</CODE> function is normally used for doing simple debugging.
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>input</B> <I>(<VAR>prompt</VAR>)</I>
+<DD><A NAME="IDX470"></A>
+<DT><U>Built-in Function:</U>  <B>input</B> <I>(<VAR>prompt</VAR>, "s")</I>
+<DD><A NAME="IDX471"></A>
+Print a prompt and wait for user input.  For example,
+
+</P>
+
+<PRE>
+input ("Pick a number, any number! ")
+</PRE>
+
+<P>
+prints the prompt
+
+</P>
+
+<PRE>
+Pick a number, any number!
+</PRE>
+
+<P>
+and waits for the user to enter a value.  The string entered by the user
+is evaluated as an expression, so it may be a literal constant, a
+variable name, or any other valid expression.
+
+</P>
+<P>
+Currently, <CODE>input</CODE> only returns one value, regardless of the number
+of values produced by the evaluation of the expression.
+
+</P>
+<P>
+If you are only interested in getting a literal string value, you can
+call <CODE>input</CODE> with the character string <CODE>"s"</CODE> as the second
+argument.  This tells Octave to return the string entered by the user
+directly, without evaluating it first.
+
+</P>
+<P>
+Because there may be output waiting to be displayed by the pager, it is
+a good idea to always call <CODE>fflush (stdout)</CODE> before calling
+<CODE>input</CODE>.  This will ensure that all pending output is written to
+the screen before your prompt.  See section <A HREF="octave_14.html#SEC100">Input and Output</A>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>menu</B> <I>(<VAR>title</VAR>, <VAR>opt1</VAR>, ...)</I>
+<DD><A NAME="IDX472"></A>
+Print a title string followed by a series of options.  Each option will
+be printed along with a number.  The return value is the number of the
+option selected by the user.  This function is useful for interactive
+programs.  There is no limit to the number of options that may be passed
+in, but it may be confusing to present more than will fit easily on one
+screen.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>keyboard</B> <I>(<VAR>prompt</VAR>)</I>
+<DD><A NAME="IDX473"></A>
+This function is normally used for simple debugging.  When the
+<CODE>keyboard</CODE> function is executed, Octave prints a prompt and waits
+for user input.  The input strings are then evaluated and the results
+are printed.  This makes it possible to examine the values of variables
+within a function, and to assign new values to variables.  No value is
+returned from the <CODE>keyboard</CODE> function, and it continues to prompt
+for input until the user types <SAMP>`quit'</SAMP>, or <SAMP>`exit'</SAMP>.
+
+</P>
+<P>
+If <CODE>keyboard</CODE> is invoked without any arguments, a default prompt of
+<SAMP>`debug&#62; '</SAMP> is used.
+</DL>
+
+</P>
+<P>
+For both <CODE>input</CODE> and <CODE>keyboard</CODE>, the normal command line
+history and editing functions are available at the prompt.
+
+</P>
+<P>
+Octave also has a function that makes it possible to get a single
+character from the keyboard without requiring the user to type a
+carriage return.
+
+</P>
+
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>kbhit</B> <I>()</I>
+<DD><A NAME="IDX474"></A>
+Read a single keystroke from the keyboard.  For example,
+
+</P>
+
+<PRE>
+x = kbhit ();
+</PRE>
+
+<P>
+will set <VAR>x</VAR> to the next character typed at the keyboard as soon as
+it is typed.
+</DL>
+
+</P>
+
+
+<H3><A NAME="SEC104" HREF="octave_toc.html#TOC104">Simple File I/O</A></H3>
+
+<P>
+The <CODE>save</CODE> and <CODE>load</CODE> commands allow data to be written to and
+read from disk files in various formats.  The default format of files
+written by the <CODE>save</CODE> command can be controlled using the built-in
+variables <CODE>default_save_format</CODE> and <CODE>save_precision</CODE>.
+
+</P>
+<P>
+Note that Octave can not yet save or load structure variables or any
+user-defined types.
+
+</P>
+<P>
+<DL>
+<DT><U>Command:</U> <B>save</B> <I>options file v1 v2 ...</I>
+<DD><A NAME="IDX475"></A>
+Save the named variables <VAR>v1</VAR>, <VAR>v2</VAR>, ... in the file
+<VAR>file</VAR>.  The special filename <SAMP>`-'</SAMP> can be used to write the
+output to your terminal.  If no variable names are listed, Octave saves
+all the variables in the current scope.  Valid options for the
+<CODE>save</CODE> command are listed in the following table.  Options that
+modify the output format override the format specified by the built-in
+variable <CODE>default_save_format</CODE>.
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>-ascii</CODE>
+<DD>
+Save the data in Octave's text data format.
+
+<DT><CODE>-binary</CODE>
+<DD>
+Save the data in Octave's binary data format.
+
+<DT><CODE>-float-binary</CODE>
+<DD>
+Save the data in Octave's binary data format but only using single
+precision.  You should use this format only if you know that all the
+values to be saved can be represented in single precision.
+
+<DT><CODE>-mat-binary</CODE>
+<DD>
+Save the data in MATLAB's binary data format.
+
+<DT><CODE>-save-builtins</CODE>
+<DD>
+Force Octave to save the values of built-in variables too.  By default,
+Octave does not save built-in variables.
+</DL>
+
+<P>
+The list of variables to save may include wildcard patterns containing
+the following special characters:
+<DL COMPACT>
+
+<DT><CODE>?</CODE>
+<DD>
+Match any single character.
+
+<DT><CODE>*</CODE>
+<DD>
+Match zero or more characters.
+
+<DT><CODE>[ <VAR>list</VAR> ]</CODE>
+<DD>
+Match the list of characters specified by <VAR>list</VAR>.  If the first
+character is <CODE>!</CODE> or <CODE>^</CODE>, match all characters except those
+specified by <VAR>list</VAR>.  For example, the pattern <SAMP>`[a-zA-Z]'</SAMP> will
+match all lower and upper case alphabetic characters. 
+</DL>
+
+<P>
+Except when using the MATLAB binary data file format, saving global
+variables also saves the global status of the variable, so that if it is
+restored at a later time using <SAMP>`load'</SAMP>, it will be restored as a
+global variable.
+
+</P>
+<P>
+The command
+
+</P>
+
+<PRE>
+save -binary data a b*
+</PRE>
+
+<P>
+saves the variable <SAMP>`a'</SAMP> and all variables beginning with <SAMP>`b'</SAMP> to
+the file <TT>`data'</TT> in Octave's binary format.
+</DL>
+
+</P>
+<P>
+There are two variables that modify the behavior of <CODE>save</CODE>.
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>default_save_format</B>
+<DD><A NAME="IDX476"></A>
+This variable specifies the default format for the <CODE>save</CODE> command.
+It should have one of the following values: <CODE>"ascii"</CODE>,
+<CODE>"binary"</CODE>, <CODE>float-binary</CODE>, or <CODE>"mat-binary"</CODE>.  The
+initial default save format is Octave's text format.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>save_precision</B>
+<DD><A NAME="IDX477"></A>
+This variable specifies the number of digits to keep when saving data in
+text format.  The default value is 17.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Command:</U> <B>load</B> <I>options file v1 v2 ...</I>
+<DD><A NAME="IDX478"></A>
+Load the named variables from the file <VAR>file</VAR>.  As with <CODE>save</CODE>,
+you may specify a list of variables and <CODE>load</CODE> will only extract
+those variables with names that match.  For example, to restore the
+variables saved in the file <TT>`data'</TT>, use the command
+
+</P>
+
+<PRE>
+load data
+</PRE>
+
+<P>
+Octave will refuse to overwrite existing variables unless you use the
+option <SAMP>`-force'</SAMP>.
+
+</P>
+<P>
+If a variable that is not marked as global is loaded from a file when a
+global symbol with the same name already exists, it is loaded in the
+global symbol table.  Also, if a variable is marked as global in a file
+and a local symbol exists, the local symbol is moved to the global
+symbol table and given the value from the file.  Since it seems that
+both of these cases are likely to be the result of some sort of error,
+they will generate warnings.
+
+</P>
+<P>
+The <CODE>load</CODE> command can read data stored in Octave's text and
+binary formats, and MATLAB's binary format.  It will automatically
+detect the type of file and do conversion from different floating point
+formats (currently only IEEE big and little endian, though other formats
+may added in the future).
+
+</P>
+<P>
+Valid options for <CODE>load</CODE> are listed in the following table.
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>-force</CODE>
+<DD>
+Force variables currently in memory to be overwritten by variables with
+the same name found in the file.
+
+<DT><CODE>-ascii</CODE>
+<DD>
+Force Octave to assume the file is in Octave's text format.
+
+<DT><CODE>-binary</CODE>
+<DD>
+Force Octave to assume the file is in Octave's binary format.
+
+<DT><CODE>-mat-binary</CODE>
+<DD>
+Force Octave to assume the file is in MATLAB's binary format.
+</DL>
+</DL>
+
+
+
+<H2><A NAME="SEC105" HREF="octave_toc.html#TOC105">C-Style I/O Functions</A></H2>
+
+<P>
+Octave's C-style input and output functions provide most of the
+functionality of the C programming language's standard I/O library.  The
+argument lists for some of the input functions are slightly different,
+however, because Octave has no way of passing arguments by reference.
+
+</P>
+<P>
+In the following, <VAR>file</VAR> refers to a file name and <CODE>fid</CODE> refers
+to an integer file number, as returned by <CODE>fopen</CODE>.
+
+</P>
+<P>
+There are three files that are always available.  Although these files
+can be accessed using their corresponding numeric file ids, you should
+always use the symbolic names given in the table below, since it will
+make your programs easier to understand.
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>stdin</B>
+<DD><A NAME="IDX479"></A>
+The standard input stream (file id 0).  When Octave is used
+interactively, this is filtered through the command line editing
+functions.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>stdout</B>
+<DD><A NAME="IDX480"></A>
+The standard output stream (file id 1).  Data written to the
+standard output is normally filtered through the pager.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>stderr</B>
+<DD><A NAME="IDX481"></A>
+The standard error stream (file id 2).  Even if paging is turned on,
+the standard error is not sent to the pager.  It is useful for error
+messages and prompts.
+</DL>
+
+</P>
+
+
+
+<H3><A NAME="SEC106" HREF="octave_toc.html#TOC106">Opening and Closing Files</A></H3>
+
+<P>
+<DL>
+<DT><U>Built-in Function:</U> [<VAR>fid</VAR>, <VAR>msg</VAR>] = <B>fopen</B> <I>(<VAR>name</VAR>, <VAR>mode</VAR>, <VAR>arch</VAR>)</I>
+<DD><A NAME="IDX482"></A>
+<DT><U>Built-in Function:</U> <VAR>fid_list</VAR> = <B>fopen</B> <I>("all")</I>
+<DD><A NAME="IDX483"></A>
+<DT><U>Built-in Function:</U> <VAR>file</VAR> = <B>fopen</B> <I>(<VAR>fid</VAR>)</I>
+<DD><A NAME="IDX484"></A>
+The first form of the <CODE>fopen</CODE> function opens the named file with
+the specified mode (read-write, read-only, etc.) and architecture
+interpretation (IEEE big endian, IEEE little endian, etc.), and returns
+an integer value that may be used to refer to the file later.  If an
+error occurs, <VAR>fid</VAR> is set to -1 and <VAR>msg</VAR> contains the
+corresponding system error message.  The <VAR>mode</VAR> is a one or two
+character string that specifies whether the file is to be opened for
+reading, writing, or both.
+
+</P>
+<P>
+The second form of the <CODE>fopen</CODE> function returns a vector of file ids
+corresponding to all the currently open files, excluding the
+<CODE>stdin</CODE>, <CODE>stdout</CODE>, and <CODE>stderr</CODE> streams.
+
+</P>
+<P>
+The third form of the <CODE>fopen</CODE> function returns the name of a
+currently open file given its file id.
+
+</P>
+<P>
+For example,
+
+</P>
+
+<PRE>
+myfile = fopen ("splat.dat", "r", "ieee-le");
+</PRE>
+
+<P>
+opens the file <TT>`splat.dat'</TT> for reading.  If necessary, binary
+numeric values will be read assuming they are stored in IEEE format with
+the least significant bit first, and then converted to the native
+representation.
+
+</P>
+<P>
+Opening a file that is already open simply opens it again and returns a
+separate file id.  It is not an error to open a file several times,
+though writing to the same file through several different file ids may
+produce unexpected results.
+
+</P>
+<P>
+The possible values <SAMP>`mode'</SAMP> may have are
+
+</P>
+<DL COMPACT>
+
+<DT><SAMP>`r'</SAMP>
+<DD>
+Open a file for reading.
+
+<DT><SAMP>`w'</SAMP>
+<DD>
+Open a file for writing.  The previous contents are discared.
+
+<DT><SAMP>`a'</SAMP>
+<DD>
+Open or create a file for writing at the end of the file.
+
+<DT><SAMP>`r+'</SAMP>
+<DD>
+Open an existing file for reading and writing.
+
+<DT><SAMP>`w+'</SAMP>
+<DD>
+Open a file for reading or writing.  The previous contents are
+discarded.
+
+<DT><SAMP>`a+'</SAMP>
+<DD>
+Open or create a file for reading or writing at the end of the
+file.
+</DL>
+
+<P>
+The parameter <VAR>arch</VAR> is a string specifying the default data format
+for the file.  Valid values for <VAR>arch</VAR> are:
+
+</P>
+<DL COMPACT>
+
+<SAMP>`native'</SAMP>
+The format of the current machine (this is the default).
+
+<SAMP>`ieee-le'</SAMP>
+IEEE big endian format.
+
+<SAMP>`ieee-be'</SAMP>
+IEEE little endian format.
+
+<SAMP>`vaxd'</SAMP>
+VAX D floating format.
+
+<SAMP>`vaxg'</SAMP>
+VAX G floating format.
+
+<SAMP>`cray'</SAMP>
+Cray floating format.
+</DL>
+
+<P>
+however, conversions are currently only supported for <SAMP>`native'</SAMP>
+<SAMP>`ieee-be'</SAMP>, and <SAMP>`ieee-le'</SAMP> formats.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>fclose</B> <I>(<VAR>fid</VAR>)</I>
+<DD><A NAME="IDX485"></A>
+Closes the specified file.  If an error is encountered while trying to
+close the file, an error message is printed and <CODE>fclose</CODE> returns
+0.  Otherwise, it returns 1.
+</DL>
+
+</P>
+
+
+<H3><A NAME="SEC107" HREF="octave_toc.html#TOC107">Simple Output</A></H3>
+
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>fputs</B> <I>(<VAR>fid</VAR>, <VAR>string</VAR>)</I>
+<DD><A NAME="IDX486"></A>
+Write a string to a file with no formatting.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>puts</B> <I>(<VAR>string</VAR>)</I>
+<DD><A NAME="IDX487"></A>
+Write a string to the standard output with no formatting.
+</DL>
+
+</P>
+
+
+<H3><A NAME="SEC108" HREF="octave_toc.html#TOC108">Line-Oriented Input</A></H3>
+
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>fgetl</B> <I>(<VAR>fid</VAR>, <VAR>len</VAR>)</I>
+<DD><A NAME="IDX488"></A>
+Read characters from a file, stopping at the first newline character
+that is encountered or after <VAR>len</VAR> characters have been read, and
+returning the characters as a string.  The newline is not included in
+the returned value.
+
+</P>
+<P>
+If <VAR>len</VAR> is omitted, <CODE>fgetl</CODE> reads until the next newline
+character.
+
+</P>
+<P>
+If there are no more characters to read, <CODE>fgetl</CODE> returns -1.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>fgets</B> <I>(<VAR>fid</VAR>, <VAR>len</VAR>)</I>
+<DD><A NAME="IDX489"></A>
+Read characters from a file, stopping at the first newline character
+that is encountered or after <VAR>len</VAR> characters have been read, and
+returning the characters as a string.  The newline is included in the
+returned value.
+
+</P>
+<P>
+If <VAR>len</VAR> is omitted, <CODE>fgets</CODE> reads until the next newline
+character.
+
+</P>
+<P>
+If there are no more characters to read, <CODE>fgets</CODE> returns -1.
+</DL>
+
+</P>
+
+
+<H3><A NAME="SEC109" HREF="octave_toc.html#TOC109">Formatted Output</A></H3>
+
+<P>
+This section describes how to call <CODE>printf</CODE> and related functions.
+
+</P>
+<P>
+The following functions are available for formatted output.  They are
+modelled after the C language functions of the same name, but they
+interpret the format template differently in order to improve the
+performance of printing vector and matrix values.
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>printf</B> <I>(<VAR>template</VAR>, ...)</I>
+<DD><A NAME="IDX490"></A>
+The <CODE>printf</CODE> function prints the optional arguments under the
+control of the template string <VAR>template</VAR> to the stream
+<CODE>stdout</CODE>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>fprintf</B> <I>(<VAR>fid</VAR>, <VAR>template</VAR>, ...)</I>
+<DD><A NAME="IDX491"></A>
+This function is just like <CODE>printf</CODE>, except that the output is
+written to the stream <VAR>fid</VAR> instead of <CODE>stdout</CODE>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>sprintf</B> <I>(<VAR>template</VAR>, ...)</I>
+<DD><A NAME="IDX492"></A>
+This is like <CODE>printf</CODE>, except that the output is returned as a
+string.  Unlike the C library function, which requires you to provide a
+suitably sized string as an argument, Octave's <CODE>sprintf</CODE> function
+returns the string, automatically sized to hold all of the items
+converted.
+</DL>
+
+</P>
+<P>
+The <CODE>printf</CODE> function can be used to print any number of arguments.
+The template string argument you supply in a call provides
+information not only about the number of additional arguments, but also
+about their types and what style should be used for printing them.
+
+</P>
+<P>
+Ordinary characters in the template string are simply written to the
+output stream as-is, while <STRONG>conversion specifications</STRONG> introduced by
+a <SAMP>`%'</SAMP> character in the template cause subsequent arguments to be
+formatted and written to the output stream.  For example,
+<A NAME="IDX493"></A>
+
+</P>
+
+<PRE>
+pct = 37;
+filename = "foo.txt";
+printf ("Processing of `%s' is %d%% finished.\nPlease be patient.\n",
+        filename, pct);
+</PRE>
+
+<P>
+produces output like
+
+</P>
+
+<PRE>
+Processing of `foo.txt' is 37% finished.
+Please be patient.
+</PRE>
+
+<P>
+This example shows the use of the <SAMP>`%d'</SAMP> conversion to specify that a
+scalar argument should be printed in decimal notation, the <SAMP>`%s'</SAMP>
+conversion to specify printing of a string argument, and the <SAMP>`%%'</SAMP>
+conversion to print a literal <SAMP>`%'</SAMP> character.
+
+</P>
+<P>
+There are also conversions for printing an integer argument as an
+unsigned value in octal, decimal, or hexadecimal radix (<SAMP>`%o'</SAMP>,
+<SAMP>`%u'</SAMP>, or <SAMP>`%x'</SAMP>, respectively); or as a character value
+(<SAMP>`%c'</SAMP>).
+
+</P>
+<P>
+Floating-point numbers can be printed in normal, fixed-point notation
+using the <SAMP>`%f'</SAMP> conversion or in exponential notation using the
+<SAMP>`%e'</SAMP> conversion.  The <SAMP>`%g'</SAMP> conversion uses either <SAMP>`%e'</SAMP>
+or <SAMP>`%f'</SAMP> format, depending on what is more appropriate for the
+magnitude of the particular number.
+
+</P>
+<P>
+You can control formatting more precisely by writing <STRONG>modifiers</STRONG>
+between the <SAMP>`%'</SAMP> and the character that indicates which conversion
+to apply.  These slightly alter the ordinary behavior of the conversion.
+For example, most conversion specifications permit you to specify a
+minimum field width and a flag indicating whether you want the result
+left- or right-justified within the field.
+
+</P>
+<P>
+The specific flags and modifiers that are permitted and their
+interpretation vary depending on the particular conversion.  They're all
+described in more detail in the following sections.
+
+</P>
+
+
+<H3><A NAME="SEC110" HREF="octave_toc.html#TOC110">Output Conversion for Matrices</A></H3>
+
+<P>
+When given a matrix value, Octave's formatted output functions cycle
+through the format template until all the values in the matrix have been
+printed.  For example,
+
+</P>
+
+<PRE>
+printf ("%4.2f %10.2e %8.4g\n", hilb (3));
+
+     -| 1.00   5.00e-01   0.3333
+     -| 0.50   3.33e-01     0.25
+     -| 0.33   2.50e-01      0.2
+</PRE>
+
+<P>
+If more than one value is to be printed in a single call, the output
+functions do not return to the beginning of the format template when
+moving on from one value to the next.  This can lead to confusing output
+if the number of elements in the matrices are not exact multiples of the
+number of conversions in the format template.  For example,
+
+</P>
+
+<PRE>
+printf ("%4.2f %10.2e %8.4g\n", [1, 2], [3, 4]);
+
+     -| 1.00   2.00e+00        3
+     -| 4.00
+</PRE>
+
+<P>
+If this is not what you want, use a series of calls instead of just one.
+
+</P>
+
+
+<H3><A NAME="SEC111" HREF="octave_toc.html#TOC111">Output Conversion Syntax</A></H3>
+
+<P>
+This section provides details about the precise syntax of conversion
+specifications that can appear in a <CODE>printf</CODE> template
+string.
+
+</P>
+<P>
+Characters in the template string that are not part of a
+conversion specification are printed as-is to the output stream.
+
+</P>
+<P>
+The conversion specifications in a <CODE>printf</CODE> template string have
+the general form:
+
+</P>
+
+<PRE>
+% <VAR>flags</VAR> <VAR>width</VAR> [ . <VAR>precision</VAR> ] <VAR>type</VAR> <VAR>conversion</VAR>
+</PRE>
+
+<P>
+For example, in the conversion specifier <SAMP>`%-10.8ld'</SAMP>, the <SAMP>`-'</SAMP>
+is a flag, <SAMP>`10'</SAMP> specifies the field width, the precision is
+<SAMP>`8'</SAMP>, the letter <SAMP>`l'</SAMP> is a type modifier, and <SAMP>`d'</SAMP> specifies
+the conversion style.  (This particular type specifier says to print a
+numeric argument in decimal notation, with a minimum of 8 digits
+left-justified in a field at least 10 characters wide.)
+
+</P>
+<P>
+In more detail, output conversion specifications consist of an
+initial <SAMP>`%'</SAMP> character followed in sequence by:
+
+</P>
+
+<UL>
+<LI>
+
+Zero or more <STRONG>flag characters</STRONG> that modify the normal behavior of
+the conversion specification.
+<A NAME="IDX494"></A>
+
+<LI>
+
+An optional decimal integer specifying the <STRONG>minimum field width</STRONG>.
+If the normal conversion produces fewer characters than this, the field
+is padded with spaces to the specified width.  This is a <EM>minimum</EM>
+value; if the normal conversion produces more characters than this, the
+field is <EM>not</EM> truncated.  Normally, the output is right-justified
+within the field.
+<A NAME="IDX495"></A>
+
+You can also specify a field width of <SAMP>`*'</SAMP>.  This means that the
+next argument in the argument list (before the actual value to be
+printed) is used as the field width.  The value is rounded to the
+nearest integer.  If the value is negative, this means to set the
+<SAMP>`-'</SAMP> flag (see below) and to use the absolute value as the field
+width.
+
+<LI>
+
+An optional <STRONG>precision</STRONG> to specify the number of digits to be
+written for the numeric conversions.  If the precision is specified, it
+consists of a period (<SAMP>`.'</SAMP>) followed optionally by a decimal integer
+(which defaults to zero if omitted).
+<A NAME="IDX496"></A>
+
+You can also specify a precision of <SAMP>`*'</SAMP>.  This means that the next
+argument in the argument list (before the actual value to be printed) is
+used as the precision.  The value must be an integer, and is ignored
+if it is negative.
+
+<LI>
+
+An optional <STRONG>type modifier character</STRONG>.  This character is ignored by
+Octave's <CODE>printf</CODE> function, but is recognized to provide
+compatibility with the C language <CODE>printf</CODE>.
+
+<LI>
+
+A character that specifies the conversion to be applied.
+</UL>
+
+<P>
+The exact options that are permitted and how they are interpreted vary 
+between the different conversion specifiers.  See the descriptions of the
+individual conversions for information about the particular options that
+they use.
+
+</P>
+
+
+<H3><A NAME="SEC112" HREF="octave_toc.html#TOC112">Table of Output Conversions</A></H3>
+<P>
+<A NAME="IDX497"></A>
+
+</P>
+<P>
+Here is a table summarizing what all the different conversions do:
+
+</P>
+<DL COMPACT>
+
+<DT><SAMP>`%d'</SAMP>, <SAMP>`%i'</SAMP>
+<DD>
+Print an integer as a signed decimal number.  See section <A HREF="octave_14.html#SEC113">Integer Conversions</A>, for details.  <SAMP>`%d'</SAMP> and <SAMP>`%i'</SAMP> are synonymous for
+output, but are different when used with <CODE>scanf</CODE> for input
+(see section <A HREF="octave_14.html#SEC118">Table of Input Conversions</A>).
+
+<DT><SAMP>`%o'</SAMP>
+<DD>
+Print an integer as an unsigned octal number.  See section <A HREF="octave_14.html#SEC113">Integer Conversions</A>, for details.
+
+<DT><SAMP>`%u'</SAMP>
+<DD>
+Print an integer as an unsigned decimal number.  See section <A HREF="octave_14.html#SEC113">Integer Conversions</A>, for details.
+
+<DT><SAMP>`%x'</SAMP>, <SAMP>`%X'</SAMP>
+<DD>
+Print an integer as an unsigned hexadecimal number.  <SAMP>`%x'</SAMP> uses
+lower-case letters and <SAMP>`%X'</SAMP> uses upper-case.  See section <A HREF="octave_14.html#SEC113">Integer Conversions</A>, for details.
+
+<DT><SAMP>`%f'</SAMP>
+<DD>
+Print a floating-point number in normal (fixed-point) notation.
+See section <A HREF="octave_14.html#SEC114">Floating-Point Conversions</A>, for details.
+
+<DT><SAMP>`%e'</SAMP>, <SAMP>`%E'</SAMP>
+<DD>
+Print a floating-point number in exponential notation.  <SAMP>`%e'</SAMP> uses
+lower-case letters and <SAMP>`%E'</SAMP> uses upper-case.  See section <A HREF="octave_14.html#SEC114">Floating-Point Conversions</A>, for details.
+
+<DT><SAMP>`%g'</SAMP>, <SAMP>`%G'</SAMP>
+<DD>
+Print a floating-point number in either normal (fixed-point) or
+exponential notation, whichever is more appropriate for its magnitude.
+<SAMP>`%g'</SAMP> uses lower-case letters and <SAMP>`%G'</SAMP> uses upper-case.
+See section <A HREF="octave_14.html#SEC114">Floating-Point Conversions</A>, for details.
+
+<DT><SAMP>`%c'</SAMP>
+<DD>
+Print a single character.  See section <A HREF="octave_14.html#SEC115">Other Output Conversions</A>.
+
+<DT><SAMP>`%s'</SAMP>
+<DD>
+Print a string.  See section <A HREF="octave_14.html#SEC115">Other Output Conversions</A>.
+
+<DT><SAMP>`%%'</SAMP>
+<DD>
+Print a literal <SAMP>`%'</SAMP> character.  See section <A HREF="octave_14.html#SEC115">Other Output Conversions</A>.
+</DL>
+
+<P>
+If the syntax of a conversion specification is invalid, unpredictable
+things will happen, so don't do this.  If there aren't enough function
+arguments provided to supply values for all the conversion
+specifications in the template string, or if the arguments are not of
+the correct types, the results are unpredictable.  If you supply more
+arguments than conversion specifications, the extra argument values are
+simply ignored; this is sometimes useful.
+
+</P>
+
+
+<H3><A NAME="SEC113" HREF="octave_toc.html#TOC113">Integer Conversions</A></H3>
+
+<P>
+This section describes the options for the <SAMP>`%d'</SAMP>, <SAMP>`%i'</SAMP>,
+<SAMP>`%o'</SAMP>, <SAMP>`%u'</SAMP>, <SAMP>`%x'</SAMP>, and <SAMP>`%X'</SAMP> conversion
+specifications.  These conversions print integers in various formats.
+
+</P>
+<P>
+The <SAMP>`%d'</SAMP> and <SAMP>`%i'</SAMP> conversion specifications both print an
+numeric argument as a signed decimal number; while <SAMP>`%o'</SAMP>,
+<SAMP>`%u'</SAMP>, and <SAMP>`%x'</SAMP> print the argument as an unsigned octal,
+decimal, or hexadecimal number (respectively).  The <SAMP>`%X'</SAMP> conversion
+specification is just like <SAMP>`%x'</SAMP> except that it uses the characters
+<SAMP>`ABCDEF'</SAMP> as digits instead of <SAMP>`abcdef'</SAMP>.
+
+</P>
+<P>
+The following flags are meaningful:
+
+</P>
+<DL COMPACT>
+
+<DT><SAMP>`-'</SAMP>
+<DD>
+Left-justify the result in the field (instead of the normal
+right-justification).
+
+<DT><SAMP>`+'</SAMP>
+<DD>
+For the signed <SAMP>`%d'</SAMP> and <SAMP>`%i'</SAMP> conversions, print a
+plus sign if the value is positive.
+
+<DT><SAMP>` '</SAMP>
+<DD>
+For the signed <SAMP>`%d'</SAMP> and <SAMP>`%i'</SAMP> conversions, if the result
+doesn't start with a plus or minus sign, prefix it with a space
+character instead.  Since the <SAMP>`+'</SAMP> flag ensures that the result
+includes a sign, this flag is ignored if you supply both of them.
+
+<DT><SAMP>`#'</SAMP>
+<DD>
+For the <SAMP>`%o'</SAMP> conversion, this forces the leading digit to be
+<SAMP>`0'</SAMP>, as if by increasing the precision.  For <SAMP>`%x'</SAMP> or
+<SAMP>`%X'</SAMP>, this prefixes a leading <SAMP>`0x'</SAMP> or <SAMP>`0X'</SAMP> (respectively)
+to the result.  This doesn't do anything useful for the <SAMP>`%d'</SAMP>,
+<SAMP>`%i'</SAMP>, or <SAMP>`%u'</SAMP> conversions.
+
+<DT><SAMP>`0'</SAMP>
+<DD>
+Pad the field with zeros instead of spaces.  The zeros are placed after
+any indication of sign or base.  This flag is ignored if the <SAMP>`-'</SAMP>
+flag is also specified, or if a precision is specified.
+</DL>
+
+<P>
+If a precision is supplied, it specifies the minimum number of digits to
+appear; leading zeros are produced if necessary.  If you don't specify a
+precision, the number is printed with as many digits as it needs.  If
+you convert a value of zero with an explicit precision of zero, then no
+characters at all are produced.
+
+</P>
+
+
+<H3><A NAME="SEC114" HREF="octave_toc.html#TOC114">Floating-Point Conversions</A></H3>
+
+<P>
+This section discusses the conversion specifications for floating-point
+numbers: the <SAMP>`%f'</SAMP>, <SAMP>`%e'</SAMP>, <SAMP>`%E'</SAMP>, <SAMP>`%g'</SAMP>, and <SAMP>`%G'</SAMP>
+conversions.
+
+</P>
+<P>
+The <SAMP>`%f'</SAMP> conversion prints its argument in fixed-point notation,
+producing output of the form
+[<CODE>-</CODE>]<VAR>ddd</VAR><CODE>.</CODE><VAR>ddd</VAR>,
+where the number of digits following the decimal point is controlled
+by the precision you specify.
+
+</P>
+<P>
+The <SAMP>`%e'</SAMP> conversion prints its argument in exponential notation,
+producing output of the form
+[<CODE>-</CODE>]<VAR>d</VAR><CODE>.</CODE><VAR>ddd</VAR><CODE>e</CODE>[<CODE>+</CODE>|<CODE>-</CODE>]<VAR>dd</VAR>.
+Again, the number of digits following the decimal point is controlled by
+the precision.  The exponent always contains at least two digits.  The
+<SAMP>`%E'</SAMP> conversion is similar but the exponent is marked with the letter
+<SAMP>`E'</SAMP> instead of <SAMP>`e'</SAMP>.
+
+</P>
+<P>
+The <SAMP>`%g'</SAMP> and <SAMP>`%G'</SAMP> conversions print the argument in the style
+of <SAMP>`%e'</SAMP> or <SAMP>`%E'</SAMP> (respectively) if the exponent would be less
+than -4 or greater than or equal to the precision; otherwise they use the
+<SAMP>`%f'</SAMP> style.  Trailing zeros are removed from the fractional portion
+of the result and a decimal-point character appears only if it is
+followed by a digit.
+
+</P>
+<P>
+The following flags can be used to modify the behavior:
+
+</P>
+<DL COMPACT>
+
+<DT><SAMP>`-'</SAMP>
+<DD>
+Left-justify the result in the field.  Normally the result is
+right-justified.
+
+<DT><SAMP>`+'</SAMP>
+<DD>
+Always include a plus or minus sign in the result.
+
+<DT><SAMP>` '</SAMP>
+<DD>
+If the result doesn't start with a plus or minus sign, prefix it with a
+space instead.  Since the <SAMP>`+'</SAMP> flag ensures that the result includes
+a sign, this flag is ignored if you supply both of them.
+
+<DT><SAMP>`#'</SAMP>
+<DD>
+Specifies that the result should always include a decimal point, even
+if no digits follow it.  For the <SAMP>`%g'</SAMP> and <SAMP>`%G'</SAMP> conversions,
+this also forces trailing zeros after the decimal point to be left
+in place where they would otherwise be removed.
+
+<DT><SAMP>`0'</SAMP>
+<DD>
+Pad the field with zeros instead of spaces; the zeros are placed
+after any sign.  This flag is ignored if the <SAMP>`-'</SAMP> flag is also
+specified.
+</DL>
+
+<P>
+The precision specifies how many digits follow the decimal-point
+character for the <SAMP>`%f'</SAMP>, <SAMP>`%e'</SAMP>, and <SAMP>`%E'</SAMP> conversions.  For
+these conversions, the default precision is <CODE>6</CODE>.  If the precision
+is explicitly <CODE>0</CODE>, this suppresses the decimal point character
+entirely.  For the <SAMP>`%g'</SAMP> and <SAMP>`%G'</SAMP> conversions, the precision
+specifies how many significant digits to print.  Significant digits are
+the first digit before the decimal point, and all the digits after it.
+If the precision is <CODE>0</CODE> or not specified for <SAMP>`%g'</SAMP> or
+<SAMP>`%G'</SAMP>, it is treated like a value of <CODE>1</CODE>.  If the value being
+printed cannot be expressed precisely in the specified number of digits,
+the value is rounded to the nearest number that fits.
+
+</P>
+
+
+<H3><A NAME="SEC115" HREF="octave_toc.html#TOC115">Other Output Conversions</A></H3>
+
+<P>
+This section describes miscellaneous conversions for <CODE>printf</CODE>.
+
+</P>
+<P>
+The <SAMP>`%c'</SAMP> conversion prints a single character.  The <SAMP>`-'</SAMP> 
+flag can be used to specify left-justification in the field, but no
+other flags are defined, and no precision or type modifier can be given.
+For example:
+
+</P>
+
+<PRE>
+printf ("%c%c%c%c%c", "h", "e", "l", "l", "o");
+</PRE>
+
+<P>
+prints <SAMP>`hello'</SAMP>.
+
+</P>
+<P>
+The <SAMP>`%s'</SAMP> conversion prints a string.  The corresponding argument
+must be a string.  A precision can be specified to indicate the maximum
+number of characters to write; otherwise characters in the string up to
+but not including the terminating null character are written to the
+output stream.  The <SAMP>`-'</SAMP> flag can be used to specify
+left-justification in the field, but no other flags or type modifiers
+are defined for this conversion.  For example:
+
+</P>
+
+<PRE>
+printf ("%3s%-6s", "no", "where");
+</PRE>
+
+<P>
+prints <SAMP>` nowhere '</SAMP> (note the leading and trailing spaces).
+
+</P>
+
+
+<H3><A NAME="SEC116" HREF="octave_toc.html#TOC116">Formatted Input</A></H3>
+
+<P>
+Octave provides the <CODE>scanf</CODE>, <CODE>fscanf</CODE>, and <CODE>sscanf</CODE>
+functions to read formatted input.  There are two forms of each of these
+functions.  One can be used to extract vectors of data from a file, and
+the other is more `C-like'.
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U> [<VAR>val</VAR>, <VAR>count</VAR>] = <B>fscanf</B> <I>(<VAR>fid</VAR>, <VAR>template</VAR>, <VAR>size</VAR>)</I>
+<DD><A NAME="IDX498"></A>
+<DT><U>Built-in Function:</U> [<VAR>v1</VAR>, <VAR>v2</VAR>, ...] =  <B>fscanf</B> <I>(<VAR>fid</VAR>, <VAR>template</VAR>, "C")</I>
+<DD><A NAME="IDX499"></A>
+In the first form, read from <VAR>fid</VAR> according to <VAR>template</VAR>,
+returning the result in the matrix <VAR>val</VAR>.
+
+</P>
+<P>
+The optional argument <VAR>size</VAR> specifies the amount of data to read
+and may be one of
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>Inf</CODE>
+<DD>
+Read as much as possible, returning a column vector.
+
+<DT><CODE><VAR>nr</VAR></CODE>
+<DD>
+<DT><CODE>[<VAR>nr</VAR>, Inf]</CODE>
+<DD>
+Read as much as possible, returning a matrix with <VAR>nr</VAR> rows.  If the
+number of elements read is not an exact multiple of <VAR>nr</VAR>, the last
+column is padded with zeros.
+
+<DT><CODE>[<VAR>nr</VAR>, <VAR>nc</VAR>]</CODE>
+<DD>
+Read up to <CODE><VAR>nr</VAR> * <VAR>nc</VAR></CODE> elements, returning a matrix with
+<VAR>nr</VAR> rows.  If the number of elements read is not an exact multiple
+of <VAR>nr</VAR>, the last column is padded with zeros.
+</DL>
+
+<P>
+If <VAR>size</VAR> is omitted, a value of <CODE>Inf</CODE> is assumed.
+
+</P>
+<P>
+A string is returned if <VAR>template</VAR> specifies only character
+conversions.
+
+</P>
+<P>
+The number of items successfully read is returned in <VAR>count</VAR>.
+
+</P>
+<P>
+In the second form, read from <VAR>fid</VAR> according to <VAR>template</VAR>,
+with each conversion specifier in <VAR>template</VAR> corresponding to a
+single scalar return value.  This form is more `C-like', and also
+compatible with previous versions of Octave.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U> [<VAR>val</VAR>, <VAR>count</VAR>] = <B>sscanf</B> <I>(<VAR>string</VAR>, <VAR>template</VAR>, <VAR>size</VAR>)</I>
+<DD><A NAME="IDX500"></A>
+<DT><U>Built-in Function:</U> [<VAR>v1</VAR>, <VAR>v2</VAR>, ...] =  <B>sscanf</B> <I>(<VAR>string</VAR>, <VAR>template</VAR>, "C")</I>
+<DD><A NAME="IDX501"></A>
+This is like <CODE>fscanf</CODE>, except that the characters are taken from the
+string <VAR>string</VAR> instead of from a stream.  Reaching the end of the
+string is treated as an end-of-file condition.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U> [<VAR>val</VAR>, <VAR>count</VAR>] = <B>scanf</B> <I>(<VAR>template</VAR>, <VAR>size</VAR>)</I>
+<DD><A NAME="IDX502"></A>
+<DT><U>Built-in Function:</U> [<VAR>v1</VAR>, <VAR>v2</VAR>, ...] =  <B>scanf</B> <I>(<VAR>template</VAR>, "C")</I>
+<DD><A NAME="IDX503"></A>
+This is equivalent to calling <CODE>fscanf</CODE> with <VAR>fid</VAR> = <CODE>stdin</CODE>.
+
+</P>
+<P>
+It is currently not useful to call <CODE>scanf</CODE> in interactive
+programs.
+</DL>
+
+</P>
+<P>
+Calls to <CODE>scanf</CODE> are superficially similar to calls to
+<CODE>printf</CODE> in that arbitrary arguments are read under the control of
+a template string.  While the syntax of the conversion specifications in
+the template is very similar to that for <CODE>printf</CODE>, the
+interpretation of the template is oriented more towards free-format
+input and simple pattern matching, rather than fixed-field formatting.
+For example, most <CODE>scanf</CODE> conversions skip over any amount of
+"white space" (including spaces, tabs, and newlines) in the input
+file, and there is no concept of precision for the numeric input
+conversions as there is for the corresponding output conversions.
+Ordinarily, non-whitespace characters in the template are expected to
+match characters in the input stream exactly.
+<A NAME="IDX504"></A>
+
+</P>
+<P>
+When a <STRONG>matching failure</STRONG> occurs, <CODE>scanf</CODE> returns immediately,
+leaving the first non-matching character as the next character to be
+read from the stream, and <CODE>scanf</CODE> returns all the items that were
+successfully converted.
+<A NAME="IDX505"></A>
+
+</P>
+<P>
+The formatted input functions are not used as frequently as the
+formatted output functions.  Partly, this is because it takes some care
+to use them properly.  Another reason is that it is difficult to recover
+from a matching error.
+
+</P>
+
+
+<H3><A NAME="SEC117" HREF="octave_toc.html#TOC117">Input Conversion Syntax</A></H3>
+
+<P>
+A <CODE>scanf</CODE> template string is a string that contains ordinary
+multibyte characters interspersed with conversion specifications that
+start with <SAMP>`%'</SAMP>.
+
+</P>
+<P>
+Any whitespace character in the template causes any number of whitespace
+characters in the input stream to be read and discarded.  The whitespace
+characters that are matched need not be exactly the same whitespace
+characters that appear in the template string.  For example, write
+<SAMP>` , '</SAMP> in the template to recognize a comma with optional whitespace
+before and after.
+
+</P>
+<P>
+Other characters in the template string that are not part of conversion
+specifications must match characters in the input stream exactly; if
+this is not the case, a matching failure occurs.
+
+</P>
+<P>
+The conversion specifications in a <CODE>scanf</CODE> template string
+have the general form:
+
+</P>
+
+<PRE>
+% <VAR>flags</VAR> <VAR>width</VAR> <VAR>type</VAR> <VAR>conversion</VAR>
+</PRE>
+
+<P>
+In more detail, an input conversion specification consists of an initial
+<SAMP>`%'</SAMP> character followed in sequence by:
+
+</P>
+
+<UL>
+<LI>
+
+An optional <STRONG>flag character</STRONG> <SAMP>`*'</SAMP>, which says to ignore the text
+read for this specification.  When <CODE>scanf</CODE> finds a conversion
+specification that uses this flag, it reads input as directed by the
+rest of the conversion specification, but it discards this input, does
+not use a pointer argument, and does not increment the count of
+successful assignments.
+<A NAME="IDX506"></A>
+
+<LI>
+
+An optional decimal integer that specifies the <STRONG>maximum field
+width</STRONG>.  Reading of characters from the input stream stops either when
+this maximum is reached or when a non-matching character is found,
+whichever happens first.  Most conversions discard initial whitespace
+characters (those that don't are explicitly documented), and these
+discarded characters don't count towards the maximum field width.
+<A NAME="IDX507"></A>
+
+<LI>
+
+An optional type modifier character.  This character is ignored by
+Octave's <CODE>scanf</CODE> function, but is recognized to provide
+compatibility with the C language <CODE>scanf</CODE>.
+
+<LI>
+
+A character that specifies the conversion to be applied.
+</UL>
+
+<P>
+The exact options that are permitted and how they are interpreted vary 
+between the different conversion specifiers.  See the descriptions of the
+individual conversions for information about the particular options that
+they allow.
+
+</P>
+
+
+<H3><A NAME="SEC118" HREF="octave_toc.html#TOC118">Table of Input Conversions</A></H3>
+<P>
+<A NAME="IDX508"></A>
+
+</P>
+<P>
+Here is a table that summarizes the various conversion specifications:
+
+</P>
+<DL COMPACT>
+
+<DT><SAMP>`%d'</SAMP>
+<DD>
+Matches an optionally signed integer written in decimal.  See section <A HREF="octave_14.html#SEC119">Numeric Input Conversions</A>.
+
+<DT><SAMP>`%i'</SAMP>
+<DD>
+Matches an optionally signed integer in any of the formats that the C
+language defines for specifying an integer constant.  See section <A HREF="octave_14.html#SEC119">Numeric Input Conversions</A>.
+
+<DT><SAMP>`%o'</SAMP>
+<DD>
+Matches an unsigned integer written in octal radix.
+See section <A HREF="octave_14.html#SEC119">Numeric Input Conversions</A>.
+
+<DT><SAMP>`%u'</SAMP>
+<DD>
+Matches an unsigned integer written in decimal radix.
+See section <A HREF="octave_14.html#SEC119">Numeric Input Conversions</A>.
+
+<DT><SAMP>`%x'</SAMP>, <SAMP>`%X'</SAMP>
+<DD>
+Matches an unsigned integer written in hexadecimal radix.
+See section <A HREF="octave_14.html#SEC119">Numeric Input Conversions</A>.
+
+<DT><SAMP>`%e'</SAMP>, <SAMP>`%f'</SAMP>, <SAMP>`%g'</SAMP>, <SAMP>`%E'</SAMP>, <SAMP>`%G'</SAMP>
+<DD>
+Matches an optionally signed floating-point number.  See section <A HREF="octave_14.html#SEC119">Numeric Input Conversions</A>.
+
+<DT><SAMP>`%s'</SAMP>
+<DD>
+Matches a string containing only non-whitespace characters.
+See section <A HREF="octave_14.html#SEC120">String Input Conversions</A>.
+
+<DT><SAMP>`%c'</SAMP>
+<DD>
+Matches a string of one or more characters; the number of characters
+read is controlled by the maximum field width given for the conversion.
+See section <A HREF="octave_14.html#SEC120">String Input Conversions</A>.
+
+<DT><SAMP>`%%'</SAMP>
+<DD>
+This matches a literal <SAMP>`%'</SAMP> character in the input stream.  No
+corresponding argument is used.
+</DL>
+
+<P>
+If the syntax of a conversion specification is invalid, the behavior is
+undefined.  If there aren't enough function arguments provided to supply
+addresses for all the conversion specifications in the template strings
+that perform assignments, or if the arguments are not of the correct
+types, the behavior is also undefined.  On the other hand, extra
+arguments are simply ignored.
+
+</P>
+
+
+<H3><A NAME="SEC119" HREF="octave_toc.html#TOC119">Numeric Input Conversions</A></H3>
+
+<P>
+This section describes the <CODE>scanf</CODE> conversions for reading numeric
+values.
+
+</P>
+<P>
+The <SAMP>`%d'</SAMP> conversion matches an optionally signed integer in decimal
+radix.
+
+</P>
+<P>
+The <SAMP>`%i'</SAMP> conversion matches an optionally signed integer in any of
+the formats that the C language defines for specifying an integer
+constant.
+
+</P>
+<P>
+For example, any of the strings <SAMP>`10'</SAMP>, <SAMP>`0xa'</SAMP>, or <SAMP>`012'</SAMP>
+could be read in as integers under the <SAMP>`%i'</SAMP> conversion.  Each of
+these specifies a number with decimal value <CODE>10</CODE>.
+
+</P>
+<P>
+The <SAMP>`%o'</SAMP>, <SAMP>`%u'</SAMP>, and <SAMP>`%x'</SAMP> conversions match unsigned
+integers in octal, decimal, and hexadecimal radices, respectively.
+
+</P>
+<P>
+The <SAMP>`%X'</SAMP> conversion is identical to the <SAMP>`%x'</SAMP> conversion.  They
+both permit either uppercase or lowercase letters to be used as digits.
+
+</P>
+<P>
+Unlike the C language <CODE>scanf</CODE>, Octave ignores the <SAMP>`h'</SAMP>,
+<SAMP>`l'</SAMP>, and <SAMP>`L'</SAMP> modifiers.
+
+</P>
+
+
+<H3><A NAME="SEC120" HREF="octave_toc.html#TOC120">String Input Conversions</A></H3>
+
+<P>
+This section describes the <CODE>scanf</CODE> input conversions for reading
+string and character values: <SAMP>`%s'</SAMP> and <SAMP>`%c'</SAMP>.  
+
+</P>
+<P>
+The <SAMP>`%c'</SAMP> conversion is the simplest: it matches a fixed number of
+characters, always.  The maximum field with says how many characters to
+read; if you don't specify the maximum, the default is 1.  This
+conversion does not skip over initial whitespace characters.  It reads
+precisely the next <VAR>n</VAR> characters, and fails if it cannot get that
+many.
+
+</P>
+<P>
+The <SAMP>`%s'</SAMP> conversion matches a string of non-whitespace characters.
+It skips and discards initial whitespace, but stops when it encounters
+more whitespace after having read something.
+
+</P>
+<P>
+For example, reading the input:
+
+</P>
+
+<PRE>
+ hello, world
+</PRE>
+
+<P>
+with the conversion <SAMP>`%10c'</SAMP> produces <CODE>" hello, wo"</CODE>, but
+reading the same input with the conversion <SAMP>`%10s'</SAMP> produces
+<CODE>"hello,"</CODE>.
+
+</P>
+
+
+<H3><A NAME="SEC121" HREF="octave_toc.html#TOC121">Binary I/O</A></H3>
+
+<P>
+Octave can read and write binary data using the functions <CODE>fread</CODE>
+and <CODE>fwrite</CODE>, which are patterned after the standard C functions
+with the same names.  The are able to automatically swap the byte order
+of integer data and convert among ths supported floating point formats
+as the data are read.
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U> [<VAR>val</VAR>, <VAR>count</VAR>] = <B>fread</B> <I>(<VAR>fid</VAR>, <VAR>size</VAR>, <VAR>precision</VAR>, <VAR>skip</VAR>, <VAR>arch</VAR>)</I>
+<DD><A NAME="IDX509"></A>
+Read binary data of type <VAR>precision</VAR> from the specified file ID
+<VAR>fid</VAR>.
+
+</P>
+<P>
+The optional argument <VAR>size</VAR> specifies the amount of data to read
+and may be one of
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>Inf</CODE>
+<DD>
+Read as much as possible, returning a column vector.
+
+<DT><CODE><VAR>nr</VAR></CODE>
+<DD>
+<DT><CODE>[<VAR>nr</VAR>, Inf]</CODE>
+<DD>
+Read as much as possible, returning a matrix with <VAR>nr</VAR> rows.  If the
+number of elements read is not an exact multiple of <VAR>nr</VAR>, the last
+column is padded with zeros.
+
+<DT><CODE>[<VAR>nr</VAR>, <VAR>nc</VAR>]</CODE>
+<DD>
+Read up to <CODE><VAR>nr</VAR> * <VAR>nc</VAR></CODE> elements, returning a matrix with
+<VAR>nr</VAR> rows.  If the number of elements read is not an exact multiple
+of <VAR>nr</VAR>, the last column is padded with zeros.
+</DL>
+
+<P>
+If <VAR>size</VAR> is omitted, a value of <CODE>Inf</CODE> is assumed.
+
+</P>
+<P>
+The optional argument <VAR>precision</VAR> is a string specifying the type of
+data to read and may be one of
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>"char"</CODE>
+<DD>
+<DT><CODE>"char*1"</CODE>
+<DD>
+<DT><CODE>"integer*1"</CODE>
+<DD>
+<DT><CODE>"int8"</CODE>
+<DD>
+Single character.
+
+<DT><CODE>"signed char"</CODE>
+<DD>
+<DT><CODE>"schar"</CODE>
+<DD>
+Signed character.
+
+<DT><CODE>"unsigned char"</CODE>
+<DD>
+<DT><CODE>"uchar"</CODE>
+<DD>
+Unsigned character.
+
+<DT><CODE>"short"</CODE>
+<DD>
+Short integer.
+
+<DT><CODE>"unsigned short"</CODE>
+<DD>
+<DT><CODE>"ushort"</CODE>
+<DD>
+Unsigned short integer.
+
+<DT><CODE>"int"</CODE>
+<DD>
+Integer.
+
+<DT><CODE>"unsigned int"</CODE>
+<DD>
+<DT><CODE>"uint"</CODE>
+<DD>
+Unsigned integer.
+
+<DT><CODE>"long"</CODE>
+<DD>
+Long integer.
+
+<DT><CODE>"unsigned long"</CODE>
+<DD>
+<DT><CODE>"ulong"</CODE>
+<DD>
+Unsigned long integer.
+
+<DT><CODE>"float"</CODE>
+<DD>
+<DT><CODE>"float32"</CODE>
+<DD>
+<DT><CODE>"real*4"</CODE>
+<DD>
+Single precision float.
+
+<DT><CODE>"double"</CODE>
+<DD>
+<DT><CODE>"float64"</CODE>
+<DD>
+<DT><CODE>"real*8"</CODE>
+<DD>
+Double precision float.
+
+<DT><CODE>"integer*2"</CODE>
+<DD>
+<DT><CODE>"int16"</CODE>
+<DD>
+Two byte integer.
+
+<DT><CODE>"integer*4"</CODE>
+<DD>
+<DT><CODE>"int32"</CODE>
+<DD>
+Four byte integer.
+</DL>
+
+<P>
+The default precision is <CODE>"uchar"</CODE>.
+
+</P>
+<P>
+The optional argument <VAR>skip</VAR> specifies the number of bytes to skip
+before each element is read.  If it is not specified, a value of 0 is
+assumed.
+
+</P>
+<P>
+The optional argument <VAR>arch</VAR> is a string specifying the data format
+for the file.  Valid values are
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>"native"</CODE>
+<DD>
+The format of the current machine.
+
+<DT><CODE>"ieee-le"</CODE>
+<DD>
+IEEE big endian.
+
+<DT><CODE>"ieee-be"</CODE>
+<DD>
+IEEE little endian.
+
+<DT><CODE>"vaxd"</CODE>
+<DD>
+VAX D floating format.
+
+<DT><CODE>"vaxg"</CODE>
+<DD>
+VAX G floating format.
+
+<DT><CODE>"cray"</CODE>
+<DD>
+Cray floating format.
+</DL>
+
+<P>
+Conversions are currently only supported for <CODE>"ieee-be"</CODE> and
+<CODE>"ieee-le"</CODE> formats.
+
+</P>
+<P>
+The data read from the file is returned in <VAR>val</VAR>, and the number of
+values read is returned in <CODE>count</CODE>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U> <VAR>count</VAR> = <B>fwrite</B> <I>(<VAR>fid</VAR>, <VAR>data</VAR>, <VAR>precision</VAR>, <VAR>skip</VAR>, <VAR>arch</VAR>)</I>
+<DD><A NAME="IDX510"></A>
+Write data in binary form of type <VAR>precision</VAR> to the specified file
+ID <VAR>fid</VAR>, returning the number of values successfully written to the
+file.
+
+</P>
+<P>
+The argument <VAR>data</VAR> is a matrix of values that are to be written to
+the file.  The values are extracted in column-major order.
+
+</P>
+<P>
+The remaining arguments <VAR>precision</VAR>, <VAR>skip</VAR>, and <VAR>arch</VAR> are
+optional, and are interpreted as described for <CODE>fread</CODE>.
+
+</P>
+<P>
+The behavior of <CODE>fwrite</CODE> is undefined if the values in <VAR>data</VAR>
+are too large to fit in the specified precision.
+</DL>
+
+</P>
+
+
+<H3><A NAME="SEC122" HREF="octave_toc.html#TOC122">Temporary Files</A></H3>
+
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>tmpnam</B> <I>()</I>
+<DD><A NAME="IDX511"></A>
+Return a unique temporary file name as a string.
+
+</P>
+<P>
+Since the named file is not opened, by <CODE>tmpnam</CODE>, it
+is possible (though relatively unlikely) that it will not be available
+by the time your program attempts to open it.
+</DL>
+
+</P>
+
+
+<H3><A NAME="SEC123" HREF="octave_toc.html#TOC123">End of File and Errors</A></H3>
+
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>feof</B> <I>(<VAR>fid</VAR>)</I>
+<DD><A NAME="IDX512"></A>
+Return 1 if an end-of-file condition has been encountered for a given
+file and 0 otherwise.  Note that it will only return 1 if the end of the
+file has already been encountered, not if the next read operation will
+result in an end-of-file condition.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>ferror</B> <I>(<VAR>fid</VAR>)</I>
+<DD><A NAME="IDX513"></A>
+Return 1 if an error condition has been encountered for a given file
+and 0 otherwise.  Note that it will only return 1 if an error has
+already been encountered, not if the next operation will result in an
+error condition.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>freport</B> <I>()</I>
+<DD><A NAME="IDX514"></A>
+Print a list of which files have been opened, and whether they are open
+for reading, writing, or both.  For example,
+
+</P>
+
+<PRE>
+freport ()
+
+     -|  number  mode  name
+     -| 
+     -|       0     r  stdin
+     -|       1     w  stdout
+     -|       2     w  stderr
+     -|       3     r  myfile
+</PRE>
+
+</DL>
+
+
+
+<H3><A NAME="SEC124" HREF="octave_toc.html#TOC124">File Positioning</A></H3>
+
+<P>
+Three functions are available for setting and determining the position of
+the file pointer for a given file.
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>ftell</B> <I>(<VAR>fid</VAR>)</I>
+<DD><A NAME="IDX515"></A>
+Return the position of the file pointer as the number of characters
+from the beginning of the file <VAR>fid</VAR>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>fseek</B> <I>(<VAR>fid</VAR>, <VAR>offset</VAR>, <VAR>origin</VAR>)</I>
+<DD><A NAME="IDX516"></A>
+Set the file pointer to any location within the file <VAR>fid</VAR>.  The
+pointer is positioned <VAR>offset</VAR> characters from the <VAR>origin</VAR>,
+which may be one of the predefined variables <CODE>SEEK_CUR</CODE> (current
+position), <CODE>SEEK_SET</CODE> (beginning), or <CODE>SEEK_END</CODE> (end of
+file). If <VAR>origin</VAR> is omitted, <CODE>SEEK_SET</CODE> is assumed.  The
+offset must be zero, or a value returned by <CODE>ftell</CODE> (in which case
+<VAR>origin</VAR> must be <CODE>SEEK_SET</CODE>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>SEEK_SET</B>
+<DD><A NAME="IDX517"></A>
+<DT><U>Built-in Variable:</U> <B>SEEK_CUR</B>
+<DD><A NAME="IDX518"></A>
+<DT><U>Built-in Variable:</U> <B>SEEK_END</B>
+<DD><A NAME="IDX519"></A>
+These variables may be used as the optional third argument for the
+function <CODE>fseek</CODE>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>frewind</B> <I>(<VAR>fid</VAR>)</I>
+<DD><A NAME="IDX520"></A>
+Move the file pointer to the beginning of the file <VAR>fid</VAR>, returning
+1 for success, and 0 if an error was encountered.  It is equivalent to
+<CODE>fseek (<VAR>fid</VAR>, 0, SEEK_SET)</CODE>.
+</DL>
+
+</P>
+<P>
+The following example stores the current file position in the variable
+<CODE>marker</CODE>, moves the pointer to the beginning of the file, reads
+four characters, and then returns to the original position.
+
+</P>
+
+<PRE>
+marker = ftell (myfile);
+frewind (myfile);
+fourch = fgets (myfile, 4);
+fseek (myfile, marker, SEEK_SET);
+</PRE>
+
+<P><HR><P>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_13.html">previous</A>, <A HREF="octave_15.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+</BODY>
+</HTML>

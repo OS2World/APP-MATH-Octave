@@ -1,0 +1,119 @@
+LIBRARY cruft3 INITINSTANCE TERMINSTANCE
+DESCRIPTION 'cruft3.dll (octave), (c) Klaus Gebhardt 1995-1996'
+
+DATA
+  MULTIPLE NONSHARED
+
+EXPORTS
+;
+; minpack
+;
+  dogleg_     @1
+  dpmpar_     @2
+  enorm_      @3
+  fdjac1_     @4
+  hybrd_      @5
+  hybrd1_     @6
+  hybrj_      @7
+  hybrj1_     @8
+  qform_      @9
+  qrfac_      @10
+  r1mpyq_     @11
+  r1updt_     @12
+;
+; odepack
+;
+  cfode_      @21
+  ewset_      @22
+  intdy_      @23
+  lsode_      @24
+  prepj_      @25
+  solsy_      @26
+  stode_      @27
+  vnorm_      @28
+  xerrwv_     @29
+;
+; quadpack
+;
+  dqagi_      @41
+  dqagie_     @42
+  dqagp_      @43
+  dqagpe_     @44
+  dqelg_      @45
+  dqk15i_     @46
+  dqk21_      @47
+  dqpsrt_     @48
+  xerror_     @49
+;
+; ranlib
+;
+  advnst_     @101
+  genbet_     @102
+  genchi_     @103
+  genexp_     @104
+  genf_       @105
+  gengam_     @106
+  genmn_      @107
+  gennch_     @108
+  gennf_      @109
+  gennor_     @110
+  genprm_     @111
+  genunf_     @112
+  getcgn_     @113
+  getsd_      @114
+  ignbin_     @115
+  ignlgi_     @116
+  ignpoi_     @117
+  ignuin_     @118
+  initgn_     @119
+  inrgcm_     @120
+  lennob_     @121
+  mltmod_     @122
+  phrtsd_     @123
+  qrgnin_     @124
+  ranf_       @125
+  setall_     @126
+  setant_     @127
+  setgmn_     @138
+  setsd_      @129
+  sexpo_      @130
+  sgamma_     @131
+  snorm_      @132
+  dgennor_    @133
+  dgenunf_    @134
+  setcgn_     @135
+  qrgnsn_     @136
+  rgnqsd_     @137
+;
+; villad
+;
+  dfopr_      @61
+  dif_        @62
+  intrp_      @63
+  jcobi_      @64
+  radau_      @65
+  vilerr_     @66
+
+IMPORTS
+  d1mach_=cruft2.1
+  xstopx_=cruft2.3
+  dgbfa_=cruft2.21
+  dgbsl_=cruft2.22
+  dgefa_=cruft2.25
+  dgesl_=cruft2.26
+  spofa_=cruft2.31
+  d_sign=f2c.26
+  i_indx=f2c.50
+  i_len=f2c.51
+  pow_dd=f2c.60
+  pow_di=f2c.61
+  pow_ri=f2c.64
+  r_sign=f2c.83
+  s_cmp=f2c.90
+  s_stop=f2c.94
+  do_fio=f2c.201
+  do_lio=f2c.202
+  e_wsfe=f2c.213
+  e_wsle=f2c.215
+  s_wsfe=f2c.237
+  s_wsle=f2c.239

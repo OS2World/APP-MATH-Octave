@@ -1,0 +1,52 @@
+LIBRARY cruft1 INITINSTANCE TERMINSTANCE
+DESCRIPTION 'cruft1.dll (octave), (c) Klaus Gebhardt 1995-1996'
+
+DATA
+  MULTIPLE NONSHARED
+
+EXPORTS
+;
+; balgen
+;
+  balgen_    @1
+  gradeq_    @2
+  reduce_    @3
+  scaleg_    @4
+;
+; eispack
+;
+  epslon_    @10
+  qzhes_     @11
+  qzit_      @12
+  qzval_     @13
+;
+; fftpack
+;
+  cfftb_     @20
+  cfftb1_    @21
+  cfftf_     @22
+  cfftf1_    @23
+  cffti_     @24
+  cffti1_    @25
+  passb_     @26
+  passb2_    @27
+  passb3_    @28
+  passb4_    @29
+  passb5_    @30
+  passf_     @31
+  passf2_    @32
+  passf3_    @33
+  passf4_    @34
+  passf5_    @35
+;
+; fsqp
+;
+;  ql0001_    @50
+;  ql0002_    @51
+IMPORTS
+  d_lg10=f2c.21
+  d_sign=f2c.26
+  pow_di=f2c.61
+  do_fio=f2c.201
+  e_wsfe=f2c.213
+  s_wsfe=f2c.237

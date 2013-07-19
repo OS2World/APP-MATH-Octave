@@ -1,0 +1,78 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from ./Octave-FAQ.texi on 9 October 1998 -->
+
+<TITLE>Frequently asked questions about Octave (with answers) - Installation Issues and Problems</TITLE>
+</HEAD>
+<BODY>
+Go to the <A HREF="Octave-FAQ_1.html">first</A>, <A HREF="Octave-FAQ_5.html">previous</A>, <A HREF="Octave-FAQ_7.html">next</A>, <A HREF="Octave-FAQ_11.html">last</A> section, <A HREF="Octave-FAQ_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC18" HREF="Octave-FAQ_toc.html#TOC18">Installation Issues and Problems</A></H1>
+
+<P>
+<A NAME="IDX40"></A>
+
+</P>
+<P>
+Octave requires approximately 125MB of disk storage to unpack and
+compile from source (significantly less if you don't compile with
+debugging symbols or create shared libraries).  Once installed, Octave
+requires approximately 65MB of disk space (again, considerably less if
+you don't build shared libraries or the binaries and libraries do not
+include debugging symbols).
+
+</P>
+
+
+
+<H2><A NAME="SEC19" HREF="Octave-FAQ_toc.html#TOC19">What else do I need?</A></H2>
+
+<P>
+<A NAME="IDX41"></A>
+<A NAME="IDX42"></A>
+<A NAME="IDX43"></A>
+<A NAME="IDX44"></A>
+<A NAME="IDX45"></A>
+<A NAME="IDX46"></A>
+
+</P>
+<P>
+To compile Octave, you will need a recent version of GNU Make.  You
+will also need g++ 2.7.2 or later.  Version 2.8.0 or egcs 1.0.x should
+work.  Later versions may work, but C++ is still evolving, so don't be
+too surprised if you run into some trouble.
+
+</P>
+<P>
+It is no longer necessary to have libg++, but you do need to have the
+GNU implementation of libstdc++.  If you are using g++ 2.7.2,
+libstdc++ is distributed along with libg++, but for later versions,
+libstdc++ is distributed separately.  For egcs, libstdc++ is included
+with the compiler distribution.
+
+</P>
+<P>
+&#60;em&#62;You must have gnu make to compile octave&#60;/em&#62;.  Octave's Makefiles
+use features of GNU Make that are not present in other versions of make.
+GNU Make is very portable and easy to install.
+
+</P>
+
+
+<H2><A NAME="SEC20" HREF="Octave-FAQ_toc.html#TOC20">Can I compile Octave with another C++ compiler?</A></H2>
+
+<P>
+Currently, Octave can only be compiled with the GNU C++ compiler.  It
+would be nice to make it possible to compile Octave with other C++
+compilers, but the maintainers do not have sufficient time to devote to
+this.  If you are interested in working to make Octave portable to other
+compilers, please contact bug-octave@bevo.che.wisc.edu.
+
+</P>
+<P><HR><P>
+Go to the <A HREF="Octave-FAQ_1.html">first</A>, <A HREF="Octave-FAQ_5.html">previous</A>, <A HREF="Octave-FAQ_7.html">next</A>, <A HREF="Octave-FAQ_11.html">last</A> section, <A HREF="Octave-FAQ_toc.html">table of contents</A>.
+</BODY>
+</HTML>

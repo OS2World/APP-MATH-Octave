@@ -1,0 +1,23 @@
+# This is the OS/2 makefile for texinfos lib directory.
+# (c) Klaus Gebhardt, 1999
+
+include ../makeconf.os2
+
+SOURCES = alloca.c getopt.c getopt1.c memcpy.c memmove.c \
+	strdup.c strerror.c xmalloc.c xstrdup.c
+
+INCL = getopt.h system.h
+
+OBJECTS = alloca.obj getopt.obj getopt1.obj memcpy.obj memmove.obj \
+	strdup.obj strerror.obj xmalloc.obj xstrdup.obj
+
+all: texinfo.lib
+
+texinfo.lib: $(OBJECTS)
+	emxomfar r texinfo.lib $(OBJECTS)
+
+clean:
+	rm -f *.o *.obj *.a *.lib *.dll *.exe
+
+getopt.obj:	getopt.c getopt.h;	$(CC) $(EFLAGS) -c $< -o $@ -Zomf
+getopt1.obj:	getopt1.c getopt.h;	$(CC) $(EFLAGS) -c $< -o $@ -Zomf

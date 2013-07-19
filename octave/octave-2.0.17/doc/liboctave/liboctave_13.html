@@ -1,0 +1,64 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from ./liboctave.texi on 9 October 1998 -->
+
+<TITLE>Octave C++ Classes - Differential Algebraic Equations</TITLE>
+</HEAD>
+<BODY>
+Go to the <A HREF="liboctave_1.html">first</A>, <A HREF="liboctave_12.html">previous</A>, <A HREF="liboctave_14.html">next</A>, <A HREF="liboctave_18.html">last</A> section, <A HREF="liboctave_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC25" HREF="liboctave_toc.html#TOC25">Differential Algebraic Equations</A></H1>
+<P>
+<A NAME="IDX1009"></A>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> {}DAE <B>(void)</B>
+<DD><A NAME="IDX1010"></A>
+<DT><U>:</U> {}DAE <B>(int</B> <I><VAR>n</VAR>)</I>
+<DD><A NAME="IDX1011"></A>
+<DT><U>:</U> {}DAE <B>(const</B> <I>ColumnVector &#38;<VAR>x</VAR>, double <VAR>time</VAR>, DAEFunc &#38;<VAR>f</VAR>)</I>
+<DD><A NAME="IDX1012"></A>
+<DT><U>:</U> {}DAE <B>(const</B> <I>ColumnVector &#38;<VAR>x</VAR>, ColumnVector &#38;<VAR>xdot</VAR>, double <VAR>time</VAR>, DAEFunc &#38;<VAR>f</VAR>)</I>
+<DD><A NAME="IDX1013"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ColumnVector <B>deriv</B> <I>(void)</I>
+<DD><A NAME="IDX1014"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> virtual void <B>initialize</B> <I>(const ColumnVector &#38;<VAR>x</VAR>, double <VAR>t</VAR>)</I>
+<DD><A NAME="IDX1015"></A>
+<DT><U>:</U> virtual void <B>initialize</B> <I>(const ColumnVector &#38;<VAR>x</VAR>, ColumnVector &#38;<VAR>xdot</VAR>, double <VAR>t</VAR>)</I>
+<DD><A NAME="IDX1016"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> ColumnVector <B>integrate</B> <I>(double <VAR>t</VAR>)</I>
+<DD><A NAME="IDX1017"></A>
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>:</U> Matrix <B>integrate</B> <I>(const ColumnVector &#38;<VAR>tout</VAR>, Matrix &#38;<VAR>xdot_out</VAR>)</I>
+<DD><A NAME="IDX1018"></A>
+<DT><U>:</U> Matrix <B>integrate</B> <I>(const ColumnVector &#38;<VAR>tout</VAR>, Matrix &#38;<VAR>xdot_out</VAR>, const ColumnVector &#38;<VAR>tcrit</VAR>)</I>
+<DD><A NAME="IDX1019"></A>
+</DL>
+<P><HR><P>
+Go to the <A HREF="liboctave_1.html">first</A>, <A HREF="liboctave_12.html">previous</A>, <A HREF="liboctave_14.html">next</A>, <A HREF="liboctave_18.html">last</A> section, <A HREF="liboctave_toc.html">table of contents</A>.
+</BODY>
+</HTML>

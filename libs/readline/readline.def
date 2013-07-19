@@ -1,0 +1,285 @@
+LIBRARY readline INITINSTANCE TERMINSTANCE
+DESCRIPTION 'readline.dll v0.3, Klaus Gebhardt 1995-1996'
+
+DATA
+   MULTIPLE NONSHARED
+
+EXPORTS
+;
+; Manipulation of readline keymaps.
+;
+  rl_make_bare_keymap			@1
+  rl_copy_keymap			@2
+  rl_make_keymap			@3
+  rl_get_keymap_by_name			@4
+  rl_get_keymap				@5
+  rl_set_keymap				@6
+;
+; Keymaps
+;
+  emacs_standard_keymap			@1000
+  emacs_meta_keymap			@1001
+  emacs_ctlx_keymap			@1002
+  emacs_emx_keymap			@1003
+  vi_insertion_keymap			@1004
+  vi_movement_keymap			@1005
+;
+; Most of these functions are bound to keys by default.
+;
+  rl_tilde_expand			@50
+  rl_beg_of_line			@51
+  rl_backward				@52
+  rl_delete				@53
+  rl_end_of_line			@54
+  rl_forward				@55
+  ding					@56
+  rl_newline				@57
+  rl_kill_line				@58
+  rl_clear_screen			@59
+  rl_get_next_history			@60
+  rl_get_previous_history		@61
+  rl_quoted_insert			@62
+  rl_reverse_search_history		@63
+  rl_transpose_chars			@64
+  rl_unix_line_discard			@65
+  rl_unix_word_rubout			@66
+  rl_yank				@67
+  rl_rubout				@68
+  rl_backward_word			@69
+  rl_kill_word				@70
+  rl_forward_word			@71
+  rl_tab_insert				@72
+  rl_yank_pop				@73
+  rl_yank_nth_arg			@74
+  rl_backward_kill_word			@75
+  rl_backward_kill_line			@76
+  rl_transpose_words			@77
+  rl_complete				@78
+  rl_possible_completions		@79
+  rl_insert_completions			@80
+  rl_do_lowercase_version		@81
+  rl_universal_argument			@83
+  rl_abort				@84
+  rl_undo_command			@85
+  rl_revert_line			@86
+  rl_beginning_of_history		@87
+  rl_end_of_history			@88
+  rl_forward_search_history		@89
+  rl_insert				@90
+  rl_upcase_word			@91
+  rl_downcase_word			@92
+  rl_capitalize_word			@93
+  rl_restart_output			@94
+  rl_re_read_init_file			@95
+  rl_dump_functions			@96
+  rl_delete_horizontal_space		@97
+  rl_blink_matching_paren		@98
+  rl_history_search_forward		@100
+  rl_history_search_backward		@101
+  rl_tty_status				@102
+  rl_yank_last_arg			@103
+  _rl_clear_screen			@104
+;
+; Public utility functions.
+;
+  rl_insert_text			@99
+  rl_delete_text			@701
+  rl_kill_text				@702
+  rl_complete_internal			@703
+  rl_expand_prompt			@704
+  rl_initialize				@705
+  rl_set_signals			@706
+  rl_clear_signals			@707
+  _rl_init_argument			@708
+  rl_digit_argument			@82
+  rl_read_key				@710
+  rl_getc				@711
+  rl_stuff_char				@712
+  maybe_save_line			@713
+  maybe_unsave_line			@714
+  maybe_replace_line			@715
+  rl_modifying				@716
+  rl_begin_undo_group			@717
+  rl_end_undo_group			@718
+  rl_add_undo				@719
+  rl_do_undo				@721
+  rl_prep_terminal			@722
+  rl_deprep_terminal			@723
+  rl_read_init_file			@724
+  rl_deprep_term_function		@725
+  rl_resize_terminal			@726
+;
+; Paren matching
+; 
+  rl_insert_close			@150
+;
+; These are *both* defined even when VI_MODE is not.
+;
+  rl_vi_editing_mode			@160
+  rl_emacs_editing_mode			@161
+;
+; Non incremental history searching.
+;
+  rl_noninc_forward_search		@175
+  rl_noninc_reverse_search		@176
+  rl_noninc_forward_search_again	@177
+  rl_noninc_reverse_search_again	@178
+;
+; Things for vi mode.
+;
+  rl_vi_redo				@200
+  rl_vi_tilde_expand			@201
+  rl_vi_movement_mode			@202
+  rl_vi_insertion_mode			@203
+  rl_vi_arg_digit			@204
+  rl_vi_prev_word			@205
+  rl_vi_next_word			@206
+  rl_vi_char_search			@207
+  rl_vi_eof_maybe			@208
+  rl_vi_append_mode			@209
+  rl_vi_put				@210
+  rl_vi_append_eol			@211
+  rl_vi_insert_beg			@212
+  rl_vi_delete				@213
+  rl_insert_comment			@214
+  rl_vi_first_print			@215
+  rl_vi_fword				@216
+  rl_vi_fWord				@217
+  rl_vi_bword				@218
+  rl_vi_bWord				@219
+  rl_vi_eword				@220
+  rl_vi_eWord				@221
+  rl_vi_end_word			@222
+  rl_vi_change_case			@223
+  rl_vi_match				@224
+  rl_vi_bracktype			@225
+  rl_vi_change_char			@226
+  rl_vi_yank_arg			@227
+  rl_vi_search				@228
+  rl_vi_search_again			@229
+  rl_vi_subst				@230
+  rl_vi_overstrike			@231
+  rl_vi_overstrike_delete		@232
+  rl_vi_replace				@233
+  rl_vi_column				@234
+  rl_vi_delete_to			@235
+  rl_vi_change_to			@236
+  rl_vi_yank_to				@237
+  rl_vi_complete			@238
+  rl_vi_fetch_history			@239
+;
+; Keyboard macro commands + ...
+;
+  rl_start_kbd_macro			@280
+  rl_end_kbd_macro			@281
+  rl_call_last_kbd_macro		@282
+  rl_arrow_keys				@296
+  rl_refresh_line			@297
+;
+; The current undo list for RL_LINE_BUFFER.
+;
+  rl_undo_list				@310
+  free_undo_list			@311
+;
+; Well Published Variables
+;
+  rl_readline_name			@1100
+  rl_line_buffer			@1101
+  rl_point				@1102
+  rl_end				@1103
+  rl_terminal_name			@1104
+  rl_instream				@1105
+  rl_outstream				@1106
+  rl_basic_word_break_characters	@1107
+  rl_completer_word_break_characters	@1108
+  rl_completer_quote_characters		@1109
+  rl_special_prefixes			@1110
+  rl_completion_entry_function		@1111
+  rl_ignore_some_completions_function	@1112
+  rl_attempted_completion_function	@1113
+  rl_startup_hook			@1114
+  rl_directory_completion_hook		@1115
+  rl_event_hook				@1116
+;
+; Tilde expansion
+;
+  tilde_expand				@320
+;
+; Tilde Variables That Can be Externally Set
+;
+  tilde_expansion_failure_hook		@2000
+  tilde_additional_prefixes		@2001
+  tilde_additional_suffixes		@2002
+;
+; NOTE: Functions and variables prefixed with `_rl_' are
+; pseudo-global: they are global so they can be shared
+; between files in the readline library, but are not intended
+; to be visible to readline callers.
+;
+; But some programs ...
+;
+  _rl_savestring			@330
+  _rl_output_character_function		@331
+;
+; Well Published Functions
+;
+  readline				@400
+  completion_matches			@401
+  rl_add_defun				@402
+;
+; History
+;
+  add_history				@500
+  append_history			@501
+  current_history			@502
+  history_arg_extract			@503
+  history_expand			@504
+  history_get				@505
+  history_get_history_state		@506
+  history_list				@507
+  history_set_history_state		@508
+  history_set_pos			@509
+  history_search			@510
+  history_search_pos			@511
+  history_total_bytes			@512
+  previous_history			@513
+  next_history				@514
+  read_history				@515
+  read_history_range			@516
+  remove_history			@517
+  replace_history_entry			@518
+  stifle_history			@519
+  unstifle_history			@520
+  using_history				@521
+  where_history				@522
+  write_history				@523
+  history_is_stifled			@524
+  history_search_prefix			@525
+  history_truncate_file			@526
+  get_history_event			@527
+  history_tokenize			@528
+;
+; History Variables
+;
+  history_base				@2200
+  history_length			@2201
+  history_stifled			@2202
+  max_input_history			@2203
+  history_expansion_char		@2204
+  history_subst_char			@2205
+  history_comment_char			@2206
+  history_no_expand_chars		@2207
+  rl_completion_append_character	@2300
+  rl_basic_quote_characters		@2301
+;
+; Things used by other programs
+;
+  term_clrpag				@600
+  crlf					@601
+  screenheight				@602
+  screenwidth				@603
+  tputs					@604
+;
+; set cursor type (OS/2)
+;
+  _setcursortype			@3000

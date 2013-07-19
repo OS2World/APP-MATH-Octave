@@ -1,0 +1,43 @@
+# Makefile for octave's doc subdirectories
+# (c) Klaus Gebhardt, 1994 - 1997
+
+TOPDIR = ../..
+
+include $(TOPDIR)/Makeconf.os2
+
+srcdir = .
+
+SRCS = $(wildcard *.tex) ../conf.tex
+
+all: $(FILE).dvi $(FILE).ps $(FILE) $(FILE).INF
+
+$(FILE).dvi: $(SRCS)
+	cmd /c 'tex386 ^&plain3 \\nonstopmode\\input $(FILE).tex'
+	cmd /c 'tex386 ^&plain3 \\nonstopmode\\input $(FILE).tex'
+	cmd /c 'texindex $(FILE).??'
+	cmd /c 'tex386 ^&plain3 \\nonstopmode\\input $(FILE).tex'
+	cmd /c 'tex386 ^&plain3 \\nonstopmode\\input $(FILE).tex'
+
+$(FILE).ps: $(FILE).dvi
+	-dvips $(FILE)
+
+$(FILE): $(SRCS)
+	-makeinfo $(FILE).tex -o $(FILE)
+
+$(FILE).IPF: $(SRCS)
+	make -f ../makefile-subdirs.os2 FILE=$(FILE) temp-clean
+	-texi2ipf $(FILE).tex > $(FILE).IPF
+
+$(FILE).INF: $(FILE).IPF
+	-ipfc /INF $(FILE).IPF
+
+temp-clean:
+	rm -f $(FILE).cp $(FILE).cps $(FILE).fn $(FILE).fns
+	rm -f $(FILE).ky $(FILE).kys $(FILE).op $(FILE).ops
+	rm -f $(FILE).pg $(FILE).pgs $(FILE).tp $(FILE).tps
+	rm -f $(FILE).vr $(FILE).vrs
+	rm -f $(FILE).aux $(FILE).bbl $(FILE).blg $(FILE).log $(FILE).toc 
+
+clean: temp-clean
+	rm -f $(FILE) $(FILE).i0? $(FILE).i1?
+	rm -f $(FILE).dvi $(FILE).INF $(FILE).IPF $(FILE).ps

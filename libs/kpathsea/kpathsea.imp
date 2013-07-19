@@ -1,0 +1,13 @@
+;
+; kpathsea.imp (created by emximp)
+;
+; -------- kpathsea.def --------
+kpse_path_search        kpathsea 100 ?
+kpse_path_element       kpathsea 101 ?
+kpse_element_dirs       kpathsea 102 ?
+kpse_all_path_search    kpathsea 103 ?
+kpse_path_expand        kpathsea 104 ?
+kpse_set_progname       kpathsea 105 ?
+kpse_expand_default     kpathsea 106 ?
+kpse_clear_dir_cache    kpathsea 107 ?
+kpathsea_debug          kpathsea 1000 ?

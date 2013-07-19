@@ -1,0 +1,82 @@
+<html>
+<title>Comments</title>
+<body bgcolor=#CFCFCF>
+
+
+<center><table align=center border CELLSPACING=10 CELLPADDING=10>
+<tr>
+<td align=center><font size=5><b>Comments</b></font></td>
+<td align=left>
+Comments in Octaves script and function files.
+<p>
+<menu>
+<img src="bullet.gif" align=bottom>
+<a href="octave.html">Octave for OS/2 Homepage.</a><br>
+<img src="bullet.gif" align=bottom>
+<a href="readme.html">Read Me!</a><br>
+<img src="bullet.gif" align=bottom>
+<a href="changes.html">History of Changes.</a><br>
+</menu>
+</td>
+</table></center>
+
+<hr>
+
+
+A <b>comment</b> is some text that is included in a program for the sake
+of human readers, and that is not really part of the program.  Comments
+can explain what the program does, and how it works.  Nearly all
+programming languages have provisions for comments, because programs are
+typically hard to understand without them.
+
+In the Octave language, a comment starts with either the sharp sign
+character, <b>#</b>, or the percent symbol <b>%</b> and continues to the
+end of the line.  The Octave interpreter ignores the rest of a
+line following a sharp sign or percent symbol.  For example, we could
+have put the following into the function <b>f</b>:<p>
+<pre>
+function xdot = f (x, t)
+
+# usage: f (x, t)
+#
+# This function defines the right-hand-side functions for a set of
+# nonlinear differential equations.
+
+r = 0.25
+
+and so on ...
+
+endfunction
+</pre><p>
+
+The <b>help</b> command is able to find the first block
+of comments in a function (even those that are composed directly on the
+command line).  This means that users of Octave can use the same
+commands to get help for built-in functions, and for functions that you
+have defined.  For example, after defining the function <b>f</b> above,
+the command<p>
+<pre>help f</pre><p>
+produces the output<p>
+<pre>
+usage: f (x, t)
+
+This function defines the right-hand-side functions for a set of
+nonlinear differential equations.
+</pre><p>
+
+Although it is possible to put comment lines into keyboard-composed
+throw-away Octave programs, it usually isn't very useful, because the
+purpose of a comment is to help you or another person understand the
+program at a later time.<p>
+
+
+<hr><center><address><em>
+<a href="copyrigh.html">Copyright &copy; 1996, 1997 John W. Eaton.</a>
+</em></address></center>
+<center><address>Modified by 
+<a href="mailto:gebhkla@t-online.de">Klaus Gebhardt</a>
+, 1997</em></address></center>
+
+
+</body>
+</html>

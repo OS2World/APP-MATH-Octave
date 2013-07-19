@@ -1,0 +1,197 @@
+<html>
+<title>Preface</title>
+<body bgcolor=#CFCFCF>
+
+
+<center><table align=center border CELLSPACING=10 CELLPADDING=10>
+<tr>
+<td align=center><font size=5><b>Preface</b></font></td>
+<td align=left>
+This is the original preface in the manual of Octave.<p>
+<menu>
+<img src="bullet.gif" align=bottom>
+<a href="octave.html">Octave for OS/2 Homepage.</a><br>
+<img src="bullet.gif" align=bottom>
+<a href="readme.html">Read Me!</a><br>
+<img src="bullet.gif" align=bottom>
+<a href="changes.html">History of Changes.</a><br>
+</menu>
+</td>
+</table></center>
+
+<hr>
+
+Octave was originally intended to be companion software for an
+undergraduate-level textbook on chemical reactor design being written by
+James B. Rawlings of the University of Wisconsin-Madison and John
+G. Ekerdt of the University of Texas.<p>
+Clearly, Octave is now much more than just another `courseware' package
+with limited utility beyond the classroom.  Although our initial goals
+were somewhat vague, we knew that we wanted to create something that
+would enable students to solve realistic problems, and that they could
+use for many things other than chemical reactor design problems.<p>
+There are those who would say that we should be teaching the students
+Fortran instead, because that is the computer language of engineering,
+but every time we have tried that, the students have spent far too much
+time trying to figure out why their Fortran code crashes and not enough
+time learning about chemical engineering.  With Octave, most students
+pick up the basics quickly, and are using it confidently in just a few
+hours.<p>
+Although it was originally intended to be used to teach reactor design,
+it has been used in several other undergraduate and graduate
+courses in the Chemical Engineering Department at the University of
+Texas, and the math department at the University of Texas has been using
+it for teaching differential equations and linear algebra as well.  If
+you find it useful, please let us know.  We are always interested to
+find out how Octave is being used in other places.<p>
+Virtually everyone thinks that the name Octave has something to do with
+music, but it is actually the name of a former professor of mine who
+wrote a famous textbook on chemical reaction engineering, and who was
+also well known for his ability to do quick `back of the envelope'
+calculations.  We hope that this software will make it possible for many
+people to do more ambitious computations just as easily.<p>
+Everyone is encouraged to share this software with others under the
+terms of the GNU General Public License (see Copying) as described
+at the beginning of this manual.  You are also encouraged to help make
+Octave more useful by writing and contributing additional functions for
+it, and by reporting any problems you may have.<p>
+
+<ul><dt>Many people have already contributed to Octave's development.  In
+addition to John W. Eaton, the following people have helped write parts
+of Octave or helped out in various other ways.</dt><hr>
+<ul>
+<li>
+Thomas Baier (baier@ci.tuwien.ac.at) wrote the original versions of
+<b>popen</b>, <b>pclose</b>, <b>execute</b>, <b>sync_system</b>, and
+<b>async_system</b>.
+
+<p><li>
+Karl Berry (karl@cs.umb.edu) wrote the <b>kpathsea</b> library that
+allows Octave to recursively search directory paths for function and
+script files.
+
+<p><li>
+Georg Beyerle (gbeyerle@awi-potsdam.de) contributed code to save values
+in Matlab's .mat-file format, and has provided many useful bug
+reports and suggestions.
+
+<p><li>
+John Campbell (jcc@bevo.che.wisc.edu) wrote most of the file and
+C-style input and output functions.
+
+<p><li>
+Brian Fox (bfox@gnu.ai.mit.edu) wrote the <b>readline</b> library used
+for command history editing, and the portion of this manual that
+documents it.
+
+<p><li>
+Klaus Gebhardt <gebhardt@wotan.ikp.physik.th-darmstadt.de> ported
+Octave to OS/2 and worked with Michel Juillard <juillard@msh-paris.fr>
+on the port to DOS.
+
+<p><li>
+A. Scottedward Hodel (scotte@eng.auburn.edu) contributed a number
+of functions including <b>expm</b>, <b>qzval</b>, <b>qzhess</b>,
+<b>syl</b>, <b>lyap</b>, and <b>balance</b>.
+
+<p><li>
+Kurt Hornik (Kurt.Hornik@ci.tuwien.ac.at) provided the <b>corrcoef</b>,
+<b>cov</b>, <b>fftconv</b>, <b>fftfilt</b>, <b>gcd</b>, <b>lcd</b>,
+<b>kurtosis</b>, <b>null</b>, <b>orth</b>, <b>poly</b>, <b>polyfit</b>,
+<b>roots</b>, and <b>skewness</b> functions, supplied documentation for
+these and numerous other functions, rewrote the Emacs mode for editing 
+Octave code and provided its documentation, and has helped tremendously
+with testing.  He has also been a constant source of new ideas for
+improving Octave.
+
+<p><li>
+Phil Johnson (johnsonp@nicco.sscnet.ucla.edu) has helped to make Linux
+releases available.
+
+<p><li>
+Michel Juillard <juillard@msh-paris.fr> ported Octave to DOS systems.
+
+<p><li>
+Friedrich Leisch (leisch@ci.tuwien.ac.at) provided the
+<b>mahalanobis</b> function.
+
+<p><li>
+Ken Neighbors (wkn@leland.stanford.edu) has provided many useful bug
+reports and comments on Matlab compatibility.
+
+<p><li>
+Rick Niles (niles@axp745.gsfc.nasa.gov) rewrote Octave's plotting
+functions to add line styles and the ability to specify an unlimited
+number of lines in a single call.  He also continues to track down
+odd incompatibilities and bugs.
+
+<p><li>
+Mark Odegard (meo@sugarland.unocal.com) provided the initial
+implementation of <b>fread</b>, <b>fwrite</b>, <b>feof</b>, and
+<b>ferror</b>.
+
+<p><li>
+Tony Richardson (tony@guts.biomed.uakron.edu) wrote Octave's image
+processing functions as well as most of the original polynomial
+functions.
+
+<p><li>
+R. Bruce Tenison (Bruce.Tenison@eng.auburn.edu) wrote the <b>hess</b> and
+<b>schur</b> functions.
+
+<p><li>
+Teresa Twaroch (twaroch@ci.tuwien.ac.at) provided the functions
+<b>gls</b> and <b>ols</b>.
+
+<p><li>
+Andreas Weingessel (Andreas.Weingessel@ci.tuwien.ac.at) wrote the
+audio functions <b>lin2mu</b>, <b>loadaudio</b>, <b>mu2lin</b>,
+<b>playaudio</b>, <b>record</b>, <b>saveaudio</b>, and <b>setaudio</b>.
+
+<p><li>
+Fook Fah Yap (ffy@eng.cam.ac.uk) provided the <b>fft</b> and
+<b>ifft</b> functions and valuable bug reports for early versions.
+</ul>
+</ul><p>
+
+
+<ul><dt>Special thanks to the following people and organizations for
+supporting the development of Octave:</dt><hr>
+<ul>
+<li>Digital Equipment Corporation, for an equipment grant as part of their
+External Research Program.
+<p><li>Sun Microsystems, Inc., for an Academic Equipment grant.
+<p><li>International Business Machines, Inc., for providing equipment as part
+of a grant to the University of Texas College of Engineering.
+<p><li>Texaco Chemical Company, for providing funding to continue the
+development of this software.
+<p><li>The University of Texas College of Engineering, for providing a
+Challenge for Excellence Research Supplement, and for providing an
+Academic Development Funds grant.
+<p><li>The State of Texas, for providing funding through the Texas
+Advanced Technology Program under Grant No. 003658-078.
+<p><li>Noel Bell, Senior Engineer, Texaco Chemical Company, Austin Texas.
+<p><li>James B. Rawlings, Professor, University of Wisconsin-Madison, Department of Chemical Engineering.
+<p><li>Richard Stallman, for writing GNU.
+</ul>
+</ul><p>
+
+<hr>
+Portions of this document have been adapted from the <b>gawk</b>,
+<b>readline</b>, <b>gcc</b>, and C library manuals, published by the Free
+Software Foundation, 59 Temple Place---Suite 330, Boston, MA
+02111--1307, USA.<p>
+This project would not have been possible without the GNU software used
+in and used to produce Octave.<p>
+
+
+<hr><center><address><em>
+<a href="copyrigh.html">Copyright &copy; 1996, 1997 John W. Eaton.</a>
+</em></address></center>
+<center><address>Modified by 
+<a href="mailto:gebhkla@t-online.de">Klaus Gebhardt</a>
+, 1997</em></address></center>
+
+
+</body>
+</html>

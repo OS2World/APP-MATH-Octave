@@ -1,0 +1,213 @@
+LIBRARY cruft4 INITINSTANCE TERMINSTANCE
+DESCRIPTION 'cruft4.dll (octave), (c) Klaus Gebhardt 1995-1996'
+
+DATA
+  MULTIPLE NONSHARED
+
+EXPORTS
+  dbdsqr_  @1
+  dgebak_  @2
+  dgebal_  @3
+  dgebd2_  @4
+  dgebrd_  @5
+  dgeesx_  @6
+  dgeev_   @7
+  dgehd2_  @8
+  dgehrd_  @9
+  dgelq2_  @10
+  dgelqf_  @11
+  dgelss_  @12
+  dgeqpf_  @13
+  dgeqr2_  @14
+  dgeqrf_  @15
+  dgesv_   @16
+  dgesvd_  @17
+  dgetf2_  @18
+  dgetrf_  @19
+  dgetrs_  @20
+  dhseqr_  @21
+  dlabad_  @22
+  dlabrd_  @23
+  dlacon_  @24
+  dlacpy_  @25
+  dladiv_  @26
+  dlaexc_  @27
+  dlahqr_  @28
+  dlahrd_  @29
+  dlaln2_  @30
+  dlamc1_  @31
+  dlamc2_  @32
+  dlamc3_  @33
+  dlamc4_  @34
+  dlamc5_  @35
+  dlamch_  @36
+  dlange_  @37
+  dlanhs_  @38
+  dlanv2_  @39
+  dlapy2_  @40
+  dlapy3_  @41
+  dlarf_   @42
+  dlarfb_  @43
+  dlarfg_  @44
+  dlarft_  @45
+  dlarfx_  @46
+  dlartg_  @47
+  dlas2_   @48
+  dlascl_  @49
+  dlaset_  @50
+  dlasq1_  @51
+  dlasq2_  @52
+  dlasq3_  @53
+  dlasq4_  @54
+  dlasr_   @55
+  dlasrt_  @56
+  dlassq_  @57
+  dlasv2_  @58
+  dlaswp_  @59
+  dlasy2_  @60
+  dorg2r_  @61
+  dorgbr_  @62
+  dorghr_  @63
+  dorgl2_  @64
+  dorglq_  @65
+  dorgqr_  @66
+  dorm2r_  @67
+  dormbr_  @68
+  dorml2_  @69
+  dormlq_  @70
+  dormqr_  @71
+  drscl_   @72
+  dtrevc_  @73
+  dtrexc_  @74
+  dtrsen_  @75
+  dtrsyl_  @76
+  dzsum1_  @77
+  ilaenv_  @78
+  izmax1_  @79
+  zbdsqr_  @80
+  zdrscl_  @81
+  zgebak_  @82
+  zgebal_  @83
+  zgebd2_  @84
+  zgebrd_  @85
+  zgeesx_  @86
+  zgeev_   @87
+  zgehd2_  @88
+  zgehrd_  @89
+  zgelq2_  @90
+  zgelqf_  @91
+  zgelss_  @92
+  zgeqpf_  @93
+  zgeqr2_  @94
+  zgeqrf_  @95
+  zgesv_   @96
+  zgesvd_  @97
+  zgetf2_  @98
+  zgetrf_  @99
+  zgetrs_  @100
+  zhseqr_  @101
+  zlabrd_  @102
+  zlacgv_  @103
+  zlacon_  @104
+  zlacpy_  @105
+  zladiv_  @106
+  zlahqr_  @107
+  zlahrd_  @108
+  zlange_  @109
+  zlanhs_  @110
+  zlarf_   @111
+  zlarfb_  @112
+  zlarfg_  @113
+  zlarft_  @114
+  zlarfx_  @115
+  zlartg_  @116
+  zlascl_  @117
+  zlaset_  @118
+  zlasr_   @119
+  zlassq_  @120
+  zlaswp_  @121
+  zlatrs_  @122
+  zpotf2_  @123
+  zpotrf_  @124
+  zrot_    @125
+  ztrevc_  @126
+  ztrexc_  @127
+  ztrsen_  @128
+  ztrsyl_  @129
+  zung2r_  @130
+  zungbr_  @131
+  zunghr_  @132
+  zungl2_  @133
+  zunglq_  @134
+  zungqr_  @135
+  zunm2r_  @136
+  zunmbr_  @137
+  zunml2_  @138
+  zunmlq_  @139
+  zunmqr_  @140
+  zheev_   @141
+  dsyev_   @142
+  xdlange_ @143
+  xzlange_ @144
+
+IMPORTS
+  d1mach_=cruft2.1
+  dasum_=cruft2.101
+  daxpy_=cruft2.102
+  dcopy_=cruft2.104
+  ddot_=cruft2.105
+  dgemm_=cruft2.106
+  dgemv_=cruft2.107
+  dger_=cruft2.108
+  dnrm2_=cruft2.110
+  drot_=cruft2.111
+  dscal_=cruft2.112
+  dswap_=cruft2.113
+  dtrmm_=cruft2.115
+  dtrmv_=cruft2.116
+  dtrsm_=cruft2.117
+  dzasum_=cruft2.119
+  dznrm2_=cruft2.120
+  idamax_=cruft2.121
+  izamax_=cruft2.122
+  lsame_=cruft2.123
+  xerbla_=cruft2.124
+  zaxpy_=cruft2.125
+  zcopy_=cruft2.126
+  zdotc_=cruft2.127
+  zdotu_=cruft2.128
+  zdrot_=cruft2.129
+  zdscal_=cruft2.130
+  zgemm_=cruft2.131
+  zgemv_=cruft2.132
+  zgerc_=cruft2.133
+  zgeru_=cruft2.134
+  zherk_=cruft2.135
+  zscal_=cruft2.136
+  zswap_=cruft2.137
+  ztrmm_=cruft2.138
+  ztrmv_=cruft2.139
+  ztrsm_=cruft2.150
+  ztrsv_=cruft2.151
+  zhemv_=cruft2.152
+  dsyr2_=cruft2.153
+  zher2k_=cruft2.154
+  zher2_=cruft2.155
+  dsymv_=cruft2.156
+  dsyr2k_=cruft2.157
+  d_cnjg=f2c.14
+  d_imag=f2c.19
+  d_lg10=f2c.21
+  d_sign=f2c.26
+  i_dnnt=f2c.49
+  pow_dd=f2c.60
+  pow_di=f2c.61
+  s_cat=f2c.89
+  s_cmp=f2c.90
+  s_copy=f2c.91
+  z_abs=f2c.98
+  z_div=f2c.100
+  z_sqrt=f2c.104
+  do_fio=f2c.201
+  e_wsfe=f2c.213
+  s_wsfe=f2c.237

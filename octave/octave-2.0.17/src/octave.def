@@ -1,0 +1,4 @@
+NAME octave WINDOWCOMPAT NEWFILES
+DESCRIPTION "octave.exe, (c) Klaus Gebhardt 1995-1998" 
+
+STACKSIZE 65536

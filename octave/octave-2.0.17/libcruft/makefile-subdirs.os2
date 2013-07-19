@@ -1,0 +1,30 @@
+# Makefile for all subdirs in octave's libcruft directory
+# Modified by Klaus Gebhardt, 1994 - 1996
+
+TOPDIR = ../..
+
+ifeq ($(DLLNAME),misc)
+
+SPECIAL = machar.c d1mach-tst.for dostop.c f77-extern.cc \
+	f77-fcn.c f77-fcn.h lo-error.c lo-error.h
+
+SPECIAL_DEPEND = machar.obj dostop.obj f77-fcn.obj lo-error.obj
+
+EXTERNAL_DISTFILES = $(DISTFILES)
+
+include $(TOPDIR)/makeconf.os2
+include ../makerules.os2
+
+# Don't optimize.
+
+XCC = $(patsubst -O%, , $(CC)) -DDP
+
+machar.obj: machar.c
+	$(XCC) -o machar.obj -c machar.c -Zomf
+
+else
+
+include $(TOPDIR)/makeconf.os2
+include ../makerules.os2
+
+endif

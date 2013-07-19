@@ -1,0 +1,221 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from ./octave.texi on 9 October 1998 -->
+
+<TITLE>GNU Octave - Differential Equations</TITLE>
+</HEAD>
+<BODY>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_20.html">previous</A>, <A HREF="octave_22.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC151" HREF="octave_toc.html#TOC151">Differential Equations</A></H1>
+
+<P>
+Octave has two built-in functions for solving differential equations.
+Both are based on reliable ODE solvers written in Fortran.
+
+</P>
+
+<P>
+<A NAME="IDX744"></A>
+<A NAME="IDX745"></A>
+<A NAME="IDX746"></A>
+
+</P>
+
+
+<H2><A NAME="SEC152" HREF="octave_toc.html#TOC152">Ordinary Differential Equations</A></H2>
+
+<P>
+The function <CODE>lsode</CODE> can be used Solve ODEs of the form
+
+</P>
+<P>
+using Hindmarsh's ODE solver LSODE.
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U>  <B>lsode</B> <I>(<VAR>fcn</VAR>, <VAR>x0</VAR>, <VAR>t</VAR>, <VAR>t_crit</VAR>)</I>
+<DD><A NAME="IDX747"></A>
+Return a matrix of <VAR>x</VAR> as a function of <VAR>t</VAR>, given the initial
+state of the system <VAR>x0</VAR>.  Each row in the result matrix corresponds
+to one of the elements in the vector <VAR>t</VAR>.  The first element of
+<VAR>t</VAR> corresponds to the initial state <VAR>x0</VAR>, so that the first row
+of the output is <VAR>x0</VAR>.
+
+</P>
+<P>
+The first argument, <VAR>fcn</VAR>, is a string that names the function to
+call to compute the vector of right hand sides for the set of equations.
+It must have the form
+
+</P>
+
+<PRE>
+<VAR>xdot</VAR> = f (<VAR>x</VAR>, <VAR>t</VAR>)
+</PRE>
+
+<P>
+where <VAR>xdot</VAR> and <VAR>x</VAR> are vectors and <VAR>t</VAR> is a scalar.
+
+</P>
+<P>
+The fourth argument is optional, and may be used to specify a set of
+times that the ODE solver should not integrate past.  It is useful for
+avoiding difficulties with singularities and points where there is a
+discontinuity in the derivative.
+</DL>
+
+</P>
+<P>
+Here is an example of solving a set of three differential equations using
+<CODE>lsode</CODE>.  Given the function
+
+</P>
+<P>
+<A NAME="IDX748"></A>
+
+</P>
+
+<PRE>
+function xdot = f (x, t)
+
+  xdot = zeros (3,1);
+
+  xdot(1) = 77.27 * (x(2) - x(1)*x(2) + x(1) \
+            - 8.375e-06*x(1)^2);
+  xdot(2) = (x(3) - x(1)*x(2) - x(2)) / 77.27;
+  xdot(3) = 0.161*(x(1) - x(3));
+
+endfunction
+</PRE>
+
+<P>
+and the initial condition <CODE>x0 = [ 4; 1.1; 4 ]</CODE>, the set of
+equations can be integrated using the command
+
+</P>
+
+<PRE>
+t = linspace (0, 500, 1000);
+
+y = lsode ("f", x0, t);
+</PRE>
+
+<P>
+If you try this, you will see that the value of the result changes
+dramatically between <VAR>t</VAR> = 0 and 5, and again around <VAR>t</VAR> = 305.
+A more efficient set of output points might be
+
+</P>
+
+<PRE>
+t = [0, logspace (-1, log10(303), 150), \
+        logspace (log10(304), log10(500), 150)];
+</PRE>
+
+<P>
+<DL>
+<DT><U>Loadable Function:</U>  <B>lsode_options</B> <I>(<VAR>opt</VAR>, <VAR>val</VAR>)</I>
+<DD><A NAME="IDX749"></A>
+When called with two arguments, this function allows you set options
+parameters for the function <CODE>lsode</CODE>.  Given one argument,
+<CODE>lsode_options</CODE> returns the value of the corresponding option.  If
+no arguments are supplied, the names of all the available options and
+their current values are displayed.
+</DL>
+
+</P>
+<P>
+See Alan C. Hindmarsh, <CITE>ODEPACK, A Systematized Collection of ODE
+Solvers</CITE>, in Scientific Computing, R. S. Stepleman, editor, (1983) for
+more information about the inner workings of <CODE>lsode</CODE>.
+
+</P>
+
+
+<H2><A NAME="SEC153" HREF="octave_toc.html#TOC153">Differential-Algebraic Equations</A></H2>
+
+<P>
+The function <CODE>dassl</CODE> can be used Solve DAEs of the form
+
+</P>
+<P>
+using Petzold's DAE solver DASSL.
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U> [<VAR>x</VAR>, <VAR>xdot</VAR>] = <B>dassl</B> <I>(<VAR>fcn</VAR>, <VAR>x0</VAR>, <VAR>xdot0</VAR>, <VAR>t</VAR>, <VAR>t_crit</VAR>)</I>
+<DD><A NAME="IDX750"></A>
+Return a matrix of states and their first derivatives with respect to
+<VAR>t</VAR>.  Each row in the result matrices correspond to one of the
+elements in the vector <VAR>t</VAR>.  The first element of <VAR>t</VAR>
+corresponds to the initial state <VAR>x0</VAR> and derivative <VAR>xdot0</VAR>, so
+that the first row of the output <VAR>x</VAR> is <VAR>x0</VAR> and the first row
+of the output <VAR>xdot</VAR> is <VAR>xdot0</VAR>.
+
+</P>
+<P>
+The first argument, <VAR>fcn</VAR>, is a string that names the function to
+call to compute the vector of residuals for the set of equations.
+It must have the form
+
+</P>
+
+<PRE>
+<VAR>res</VAR> = f (<VAR>x</VAR>, <VAR>xdot</VAR>, <VAR>t</VAR>)
+</PRE>
+
+<P>
+where <VAR>x</VAR>, <VAR>xdot</VAR>, and <VAR>res</VAR> are vectors, and <VAR>t</VAR> is a
+scalar.
+
+</P>
+<P>
+The second and third arguments to <CODE>dassl</CODE> specify the initial
+condition of the states and their derivatives, and the fourth argument
+specifies a vector of output times at which the solution is desired, 
+including the time corresponding to the initial condition.
+
+</P>
+<P>
+The set of initial states and derivatives are not strictly required to
+be consistent.  In practice, however, DASSL is not very good at
+determining a consistent set for you, so it is best if you ensure that
+the initial values result in the function evaluating to zero.
+
+</P>
+<P>
+The fifth argument is optional, and may be used to specify a set of
+times that the DAE solver should not integrate past.  It is useful for
+avoiding difficulties with singularities and points where there is a
+discontinuity in the derivative.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U>  <B>dassl_options</B> <I>(<VAR>opt</VAR>, <VAR>val</VAR>)</I>
+<DD><A NAME="IDX751"></A>
+When called with two arguments, this function allows you set options
+parameters for the function <CODE>lsode</CODE>.  Given one argument,
+<CODE>dassl_options</CODE> returns the value of the corresponding option.  If
+no arguments are supplied, the names of all the available options and
+their current values are displayed.
+</DL>
+
+</P>
+<P>
+See K. E. Brenan, et al., <CITE>Numerical Solution of Initial-Value
+Problems in Differential-Algebraic Equations</CITE>, North-Holland (1989) for
+more information about the implementation of DASSL.
+
+</P>
+<P><HR><P>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_20.html">previous</A>, <A HREF="octave_22.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+</BODY>
+</HTML>

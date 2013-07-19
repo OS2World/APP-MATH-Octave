@@ -1,0 +1,207 @@
+\initial {(}
+\entry {\code {(int}}{25}
+\initial {A}
+\entry {\code {abort (C-g)}}{15}
+\entry {\code {accept-line (Newline, Return)}}{11}
+\entry {\code {alphabetic}}{26}
+\initial {B}
+\entry {\code {backward-char (C-b)}}{11}
+\entry {\code {backward-delete-char (Rubout)}}{12}
+\entry {\code {backward-kill-line (C-x Rubout)}}{13}
+\entry {\code {backward-kill-word (M-DEL)}}{13}
+\entry {\code {backward-word (M-b)}}{11}
+\entry {\code {beginning-of-history (M-<)}}{11}
+\entry {\code {beginning-of-line (C-a)}}{11}
+\entry {bell-style}{4}
+\initial {C}
+\entry {\code {call-last-kbd-macro (C-x e)}}{15}
+\entry {\code {capitalize-word (M-c)}}{13}
+\entry {\code {character-search (C-])}}{16}
+\entry {\code {character-search-backward (M-C-])}}{16}
+\entry {\code {clear-screen (C-l)}}{11}
+\entry {comment-begin}{4}
+\entry {\code {complete (TAB)}}{14}
+\entry {completion-query-items}{4}
+\entry {\code {completion_matches}}{29}
+\entry {convert-meta}{4}
+\entry {\code {copy-backward-word ()}}{14}
+\entry {\code {copy-forward-word ()}}{14}
+\entry {\code {copy-region-as-kill ()}}{14}
+\initial {D}
+\entry {\code {delete-char (C-d)}}{12}
+\entry {\code {delete-horizontal-space ()}}{14}
+\entry {\code {digit-argument (M-0, M-1, ... M--)}}{14}
+\entry {\code {digit_p}}{26}
+\entry {\code {digit_value}}{26}
+\entry {\code {ding}}{26}
+\entry {disable-completion}{4}
+\entry {\code {do-uppercase-version (M-a, M-b, M-\var {x}, \dots {})}}{15}
+\entry {\code {downcase-word (M-l)}}{13}
+\entry {\code {dump-functions ()}}{16}
+\entry {\code {dump-macros ()}}{16}
+\entry {\code {dump-variables ()}}{16}
+\initial {E}
+\entry {editing-mode}{5}
+\entry {enable-keypad}{5}
+\entry {\code {end-kbd-macro (C-x ))}}{15}
+\entry {\code {end-of-history (M->)}}{11}
+\entry {\code {end-of-line (C-e)}}{11}
+\entry {\code {exchange-point-and-mark (C-x C-x)}}{16}
+\entry {expand-tilde}{5}
+\initial {F}
+\entry {\code {filename_completion_function}}{30}
+\entry {\code {forward-char (C-f)}}{11}
+\entry {\code {forward-search-history (C-s)}}{12}
+\entry {\code {forward-word (M-f)}}{11}
+\entry {\code {free_undo_list}}{24}
+\initial {H}
+\entry {\code {history-search-backward ()}}{12}
+\entry {\code {history-search-forward ()}}{12}
+\entry {horizontal-scroll-mode}{5}
+\initial {I}
+\entry {input-meta}{5}
+\entry {\code {insert-comment (M-#)}}{16}
+\entry {\code {insert-completions (M-*)}}{15}
+\initial {K}
+\entry {keymap}{5}
+\entry {\code {kill-line (C-k)}}{13}
+\entry {\code {kill-region ()}}{14}
+\entry {\code {kill-whole-line ()}}{13}
+\entry {\code {kill-word (M-d)}}{13}
+\initial {L}
+\entry {\code {lowercase_p}}{26}
+\initial {M}
+\entry {mark-modified-lines}{5}
+\entry {meta-flag}{5}
+\initial {N}
+\entry {\code {next-history (C-n)}}{11}
+\entry {\code {non-incremental-forward-search-history (M-n)}}{12}
+\entry {\code {non-incremental-reverse-search-history (M-p)}}{12}
+\entry {\code {numeric}}{26}
+\initial {O}
+\entry {output-meta}{5}
+\initial {P}
+\entry {\code {possible-completions (M-?)}}{15}
+\entry {\code {prefix-meta (ESC)}}{15}
+\entry {\code {previous-history (C-p)}}{11}
+\initial {Q}
+\entry {\code {quoted-insert (C-q, C-v)}}{12}
+\initial {R}
+\entry {\code {re-read-init-file (C-x C-r)}}{15}
+\entry {\code {readline}}{17}
+\entry {\code {redraw-current-line ()}}{11}
+\entry {\code {reverse-search-history (C-r)}}{12}
+\entry {\code {revert-line (M-r)}}{15}
+\entry {\code {rl_add_defun}}{21}
+\entry {\code {rl_add_undo}}{24}
+\entry {\code {rl_attempted_completion_function}}{30}
+\entry {\code {rl_basic_quote_characters}}{31}
+\entry {\code {rl_basic_word_break_characters}}{31}
+\entry {\code {rl_begin_undo_group}}{24}
+\entry {\code {rl_bind_key}}{22}
+\entry {\code {rl_bind_key_in_map}}{22}
+\entry {\code {rl_binding_keymap}}{20}
+\entry {\code {rl_callback_handler_install}}{26}
+\entry {\code {rl_callback_handler_remove}}{27}
+\entry {\code {rl_callback_read_char}}{26}
+\entry {\code {rl_char_is_quoted_p}}{31}
+\entry {\code {rl_clear_message}}{25}
+\entry {\code {rl_complete}}{29}
+\entry {\code {rl_complete_internal}}{29}
+\entry {\code {rl_completer_quote_characters}}{31}
+\entry {\code {rl_completer_word_break_characters}}{31}
+\entry {\code {rl_completion_append_character}}{31}
+\entry {\code {rl_completion_entry_function}}{29, 30}
+\entry {\code {rl_completion_query_items}}{31}
+\entry {\code {rl_copy_keymap}}{21}
+\entry {\code {rl_copy_text}}{25}
+\entry {\code {rl_delete_text}}{25}
+\entry {\code {rl_directory_completion_hook}}{32}
+\entry {\code {rl_discard_keymap}}{21}
+\entry {\code {rl_do_undo}}{24}
+\entry {\code {rl_done}}{19}
+\entry {\code {rl_end}}{19}
+\entry {\code {rl_end_undo_group}}{24}
+\entry {\code {rl_event_hook}}{20}
+\entry {\code {rl_executing_keymap}}{20}
+\entry {\code {rl_filename_completion_desired}}{32}
+\entry {\code {rl_filename_dequoting_function}}{30}
+\entry {\code {rl_filename_quote_characters}}{31}
+\entry {\code {rl_filename_quoting_desired}}{32}
+\entry {\code {rl_filename_quoting_function}}{30}
+\entry {\code {rl_forced_update_display}}{24}
+\entry {\code {rl_function_dumper}}{23}
+\entry {\code {rl_function_of_keyseq}}{23}
+\entry {\code {rl_generic_bind}}{22}
+\entry {\code {rl_get_keymap}}{21}
+\entry {\code {rl_get_keymap_by_name}}{22}
+\entry {\code {rl_get_keymap_name}}{22}
+\entry {\code {rl_getc}}{25}
+\entry {\code {rl_getc_function}}{20}
+\entry {\code {rl_ignore_completion_duplicates}}{32}
+\entry {\code {rl_ignore_some_completions_function}}{32}
+\entry {\code {rl_inhibit_completion}}{32}
+\entry {\code {rl_initialize}}{25}
+\entry {\code {rl_insert_completions}}{29}
+\entry {\code {rl_insert_text}}{25}
+\entry {\code {rl_instream}}{20}
+\entry {\code {rl_invoking_keyseqs}}{23}
+\entry {\code {rl_invoking_keyseqs_in_map}}{23}
+\entry {\code {rl_kill_text}}{25}
+\entry {\code {rl_library_version}}{20}
+\entry {\code {rl_line_buffer}}{19}
+\entry {\code {rl_list_funmap_names}}{23}
+\entry {\code {rl_make_bare_keymap}}{21}
+\entry {\code {rl_make_keymap}}{21}
+\entry {\code {rl_mark}}{19}
+\entry {\code {rl_message}}{25}
+\entry {\code {rl_modifying}}{24}
+\entry {\code {rl_named_function}}{23}
+\entry {\code {rl_on_new_line}}{24}
+\entry {\code {rl_outstream}}{20}
+\entry {\code {rl_parse_and_bind}}{22}
+\entry {\code {rl_pending_input}}{19}
+\entry {\code {rl_point}}{19}
+\entry {\code {rl_possible_completions}}{29}
+\entry {\code {rl_prompt}}{20}
+\entry {\code {rl_read_init_file}}{22}
+\entry {\code {rl_read_key}}{25}
+\entry {\code {rl_readline_name}}{20}
+\entry {\code {rl_redisplay}}{24}
+\entry {\code {rl_redisplay_function}}{20}
+\entry {\code {rl_reset_line_state}}{24}
+\entry {\code {rl_reset_terminal}}{25}
+\entry {\code {rl_set_keymap}}{22}
+\entry {\code {rl_special_prefixes}}{31}
+\entry {\code {rl_startup_hook}}{20}
+\entry {\code {rl_stuff_char}}{25}
+\entry {\code {rl_terminal_name}}{20}
+\entry {\code {rl_unbind_key}}{22}
+\entry {\code {rl_unbind_key_in_map}}{22}
+\initial {S}
+\entry {\code {self-insert (a, b, A, 1, !, ...)}}{13}
+\entry {\code {set-mark (C-@)}}{16}
+\entry {show-all-if-ambiguous}{5}
+\entry {\code {start-kbd-macro (C-x ()}}{15}
+\initial {T}
+\entry {\code {tab-insert (M-TAB)}}{13}
+\entry {\code {tilde-expand (M-~)}}{15}
+\entry {\code {to_lower}}{26}
+\entry {\code {to_upper}}{26}
+\entry {\code {transpose-chars (C-t)}}{13}
+\entry {\code {transpose-words (M-t)}}{13}
+\initial {U}
+\entry {\code {undo (C-_, C-x C-u)}}{15}
+\entry {\code {universal-argument ()}}{14}
+\entry {\code {unix-line-discard (C-u)}}{13}
+\entry {\code {unix-word-rubout (C-w)}}{14}
+\entry {\code {upcase-word (M-u)}}{13}
+\entry {\code {uppercase_p}}{26}
+\entry {\code {username_completion_function}}{30}
+\initial {V}
+\entry {visible-stats}{6}
+\initial {Y}
+\entry {\code {yank (C-y)}}{14}
+\entry {\code {yank-last-arg (M-., M-_)}}{12}
+\entry {\code {yank-nth-arg (M-C-y)}}{12}
+\entry {\code {yank-pop (M-y)}}{14}

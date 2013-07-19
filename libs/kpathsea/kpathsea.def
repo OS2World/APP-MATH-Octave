@@ -1,0 +1,19 @@
+LIBRARY kpathsea INITINSTANCE TERMINSTANCE
+DESCRIPTION 'kpathsea.dll v0.1, Klaus Gebhardt 1995'
+
+DATA
+   MULTIPLE NONSHARED
+
+EXPORTS
+  kpse_path_search					@100
+  kpse_path_element					@101
+  kpse_element_dirs					@102
+  kpse_all_path_search					@103
+  kpse_path_expand					@104
+  kpse_set_progname					@105
+  kpse_expand_default					@106
+  kpse_clear_dir_cache					@107
+;
+; Debug.
+;
+  kpathsea_debug					@1000

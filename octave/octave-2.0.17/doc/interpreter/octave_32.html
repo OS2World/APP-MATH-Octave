@@ -1,0 +1,567 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from ./octave.texi on 9 October 1998 -->
+
+<TITLE>GNU Octave - Known Causes of Trouble</TITLE>
+</HEAD>
+<BODY>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_31.html">previous</A>, <A HREF="octave_33.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC181" HREF="octave_toc.html#TOC181">Known Causes of Trouble</A></H1>
+
+<P>
+<A NAME="IDX928"></A>
+<A NAME="IDX929"></A>
+<A NAME="IDX930"></A>
+<A NAME="IDX931"></A>
+
+</P>
+<P>
+This section describes known problems that affect users of Octave.  Most
+of these are not Octave bugs per se--if they were, we would fix them.
+But the result for a user may be like the result of a bug.
+
+</P>
+<P>
+Some of these problems are due to bugs in other software, some are
+missing features that are too much work to add, and some are places
+where people's opinions differ as to what is best.
+
+</P>
+
+
+
+<H2><A NAME="SEC182" HREF="octave_toc.html#TOC182">Actual Bugs We Haven't Fixed Yet</A></H2>
+
+
+<UL>
+<LI>
+
+Output that comes directly from Fortran functions is not sent through
+the pager and may appear out of sequence with other output that is sent
+through the pager.  One way to avoid this is to force pending output to
+be flushed before calling a function that will produce output from
+within Fortran functions.  To do this, use the command
+
+
+<PRE>
+fflush (stdout)
+</PRE>
+
+Another possible workaround is to use the command
+
+
+<PRE>
+page_screen_output = "false"
+</PRE>
+
+to turn the pager off.
+
+<LI>
+
+If you get messages like
+
+
+<PRE>
+Input line too long
+</PRE>
+
+when trying to plot many lines on one graph, you have probably generated
+a plot command that is too larger for <CODE>gnuplot</CODE>'s fixed-length
+buffer for commands.  Splitting up the plot command doesn't help because
+replot is implemented in gnuplot by simply appending the new plotting
+commands to the old command line and then evaluating it again.
+
+You can demonstrate this `feature' by running gnuplot and doing
+something like
+
+
+<PRE>
+  plot sin (x), sin (x), sin (x), ... lots more ..., sin (x)
+</PRE>
+
+and then
+
+
+<PRE>
+  replot sin (x), sin (x), sin (x), ... lots more ..., sin (x)
+</PRE>
+
+after repeating the replot command a few times, gnuplot will give you
+an error.
+
+Also, it doesn't help to use backslashes to enter a plot command over
+several lines, because the limit is on the overall command line
+length, once the backslashed lines are all pasted together.
+
+Because of this, Octave tries to use as little of the command-line
+length as possible by using the shortest possible abbreviations for
+all the plot commands and options.  Unfortunately, the length of the
+temporary file names is probably what is taking up the most space on
+the command line.
+
+You can buy a little bit of command line space by setting the
+environment variable <CODE>TMPDIR</CODE> to be "." before starting Octave, or
+you can increase the maximum command line length in gnuplot by changing
+the following limits in the file plot.h in the gnuplot distribution and
+recompiling gnuplot.
+
+
+<PRE>
+#define MAX_LINE_LEN 32768  /* originally 1024 */
+#define MAX_TOKENS 8192     /* originally 400 */
+</PRE>
+
+Of course, this doesn't really fix the problem, but it does make it
+much less likely that you will run into trouble unless you are putting
+a very large number of lines on a given plot.
+</UL>
+
+<P>
+A list of ideas for future enhancements is distributed with Octave.  See
+the file <TT>`PROJECTS'</TT> in the top level directory in the source
+distribution.
+
+</P>
+
+
+<H2><A NAME="SEC183" HREF="octave_toc.html#TOC183">Reporting Bugs</A></H2>
+<P>
+<A NAME="IDX932"></A>
+<A NAME="IDX933"></A>
+
+</P>
+<P>
+Your bug reports play an essential role in making Octave reliable.
+
+</P>
+<P>
+When you encounter a problem, the first thing to do is to see if it is
+already known.  See section <A HREF="octave_32.html#SEC181">Known Causes of Trouble</A>.  If it isn't known, then you should
+report the problem.
+
+</P>
+<P>
+Reporting a bug may help you by bringing a solution to your problem, or
+it may not.  In any case, the principal function of a bug report is
+to help the entire community by making the next version of Octave work
+better.  Bug reports are your contribution to the maintenance of Octave.
+
+</P>
+<P>
+In order for a bug report to serve its purpose, you must include the
+information that makes it possible to fix the bug.
+
+</P>
+<P>
+<A NAME="IDX934"></A>
+
+</P>
+<P>
+If you have Octave working at all, the easiest way to prepare a complete
+bug report is to use the Octave function <CODE>bug_report</CODE>.  When you
+execute this function, Octave will prompt you for a subject and then
+invoke the editor on a file that already contains all the configuration
+information.  When you exit the editor, Octave will mail the bug report
+for you.
+
+</P>
+
+
+
+<H2><A NAME="SEC184" HREF="octave_toc.html#TOC184">Have You Found a Bug?</A></H2>
+<P>
+<A NAME="IDX935"></A>
+
+</P>
+<P>
+If you are not sure whether you have found a bug, here are some guidelines:
+
+</P>
+
+<UL>
+<LI>
+
+<A NAME="IDX936"></A>
+ <A NAME="IDX937"></A>
+ 
+If Octave gets a fatal signal, for any input whatever, that is
+a bug.  Reliable interpreters never crash.
+
+<A NAME="IDX938"></A>
+<A NAME="IDX939"></A>
+<A NAME="IDX940"></A>
+<A NAME="IDX941"></A>
+<A NAME="IDX942"></A>
+<A NAME="IDX943"></A>
+<LI>
+
+If Octave produces incorrect results, for any input whatever,
+that is a bug.
+
+<A NAME="IDX944"></A>
+<A NAME="IDX945"></A>
+<LI>
+
+Some output may appear to be incorrect when it is in fact due to a
+program whose behavior is undefined, which happened by chance to give
+the desired results on another system.  For example, the range operator
+may produce different results because of differences in the way floating
+point arithmetic is handled on various systems.
+
+<A NAME="IDX946"></A>
+<A NAME="IDX947"></A>
+<A NAME="IDX948"></A>
+<LI>
+
+If Octave produces an error message for valid input, that is a bug.
+
+<A NAME="IDX949"></A>
+<LI>
+
+If Octave does not produce an error message for invalid input, that is
+a bug.  However, you should note that your idea of "invalid input"
+might be my idea of "an extension" or "support for traditional
+practice".
+
+<A NAME="IDX950"></A>
+<A NAME="IDX951"></A>
+<LI>
+
+If you are an experienced user of programs like Octave, your suggestions
+for improvement are welcome in any case.
+</UL>
+
+
+
+<H2><A NAME="SEC185" HREF="octave_toc.html#TOC185">Where to Report Bugs</A></H2>
+<P>
+<A NAME="IDX952"></A>
+<A NAME="IDX953"></A>
+<A NAME="IDX954"></A>
+
+</P>
+<P>
+<A NAME="IDX955"></A>
+
+</P>
+<P>
+If you have Octave working at all, the easiest way to prepare a complete
+bug report is to use the Octave function <CODE>bug_report</CODE>.  When you
+execute this function, Octave will prompt you for a subject and then
+invoke the editor on a file that already contains all the configuration
+information.  When you exit the editor, Octave will mail the bug report
+for you.
+
+</P>
+<P>
+If for some reason you cannot use Octave's <CODE>bug_report</CODE> function,
+send bug reports for Octave to @email{bug-octave@bevo.che.wisc.edu}.
+
+</P>
+<P>
+<STRONG>Do not send bug reports to <SAMP>`help-octave'</SAMP></STRONG>.  Most users of
+Octave do not want to receive bug reports.  Those that do have asked to
+be on the mailing list.
+
+</P>
+<P>
+As a last resort, send bug reports on paper to:
+
+</P>
+
+<PRE>
+Octave Bugs c/o John W. Eaton
+University of Wisconsin-Madison
+Department of Chemical Engineering
+1415 Engineering Drive
+Madison, Wisconsin 53706  USA
+</PRE>
+
+
+
+<H2><A NAME="SEC186" HREF="octave_toc.html#TOC186">How to Report Bugs</A></H2>
+<P>
+<A NAME="IDX956"></A>
+
+</P>
+<P>
+Send bug reports for Octave to one of the addresses listed in
+section <A HREF="octave_32.html#SEC185">Where to Report Bugs</A>.
+
+</P>
+<P>
+The fundamental principle of reporting bugs usefully is this:
+<STRONG>report all the facts</STRONG>.  If you are not sure whether to state a
+fact or leave it out, state it!
+
+</P>
+<P>
+Often people omit facts because they think they know what causes the
+problem and they conclude that some details don't matter.  Thus, you might
+assume that the name of the variable you use in an example does not matter.
+Well, probably it doesn't, but one cannot be sure.  Perhaps the bug is a
+stray memory reference which happens to fetch from the location where that
+name is stored in memory; perhaps, if the name were different, the contents
+of that location would fool the interpreter into doing the right thing
+despite the bug.  Play it safe and give a specific, complete example.
+
+</P>
+<P>
+Keep in mind that the purpose of a bug report is to enable someone to
+fix the bug if it is not known. Always write your bug reports on
+the assumption that the bug is not known.
+
+</P>
+<P>
+Sometimes people give a few sketchy facts and ask, "Does this ring a
+bell?"  This cannot help us fix a bug.  It is better to send a complete
+bug report to begin with.
+
+</P>
+<P>
+Try to make your bug report self-contained.  If we have to ask you for
+more information, it is best if you include all the previous information
+in your response, as well as the information that was missing.
+
+</P>
+<P>
+To enable someone to investigate the bug, you should include all these
+things:
+
+</P>
+
+<UL>
+<LI>
+
+The version of Octave.  You can get this by noting the version number
+that is printed when Octave starts, or running it with the <SAMP>`-v'</SAMP>
+option.
+
+<LI>
+
+A complete input file that will reproduce the bug.
+
+A single statement may not be enough of an example--the bug might
+depend on other details that are missing from the single statement where
+the error finally occurs.
+
+<LI>
+
+The command arguments you gave Octave to execute that example
+and observe the bug.  To guarantee you won't omit something important,
+list all the options. 
+
+If we were to try to guess the arguments, we would probably guess wrong
+and then we would not encounter the bug.
+
+<LI>
+
+The type of machine you are using, and the operating system name and
+version number.
+
+<LI>
+
+The command-line arguments you gave to the <CODE>configure</CODE> command when
+you installed the interpreter.
+
+<LI>
+
+A complete list of any modifications you have made to the interpreter
+source.
+
+Be precise about these changes--show a context diff for them.
+
+<LI>
+
+Details of any other deviations from the standard procedure for installing
+Octave.
+
+<A NAME="IDX957"></A>
+<A NAME="IDX958"></A>
+<A NAME="IDX959"></A>
+<A NAME="IDX960"></A>
+<A NAME="IDX961"></A>
+<A NAME="IDX962"></A>
+<LI>
+
+A description of what behavior you observe that you believe is
+incorrect.  For example, "The interpreter gets a fatal signal," or, "The
+output produced at line 208 is incorrect."
+
+Of course, if the bug is that the interpreter gets a fatal signal, then
+one can't miss it.  But if the bug is incorrect output, we might not
+notice unless it is glaringly wrong.
+
+Even if the problem you experience is a fatal signal, you should still
+say so explicitly.  Suppose something strange is going on, such as, your
+copy of the interpreter is out of synch, or you have encountered a bug
+in the C library on your system.  Your copy might crash and the copy
+here would not.  If you said to expect a crash, then when the
+interpreter here fails to crash, we would know that the bug was not
+happening.  If you don't say to expect a crash, then we would not know
+whether the bug was happening.  We would not be able to draw any
+conclusion from our observations.
+
+Often the observed symptom is incorrect output when your program is run.
+Unfortunately, this is not enough information unless the program is
+short and simple.  It is very helpful if you can include an explanation
+of the expected output, and why the actual output is incorrect.
+
+<LI>
+
+If you wish to suggest changes to the Octave source, send them as
+context diffs.  If you even discuss something in the Octave source,
+refer to it by context, not by line number, because the line numbers in
+the development sources probably won't match those in your sources.
+</UL>
+
+<P>
+Here are some things that are not necessary:
+
+</P>
+
+<UL>
+<LI>
+
+<A NAME="IDX963"></A>
+ 
+A description of the envelope of the bug.
+
+Often people who encounter a bug spend a lot of time investigating which
+changes to the input file will make the bug go away and which changes
+will not affect it.  Such information is usually not necessary to enable
+us to fix bugs in Octave, but if you can find a simpler example to
+report <EM>instead</EM> of the original one, that is a convenience.
+Errors in the output will be easier to spot, running under the debugger
+will take less time, etc. Most Octave bugs involve just one function, so
+the most straightforward way to simplify an example is to delete all the
+function definitions except the one in which the bug occurs.
+
+However, simplification is not vital; if you don't want to do
+this, report the bug anyway and send the entire test case you
+used.
+
+<LI>
+
+A patch for the bug.  Patches can be helpful, but if you find a bug, you
+should report it, even if you cannot send a fix for the problem.
+</UL>
+
+
+
+<H2><A NAME="SEC187" HREF="octave_toc.html#TOC187">Sending Patches for Octave</A></H2>
+<P>
+<A NAME="IDX964"></A>
+<A NAME="IDX965"></A>
+<A NAME="IDX966"></A>
+<A NAME="IDX967"></A>
+<A NAME="IDX968"></A>
+
+</P>
+<P>
+If you would like to write bug fixes or improvements for Octave, that is
+very helpful.  When you send your changes, please follow these
+guidelines to avoid causing extra work for us in studying the patches.
+
+</P>
+<P>
+If you don't follow these guidelines, your information might still be
+useful, but using it will take extra work.  Maintaining Octave is a lot
+of work in the best of circumstances, and we can't keep up unless you do
+your best to help.
+
+</P>
+
+<UL>
+<LI>
+
+Send an explanation with your changes of what problem they fix or what
+improvement they bring about.  For a bug fix, just include a copy of the
+bug report, and explain why the change fixes the bug.
+
+<LI>
+
+Always include a proper bug report for the problem you think you have
+fixed.  We need to convince ourselves that the change is right before
+installing it.  Even if it is right, we might have trouble judging it if
+we don't have a way to reproduce the problem.
+
+<LI>
+
+Include all the comments that are appropriate to help people reading the
+source in the future understand why this change was needed.
+
+<LI>
+
+Don't mix together changes made for different reasons.
+Send them <EM>individually</EM>.
+
+If you make two changes for separate reasons, then we might not want to
+install them both.  We might want to install just one.
+
+<LI>
+
+Use <SAMP>`diff -c'</SAMP> to make your diffs.  Diffs without context are hard
+for us to install reliably.  More than that, they make it hard for us to
+study the diffs to decide whether we want to install them.  Unidiff
+format is better than contextless diffs, but not as easy to read as
+<SAMP>`-c'</SAMP> format.
+
+If you have GNU diff, use <SAMP>`diff -cp'</SAMP>, which shows the name of the
+function that each change occurs in.
+
+<LI>
+
+Write the change log entries for your changes.
+
+Read the <TT>`ChangeLog'</TT> file to see what sorts of information to put
+in, and to learn the style that we use.  The purpose of the change log
+is to show people where to find what was changed.  So you need to be
+specific about what functions you changed; in large functions, it's
+often helpful to indicate where within the function the change was made.
+
+On the other hand, once you have shown people where to find the change,
+you need not explain its purpose. Thus, if you add a new function, all
+you need to say about it is that it is new.  If you feel that the
+purpose needs explaining, it probably does--but the explanation will be
+much more useful if you put it in comments in the code.
+
+If you would like your name to appear in the header line for who made
+the change, send us the header line.
+</UL>
+
+
+
+<H2><A NAME="SEC188" HREF="octave_toc.html#TOC188">How To Get Help with Octave</A></H2>
+<P>
+<A NAME="IDX969"></A>
+
+</P>
+<P>
+The mailing list @email{help-octave@bevo.che.wisc.edu} exists for the
+discussion of matters related to using and installing Octave.  If would
+like to join the discussion, please send a short note to
+@email{help-octave<STRONG>-request</STRONG>@bevo.che.wisc.edu}.
+
+</P>
+<P>
+<STRONG>Please do not</STRONG> send requests to be added or removed from the
+mailing list, or other administrative trivia to the list itself.
+
+</P>
+<P>
+If you think you have found a bug in the installation procedure,
+however, you should send a complete bug report for the problem to
+@email{bug-octave@bevo.che.wisc.edu}.  See section <A HREF="octave_32.html#SEC186">How to Report Bugs</A> for
+information that will help you to submit a useful report.
+
+</P>
+
+<P><HR><P>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_31.html">previous</A>, <A HREF="octave_33.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+</BODY>
+</HTML>

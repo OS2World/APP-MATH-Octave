@@ -1,0 +1,473 @@
+This is Info file liboct, produced by Makeinfo version 1.68 from the
+input file liboct.tex.
+
+   Copyright (C) 1996, 1997 John W. Eaton.
+
+   Permission is granted to make and distribute verbatim copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies.
+
+   Permission is granted to copy and distribute modified versions of
+this manual under the conditions for verbatim copying, provided that
+the entire resulting derived work is distributed under the terms of a
+permission notice identical to this one.
+
+   Permission is granted to copy and distribute translations of this
+manual into another language, under the above conditions for modified
+versions.
+
+
+File: liboct,  Node: Differential Algebraic Equations,  Next: Error Handling,  Prev: Ordinary Differential Equations,  Up: Top
+
+Differential Algebraic Equations
+********************************
+
+ - :  DAE (void)
+ - :  DAE (int N)
+ - :  DAE (const ColumnVector &X, double TIME, DAEFunc &F)
+ - :  DAE (const ColumnVector &X, ColumnVector &XDOT, double TIME,
+          DAEFunc &F)
+
+ - : ColumnVector deriv (void)
+
+ - : virtual void initialize (const ColumnVector &X, double T)
+ - : virtual void initialize (const ColumnVector &X, ColumnVector
+          &XDOT, double T)
+
+ - : ColumnVector integrate (double T)
+
+ - : Matrix integrate (const ColumnVector &TOUT, Matrix &XDOT_OUT)
+ - : Matrix integrate (const ColumnVector &TOUT, Matrix &XDOT_OUT,
+          const ColumnVector &TCRIT)
+
+
+File: liboct,  Node: Error Handling,  Next: Installation,  Prev: Differential Algebraic Equations,  Up: Top
+
+Error Handling
+**************
+
+
+File: liboct,  Node: Installation,  Next: Bugs,  Prev: Error Handling,  Up: Top
+
+Installation
+************
+
+
+File: liboct,  Node: Bugs,  Next: Concept Index,  Prev: Installation,  Up: Top
+
+Bugs
+****
+
+
+File: liboct,  Node: Concept Index,  Next: Function Index,  Prev: Bugs,  Up: Top
+
+Concept Index
+*************
+
+* Menu:
+
+* acknowledgements:                      Acknowledgements.
+* arrays:                                Arrays.
+* bounds:                                Bounds.
+* bugs, known:                           Bugs.
+* collocation weights:                   Collocation Weights.
+* contributors:                          Contributors.
+* copyright:                             Contributors.
+* DAE:                                   Differential Algebraic Equations.
+* factorizations:                        Matrix Factorizations.
+* installation:                          Installation.
+* installation trouble:                  Bugs.
+* integration:                           Quadrature.
+* introduction:                          Introduction.
+* known causes of trouble:               Bugs.
+* linear Constraints:                    Linear Constraints.
+* matrix factorizations:                 Matrix Factorizations.
+* matrix manipulations:                  Matrix and Vector Operations.
+* NLP:                                   Nonlinear Programming.
+* nonlinear Constraints:                 Nonlinear Constraints.
+* nonlinear equations:                   Nonlinear Equations.
+* nonlinear functions:                   Nonlinear Functions.
+* nonlinear programming:                 Nonlinear Programming.
+* numerical integration:                 Quadrature.
+* objective functions:                   Objective Functions.
+* ODE:                                   Ordinary Differential Equations.
+* optimization:                          Optimization.
+* orthogonal collocation:                Collocation Weights.
+* QP:                                    Quadratic Programming.
+* quadratic programming:                 Quadratic Programming.
+* quadrature:                            Quadrature.
+* ranges:                                Ranges.
+* troubleshooting:                       Bugs.
+* vector manipulations:                  Matrix and Vector Operations.
+* warranty:                              Contributors.
+
+
+File: liboct,  Node: Function Index,  Prev: Concept Index,  Up: Top
+
+Function Index
+**************
+
+* Menu:
+
+* ( <1>:                                 Quadrature.
+* ( <2>:                                 Matrix Factorizations.
+* ( <3>:                                 Constructors and Assignment.
+* (:                                     Matrix Factorizations.
+* absolute_tolerance <1>:                Quadrature.
+* absolute_tolerance:                    Ordinary Differential Equations.
+* add_left:                              Collocation Weights.
+* add_right:                             Collocation Weights.
+* AEPBALANCE:                            Matrix Factorizations.
+* all:                                   Matrix and Vector Operations.
+* alpha:                                 Collocation Weights.
+* any:                                   Matrix and Vector Operations.
+* append:                                Matrix and Vector Operations.
+* Array2:                                Constructors and Assignment.
+* Array<T>::Array:                       Constructors and Assignment.
+* Array<T>::capacity:                    Constructors and Assignment.
+* Array<T>::checkelem:                   Constructors and Assignment.
+* Array<T>::data:                        Constructors and Assignment.
+* Array<T>::elem:                        Constructors and Assignment.
+* Array<T>::length:                      Constructors and Assignment.
+* Array<T>::operator:                    Constructors and Assignment.
+* Array<T>::operator ():                 Constructors and Assignment.
+* Array<T>::operator =:                  Constructors and Assignment.
+* Array<T>::resize:                      Constructors and Assignment.
+* Array<T>::xelem:                       Constructors and Assignment.
+* balanced_a_matrix:                     Matrix Factorizations.
+* balanced_b_matrix:                     Matrix Factorizations.
+* balanced_matrix:                       Matrix Factorizations.
+* balancing_matrix:                      Matrix Factorizations.
+* base:                                  Ranges.
+* beta:                                  Collocation Weights.
+* Bounds:                                Bounds.
+* checkelem:                             Constructors and Assignment.
+* CHOL:                                  Matrix Factorizations.
+* chol_matrix:                           Matrix Factorizations.
+* clear_stop_time:                       Ordinary Differential Equations.
+* coefficient:                           Matrix Factorizations.
+* CollocWt:                              Collocation Weights.
+* cols:                                  Constructors and Assignment.
+* column:                                Matrix and Vector Operations.
+* columns:                               Constructors and Assignment.
+* ColumnVector:                          Matrix and Vector Operations.
+* column_max:                            Matrix and Vector Operations.
+* column_max_loc:                        Matrix and Vector Operations.
+* column_min:                            Matrix and Vector Operations.
+* column_min_loc:                        Matrix and Vector Operations.
+* ComplexCHOL:                           Matrix Factorizations.
+* ComplexColumnVector:                   Matrix and Vector Operations.
+* ComplexDET:                            Matrix Factorizations.
+* ComplexDiagMatrix:                     Matrix and Vector Operations.
+* ComplexHESS:                           Matrix Factorizations.
+* ComplexLU:                             Matrix Factorizations.
+* ComplexMatrix:                         Matrix and Vector Operations.
+* ComplexQR:                             Matrix Factorizations.
+* ComplexRowVector:                      Matrix and Vector Operations.
+* ComplexSCHUR:                          Matrix Factorizations.
+* ComplexSVD:                            Matrix Factorizations.
+* conj:                                  Matrix and Vector Operations.
+* constraint_matrix:                     Linear Constraints.
+* copy <1>:                              Ordinary Differential Equations.
+* copy <2>:                              Quadrature.
+* copy:                                  Nonlinear Equations.
+* cumprod:                               Matrix and Vector Operations.
+* cumsum:                                Matrix and Vector Operations.
+* DAE:                                   Differential Algebraic Equations.
+* DefQuad:                               Quadrature.
+* delete_left:                           Collocation Weights.
+* delete_right:                          Collocation Weights.
+* deriv:                                 Differential Algebraic Equations.
+* DET:                                   Matrix Factorizations.
+* determinant:                           Matrix and Vector Operations.
+* diag:                                  Matrix and Vector Operations.
+* DiagArray:                             Constructors and Assignment.
+* DiagMatrix:                            Matrix and Vector Operations.
+* dim1:                                  Constructors and Assignment.
+* dim2:                                  Constructors and Assignment.
+* dim3:                                  Constructors and Assignment.
+* EIG:                                   Matrix Factorizations.
+* eigenvalues:                           Matrix Factorizations.
+* eigenvectors:                          Matrix Factorizations.
+* elem:                                  Constructors and Assignment.
+* eq_constraint_matrix:                  Linear Constraints.
+* eq_constraint_vector:                  Linear Constraints.
+* exponent:                              Matrix Factorizations.
+* extract:                               Matrix and Vector Operations.
+* fill:                                  Matrix and Vector Operations.
+* first:                                 Collocation Weights.
+* force_restart:                         Ordinary Differential Equations.
+* fourier:                               Matrix and Vector Operations.
+* function:                              Nonlinear Functions.
+* GEPBALANCE:                            Matrix Factorizations.
+* gradient_function:                     Objective Functions.
+* HESS:                                  Matrix Factorizations.
+* hess_matrix:                           Matrix Factorizations.
+* ifourier:                              Matrix and Vector Operations.
+* imag:                                  Matrix and Vector Operations.
+* inc:                                   Ranges.
+* IndefQuad:                             Quadrature.
+* ineq_constraint_matrix:                Linear Constraints.
+* ineq_constraint_vector:                Linear Constraints.
+* init <1>:                              Nonlinear Equations.
+* init <2>:                              Ordinary Differential Equations.
+* init:                                  Quadrature.
+* initialize <1>:                        Differential Algebraic Equations.
+* initialize:                            Ordinary Differential Equations.
+* initial_step_size:                     Ordinary Differential Equations.
+* insert:                                Matrix and Vector Operations.
+* integrate <1>:                         Ordinary Differential Equations.
+* integrate <2>:                         Differential Algebraic Equations.
+* integrate <3>:                         Ordinary Differential Equations.
+* integrate <4>:                         Quadrature.
+* integrate <5>:                         Differential Algebraic Equations.
+* integrate:                             Quadrature.
+* inverse:                               Matrix and Vector Operations.
+* jacobian_function:                     Nonlinear Functions.
+* L:                                     Matrix Factorizations.
+* left:                                  Collocation Weights.
+* left_balancing_matrix:                 Matrix Factorizations.
+* left_included:                         Collocation Weights.
+* left_singular_matrix:                  Matrix Factorizations.
+* limit:                                 Ranges.
+* LinConst:                              Linear Constraints.
+* lower_bound:                           Bounds.
+* lower_bounds:                          Bounds.
+* lssolve:                               Matrix and Vector Operations.
+* LU:                                    Matrix Factorizations.
+* map:                                   Matrix and Vector Operations.
+* Matrix:                                Matrix and Vector Operations.
+* max <1>:                               Matrix and Vector Operations.
+* max <2>:                               Ranges.
+* max:                                   Matrix and Vector Operations.
+* maximum_step_size:                     Ordinary Differential Equations.
+* min <1>:                               Matrix and Vector Operations.
+* min:                                   Ranges.
+* minimize <1>:                          Quadratic Programming.
+* minimize <2>:                          Nonlinear Programming.
+* minimize <3>:                          Quadratic Programming.
+* minimize <4>:                          Nonlinear Programming.
+* minimize <5>:                          Quadratic Programming.
+* minimize:                              Nonlinear Programming.
+* minimum_step_size:                     Ordinary Differential Equations.
+* ncol:                                  Collocation Weights.
+* nelem:                                 Ranges.
+* NLConst:                               Nonlinear Constraints.
+* NLEqn:                                 Nonlinear Equations.
+* NLEqn_options:                         Nonlinear Equations.
+* NLFunc:                                Nonlinear Functions.
+* NLP:                                   Nonlinear Programming.
+* Objective:                             Objective Functions.
+* objective_function:                    Objective Functions.
+* ODE:                                   Ordinary Differential Equations.
+* ODE_options:                           Ordinary Differential Equations.
+* operator !:                            Matrix and Vector Operations.
+* operator !=:                           Matrix and Vector Operations.
+* operator ():                           Constructors and Assignment.
+* operator * <1>:                        Matrix and Vector Operations.
+* operator * <2>:                        Constructors and Assignment.
+* operator * <3>:                        Matrix and Vector Operations.
+* operator * <4>:                        Constructors and Assignment.
+* operator * <5>:                        Matrix and Vector Operations.
+* operator * <6>:                        Constructors and Assignment.
+* operator * <7>:                        Matrix and Vector Operations.
+* operator * <8>:                        Constructors and Assignment.
+* operator *:                            Matrix and Vector Operations.
+* operator + <1>:                        Matrix and Vector Operations.
+* operator + <2>:                        Constructors and Assignment.
+* operator + <3>:                        Matrix and Vector Operations.
+* operator + <4>:                        Constructors and Assignment.
+* operator + <5>:                        Matrix and Vector Operations.
+* operator + <6>:                        Constructors and Assignment.
+* operator + <7>:                        Matrix and Vector Operations.
+* operator + <8>:                        Constructors and Assignment.
+* operator + <9>:                        Matrix and Vector Operations.
+* operator + <10>:                       Constructors and Assignment.
+* operator + <11>:                       Matrix and Vector Operations.
+* operator + <12>:                       Constructors and Assignment.
+* operator +:                            Matrix and Vector Operations.
+* operator +=:                           Matrix and Vector Operations.
+* operator - <1>:                        Matrix and Vector Operations.
+* operator - <2>:                        Constructors and Assignment.
+* operator - <3>:                        Matrix and Vector Operations.
+* operator - <4>:                        Constructors and Assignment.
+* operator - <5>:                        Matrix and Vector Operations.
+* operator - <6>:                        Constructors and Assignment.
+* operator - <7>:                        Matrix and Vector Operations.
+* operator - <8>:                        Constructors and Assignment.
+* operator - <9>:                        Matrix and Vector Operations.
+* operator - <10>:                       Constructors and Assignment.
+* operator - <11>:                       Matrix and Vector Operations.
+* operator - <12>:                       Constructors and Assignment.
+* operator - <13>:                       Matrix and Vector Operations.
+* operator - <14>:                       Constructors and Assignment.
+* operator -:                            Matrix and Vector Operations.
+* operator -=:                           Matrix and Vector Operations.
+* operator / <1>:                        Matrix and Vector Operations.
+* operator / <2>:                        Constructors and Assignment.
+* operator / <3>:                        Matrix and Vector Operations.
+* operator / <4>:                        Constructors and Assignment.
+* operator / <5>:                        Matrix and Vector Operations.
+* operator / <6>:                        Constructors and Assignment.
+* operator / <7>:                        Matrix and Vector Operations.
+* operator / <8>:                        Constructors and Assignment.
+* operator / <9>:                        Matrix and Vector Operations.
+* operator / <10>:                       Constructors and Assignment.
+* operator /:                            Matrix and Vector Operations.
+* operator << <1>:                       Matrix Factorizations.
+* operator << <2>:                       Matrix and Vector Operations.
+* operator << <3>:                       Matrix Factorizations.
+* operator << <4>:                       Matrix and Vector Operations.
+* operator << <5>:                       Matrix Factorizations.
+* operator << <6>:                       Matrix and Vector Operations.
+* operator << <7>:                       Ranges.
+* operator << <8>:                       Matrix and Vector Operations.
+* operator << <9>:                       Bounds.
+* operator << <10>:                      Matrix Factorizations.
+* operator << <11>:                      Matrix and Vector Operations.
+* operator << <12>:                      Matrix Factorizations.
+* operator << <13>:                      Linear Constraints.
+* operator << <14>:                      Collocation Weights.
+* operator << <15>:                      Matrix Factorizations.
+* operator <<:                           Matrix and Vector Operations.
+* operator = <1>:                        Matrix Factorizations.
+* operator = <2>:                        Matrix and Vector Operations.
+* operator = <3>:                        Matrix Factorizations.
+* operator = <4>:                        Nonlinear Programming.
+* operator = <5>:                        Matrix Factorizations.
+* operator = <6>:                        Matrix and Vector Operations.
+* operator = <7>:                        Matrix Factorizations.
+* operator = <8>:                        Matrix and Vector Operations.
+* operator = <9>:                        Matrix Factorizations.
+* operator = <10>:                       Bounds.
+* operator = <11>:                       Matrix Factorizations.
+* operator = <12>:                       Nonlinear Constraints.
+* operator = <13>:                       Linear Constraints.
+* operator = <14>:                       Matrix Factorizations.
+* operator = <15>:                       Matrix and Vector Operations.
+* operator = <16>:                       Collocation Weights.
+* operator = <17>:                       Nonlinear Equations.
+* operator = <18>:                       Matrix and Vector Operations.
+* operator = <19>:                       Quadrature.
+* operator = <20>:                       Matrix Factorizations.
+* operator = <21>:                       Ordinary Differential Equations.
+* operator = <22>:                       Matrix Factorizations.
+* operator = <23>:                       Constructors and Assignment.
+* operator = <24>:                       Nonlinear Equations.
+* operator = <25>:                       Nonlinear Functions.
+* operator = <26>:                       Constructors and Assignment.
+* operator = <27>:                       Objective Functions.
+* operator = <28>:                       Matrix and Vector Operations.
+* operator =:                            Matrix Factorizations.
+* operator ==:                           Matrix and Vector Operations.
+* operator >> <1>:                       Ranges.
+* operator >>:                           Matrix and Vector Operations.
+* P:                                     Matrix Factorizations.
+* print_range:                           Ranges.
+* prod:                                  Matrix and Vector Operations.
+* product <1>:                           Matrix and Vector Operations.
+* product <2>:                           Constructors and Assignment.
+* product <3>:                           Matrix and Vector Operations.
+* product <4>:                           Constructors and Assignment.
+* product:                               Matrix and Vector Operations.
+* Q:                                     Matrix Factorizations.
+* QP:                                    Quadratic Programming.
+* QR:                                    Matrix Factorizations.
+* Quad:                                  Quadrature.
+* quad:                                  Collocation Weights.
+* quad_weights:                          Collocation Weights.
+* quotient <1>:                          Matrix and Vector Operations.
+* quotient <2>:                          Constructors and Assignment.
+* quotient <3>:                          Matrix and Vector Operations.
+* quotient <4>:                          Constructors and Assignment.
+* quotient:                              Matrix and Vector Operations.
+* R:                                     Matrix Factorizations.
+* Range:                                 Ranges.
+* real:                                  Matrix and Vector Operations.
+* relative_tolerance <1>:                Quadrature.
+* relative_tolerance:                    Ordinary Differential Equations.
+* resize <1>:                            Collocation Weights.
+* resize <2>:                            Constructors and Assignment.
+* resize <3>:                            Bounds.
+* resize <4>:                            Constructors and Assignment.
+* resize <5>:                            Linear Constraints.
+* resize <6>:                            Constructors and Assignment.
+* resize <7>:                            Nonlinear Equations.
+* resize:                                Constructors and Assignment.
+* right:                                 Collocation Weights.
+* right_balancing_matrix:                Matrix Factorizations.
+* right_included:                        Collocation Weights.
+* right_singular_matrix:                 Matrix Factorizations.
+* roots:                                 Collocation Weights.
+* row:                                   Matrix and Vector Operations.
+* rows:                                  Constructors and Assignment.
+* RowVector:                             Matrix and Vector Operations.
+* row_max:                               Matrix and Vector Operations.
+* row_max_loc:                           Matrix and Vector Operations.
+* row_min:                               Matrix and Vector Operations.
+* row_min_loc:                           Matrix and Vector Operations.
+* SCHUR:                                 Matrix Factorizations.
+* schur_matrix:                          Matrix Factorizations.
+* second:                                Collocation Weights.
+* set_absolute_tolerance <1>:            Ordinary Differential Equations.
+* set_absolute_tolerance:                Quadrature.
+* set_alpha:                             Collocation Weights.
+* set_base:                              Ranges.
+* set_beta:                              Collocation Weights.
+* set_bound:                             Bounds.
+* set_bounds:                            Bounds.
+* set_constraint_matrix:                 Linear Constraints.
+* set_default_options <1>:               Nonlinear Equations.
+* set_default_options <2>:               Quadrature.
+* set_default_options:                   Ordinary Differential Equations.
+* set_function:                          Nonlinear Functions.
+* set_gradient_function:                 Objective Functions.
+* set_inc:                               Ranges.
+* set_initial_step_size:                 Ordinary Differential Equations.
+* set_jacobian_function:                 Nonlinear Functions.
+* set_left:                              Collocation Weights.
+* set_limit:                             Ranges.
+* set_lower_bound:                       Bounds.
+* set_lower_bounds:                      Bounds.
+* set_maximum_step_size:                 Ordinary Differential Equations.
+* set_minimum_step_size:                 Ordinary Differential Equations.
+* set_objective_function:                Objective Functions.
+* set_relative_tolerance <1>:            Quadrature.
+* set_relative_tolerance:                Ordinary Differential Equations.
+* set_right:                             Collocation Weights.
+* set_states:                            Nonlinear Equations.
+* set_stop_time:                         Ordinary Differential Equations.
+* set_tolerance:                         Nonlinear Equations.
+* set_upper_bound:                       Bounds.
+* set_upper_bounds:                      Bounds.
+* singular_values:                       Matrix Factorizations.
+* size <1>:                              Bounds.
+* size <2>:                              Nonlinear Equations.
+* size <3>:                              Ordinary Differential Equations.
+* size:                                  Nonlinear Programming.
+* solve <1>:                             Matrix and Vector Operations.
+* solve <2>:                             Nonlinear Equations.
+* solve <3>:                             Matrix and Vector Operations.
+* solve <4>:                             Nonlinear Equations.
+* solve:                                 Matrix and Vector Operations.
+* sort:                                  Ranges.
+* stack:                                 Matrix and Vector Operations.
+* state:                                 Ordinary Differential Equations.
+* states:                                Nonlinear Equations.
+* sum:                                   Matrix and Vector Operations.
+* sumsq:                                 Matrix and Vector Operations.
+* SVD:                                   Matrix Factorizations.
+* time:                                  Ordinary Differential Equations.
+* tolerance:                             Nonlinear Equations.
+* transpose:                             Matrix and Vector Operations.
+* U:                                     Matrix Factorizations.
+* unitary_hess_matrix:                   Matrix Factorizations.
+* unitary_matrix:                        Matrix Factorizations.
+* upper_bound:                           Bounds.
+* upper_bounds:                          Bounds.
+* value:                                 Matrix Factorizations.
+* value_will_overflow:                   Matrix Factorizations.
+* value_will_underflow:                  Matrix Factorizations.
+* width:                                 Collocation Weights.
+
+

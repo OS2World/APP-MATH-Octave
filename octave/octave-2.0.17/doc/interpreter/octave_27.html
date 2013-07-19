@@ -1,0 +1,220 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from ./octave.texi on 9 October 1998 -->
+
+<TITLE>GNU Octave - Signal Processing</TITLE>
+</HEAD>
+<BODY>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_26.html">previous</A>, <A HREF="octave_28.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC162" HREF="octave_toc.html#TOC162">Signal Processing</A></H1>
+
+<P>
+I hope that someday Octave will include more signal processing
+functions.  If you would like to help improve Octave in this area,
+please contact @email{bug-octave@bevo.che.wisc.edu}.
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>detrend</B> <I>(<VAR>x</VAR>, <VAR>p</VAR>)</I>
+<DD><A NAME="IDX799"></A>
+If <VAR>x</VAR> is a vector, <CODE>detrend (<VAR>x</VAR>, <VAR>p</VAR>)</CODE> removes the
+best fit of a polynomial of order <VAR>p</VAR> from the data <VAR>x</VAR>.
+
+</P>
+<P>
+If <VAR>x</VAR> is a matrix, <CODE>detrend (<VAR>x</VAR>, <VAR>p</VAR>)</CODE> does the same
+for each column in <VAR>x</VAR>.
+
+</P>
+<P>
+The second argument is optional.  If it is not specified, a value of 1
+is assumed.  This corresponds to removing a linear trend.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function:</U>  <B>fft</B> <I>(<VAR>a</VAR>, <VAR>n</VAR>)</I>
+<DD><A NAME="IDX800"></A>
+Compute the FFT of <VAR>a</VAR> using subroutines from FFTPACK.  If <VAR>a</VAR>
+is a matrix, <CODE>fft</CODE> computes the FFT for each column of <VAR>a</VAR>.
+
+</P>
+<P>
+If called with two arguments, <VAR>n</VAR> is expected to be an integer
+specifying the number of elements of <VAR>a</VAR> to use.  If <VAR>a</VAR> is a
+matrix, <VAR>n</VAR> specifies the number of rows of <VAR>a</VAR> to use.  If
+<VAR>n</VAR> is larger than the size of <VAR>a</VAR>, <VAR>a</VAR> is resized and
+padded with zeros.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U>  <B>ifft</B> <I>(<VAR>a</VAR>, <VAR>n</VAR>)</I>
+<DD><A NAME="IDX801"></A>
+Compute the inverse FFT of <VAR>a</VAR> using subroutines from FFTPACK.  If
+<VAR>a</VAR> is a matrix, <CODE>fft</CODE> computes the inverse FFT for each column
+of <VAR>a</VAR>.
+
+</P>
+<P>
+If called with two arguments, <VAR>n</VAR> is expected to be an integer
+specifying the number of elements of <VAR>a</VAR> to use.  If <VAR>a</VAR> is a
+matrix, <VAR>n</VAR> specifies the number of rows of <VAR>a</VAR> to use.  If
+<VAR>n</VAR> is larger than the size of <VAR>a</VAR>, <VAR>a</VAR> is resized and
+padded with zeros.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U>  <B>fft2</B> <I>(<VAR>a</VAR>, <VAR>n</VAR>, <VAR>m</VAR>)</I>
+<DD><A NAME="IDX802"></A>
+Compute the two dimensional FFT of <VAR>a</VAR>.
+
+</P>
+<P>
+The optional arguments <VAR>n</VAR> and <VAR>m</VAR> may be used specify the
+number of rows and columns of <VAR>a</VAR> to use.  If either of these is
+larger than the size of <VAR>a</VAR>, <VAR>a</VAR> is resized and padded with
+zeros.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U>  <B>ifft2</B> <I>(<VAR>a</VAR>, <VAR>n</VAR>, <VAR>m</VAR>)</I>
+<DD><A NAME="IDX803"></A>
+Compute the two dimensional inverse FFT of <VAR>a</VAR>.
+
+</P>
+<P>
+The optional arguments <VAR>n</VAR> and <VAR>m</VAR> may be used specify the
+number of rows and columns of <VAR>a</VAR> to use.  If either of these is
+larger than the size of <VAR>a</VAR>, <VAR>a</VAR> is resized and padded with
+zeros.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>fftconv</B> <I>(<VAR>a</VAR>, <VAR>b</VAR>, <VAR>n</VAR>)</I>
+<DD><A NAME="IDX804"></A>
+Return the convolution of the vectors <VAR>a</VAR> and <VAR>b</VAR>, as a vector
+with length equal to the <CODE>length (a) + length (b) - 1</CODE>.  If <VAR>a</VAR>
+and <VAR>b</VAR> are the coefficient vectors of two polynomials, the returned
+value is the coefficient vector of the product polynomial.
+
+</P>
+<P>
+The computation uses the FFT by calling the function <CODE>fftfilt</CODE>.  If
+the optional argument <VAR>n</VAR> is specified, an N-point FFT is used.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>fftfilt</B> <I>(<VAR>b</VAR>, <VAR>x</VAR>, <VAR>n</VAR>)</I>
+<DD><A NAME="IDX805"></A>
+
+</P>
+<P>
+With two arguments, <CODE>fftfilt</CODE> filters <VAR>x</VAR> with the FIR filter
+<VAR>b</VAR> using the FFT.
+
+</P>
+<P>
+Given the optional third argument, <VAR>n</VAR>, <CODE>fftfilt</CODE> uses the
+overlap-add method to filter <VAR>x</VAR> with <VAR>b</VAR> using an N-point FFT.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U> y = <B>filter</B> <I>(<VAR>b</VAR>, <VAR>a</VAR>, <VAR>x</VAR>)</I>
+<DD><A NAME="IDX806"></A>
+Return the solution to the following linear, time-invariant difference
+equation:
+
+</P>
+<P>
+where
+An equivalent form of this equation is:
+
+</P>
+<P>
+where
+
+</P>
+<P>
+In terms of the z-transform, y is the result of passing the discrete-
+time signal x through a system characterized by the following rational
+system function:
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U> [<VAR>y</VAR>, <VAR>sf</VAR>] = <B>filter</B> <I>(<VAR>b</VAR>, <VAR>a</VAR>, <VAR>x</VAR>, <VAR>si</VAR>)</I>
+<DD><A NAME="IDX807"></A>
+This is the same as the <CODE>filter</CODE> function described above, except
+that <VAR>si</VAR> is taken as the initial state of the system and the final
+state is returned as <VAR>sf</VAR>.  The state vector is a column vector
+whose length is equal to the length of the longest coefficient vector
+minus one.  If <VAR>si</VAR> is not set, the initial state vector is set to
+all zeros.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U> [<VAR>h</VAR>, <VAR>w</VAR>] = <B>freqz</B> <I>(<VAR>b</VAR>, <VAR>a</VAR>, <VAR>n</VAR>, "whole")</I>
+<DD><A NAME="IDX808"></A>
+Return the complex frequency response <VAR>h</VAR> of the rational IIR filter
+whose numerator and denominator coefficients are <VAR>b</VAR> and <VAR>a</VAR>,
+respectively.  The response is evaluated at <VAR>n</VAR> angular frequencies
+between 0 and
+
+</P>
+<P>
+The output value <VAR>w</VAR> is a vector of the frequencies.
+
+</P>
+<P>
+If the fourth argument is omitted, the response is evaluated at
+frequencies between 0 and
+
+</P>
+<P>
+If <VAR>n</VAR> is omitted, a value of 512 is assumed.
+
+</P>
+<P>
+If <VAR>a</VAR> is omitted, the denominator is assumed to be 1 (this
+corresponds to a simple FIR filter).
+
+</P>
+<P>
+For fastest computation, <VAR>n</VAR> should factor into a small number of
+small primes.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>sinc</B> <I>(<VAR>x</VAR>)</I>
+<DD><A NAME="IDX809"></A>
+Return
+</DL>
+
+</P>
+<P><HR><P>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_26.html">previous</A>, <A HREF="octave_28.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+</BODY>
+</HTML>

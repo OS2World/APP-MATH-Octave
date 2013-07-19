@@ -1,0 +1,28 @@
+include $(_PRJ_SRC_DIR)\\C\\emx-0.9c\\src\\.make\\makerules
+
+MAKE     = make
+MAKE_SUB = make -f ../makefile-subdirs
+
+CC     = gcc
+OFLAGS = $(MC_OFLAGS)
+CFLAGS = -Wall $(OFLAGS) -mprobe -D__ST_MT_ERRNO__ -Zmt
+
+CSRC = $(wildcard *.c)
+SSRC = $(wildcard *.s)
+OBJS = $(patsubst %.c, %.obj, $(CSRC)) $(patsubst %.s, %.obj, $(SSRC))
+
+
+all: $(OBJS)
+
+build: clean all
+
+clean:
+	rm -f *.obj *.o *.lib *.a
+
+install: all
+
+lib: ../$(DLLNAME).lib
+
+../$(DLLNAME).lib: $(OBJS)
+	rm -f $@
+	emxomfar -p128 r $@ $(OBJS)

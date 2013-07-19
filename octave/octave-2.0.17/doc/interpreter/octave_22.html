@@ -1,0 +1,114 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from ./octave.texi on 9 October 1998 -->
+
+<TITLE>GNU Octave - Optimization</TITLE>
+</HEAD>
+<BODY>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_21.html">previous</A>, <A HREF="octave_23.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC154" HREF="octave_toc.html#TOC154">Optimization</A></H1>
+
+<P>
+<A NAME="IDX752"></A>
+<A NAME="IDX753"></A>
+<A NAME="IDX754"></A>
+<A NAME="IDX755"></A>
+<A NAME="IDX756"></A>
+<A NAME="IDX757"></A>
+
+</P>
+
+
+<H2><A NAME="SEC155" HREF="octave_toc.html#TOC155">Quadratic Programming</A></H2>
+
+
+
+<H2><A NAME="SEC156" HREF="octave_toc.html#TOC156">Nonlinear Programming</A></H2>
+
+
+
+<H2><A NAME="SEC157" HREF="octave_toc.html#TOC157">Linear Least Squares</A></H2>
+
+<P>
+<DL>
+<DT><U>Function File:</U> [<VAR>beta</VAR>, <VAR>v</VAR>, <VAR>r</VAR>] = <B>gls</B> <I>(<VAR>y</VAR>, <VAR>x</VAR>, <VAR>o</VAR>)</I>
+<DD><A NAME="IDX758"></A>
+Generalized least squares estimation for the multivariate model
+ where
+
+</P>
+<P>
+Each row of Y and X is an observation and each column a variable.
+
+</P>
+<P>
+The return values <VAR>beta</VAR>, <VAR>v</VAR>, and <VAR>r</VAR> are defined as
+follows.
+
+</P>
+<DL COMPACT>
+
+<DT><VAR>beta</VAR>
+<DD>
+The GLS estimator for <VAR>b</VAR>.
+
+<DT><VAR>v</VAR>
+<DD>
+The GLS estimator for <CODE><VAR>s</VAR>^2</CODE>.
+
+<DT><VAR>r</VAR>
+<DD>
+The matrix of GLS residuals, <CODE><VAR>r</VAR> = <VAR>y</VAR> - <VAR>x</VAR> *
+<VAR>beta</VAR></CODE>.
+</DL>
+</DL>
+
+<P>
+<DL>
+<DT><U>Function File:</U> [<VAR>beta</VAR>, <VAR>sigma</VAR>, <VAR>r</VAR>] = <B>ols</B> <I>(<VAR>y</VAR>, <VAR>x</VAR>)</I>
+<DD><A NAME="IDX759"></A>
+Ordinary least squares estimation for the multivariate model
+ where
+
+</P>
+<P>
+Each row of <VAR>y</VAR> and <VAR>x</VAR> is an observation and each column a
+variable.
+
+</P>
+<P>
+The return values <VAR>beta</VAR>, <VAR>sigma</VAR>, and <VAR>r</VAR> are defined as
+follows.
+
+</P>
+<DL COMPACT>
+
+<DT><VAR>beta</VAR>
+<DD>
+The OLS estimator for <VAR>b</VAR>, <CODE><VAR>beta</VAR> = pinv (<VAR>x</VAR>) *
+<VAR>y</VAR></CODE>, where <CODE>pinv (<VAR>x</VAR>)</CODE> denotes the pseudoinverse of
+<VAR>x</VAR>.
+
+<DT><VAR>sigma</VAR>
+<DD>
+The OLS estimator for the matrix <VAR>s</VAR>,
+
+
+<PRE>
+<VAR>sigma</VAR> = (<VAR>y</VAR>-<VAR>x</VAR>*<VAR>beta</VAR>)' * (<VAR>y</VAR>-<VAR>x</VAR>*<VAR>beta</VAR>) / (<VAR>t</VAR>-rank(<VAR>x</VAR>))
+</PRE>
+
+<DT><VAR>r</VAR>
+<DD>
+The matrix of OLS residuals, <CODE><VAR>r</VAR> = <VAR>y</VAR> - <VAR>x</VAR> * <VAR>beta</VAR></CODE>.
+</DL>
+</DL>
+
+<P><HR><P>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_21.html">previous</A>, <A HREF="octave_23.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+</BODY>
+</HTML>

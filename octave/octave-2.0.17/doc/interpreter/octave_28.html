@@ -1,0 +1,240 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from ./octave.texi on 9 October 1998 -->
+
+<TITLE>GNU Octave - Image Processing</TITLE>
+</HEAD>
+<BODY>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_27.html">previous</A>, <A HREF="octave_29.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC163" HREF="octave_toc.html#TOC163">Image Processing</A></H1>
+
+<P>
+Octave can display images with the X Window System using the
+<CODE>xloadimage</CODE> program.  You do not need to be running X in order to
+manipulate images, however, so some of these functions may be useful
+even if you are not able to view the results.
+
+</P>
+<P>
+Loading images only works with Octave's image format (a file with a
+matrix containing the image data, and a matrix containing the
+colormap).  Contributions of robust, well-written functions to read
+other image formats are welcome.  If you can provide them, or would like
+to improve Octave's image processing capabilities in other ways, please
+contact @email{bug-octave@bevo.che.wisc.edu}.
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>colormap</B> <I>(<VAR>map</VAR>)</I>
+<DD><A NAME="IDX810"></A>
+<DT><U>Function File:</U>  <B>colormap</B> <I>("default")</I>
+<DD><A NAME="IDX811"></A>
+Set the current colormap.
+
+</P>
+<P>
+<CODE>colormap (<VAR>map</VAR>)</CODE> sets the current colormap to <VAR>map</VAR>.  The
+color map should be an <VAR>n</VAR> row by 3 column matrix.  The columns
+contain red, green, and blue intensities respectively.  All entries
+should be between 0 and 1 inclusive.  The new colormap is returned.
+
+</P>
+<P>
+<CODE>colormap ("default")</CODE> restores the default colormap (a gray scale
+colormap with 64 entries).  The default colormap is returned.
+
+</P>
+<P>
+With no arguments, <CODE>colormap</CODE> returns the current color map.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>gray</B> <I>(<VAR>n</VAR>)</I>
+<DD><A NAME="IDX812"></A>
+Return a gray colormap with <VAR>n</VAR> entries corresponding to values from
+0 to <VAR>n</VAR>.  The argument <VAR>n</VAR> should be a scalar.  If it is
+omitted, 64 is assumed.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U> [<VAR>img</VAR>, <VAR>map</VAR>] = <B>gray2ind</B> <I>(<VAR></VAR>)</I>
+<DD><A NAME="IDX813"></A>
+Convert a gray scale intensity image to an Octave indexed image.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>image</B> <I>(<VAR>x</VAR>, <VAR>zoom</VAR>)</I>
+<DD><A NAME="IDX814"></A>
+Display a matrix as a color image.  The elements of <VAR>x</VAR> are indices
+into the current colormap and should have values between 1 and the
+length of the colormap.  If <VAR>zoom</VAR> is omitted, a value of 4 is
+assumed. 
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>imagesc</B> <I>(<VAR>x</VAR>, <VAR>zoom</VAR>)</I>
+<DD><A NAME="IDX815"></A>
+Display a scaled version of the matrix <VAR>x</VAR> as a color image.  The
+matrix is scaled so that its entries are indices into the current
+colormap.  The scaled matrix is returned.  If <VAR>zoom</VAR> is omitted, a
+value of 4 is assumed.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>imshow</B> <I>(<VAR>x</VAR>, <VAR>map</VAR>)</I>
+<DD><A NAME="IDX816"></A>
+<DT><U>Function File:</U>  <B>imshow</B> <I>(<VAR>x</VAR>, <VAR>n</VAR>)</I>
+<DD><A NAME="IDX817"></A>
+<DT><U>Function File:</U>  <B>imshow</B> <I>(<VAR>i</VAR>, <VAR>n</VAR>)</I>
+<DD><A NAME="IDX818"></A>
+<DT><U>Function File:</U>  <B>imshow</B> <I>(<VAR>r</VAR>, <VAR>g</VAR>, <VAR>b</VAR>)</I>
+<DD><A NAME="IDX819"></A>
+Display images.
+
+</P>
+<P>
+<CODE>imshow (<VAR>x</VAR>)</CODE> displays an indexed image using the current
+colormap.
+
+</P>
+<P>
+<CODE>imshow (<VAR>x</VAR>, <VAR>map</VAR>)</CODE> displays an indexed image using the
+specified colormap.
+
+</P>
+<P>
+<CODE>imshow (<VAR>i</VAR>, <VAR>n</VAR>)</CODE> displays a gray scale intensity image.
+
+</P>
+<P>
+<CODE>imshow (<VAR>r</VAR>, <VAR>g</VAR>, <VAR>b</VAR>)</CODE> displays an RGB image.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>ind2gray</B> <I>(<VAR>x</VAR>, <VAR>map</VAR>)</I>
+<DD><A NAME="IDX820"></A>
+Convert an Octave indexed image to a gray scale intensity image.
+If <VAR>map</VAR> is omitted, the current colormap is used to determine the
+intensities.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U> [<VAR>r</VAR>, <VAR>g</VAR>, <VAR>b</VAR>] = <B>ind2rgb</B> <I>(<VAR>x</VAR>, <VAR>map</VAR>)</I>
+<DD><A NAME="IDX821"></A>
+Convert an indexed image to red, green, and blue color components.
+If <VAR>map</VAR> is omitted, the current colormap is used for the conversion.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U> [<VAR>x</VAR>, <VAR>map</VAR>] = <B>loadimage</B> <I>(<VAR>file</VAR>)</I>
+<DD><A NAME="IDX822"></A>
+Load an image file and it's associated color map from the specified
+<VAR>file</VAR>.  The image must be stored in Octave's image format.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>rgb2ntsc</B> <I>(<VAR>rgb</VAR>)</I>
+<DD><A NAME="IDX823"></A>
+Image format conversion.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>ntsc2rgb</B> <I>(<VAR>yiq</VAR>)</I>
+<DD><A NAME="IDX824"></A>
+Image format conversion.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>ocean</B> <I>(<VAR>n</VAR>)</I>
+<DD><A NAME="IDX825"></A>
+Create color colormap.  The argument <VAR>n</VAR> should be a scalar.  If it
+is omitted, 64 is assumed.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U> [<VAR>x</VAR>, <VAR>map</VAR>] = <B>rgb2ind</B> <I>(<VAR>r</VAR>, <VAR>g</VAR>, <VAR>b</VAR>)</I>
+<DD><A NAME="IDX826"></A>
+Convert and RGB image to an Octave indexed image.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>saveimage</B> <I>(<VAR>file</VAR>, <VAR>x</VAR>, <VAR>fmt</VAR>, <VAR>map</VAR>)</I>
+<DD><A NAME="IDX827"></A>
+Save the matrix <VAR>x</VAR> to <VAR>file</VAR> in image format <VAR>fmt</VAR>.  Valid
+values for <VAR>fmt</VAR> are
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>"img"</CODE>
+<DD>
+Octave's image format.  The current colormap is also saved in the file.
+
+<DT><CODE>"ppm"</CODE>
+<DD>
+Portable pixmap format.
+
+<DT><CODE>"ps"</CODE>
+<DD>
+PostScript format.  Note that images saved in PostScript format can not
+be read back into Octave with loadimage.
+</DL>
+
+<P>
+If the fourth argument is supplied, the specified colormap will also be
+saved along with the image.
+
+</P>
+<P>
+Note: if the colormap contains only two entries and these entries are
+black and white, the bitmap ppm and PostScript formats are used.  If the
+image is a gray scale image (the entries within each row of the colormap
+are equal) the gray scale ppm and PostScript image formats are used,
+otherwise the full color formats are used.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>IMAGEPATH</B>
+<DD><A NAME="IDX828"></A>
+A colon separated list of directories in which to search for image
+files.
+</DL>
+
+</P>
+<P><HR><P>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_27.html">previous</A>, <A HREF="octave_29.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+</BODY>
+</HTML>

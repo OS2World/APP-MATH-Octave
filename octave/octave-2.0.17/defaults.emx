@@ -1,0 +1,171 @@
+// defaults.h                                               -*- C++ -*-
+/*
+
+Copyright (C) 1996 John W. Eaton
+
+This file is part of Octave.
+
+Octave is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the
+Free Software Foundation; either version 2, or (at your option) any
+later version.
+
+Octave is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+for more details.
+
+You should have received a copy of the GNU General Public License
+along with Octave; see the file COPYING.  If not, write to the Free
+Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
+
+*/
+
+/* Modified by Klaus Gebhardt, 1994 - 1997 */
+
+#include <string>
+
+#include "pathsearch.h"
+
+#if !defined (_defaults_h)
+#define _defaults_h 1
+
+#ifndef DEFAULT_PAGER
+#define DEFAULT_PAGER "less -ce"
+#endif
+
+#ifndef OCTAVE_PREFIX
+#define OCTAVE_PREFIX "j:/apps2/science/octave"
+#endif
+
+#ifndef OCTAVE_EXEC_PREFIX
+#define OCTAVE_EXEC_PREFIX "j:/apps2/science/octave"
+#endif
+
+#ifndef OCTAVE_DATADIR
+#define OCTAVE_DATADIR "j:/apps2/science/octave"
+#endif
+
+#ifndef OCTAVE_LIBEXECDIR
+#define OCTAVE_LIBEXECDIR "j:/apps2/science/octave"
+#endif
+
+#ifndef OCTAVE_LIBDIR
+#define OCTAVE_LIBDIR "j:/apps2/science/octave"
+#endif
+
+#ifndef OCTAVE_OCTLIBDIR
+#define OCTAVE_OCTLIBDIR "j:/apps2/science/octave"
+#endif
+
+#ifndef OCTAVE_BINDIR
+#define OCTAVE_BINDIR "j:/apps2/science/octave"
+#endif
+
+#ifndef OCTAVE_INFODIR
+#define OCTAVE_INFODIR "j:/apps2/science/octave/doc"
+#endif
+
+#ifndef OCTAVE_INFOFILE
+#define OCTAVE_INFOFILE "j:/apps2/science/octave/doc/octave"
+#endif
+
+#ifndef OCTAVE_FCNFILEDIR
+#define OCTAVE_FCNFILEDIR "j:/apps2/science/octave/scripts"
+#endif
+
+#ifndef OCTAVE_LOCALFCNFILEDIR
+#define OCTAVE_LOCALFCNFILEDIR "j:/apps2/science/octave/scripts"
+#endif
+
+#ifndef OCTAVE_LOCALSTARTUPFILEDIR
+#define OCTAVE_LOCALSTARTUPFILEDIR "j:/apps2/science/octave/scripts/startup"
+#endif
+
+#ifndef OCTAVE_STARTUPFILEDIR
+#define OCTAVE_STARTUPFILEDIR "j:/apps2/science/octave/scripts/startup"
+#endif
+
+#ifndef OCTAVE_LOCALFCNFILEPATH
+#define OCTAVE_LOCALFCNFILEPATH "j:/apps2/science/octave/scripts//"
+#endif
+
+#ifndef OCTAVE_ARCHLIBDIR
+#define OCTAVE_ARCHLIBDIR "j:/apps2/science/octave"
+#endif
+
+#ifndef OCTAVE_LOCALARCHLIBDIR
+#define OCTAVE_LOCALARCHLIBDIR "j:/apps2/science/octave"
+#endif
+
+#ifndef OCTAVE_OCTFILEDIR
+#define OCTAVE_OCTFILEDIR "j:/apps2/science/octave"
+#endif
+
+#ifndef OCTAVE_LOCALOCTFILEPATH
+#define OCTAVE_LOCALOCTFILEPATH "j:/apps2/science/octave"
+#endif
+
+#ifndef OCTAVE_FCNFILEPATH
+#define OCTAVE_FCNFILEPATH "j:/apps2/science/octave/scripts//"
+#endif
+
+#ifndef OCTAVE_IMAGEPATH
+#define OCTAVE_IMAGEPATH "j:/apps2/science/octave/scripts/image"
+#endif
+
+#ifndef CANONICAL_HOST_TYPE
+#define CANONICAL_HOST_TYPE "i486 running OS/2"
+#endif
+  
+#ifndef OCTAVE_LOCALVERARCHLIBDIR
+#define OCTAVE_LOCALVERARCHLIBDIR "j:/apps2/science/octave"
+#endif
+ 
+#ifndef OCTAVE_LOCALVERFCNFILEDIR
+#define OCTAVE_LOCALVERFCNFILEDIR "j:/apps2/science/octave/scripts"
+#endif
+
+#ifndef OCTAVE_LOCALVEROCTFILEDIR
+#define OCTAVE_LOCALVEROCTFILEDIR "j:/apps2/science/octave"
+#endif
+
+extern string Voctave_home;
+
+extern string Vbin_dir;
+extern string Vlib_dir;
+extern string Vinfo_dir;
+extern string Vdata_dir;
+extern string Vlibexec_dir;
+extern string Varch_lib_dir;
+extern string Vlocal_arch_lib_dir;
+extern string Vlocal_ver_arch_lib_dir;
+extern string Vfcn_file_dir;
+
+// The path that will be searched for programs that we execute.
+// (--exec-path path)
+extern string Vexec_path;
+
+// And the cached directory path corresponding to Vload_path.
+extern dir_path Vload_path_dir_path;
+
+// Name of the editor to be invoked by the edit_history command.
+extern string Veditor;
+
+extern string Vimagepath;
+
+extern string Vlocal_site_defaults_file;
+extern string Vsite_defaults_file;
+
+extern void install_defaults (void);
+
+extern void symbols_of_defaults (void);
+
+#endif
+
+/*
+;;; Local Variables: ***
+;;; mode: C++ ***
+;;; page-delimiter: "^/\\*" ***
+;;; End: ***
+*/

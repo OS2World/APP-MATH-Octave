@@ -1,0 +1,661 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from ./octave.texi on 9 October 1998 -->
+
+<TITLE>GNU Octave - Installing Octave</TITLE>
+</HEAD>
+<BODY>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_32.html">previous</A>, <A HREF="octave_34.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC189" HREF="octave_toc.html#TOC189">Installing Octave</A></H1>
+
+<P>
+<A NAME="IDX970"></A>
+
+</P>
+<P>
+Here is the procedure for installing Octave from scratch on a Unix
+system.  For instructions on how to install the binary distributions of
+Octave, see section <A HREF="octave_33.html#SEC192">Binary Distributions</A>.
+
+</P>
+
+<UL>
+<LI>
+
+Run the shell script <TT>`configure'</TT>.  This will determine the features
+your system has (or doesn't have) and create a file named
+<TT>`Makefile'</TT> from each of the files named <TT>`Makefile.in'</TT>.
+
+Here is a summary of the configure options that are most frequently used
+when building Octave:
+
+<DL COMPACT>
+
+<DT><CODE>--prefix=<VAR>prefix</VAR></CODE>
+<DD>
+Install Octave in subdirectories below <VAR>prefix</VAR>.  The default value
+of <VAR>prefix</VAR> is <TT>`/usr/local'</TT>.
+
+<DT><CODE>--srcdir=<VAR>dir</VAR></CODE>
+<DD>
+Look for Octave sources in the directory <VAR>dir</VAR>.
+
+<DT><CODE>--with-f2c</CODE>
+<DD>
+Use <CODE>f2c</CODE> even if a Fortran compiler is available.
+
+<DT><CODE>--with-g77</CODE>
+<DD>
+Use <CODE>g77</CODE> to compile Fortran code.
+
+<DT><CODE>--enable-shared</CODE>
+<DD>
+Create shared libraries.  If you are planning to use
+<CODE>--enable-lite-kernelel</CODE> or the dynamic loading features, you will
+probably want to use this option.  It will make your <TT>`.oct'</TT> files
+much smaller and on some systems it may be necessary to build shared
+libraries in order to use dynamically linked functions.
+
+You may also want to build a shared version of <CODE>libstdc++</CODE>, if your
+system doesn't already have one.  Note that a patch is needed to build
+shared versions of version 2.7.2 of <CODE>libstdc++</CODE> on the HP-PA
+architecture.  You can find the patch at
+@url{ftp://ftp.cygnus.com/pub/g++/libg++-2.7.2-hppa-gcc-fix}.
+
+<DT><CODE>--enable-dl</CODE>
+<DD>
+Use <CODE>dlopen</CODE> and friends to make Octave capable of dynamically
+linking externally compiled functions.  This only works on systems that
+actually have these functions.  If you plan on using this feature, you
+should probably also use <CODE>--enable-shared</CODE> to reduce the size of
+your <TT>`.oct'</TT> files.
+
+<DT><CODE>--enable-shl</CODE>
+<DD>
+Use <CODE>shl_load</CODE> and friends to make Octave capable of dynamically
+linking externally compiled functions.  This only works on systems that
+actually have these functions (only HP-UX systems).  If you plan on
+using this feature, you should probably also use <CODE>--enable-shared</CODE>
+to reduce the size of your <TT>`.oct'</TT> files.
+
+<DT><CODE>--enable-lite-kernel</CODE>
+<DD>
+Compile smaller kernel.  This currently requires the dynamic linking
+functions <CODE>dlopen</CODE> or <CODE>shl_load</CODE> and friends so that Octave
+can load functions at run time that are not loaded at compile time.
+
+<DT><CODE>--help</CODE>
+<DD>
+Print a summary of the options recognized by the configure script.
+</DL>
+
+See the file <TT>`INSTALL'</TT> for more information about the command line
+options used by configure.  That file also contains instructions for
+compiling in a directory other than where the source is located.
+
+<LI>
+
+Run make.
+
+You will need a recent version of GNU Make.  Modifying Octave's
+makefiles to work with other make programs is probably not worth
+your time.  We recommend you get and compile GNU Make instead.
+
+For plotting, you will need to have gnuplot installed on your system.
+Gnuplot is a command-driven interactive function plotting program.
+Gnuplot is copyrighted, but freely distributable.  The `gnu' in gnuplot
+is a coincidence--it is not related to the GNU project or the FSF in
+any but the most peripheral sense.
+
+To compile Octave, you will need a recent version of GNU Make.  You
+will also need <CODE>g++</CODE> 2.7.2 or later.  Version 2.8.0 or <CODE>egcs</CODE>
+1.0.x should work.  Later versions may work, but C++ is still evolving,
+so don't be too surprised if you run into some trouble.
+
+It is no longer necessary to have <CODE>libg++</CODE>, but you do need to have
+the GNU implementation of <CODE>libstdc++</CODE>.  If you are using <CODE>g++</CODE>
+2.7.2, <CODE>libstdc++</CODE> is distributed along with <CODE>libg++</CODE>, but for
+later versions, <CODE>libstdc++</CODE> is distributed separately.  For
+<CODE>egcs</CODE>, <CODE>libstdc++</CODE> is included with the compiler
+distribution.
+
+If you plan to modify the parser you will also need GNU <CODE>bison</CODE> and
+<CODE>flex</CODE>.  If you modify the documentation, you will need GNU
+Texinfo, along with the patch for the <CODE>makeinfo</CODE> program that is
+distributed with Octave.
+
+GNU Make, <CODE>gcc</CODE>, and <CODE>libstdc++</CODE>, <CODE>gnuplot</CODE>,
+<CODE>bison</CODE>, <CODE>flex</CODE>, and Texinfo are all available from many
+anonymous ftp archives.  The primary site is @url{ftp.gnu.org}, but it
+is often very busy.  A list of sites that mirror the software on
+@url{ftp.gnu.org} is available by anonymous ftp from
+@url{ftp://ftp.gnu.org/pub/gnu/GNUinfo/FTP}.
+
+If you don't have a Fortran compiler, or if your Fortran compiler
+doesn't work like the traditional Unix f77, you will need to have the
+Fortran to C translator <CODE>f2c</CODE>.  You can get <CODE>f2c</CODE> from any
+number of anonymous ftp archives.  The most recent version of <CODE>f2c</CODE>
+is always available from @url{netlib.att.com}.
+
+On an otherwise idle Pentium 133 running Linux, it will take somewhere
+between 1-1/2 to 3 hours to compile everything, depending on whether you
+are building shared libraries.  You will need about 100 megabytes of disk
+storage to work with (considerably less if you don't compile with debugging
+symbols).  To do that, use the command
+
+
+<PRE>
+make CFLAGS=-O CXXFLAGS=-O LDFLAGS=
+</PRE>
+
+instead of just <SAMP>`make'</SAMP>.
+
+<LI>
+
+If you encounter errors while compiling Octave, first check the list of
+known problems below to see if there is a workaround or solution for
+your problem.  If not,
+see section <A HREF="octave_32.html#SEC181">Known Causes of Trouble</A>,
+for information about how to report bugs.
+
+<LI>
+
+Once you have successfully compiled Octave, run <SAMP>`make install'</SAMP>.
+
+This will install a copy of octave, its libraries, and its documentation
+in the destination directory.  As distributed, Octave is installed in
+the following directories.  In the table below, <VAR>prefix</VAR> defaults to
+<TT>`/usr/local'</TT>, <VAR>version</VAR> stands for the current version number
+of the interpreter, and <VAR>arch</VAR> is the type of computer on which
+Octave is installed (for example, <SAMP>`i586-unknown-gnu'</SAMP>).
+
+<DL COMPACT>
+
+<DT><TT>`<VAR>prefix</VAR>/bin'</TT>
+<DD>
+Octave and other binaries that people will want to run directly.
+
+<DT><TT>`<VAR>prefix</VAR>/lib'</TT>
+<DD>
+Libraries like libcruft.a and liboctave.a.
+
+<DT><TT>`<VAR>prefix</VAR>/share'</TT>
+<DD>
+Architecture-independent data files.
+
+<DT><TT>`<VAR>prefix</VAR>/include/octave'</TT>
+<DD>
+Include files distributed with Octave.
+
+<DT><TT>`<VAR>prefix</VAR>/man/man1'</TT>
+<DD>
+Unix-style man pages describing Octave.
+
+<DT><TT>`<VAR>prefix</VAR>/info'</TT>
+<DD>
+Info files describing Octave.
+
+<DT><TT>`<VAR>prefix</VAR>/share/octave/<VAR>version</VAR>/m'</TT>
+<DD>
+Function files distributed with Octave.  This includes the Octave
+version, so that multiple versions of Octave may be installed at the
+same time.
+
+<DT><TT>`<VAR>prefix</VAR>/lib/octave/<VAR>version</VAR>/exec/<VAR>arch</VAR>'</TT>
+<DD>
+Executables to be run by Octave rather than the user.
+
+<DT><TT>`<VAR>prefix</VAR>/lib/octave/<VAR>version</VAR>/oct/<VAR>arch</VAR>'</TT>
+<DD>
+Object files that will be dynamically loaded.
+
+<DT><TT>`<VAR>prefix</VAR>/share/octave/<VAR>version</VAR>/imagelib'</TT>
+<DD>
+Image files that are distributed with Octave.
+</DL>
+</UL>
+
+
+
+<H2><A NAME="SEC190" HREF="octave_toc.html#TOC190">Notes</A></H2>
+
+
+<UL>
+<LI>
+
+You must use the version of GNU Info distributed with Octave, because it
+includes some changes to allow Octave to search the indices of the info
+files.  If you would like, you should be able to replace other copies of
+the Info browser that you have with the one distributed with Octave.
+Patches relative to a recent release of the GNU Info browser are
+included in the file <TT>`INFO.PATCH'</TT> in the Octave source
+distribution.  This modification has been submitted to the GNU Info
+maintainer, and should appear in some future release.  Once that
+happens, the GNU Info browser will no longer be distributed with Octave.
+</UL>
+
+
+
+<H2><A NAME="SEC191" HREF="octave_toc.html#TOC191">Installation Problems</A></H2>
+
+<P>
+This section contains a list of problems (and some apparent problems
+that don't really mean anything is wrong) that may show up during
+installation of Octave.
+
+</P>
+
+<UL>
+<LI>
+
+On some SCO systems, <CODE>info</CODE> fails to compile if
+<CODE>HAVE_TERMIOS_H</CODE> is defined int <TT>`config.h'</TT>.  Simply removing
+the definition from <TT>`info/config.h'</TT> should allow it to compile.
+
+<LI>
+
+If <CODE>configure</CODE> finds <CODE>dlopen</CODE>, <CODE>dlsym</CODE>, <CODE>dlclose</CODE>,
+and <CODE>dlerror</CODE>, but not the header file <TT>`dlfcn.h'</TT>, you need to
+find the source for the header file and install it in the directory
+<TT>`usr/include'</TT>.  This is reportedly a problem with Slackware 3.1.
+For Linux/GNU systems, the source for <TT>`dlfcn.h'</TT> is in the
+<CODE>ldso</CODE> package.
+
+<LI>
+
+Building <TT>`.oct'</TT> files doesn't work.
+
+You should probably have a shared version of <CODE>libstdc++</CODE>.  A patch
+is needed to build shared versions of version 2.7.2 of <CODE>libstdc++</CODE>
+on the HP-PA architecture.  You can find the patch at
+@url{ftp://ftp.cygnus.com/pub/g++/libg++-2.7.2-hppa-gcc-fix}.
+
+<LI>
+
+On FreeBSD systems Octave may hang while initializing some internal
+constants.  The fix appears to be to use
+
+
+<PRE>
+options      GPL_MATH_EMULATE
+</PRE>
+
+rather than 
+
+
+<PRE>
+options      MATH_EMULATE 
+</PRE>
+
+in the kernel configuration files (typically found in the directory
+<TT>`/sys/i386/conf'</TT>.  After making this change, you'll need to rebuild
+the kernel, install it, and reboot.
+
+<LI>
+
+If you encounter errors like
+
+
+<PRE>
+passing `void (*)()' as argument 2 of
+  `octave_set_signal_handler(int, void (*)(int))'
+</PRE>
+
+or
+
+
+<PRE>
+warning: ANSI C++ prohibits conversion from `(int)' to `(...)'
+</PRE>
+
+while compiling <TT>`sighandlers.cc'</TT>, you may need to edit some files
+in the <CODE>gcc</CODE> include subdirectory to add proper prototypes for functions
+there.  For example, Ultrix 4.2 needs proper declarations for the
+<CODE>signal</CODE> function and the <CODE>SIG_IGN</CODE> macro in the file
+<TT>`signal.h'</TT>.
+
+On some systems the <CODE>SIG_IGN</CODE> macro is defined to be something like
+this:
+
+
+<PRE>
+#define  SIG_IGN  (void (*)())1
+</PRE>
+
+when it should really be something like:
+
+
+<PRE>
+#define  SIG_IGN  (void (*)(int))1
+</PRE>
+
+to match the prototype declaration for the <CODE>signal</CODE> function.  This
+change should also be made for the <CODE>SIG_DFL</CODE> and <CODE>SIG_ERR</CODE>
+symbols. It may be necessary to change the definitions in
+<TT>`sys/signal.h'</TT> as well.
+
+The <CODE>gcc</CODE> <CODE>fixincludes</CODE> and <CODE>fixproto</CODE> scripts should
+probably fix these problems when <CODE>gcc</CODE> installs its modified set of
+header files, but I don't think that's been done yet.
+
+<STRONG>You should not change the files in <TT>`/usr/include'</TT></STRONG>.  You
+can find the <CODE>gcc</CODE> include directory tree by running the command
+
+
+<PRE>
+gcc -print-libgcc-file-name
+</PRE>
+
+The directory of <CODE>gcc</CODE> include files normally begins in the same directory
+that contains the file <TT>`libgcc.a'</TT>.
+
+<LI>
+
+There is a bug with the <CODE>makeinfo</CODE> program that is distributed with
+Texinfo (through version 3.9) that causes the indices in Octave's
+on-line manual to be generated incorrectly.  If you need to recreate the
+on-line documentation, you should get the <CODE>makeinfo</CODE> program that
+is distributed with texinfo-3.9 and apply the patch for <CODE>makeinfo</CODE>
+that is distributed with Octave.  See the file <TT>`MAKEINFO.PATCH'</TT> for
+more details.
+
+<LI>
+
+Some of the Fortran subroutines may fail to compile with older versions
+of the Sun Fortran compiler.  If you get errors like
+
+
+<PRE>
+zgemm.f:
+	zgemm:
+warning: unexpected parent of complex expression subtree
+zgemm.f, line 245: warning: unexpected parent of complex
+  expression subtree
+warning: unexpected parent of complex expression subtree
+zgemm.f, line 304: warning: unexpected parent of complex
+  expression subtree
+warning: unexpected parent of complex expression subtree
+zgemm.f, line 327: warning: unexpected parent of complex
+  expression subtree
+pcc_binval: missing IR_CONV in complex op
+make[2]: *** [zgemm.o] Error 1
+</PRE>
+
+when compiling the Fortran subroutines in the <TT>`libcruft'</TT>
+subdirectory, you should either upgrade your compiler or try compiling
+with optimization turned off.
+
+<LI>
+
+On NeXT systems, if you get errors like this:
+
+
+<PRE>
+/usr/tmp/cc007458.s:unknown:Undefined local symbol LBB7656
+/usr/tmp/cc007458.s:unknown:Undefined local symbol LBE7656
+</PRE>
+
+when compiling <TT>`Array.cc'</TT> and <TT>`Matrix.cc'</TT>, try recompiling
+these files without <CODE>-g</CODE>.
+
+<LI>
+
+Some people have reported that calls to shell_cmd and the pager do not
+work on SunOS systems.  This is apparently due to having
+<CODE>G_HAVE_SYS_WAIT</CODE> defined to be 0 instead of 1 when compiling
+<CODE>libstdc++</CODE>.
+
+<LI>
+
+On NeXT systems, linking to <TT>`libsys_s.a'</TT> may fail to resolve the
+following functions
+
+
+<PRE>
+_tcgetattr
+_tcsetattr
+_tcflow
+</PRE>
+
+which are part of <TT>`libposix.a'</TT>.  Unfortunately, linking Octave with
+<CODE>-posix</CODE> results in the following undefined symbols.
+
+
+<PRE>
+.destructors_used
+.constructors_used
+_objc_msgSend
+_NXGetDefaultValue
+_NXRegisterDefaults
+.objc_class_name_NXStringTable
+.objc_class_name_NXBundle
+</PRE>
+
+One kluge around this problem is to extract <TT>`termios.o'</TT> from
+<TT>`libposix.a'</TT>, put it in Octave's <TT>`src'</TT> directory, and add it
+to the list of files to link together in the makefile.  Suggestions for
+better ways to solve this problem are welcome!
+
+<LI>
+
+If Octave crashes immediately with a floating point exception, it is
+likely that it is failing to initialize the IEEE floating point values
+for infinity and NaN.
+
+If your system actually does support IEEE arithmetic, you should be able
+to fix this problem by modifying the function <CODE>octave_ieee_init</CODE> in
+the file <TT>`lo-ieee.cc'</TT> to correctly initialize Octave's internal
+infinity and NaN variables.
+
+If your system does not support IEEE arithmetic but Octave's configure
+script incorrectly determined that it does, you can work around the
+problem by editing the file <TT>`config.h'</TT> to not define
+<CODE>HAVE_ISINF</CODE>, <CODE>HAVE_FINITE</CODE>, and <CODE>HAVE_ISNAN</CODE>.
+
+In any case, please report this as a bug since it might be possible to
+modify Octave's configuration script to automatically determine the
+proper thing to do.
+
+<LI>
+
+After installing the binary distribution of Octave in an alternate
+directory, the Emacs command <CODE>run-octave</CODE> doesn't work.  Emacs
+hangs in <CODE>accept-process-output</CODE> in <CODE>inferior-octave-startup</CODE>.
+
+This seems to be a problem with executing a shell script using the
+comint package.  You can avoid the problem by changing the way Octave is
+installed to eliminate the need for the shell script.  You can either
+compile and install Octave using the source distribution, reinstall the
+binary distribution in the default directory, or copy the commands in
+the octave shell script wrapper to your shell startup files (and the
+shell startup files for anyone else who is using Octave) and then
+rename the file <TT>`octave.bin'</TT> to be <TT>`octave'</TT>.
+</UL>
+
+
+
+<H2><A NAME="SEC192" HREF="octave_toc.html#TOC192">Binary Distributions</A></H2>
+
+<P>
+Although Octave is not very difficult to build from its sources, it is a
+relatively large program that does require a significant amount of time
+and disk space to compile and install.  Because of this, many people
+want to be able to obtain binary distributions so they can start using
+Octave immediately, without having to bother with the details of
+compiling it first.  This is understandable, so I try to maintain a
+current collection of binary distributions at
+@url{ftp://ftp.che.wisc.edu/pub/octave/BINARIES}.
+
+</P>
+<P>
+Please understand, however, that there is only a limited amount of time
+available to devote to making binaries, so binaries may not be
+immediately available for some platforms.  (Please contact
+@email{bug-octave@bevo.che.wisc.edu} if you are interested in helping
+make a binary distribution available for your system.)
+
+</P>
+
+
+
+<H3><A NAME="SEC193" HREF="octave_toc.html#TOC193">Installing Octave from a Binary Distribution</A></H3>
+
+<P>
+To install Octave from a binary distribution, execute the command
+
+</P>
+
+<PRE>
+sh ./install-octave
+</PRE>
+
+<P>
+in the top level directory of the distribution.
+
+</P>
+<P>
+Binary distributions are normally compiled assuming that Octave will be
+installed in the following subdirectories of <TT>`/usr/local'</TT>.
+
+</P>
+<DL COMPACT>
+
+<DT><TT>`bin'</TT>
+<DD>
+Octave and other binaries that people will want to run directly.
+
+<DT><TT>`lib'</TT>
+<DD>
+Shared libraries that Octave needs in order to run.  These files are
+not included if you are installing a statically linked version of
+Octave.
+
+<DT><TT>`man/man1'</TT>
+<DD>
+Unix-style man pages describing Octave.
+
+<DT><TT>`info'</TT>
+<DD>
+Info files describing Octave.
+
+<DT><TT>`share/octave/<VAR>version</VAR>/m'</TT>
+<DD>
+Function files distributed with Octave.  This includes the Octave
+version, so that multiple versions of Octave may be installed at the
+same time.
+
+<DT><TT>`libexec/octave/<VAR>version</VAR>/exec/<VAR>arch</VAR>'</TT>
+<DD>
+Executables to be run by Octave rather than the user.
+
+<DT><TT>`libexec/octave/<VAR>version</VAR>/oct/<VAR>arch</VAR>'</TT>
+<DD>
+Object files that will be dynamically loaded.
+
+<DT><TT>`share/octave/<VAR>version</VAR>/imagelib'</TT>
+<DD>
+Image files that are distributed with Octave.
+</DL>
+
+<P>
+where <VAR>version</VAR> stands for the current version number of the
+interpreter, and <VAR>arch</VAR> is the type of computer on which Octave
+is installed (for example, <SAMP>`i586-pc-linux-gnu'</SAMP>).
+
+</P>
+<P>
+If these directories don't exist, the script <CODE>install-octave</CODE> will
+create them for you.  The installation script also creates the following
+subdirectories of <TT>`/usr/local'</TT> that are intended for locally
+installed functions:
+
+</P>
+<DL COMPACT>
+
+<DT><TT>`share/octave/site/m'</TT>
+<DD>
+Locally installed M-files.
+
+<DT><TT>`libexec/octave/site/exec/<VAR>arch</VAR>'</TT>
+<DD>
+Locally installed binaries intended to be run by Octave rather than by
+the user.
+
+<DT><TT>`libexec/octave/site/octave/<VAR>arch</VAR>'</TT>
+<DD>
+Local object files that will be dynamically linked.
+</DL>
+
+<P>
+If it is not possible for you to install Octave in <TT>`/usr/local'</TT>, or
+if you would prefer to install it in a different directory, you can
+specify the name of the top level directory as an argument to the
+<TT>`install-octave'</TT> script.  For example:
+
+</P>
+
+<PRE>
+sh ./install-octave /some/other/directory
+</PRE>
+
+<P>
+will install Octave in subdirectories of the directory
+<TT>`/some/other/directory'</TT>.
+
+</P>
+
+
+<H3><A NAME="SEC194" HREF="octave_toc.html#TOC194">Creating a Binary Distribution</A></H3>
+
+<P>
+Here is how to build a binary distribution for others to use.  If you
+want to make a binary distribution for your system available along with
+the Octave sources and binaries on @url{ftp.che.wisc.edu}, please follow
+this procedure.  For directions explaining how to make the binary
+available on the ftp site, please contact
+@email{bug-octave@bevo.che.wisc.edu}.
+
+</P>
+
+<UL>
+<LI>
+
+Unpack the source distribution:
+
+
+<PRE>
+gunzip -c octave-2.0.13.tar.gz | tar xf -
+</PRE>
+
+<LI>
+
+Change your current directory to the top-level directory of the source
+distribution:
+
+
+<PRE>
+cd octave-2.0.13
+</PRE>
+
+<LI>
+
+Make the binary distribution:
+
+
+<PRE>
+make binary-dist
+</PRE>
+
+This will create a compressed tar file ready for distribution.
+It will have a name like
+<TT>`octave-2.0.13-i586-pc-linux-gnu.tar.gz'</TT>
+</UL>
+
+<P><HR><P>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_32.html">previous</A>, <A HREF="octave_34.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+</BODY>
+</HTML>

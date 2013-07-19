@@ -1,0 +1,226 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from ./octave.texi on 9 October 1998 -->
+
+<TITLE>GNU Octave - Data Types</TITLE>
+</HEAD>
+<BODY>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_3.html">previous</A>, <A HREF="octave_5.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC41" HREF="octave_toc.html#TOC41">Data Types</A></H1>
+<P>
+<A NAME="IDX122"></A>
+
+</P>
+<P>
+All versions of Octave include a number of built-in data types,
+including real and complex scalars and matrices, character strings, and
+a data structure type.
+
+</P>
+<P>
+It is also possible to define new specialized data types by writing a
+small amount of C++ code.  On some systems, new data types can be loaded
+dynamically while Octave is running, so it is not necessary to recompile
+all of Octave just to add a new type.  See section <A HREF="octave_12.html#SEC97">Dynamically Linked Functions</A> for more information about Octave's dynamic linking
+capabilities.  section <A HREF="octave_4.html#SEC46">User-defined Data Types</A> describes what you must do
+to define a new data type for Octave.
+
+</P>
+
+
+
+<H2><A NAME="SEC42" HREF="octave_toc.html#TOC42">Built-in Data Types</A></H2>
+<P>
+<A NAME="IDX123"></A>
+<A NAME="IDX124"></A>
+
+</P>
+<P>
+The standard built-in data types are real and complex scalars and
+matrices, ranges, character strings, and a data structure type.
+Additional built-in data types may be added in future versions.  If you
+need a specialized data type that is not currently provided as a
+built-in type, you are encouraged to write your own user-defined data
+type and contribute it for distribution in a future release of Octave.
+
+</P>
+
+
+
+<H3><A NAME="SEC43" HREF="octave_toc.html#TOC43">Numeric Objects</A></H3>
+<P>
+<A NAME="IDX125"></A>
+<A NAME="IDX126"></A>
+
+</P>
+<P>
+Octave's built-in numeric objects include real and complex scalars and
+matrices.  All built-in numeric data is currently stored as double
+precision numbers.  On systems that use the IEEE floating point format,
+values in the range of approximately
+ can be stored, and the relative precision is approximately
+The exact values are given by the variables <CODE>realmin</CODE>,
+<CODE>realmax</CODE>, and <CODE>eps</CODE>, respectively.
+
+</P>
+<P>
+Matrix objects can be of any size, and can be dynamically reshaped and
+resized.  It is easy to extract individual rows, columns, or submatrices
+is using a variety of powerful indexing features.  See section <A HREF="octave_9.html#SEC65">Index Expressions</A>.
+
+</P>
+<P>
+See section <A HREF="octave_5.html#SEC48">Numeric Data Types</A>, for more information.
+
+</P>
+
+
+<H3><A NAME="SEC44" HREF="octave_toc.html#TOC44">String Objects</A></H3>
+<P>
+<A NAME="IDX127"></A>
+<A NAME="IDX128"></A>
+<A NAME="IDX129"></A>
+<A NAME="IDX130"></A>
+
+</P>
+<P>
+A character string in Octave consists of a sequence of characters
+enclosed in either double-quote or single-quote marks.  Internally,
+Octave currently stores strings as matrices of characters.  All the
+indexing operations that work for matrix objects also work for strings.
+
+</P>
+<P>
+See section <A HREF="octave_6.html#SEC53">Strings</A>, for more information.
+
+</P>
+
+
+<H3><A NAME="SEC45" HREF="octave_toc.html#TOC45">Data Structure Objects</A></H3>
+<P>
+<A NAME="IDX131"></A>
+<A NAME="IDX132"></A>
+
+</P>
+<P>
+Octave's data structure type can help you to organize related objects of
+different types.  The current implementation uses an associative array
+with indices limited to strings, but the syntax is more like C-style
+structures.
+
+</P>
+<P>
+See section <A HREF="octave_7.html#SEC58">Data Structures</A>, for more information.
+
+</P>
+
+
+<H2><A NAME="SEC46" HREF="octave_toc.html#TOC46">User-defined Data Types</A></H2>
+<P>
+<A NAME="IDX133"></A>
+<A NAME="IDX134"></A>
+
+</P>
+<P>
+Someday I hope to expand this to include a complete description of
+Octave's mechanism for managing user-defined data types.  Until this
+feature is documented here, you will have to make do by reading the code
+in the <TT>`ov.h'</TT>, <TT>`ops.h'</TT>, and related files from Octave's
+<TT>`src'</TT> directory.
+
+</P>
+
+
+<H2><A NAME="SEC47" HREF="octave_toc.html#TOC47">Object Sizes</A></H2>
+
+<P>
+The following functions allow you to determine the size of a variable or
+expression.  These functions are defined for all objects.  They return
+-1 when the operation doesn't make sense.  For example, Octave's
+data structure type doesn't have rows or columns, so the <CODE>rows</CODE> and
+<CODE>columns</CODE> functions return -1 for structure arguments.
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>columns</B> <I>(<VAR>a</VAR>)</I>
+<DD><A NAME="IDX135"></A>
+Return the number of columns of <VAR>a</VAR>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>rows</B> <I>(<VAR>a</VAR>)</I>
+<DD><A NAME="IDX136"></A>
+Return the number of rows of <VAR>a</VAR>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>length</B> <I>(<VAR>a</VAR>)</I>
+<DD><A NAME="IDX137"></A>
+Return the number of rows of <VAR>a</VAR> or the number of columns of
+<VAR>a</VAR>, whichever is larger.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>size</B> <I>(<VAR>a</VAR>, <VAR>n</VAR>)</I>
+<DD><A NAME="IDX138"></A>
+Return the number rows and columns of <VAR>a</VAR>.
+
+</P>
+<P>
+With one input argument and one output argument, the result is returned
+in a 2 element row vector.  If there are two output arguments, the
+number of rows is assigned to the first, and the number of columns to
+the second.  For example,
+
+</P>
+
+<PRE>
+size ([1, 2; 3, 4; 5, 6])
+     => [ 3, 2 ]
+
+[nr, nc] = size ([1, 2; 3, 4; 5, 6])
+     => nr = 3
+     => nc = 2
+</PRE>
+
+<P>
+If given a second argument of either 1 or 2, <CODE>size</CODE> will return
+only the row or column dimension.  For example
+
+</P>
+
+<PRE>
+size ([1, 2; 3, 4; 5, 6], 2)
+     => 2
+</PRE>
+
+<P>
+returns the number of columns in the given matrix.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>isempty</B> <I>(<VAR>a</VAR>)</I>
+<DD><A NAME="IDX139"></A>
+Return 1 if <VAR>a</VAR> is an empty matrix (either the number of rows, or
+the number of columns, or both are zero).  Otherwise, return 0.
+</DL>
+
+</P>
+
+<P><HR><P>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_3.html">previous</A>, <A HREF="octave_5.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+</BODY>
+</HTML>

@@ -1,0 +1,5766 @@
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/liboctave/cmd-hist.cc i:/project/C/emx-0.9c/src/octave/octave-2.0.17/liboctave/cmd-hist.cc
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/liboctave/cmd-hist.cc	Sat Jan 15 13:15:18 2000
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/liboctave/cmd-hist.cc	Sat Jan 15 13:57:52 2000
+***************
+*** 20,25 ****
+--- 20,27 ----
+  
+  */
+  
++ /* Modified by Klaus Gebhardt */
++ 
+  #ifdef HAVE_CONFIG_H
+  #include <config.h>
+  #endif
+***************
+*** 123,133 ****
+  {
+    if (! ignoring_entries ())
+      {
+!       if (s.empty ()
+! 	  || (s.length () == 1 && (s[0] == '\r' || s[0] == '\n')))
+  	return;
+  
+!       char *FIX_READLINE_PROTOS = ::strdup (s.c_str ());
+  
+        ::add_history (FIX_READLINE_PROTOS);
+  
+--- 125,145 ----
+  {
+    if (! ignoring_entries ())
+      {
+!       if (s.empty () ||
+! 	  (s.length () == 1 && (s[0] == '\r' || s[0] == '\n' || s[0] == '')))
+  	return;
+  
+!       string t = s;
+!       int l = t.length ();
+!       char c = t[l-2];
+!       if (c == '\n' || c == '\r' || c == '')
+! 	{
+! 	  t.resize (l - 1);
+! 	  t[l-2] = '\n';
+! 	  if (l == 2)  return;
+! 	}
+! 
+!       char *FIX_READLINE_PROTOS = ::strdup (t.c_str ());
+  
+        ::add_history (FIX_READLINE_PROTOS);
+  
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/liboctave/file-ops.cc i:/project/C/emx-0.9c/src/octave/octave-2.0.17/liboctave/file-ops.cc
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/liboctave/file-ops.cc	Mon Feb  2 08:45:10 1998
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/liboctave/file-ops.cc	Sat Jul 20 00:13:56 2002
+***************
+*** 20,25 ****
+--- 20,27 ----
+  
+  */
+  
++ /* Modified by Klaus Gebhardt, 1996 */
++ 
+  #ifdef HAVE_CONFIG_H
+  #include <config.h>
+  #endif
+***************
+*** 36,45 ****
+--- 38,78 ----
+  #include <unistd.h>
+  #endif
+  
++ #ifdef OS2
++ #define MERLIN_PROCESS
++ #include <merlin.h>
++ #endif
++ 
+  #include "file-ops.h"
+  #include "lo-error.h"
+  #include "statdefs.h"
+  
++ #ifdef __EMX__
++ // Normal stat and lstat does not work with EMX!
++ // Using old approach.
++ // Modified, by Klaus Gebhardt, 1998
++ static __inline int _stat (const char *name, struct stat *buf)
++ {
++   int ret;
++ 
++   do
++     ret = stat (name, buf);
++   while (ret < 0 && errno == EINTR);
++ 
++   return ret;
++ }
++ 
++ static __inline int _lstat (const char *name, struct stat *buf)
++ {
++   int ret;
++ 
++   do
++     ret = lstat (name, buf);
++   while (ret < 0 && errno == EINTR);
++ 
++   return ret;
++ }
++ #else
+  #if !defined (HAVE_LSTAT)
+  static inline int
+  lstat (const char *name, struct stat *buf)
+***************
+*** 47,52 ****
+--- 80,86 ----
+    return stat (name, buf);
+  }
+  #endif
++ #endif
+  
+  // XXX FIXME XXX -- the is_* and mode_as_string functions are only valid
+  // for initialized objects.  If called for an object that is not
+***************
+*** 150,156 ****
+--- 184,194 ----
+  
+        struct stat buf;
+  
++ #ifdef __EMX__
++       int status = follow_links ? _stat (cname, &buf) : _lstat (cname, &buf);
++ #else
+        int status = follow_links ? stat (cname, &buf) : lstat (cname, &buf);
++ #endif
+  
+        if (status < 0)
+  	{
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/liboctave/lo-mappers.cc i:/project/C/emx-0.9c/src/octave/octave-2.0.17/liboctave/lo-mappers.cc
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/liboctave/lo-mappers.cc	Sat Jan 15 13:15:20 2000
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/liboctave/lo-mappers.cc	Sat Jan 15 13:54:44 2000
+***************
+*** 20,25 ****
+--- 20,27 ----
+  
+  */
+  
++ /* Modified by Klaus Gebhardt, 1997 - 1999 */
++ 
+  #ifdef HAVE_CONFIG_H
+  #include <config.h>
+  #endif
+***************
+*** 49,54 ****
+--- 51,66 ----
+  #define finite(x) ((x) < DBL_MAX && (x) > -DBL_MAX)
+  #endif
+  
++ extern "C"
++ {
++   double F77_FCN (dacosh, DACOSH) (const double*);
++   double F77_FCN (dasinh, DASINH) (const double*);
++   double F77_FCN (datanh, DATANH) (const double*);
++ 
++   double F77_FCN (derf, DERF) (const double&);
++   double F77_FCN (derfc, DERFC) (const double&);
++ }
++ 
+  #ifndef M_LOG10E
+  #define M_LOG10E 0.43429448190325182765
+  #endif
+***************
+*** 123,135 ****
+  }
+  
+  double
+  xerf (double x)
+  {
+  #if defined (HAVE_ERF)
+    return erf (x);
+  #else
+!   (*current_liboctave_error_handler)
+!     ("erf (x) not available on this system");
+  #endif
+  }
+  
+--- 135,184 ----
+  }
+  
+  double
++ xacosh (double x)
++ {
++ #if defined (HAVE_ACOSH)
++   return acosh (x);
++ #else
++   double y;
++   F77_YXFCN (dacosh, DACOSH, y, (&x));
++   return y;
++ #endif
++ }
++ 
++ double
++ xasinh (double x)
++ {
++ #if defined (HAVE_ASINH)
++   return asinh (x);
++ #else
++   double y;
++   F77_YXFCN (dasinh, DASINH, y, (&x));
++   return y;
++ #endif
++ }
++ 
++ double
++ xatanh (double x)
++ {
++ #if defined (HAVE_ATANH)
++   return atanh (x);
++ #else
++   double y;
++   F77_YXFCN (datanh, DATANH, y, (&x));
++   return y;
++ #endif
++ }
++ 
++ double
+  xerf (double x)
+  {
+  #if defined (HAVE_ERF)
+    return erf (x);
+  #else
+!   double y;
+!   F77_YXFCN (derf, DERF, y, (x));
+!   return y;
+  #endif
+  }
+  
+***************
+*** 139,146 ****
+  #if defined (HAVE_ERFC)
+    return erfc (x);
+  #else
+!   (*current_liboctave_error_handler)
+!     ("erfc (x) not available on this system");
+  #endif
+  }
+  
+--- 188,196 ----
+  #if defined (HAVE_ERFC)
+    return erfc (x);
+  #else
+!   double y;
+!   F77_YXFCN (derfc, DERFC, y, (x));
+!   return y;
+  #endif
+  }
+  
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/liboctave/lo-mappers.h i:/project/C/emx-0.9c/src/octave/octave-2.0.17/liboctave/lo-mappers.h
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/liboctave/lo-mappers.h	Thu Feb 19 08:17:20 1998
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/liboctave/lo-mappers.h	Thu May 13 12:51:40 1999
+***************
+*** 20,29 ****
+--- 20,33 ----
+  
+  */
+  
++ /* Modified by Klaus Gebhardt, 1997 */
++ 
+  #if !defined (octave_liboctave_mappers_h)
+  #define octave_liboctave_mappers_h 1
+  
+  #include "oct-cmplx.h"
++ #include "oct-math.h"
++ #include "lo-ieee.h"
+  
+  extern double arg (double x);
+  extern double conj (double x);
+***************
+*** 32,37 ****
+--- 36,44 ----
+  extern double real (double x);
+  extern double round (double x);
+  extern double signum (double x);
++ extern double xacosh (double x);
++ extern double xasinh (double x);
++ extern double xatanh (double x);
+  extern double xerf (double x);
+  extern double xerfc (double x);
+  extern double xisnan (double x);
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/liboctave/lo-specfun.cc i:/project/C/emx-0.9c/src/octave/octave-2.0.17/liboctave/lo-specfun.cc
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/liboctave/lo-specfun.cc	Wed Nov 25 00:24:34 1998
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/liboctave/lo-specfun.cc	Thu May 13 13:20:26 1999
+***************
+*** 20,29 ****
+--- 20,35 ----
+  
+  */
+  
++ /* Modified by Klaus Gebhardt, 1997 - 1999 */
++ 
+  #ifdef HAVE_CONFIG_H
+  #include <config.h>
+  #endif
+  
++ #ifdef __EMX__
++ #include <float.h>
++ #endif
++ 
+  #include "Range.h"
+  #include "CColVector.h"
+  #include "CMatrix.h"
+***************
+*** 36,41 ****
+--- 42,49 ----
+  #include "lo-utils.h"
+  #include "mx-inlines.cc"
+  
++ 
++ 
+  extern "C"
+  {
+    int F77_FCN (zbesj, ZBESJ) (const double&, const double&,
+***************
+*** 92,98 ****
+  acosh (double x)
+  {
+    double retval;
+!   F77_XFCN (dacosh, DACOSH, (x, retval));
+    return retval;
+  }
+  #endif
+--- 100,106 ----
+  acosh (double x)
+  {
+    double retval;
+!   F77_XFCN (xdacosh, DACOSH, (x, retval));
+    return retval;
+  }
+  #endif
+***************
+*** 102,108 ****
+  asinh (double x)
+  {
+    double retval;
+!   F77_XFCN (dasinh, DASINH, (x, retval));
+    return retval;
+  }
+  #endif
+--- 110,116 ----
+  asinh (double x)
+  {
+    double retval;
+!   F77_XFCN (xdasinh, DASINH, (x, retval));
+    return retval;
+  }
+  #endif
+***************
+*** 112,118 ****
+  atanh (double x)
+  {
+    double retval;
+!   F77_XFCN (datanh, DATANH, (x, retval));
+    return retval;
+  }
+  #endif
+--- 120,126 ----
+  atanh (double x)
+  {
+    double retval;
+!   F77_XFCN (xdatanh, DATANH, (x, retval));
+    return retval;
+  }
+  #endif
+***************
+*** 122,128 ****
+  erf (double x)
+  {
+    double retval;
+!   F77_XFCN (derf, DERF, (x, retval));
+    return retval;
+  }
+  #endif
+--- 130,136 ----
+  erf (double x)
+  {
+    double retval;
+!   F77_XFCN (xderf, DERF, (x, retval));
+    return retval;
+  }
+  #endif
+***************
+*** 132,138 ****
+  erfc (double x)
+  {
+    double retval;
+!   F77_XFCN (derfc, DERFC, (x, retval));
+    return retval;
+  }
+  #endif
+--- 140,146 ----
+  erfc (double x)
+  {
+    double retval;
+!   F77_XFCN (xderfc, DERFC, (x, retval));
+    return retval;
+  }
+  #endif
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/liboctave/makefile.os2 i:/project/C/emx-0.9c/src/octave/octave-2.0.17/liboctave/makefile.os2
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/liboctave/makefile.os2	Sat Feb  7 13:49:04 1998
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/liboctave/makefile.os2	Sat Jul 20 00:17:18 2002
+***************
+*** 76,92 ****
+  	cp ../libcruft/misc/lo-error.h lo-error.h
+  
+  octave2.def: liboctave.lib
+! 	@echo LIBRARY octave2 INITINSTANCE TERMINSTANCE > $@
+! 	@echo DESCRIPTION 'octave2.dll, (c) Klaus Gebhardt 1995-1996' >> $@
+! 	@echo. >> $@
+! 	@echo DATA >> $@
+! 	@echo   MULTIPLE NONSHARED >> $@
+! 	@echo. >> $@
+! 	@echo EXPORTS >> $@
+  	emxexp -o1 -n liboctave.lib >> $@
+  
+  CRFT   = -L../libcruft -lcruft1 -lcruft2 -lcruft3 -lcruft4
+! LIBS   = -lreadline -lkpathsea -lmkfifo -lgpp2 -lstdcpp2
+  ZFLAGS =  -Zdll -Zomf -Zcrtdll
+  
+  ../dll/octave2.dll: octave2.def liboctave.lib
+--- 76,92 ----
+  	cp ../libcruft/misc/lo-error.h lo-error.h
+  
+  octave2.def: liboctave.lib
+! 	@echo "LIBRARY octave2 INITINSTANCE TERMINSTANCE" > $@
+! 	@echo "DESCRIPTION 'octave2.dll, (c) Klaus Gebhardt 1995-1996'" >> $@
+! 	@echo "" >> $@
+! 	@echo "DATA" >> $@
+! 	@echo "  MULTIPLE NONSHARED" >> $@
+! 	@echo "" >> $@
+! 	@echo "EXPORTS" >> $@
+  	emxexp -o1 -n liboctave.lib >> $@
+  
+  CRFT   = -L../libcruft -lcruft1 -lcruft2 -lcruft3 -lcruft4
+! LIBS   = -lreadline -lkpathsea -lmerlin -lgpp2 -lstdcpp2
+  ZFLAGS =  -Zdll -Zomf -Zcrtdll
+  
+  ../dll/octave2.dll: octave2.def liboctave.lib
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/liboctave/pathsearch.cc i:/project/C/emx-0.9c/src/octave/octave-2.0.17/liboctave/pathsearch.cc
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/liboctave/pathsearch.cc	Sat Jan 15 13:15:20 2000
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/liboctave/pathsearch.cc	Sat Jan 15 13:54:44 2000
+***************
+*** 20,25 ****
+--- 20,27 ----
+  
+  */
+  
++ /* Modified by Klaus Gebhardt, 1998 */
++ 
+  #ifdef HAVE_CONFIG_H
+  #include <config.h>
+  #endif
+***************
+*** 157,163 ****
+--- 159,169 ----
+        if (s)
+  	kpathsea_debug |= atoi (s);
+  
++ #ifndef __EMX__
+        kpse_set_program_name (program_name.c_str (), "octave");
++ #else
++       kpse_set_progname (program_name.c_str ());
++ #endif
+  
+        octave_kpathsea_initialized = true;
+      }
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/libcruft/makefile.os2 i:/project/C/emx-0.9c/src/octave/octave-2.0.17/libcruft/makefile.os2
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/libcruft/makefile.os2	Thu May 13 12:56:02 1999
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/libcruft/makefile.os2	Fri Jul 19 23:58:52 2002
+***************
+*** 24,31 ****
+  CRUFT4 = cruft4.def lapack.lib
+  
+  all: $(CRUFT_LIB) $(CRUFT_A)
+! 	@for %p in ($(SUBDIRS)) do @( cd %p & $(MAKE_SUB) omf & cd .. )
+! 	@for %p in ($(SUBDIRS)) do @( cd %p & $(MAKE_SUB) DLLNAME=%p lib & cd .. )
+  	$(MAKE) $(TOPDIR)/dll/cruft1.dll
+  	$(MAKE) $(TOPDIR)/dll/cruft2.dll
+  	$(MAKE) $(TOPDIR)/dll/cruft3.dll
+--- 24,31 ----
+  CRUFT4 = cruft4.def lapack.lib
+  
+  all: $(CRUFT_LIB) $(CRUFT_A)
+! 	@for CRFTDIR in $(SUBDIRS) ; do cd $$CRFTDIR ; $(MAKE_SUB) omf                       ; cd .. ; done
+! 	@for CRFTDIR in $(SUBDIRS) ; do cd $$CRFTDIR ; $(MAKE_SUB) DLLNAME=$$CRFTDIR lib omf ; cd .. ; done
+  	$(MAKE) $(TOPDIR)/dll/cruft1.dll
+  	$(MAKE) $(TOPDIR)/dll/cruft2.dll
+  	$(MAKE) $(TOPDIR)/dll/cruft3.dll
+***************
+*** 44,48 ****
+  	$(CC) -o $@ $(CRUFT4) -Zdll -Zomf -Zcrtdll
+  
+  clean:
+! 	@for %p in ($(SUBDIRS)); do @( cd %p & $(MAKE_SUB) $@ & cd .. )
+  	rm -f *.lib *.a *.imp *.obj *.o $(TOPDIR)/dll/cruft*.dll
+--- 44,48 ----
+  	$(CC) -o $@ $(CRUFT4) -Zdll -Zomf -Zcrtdll
+  
+  clean:
+! 	@for CRFTDIR in $(SUBDIRS) ; do cd $$CRFTDIR ; $(MAKE_SUB) clean ; cd .. ; done
+  	rm -f *.lib *.a *.imp *.obj *.o $(TOPDIR)/dll/cruft*.dll
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/libcruft/misc/dostop.c i:/project/C/emx-0.9c/src/octave/octave-2.0.17/libcruft/misc/dostop.c
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/libcruft/misc/dostop.c	Sat Feb  3 15:33:40 1996
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/libcruft/misc/dostop.c	Thu May 13 12:51:40 1999
+***************
+*** 21,26 ****
+--- 21,28 ----
+  
+  */
+  
++ /* Modified by Klaus Gebhardt, 1996 */
++ 
+  #ifdef HAVE_CONFIG_H
+  #include <config.h>
+  #endif
+***************
+*** 30,35 ****
+--- 32,42 ----
+  
+  #include "f77-fcn.h"
+  #include "lo-error.h"
++ 
++ #ifdef __EMX__
++ int f77_exception_encountered;
++ jmp_buf f77_context;
++ #endif
+  
+  /* All the STOP statements in the Fortran routines have been replaced
+     with a call to XSTOPX, defined in the file libcruft/misc/xstopx.f.
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/libcruft/misc/f77-fcn.h i:/project/C/emx-0.9c/src/octave/octave-2.0.17/libcruft/misc/f77-fcn.h
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/libcruft/misc/f77-fcn.h	Sun Mar  3 02:16:14 1996
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/libcruft/misc/f77-fcn.h	Thu May 13 12:51:40 1999
+***************
+*** 20,25 ****
+--- 20,27 ----
+  
+  */
+  
++ /* Modified by Klaus Gebhardt, 1997 */
++ 
+  #if !defined (octave_f77_fcn_h)
+  #define octave_f77_fcn_h 1
+  
+***************
+*** 77,82 ****
+--- 79,103 ----
+  	} \
+        else \
+  	F77_FCN (f, F) args; \
++       copy_f77_context ((char *) saved_f77_context, (char *) f77_context, \
++ 			sizeof (jmp_buf)); \
++     } \
++   while (0)
++ 
++ #define F77_YXFCN(f, F, rc, args) \
++   do \
++     { \
++       jmp_buf saved_f77_context; \
++       f77_exception_encountered = 0; \
++       copy_f77_context ((char *) f77_context, (char *) saved_f77_context, \
++ 			sizeof (jmp_buf)); \
++       if (setjmp (f77_context)) \
++ 	{ \
++ 	  f77_exception_encountered = 1; \
++ 	  F77_XFCN_ERROR (f, F); \
++ 	} \
++       else \
++ 	rc = F77_FCN (f, F) args; \
+        copy_f77_context ((char *) saved_f77_context, (char *) f77_context, \
+  			sizeof (jmp_buf)); \
+      } \
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/cutils.c i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/cutils.c
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/cutils.c	Sat Jan 15 13:15:30 2000
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/cutils.c	Sat Jan 15 16:16:06 2000
+***************
+*** 48,53 ****
+--- 48,60 ----
+  
+    usleep (useconds);
+  
++ #elif defined (HAVE__SLEEP2)
++ 
++   int delay = useconds / 1000;
++ 
++   if (delay > 0)
++     _sleep2 (delay);
++ 
+  #elif defined (HAVE_SELECT)
+  
+    struct timeval delay;
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/defaults.cc i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/defaults.cc
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/defaults.cc	Sat Jul 20 22:56:48 2002
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/defaults.cc	Sat Jul 20 23:19:46 2002
+***************
+*** 28,33 ****
+--- 28,35 ----
+  
+  */
+  
++ /* Modified by Klaus Gebhardt, 1996 - 1997 */
++ 
+  #ifdef HAVE_CONFIG_H
+  #include <config.h>
+  #endif
+***************
+*** 184,190 ****
+  
+        if (shell_path)
+  	{
+! 	  Vexec_path = string (":");
+  	  Vexec_path.append (shell_path);
+  	}
+      }
+--- 186,192 ----
+  
+        if (shell_path)
+  	{
+! 	  Vexec_path = string (SEPCHAR_STR);
+  	  Vexec_path.append (shell_path);
+  	}
+      }
+***************
+*** 197,203 ****
+  
+    char *oct_path = getenv ("OCTAVE_PATH");
+  
+!   Vload_path = oct_path ? string (oct_path) : string (":");
+  
+    Vload_path_dir_path = dir_path (Vload_path, Vdefault_load_path);
+  }
+--- 199,205 ----
+  
+    char *oct_path = getenv ("OCTAVE_PATH");
+  
+!   Vload_path = oct_path ? string (oct_path) : string (SEPCHAR_STR);
+  
+    Vload_path_dir_path = dir_path (Vload_path, Vdefault_load_path);
+  }
+***************
+*** 220,232 ****
+    if (oct_info_prog)
+      Vinfo_prog = string (oct_info_prog);
+    else
+!     Vinfo_prog = "info";
+  }
+  
+  static void
+  set_default_editor (void)
+  {
+    Veditor = "emacs";
+  
+    char *env_editor = getenv ("EDITOR");
+  
+--- 222,245 ----
+    if (oct_info_prog)
+      Vinfo_prog = string (oct_info_prog);
+    else
+!     {
+! #if !defined (__EMX__)
+!       Vinfo_prog = Varch_lib_dir;
+!       Vinfo_prog.append ("/info");
+! #else
+!       Vinfo_prog = "";
+! #endif
+!     }
+  }
+  
+  static void
+  set_default_editor (void)
+  {
++ #if defined (__EMX__) && defined (OS2)
++   Veditor = "e";
++ #else
+    Veditor = "emacs";
++ #endif
+  
+    char *env_editor = getenv ("EDITOR");
+  
+***************
+*** 338,345 ****
+  
+        if (eplen > 0)
+  	{
+! 	  int prepend = (Vexec_path[0] == ':');
+! 	  int append = (eplen > 1 && Vexec_path[eplen-1] == ':');
+  
+  	  if (prepend)
+  	    {
+--- 351,358 ----
+  
+        if (eplen > 0)
+  	{
+! 	  int prepend = (Vexec_path[0] == SEPCHAR);
+! 	  int append = (eplen > 1 && Vexec_path[eplen-1] == SEPCHAR);
+  
+  	  if (prepend)
+  	    {
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/dynamic-ld.cc i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/dynamic-ld.cc
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/dynamic-ld.cc	Thu Mar 11 09:54:52 1999
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/dynamic-ld.cc	Sat Jul 20 00:32:36 2002
+***************
+*** 43,52 ****
+--- 43,57 ----
+  #if defined (HAVE_DLFCN_H)
+  #include <dlfcn.h>
+  #else
++ #ifdef OS2
++ #define MERLIN_PROCESS
++ #include <merlin.h>
++ #else
+  extern void *dlopen (const char *, int);
+  extern const char *dlerror (void);
+  extern void *dlsym (void *, const char *);
+  extern int dlclose (void *);
++ #endif
+  #endif
+  #ifndef RTLD_LAZY
+  #define RTLD_LAZY 1
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/file-io.cc i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/file-io.cc
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/file-io.cc	Sat Jan 15 13:15:32 2000
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/file-io.cc	Sat Jan 15 14:29:38 2000
+***************
+*** 34,39 ****
+--- 34,41 ----
+  // Completely rewritten by John W. Eaton <jwe@bevo.che.wisc.edu>,
+  // April 1996.
+  
++ /* Modified by Klaus Gebhardt, 1997 */
++ 
+  #ifdef HAVE_CONFIG_H
+  #include <config.h>
+  #endif
+***************
+*** 62,67 ****
+--- 64,70 ----
+  #include "oct-stream.h"
+  #include "oct-strstrm.h"
+  #include "pager.h"
++ #include "sighandlers.h"
+  #include "sysdep.h"
+  #include "utils.h"
+  #include "variables.h"
+***************
+*** 1297,1302 ****
+--- 1300,1340 ----
+  }
+  
+  DEFALIAS (octave_tmp_file_name, tmpnam);
++ 
++ DEFUN (child_purge_temp, args, ,
++  "child_purge_temp (pid, name)\n\
++ Remove the file NAME, when child PID dies.")
++ {
++   octave_value retval = -1.0;
++ 
++   if (args.length () == 2)
++     {
++       if (args(1).is_string ())
++ 	{
++ 	  double d_pid = args(0).double_value ();
++ 	  string name  = args(1).string_value ();
++ 
++ 	  if (!error_state)
++ 	    {
++ 	      if (D_NINT (d_pid) == d_pid)
++ 		{
++ 		  int i_pid = NINT (d_pid);
++ 
++ 		  octave_child_list::insert (i_pid, 0, name);
++ 		  retval = 0.0;
++ 		}
++ 	      else
++ 		error ("child_purge_temp: pid must be an integer");
++ 	    }
++ 	}
++       else
++ 	error ("child_purge_temp: second argument must be a string");
++     }
++   else
++     print_usage ("child_purge_temp");
++ 
++   return retval;
++ }
+  
+  static int
+  convert (int x, int ibase, int obase)
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/help.cc i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/help.cc
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/help.cc	Sat Jan 15 13:15:32 2000
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/help.cc	Sat Jan 15 14:29:38 2000
+***************
+*** 20,25 ****
+--- 20,27 ----
+  
+  */
+  
++ /* Modified by Klaus Gebhardt, 1996 */
++ 
+  #ifdef HAVE_CONFIG_H
+  #include <config.h>
+  #endif
+***************
+*** 65,70 ****
+--- 67,90 ----
+  #include "utils.h"
+  #include "variables.h"
+  
++ #if defined (__EMX__)
++ extern "C"
++ {
++ #include "info/info.h"
++ #include "info/dribble.h"
++ #include "info/terminal.h"
++ 
++   extern int external_info_search ();
++   extern int index_entry_exists ();
++   extern int do_info_index_search ();
++   extern void finish_info_session ();
++   extern char *replace_in_documentation ();
++ 
++ #include <process.h>
++   int _IO_system (const char *, int);
++ }
++ #endif
++ 
+  // Name of the info file specified on command line.
+  // (--info-file file)
+  string Vinfo_file;
+***************
+*** 523,528 ****
+--- 543,550 ----
+  static int
+  try_info (const string& nm)
+  {
++   if (Vinfo_prog.length () > 0)
++     {
+        int status = 0;
+  
+        static char *cmd_str = 0;
+***************
+*** 553,575 ****
+    volatile octave_interrupt_handler old_interrupt_handler
+      = octave_ignore_interrupts ();
+  
+    status = system (cmd_str);
+  
+    octave_set_interrupt_handler (old_interrupt_handler);
+  
+    if (WIFEXITED (status))
+      status = WEXITSTATUS (status);
+    else
+      status = 127;
+  
+    return status;
+  }
+  
+  static void
+  help_from_info (const string_vector& argv, int idx, int argc)
+  {
+    if (idx == argc)
+!     try_info (string ());
+    else
+      {
+        for (int i = idx; i < argc; i++)
+--- 575,670 ----
+        volatile octave_interrupt_handler old_interrupt_handler
+  	= octave_ignore_interrupts ();
+  
++ #ifdef __EMX__
++       status = _IO_system (cmd_str, P_WAIT);
++ #else
+        status = system (cmd_str);
++ #endif
+  
+        octave_set_interrupt_handler (old_interrupt_handler);
+  
++ #ifndef __EMX__
+        if (WIFEXITED (status))
+  	status = WEXITSTATUS (status);
+        else
+  	status = 127;
++ #else
++       if (status > 127) status -= 256;
++ #endif
++ 
++       return status;
++     }
++   else
++     {
++       volatile octave_interrupt_handler old_interrupt_handler
++ 	= octave_ignore_interrupts ();
++ 
++       int status = 0;
++ 
++       char *directory_name = strdup (Vinfo_file.c_str ());
++       char *temp = filename_non_directory (directory_name);
++ 
++       if (temp != directory_name)
++ 	{
++ 	  *temp = 0;
++ 	  info_add_path (directory_name, INFOPATH_PREPEND);
++ 	}
++ 
++       delete [] directory_name;
++ 
++       NODE *initial_node = info_get_node (Vinfo_file.c_str (), 0);
++ 
++       if (! initial_node)  status = 127;
++       else
++ 	{
++ 	  status = external_info_search(initial_node, 0,
++ 					Vinfo_file.c_str (), nm.c_str ());
++ 	  if (status == 1)
++ 	    {
++ 	      char *format = replace_in_documentation
++ 		("Type \"\\[quit]\" to quit, \"\\[get-help-window]\" for help.");
++ 	      window_message_in_echo_area (format);
++ 
++ 	      info_read_and_dispatch ();
++ 
++ #ifdef __EMX__
++ 	      terminal_goto_xy (0, screenheight - 2);
++ #else
++ 	      terminal_goto_xy (0, screenheight - 1);
++ #endif
++ 	      terminal_clear_to_eol ();
++ 	      terminal_unprep_terminal ();
++ 	    }
++ 
++ 	  status = status * status - 1;
++ 
++ 	  _finish_info_session (initial_node, 0);
++ 	}
++ 
++       octave_set_interrupt_handler (old_interrupt_handler);
+  
+    return status;
+  }
++ }
+  
+  static void
+  help_from_info (const string_vector& argv, int idx, int argc)
+  {
+    if (idx == argc)
+!     {
+!       int status = try_info (string ());
+! 
+!       if (status)
+! 	{
+! 	  if (status < 0)
+! 	    {
+! 	      message ("help", "sorry, `%s' is not indexed in the manual",
+! 		       string ().c_str ());
+! 	      sleep (2);
+! 	    }
+! 	  else  error ("help: unable to find info!");
+! 	}
+!     }
+    else
+      {
+        for (int i = idx; i < argc; i++)
+***************
+*** 1005,1010 ****
+--- 1100,1106 ----
+  
+    string s = builtin_string_variable ("INFO_PROGRAM");
+  
++ #ifndef __EMX__
+    if (s.empty ())
+      {
+        gripe_invalid_value_specified ("INFO_PROGRAM");
+***************
+*** 1012,1017 ****
+--- 1108,1116 ----
+      }
+    else
+      Vinfo_prog = s;
++ #else
++   Vinfo_prog = s;
++ #endif
+  
+    return status;
+  }
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/input.cc i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/input.cc
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/input.cc	Sat Jan 15 13:15:32 2000
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/input.cc	Sat Jan 15 14:29:38 2000
+***************
+*** 30,35 ****
+--- 30,37 ----
+  
+  */
+  
++ /* Modified by Klaus Gebhardt, 1996 - 1999*/
++ 
+  // Use the GNU readline library for command line editing and hisory.
+  
+  #ifdef HAVE_CONFIG_H
+***************
+*** 125,130 ****
+--- 127,136 ----
+  // Nonzero means the user forced this shell to be interactive (-i).
+  int forced_interactive = 0;
+  
++ // Nonzero means the user forced this shell to be really interactive (-i),
++ // but without using the pager.
++ int really_forced_interactive = 0;
++ 
+  // Should we issue a prompt?
+  int promptflag = 1;
+  
+***************
+*** 442,448 ****
+      }
+    else
+      {
+!       if (s && *s && (interactive || forced_interactive))
+  	{
+  	  fprintf (rl_outstream, s);
+  	  fflush (rl_outstream);
+--- 448,455 ----
+      }
+    else
+      {
+!       if (s && *s &&
+! 	  (interactive || forced_interactive || really_forced_interactive))
+  	{
+  	  fprintf (rl_outstream, s);
+  	  fflush (rl_outstream);
+***************
+*** 519,525 ****
+    Vlast_prompt_time = (double) time (0);
+  #endif
+  
+!   if ((interactive || forced_interactive)
+        && (! (reading_fcn_file || reading_script_file)))
+      {
+        const char *ps = (promptflag > 0) ? Vps1.c_str () :
+--- 526,532 ----
+    Vlast_prompt_time = (double) time (0);
+  #endif
+  
+!   if ((interactive || forced_interactive || really_forced_interactive)
+        && (! (reading_fcn_file || reading_script_file)))
+      {
+        const char *ps = (promptflag > 0) ? Vps1.c_str () :
+***************
+*** 668,674 ****
+    FILE *instream = 0;
+  
+    if (name.length () > 0)
+!     instream = fopen (name.c_str (), "r");
+  
+    if (! instream && warn)
+      warning ("%s: no such file or directory", name.c_str ());
+--- 675,681 ----
+    FILE *instream = 0;
+  
+    if (name.length () > 0)
+!     instream = fopen (name.c_str (), "rb");
+  
+    if (! instream && warn)
+      warning ("%s: no such file or directory", name.c_str ());
+***************
+*** 1103,1108 ****
+--- 1110,1120 ----
+    flush_octave_stdout ();
+  
+    char *input_buf = gnu_readline (prompt.c_str (), true);
++ 
++ #ifdef __EMX__
++   if (reading_fcn_file || reading_script_file)
++     octave_diary << prompt.c_str () << input_buf << "\n";
++ #endif
+  
+    if (input_buf)
+      {
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/input.h i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/input.h
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/input.h	Sat Jan 15 13:15:32 2000
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/input.h	Sat Jan 15 14:29:38 2000
+***************
+*** 20,25 ****
+--- 20,27 ----
+  
+  */
+  
++ /* Modified by Klaus Gebhardt, 1996 */
++ 
+  // Use the GNU readline library for command line editing and hisory.
+  
+  #if !defined (octave_input_h)
+***************
+*** 60,65 ****
+--- 62,71 ----
+  
+  // Nonzero means the user forced this shell to be interactive (-i).
+  extern int forced_interactive;
++ 
++ // Nonzero means the user forced this shell to be really interactive (-i),
++ // but without using the pager.
++ extern int really_forced_interactive;
+  
+  // Should we issue a prompt?
+  extern int promptflag;
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/lex.l i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/lex.l
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/lex.l	Sat Jul 20 22:56:48 2002
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/lex.l	Sat Jul 20 23:19:46 2002
+***************
+*** 20,25 ****
+--- 20,27 ----
+  
+  */
+  
++ /* Modified by Klaus Gebhardt, 1996 */
++ 
+  %s TEXT_FCN
+  %s MATRIX
+  
+***************
+*** 190,196 ****
+  
+  D	[0-9]
+  S	[ \t]
+! NL	((\n)|(\r\n))
+  SNL	({S}|{NL})
+  EL	(\.\.\.)
+  BS	(\\)
+--- 192,198 ----
+  
+  D	[0-9]
+  S	[ \t]
+! NL	((\n)|(\r)|(\r\n)|())
+  SNL	({S}|{NL})
+  EL	(\.\.\.)
+  BS	(\\)
+***************
+*** 243,249 ****
+      return handle_string (yytext[0], 1);
+    }
+  
+! <TEXT_FCN>[^ \t\n\;\,\"\'][^ \t\n\;\,]*{S}* {
+      string tok = strip_trailing_whitespace (yytext);
+      TOK_PUSH_AND_RETURN (tok, TEXT);
+    }
+--- 245,251 ----
+      return handle_string (yytext[0], 1);
+    }
+  
+! <TEXT_FCN>[^ \t\r\n\;\,\"\'][^ \t\r\n\;\,]*{S}* {
+      string tok = strip_trailing_whitespace (yytext);
+      TOK_PUSH_AND_RETURN (tok, TEXT);
+    }
+***************
+*** 540,546 ****
+      else
+        {
+  	int c;
+! 	while ((c = yyinput ()) != EOF && c != '\n')
+  	  ; // Eat comment.
+        }
+  
+--- 542,548 ----
+      else
+        {
+  	int c;
+! 	while ((c = yyinput ()) != EOF && c != '\n' && c != '\r' && c != '')
+  	  ; // Eat comment.
+        }
+  
+***************
+*** 690,696 ****
+  
+    // Only ask for input from stdin if we are expecting interactive
+    // input.
+!   if ((interactive || forced_interactive)
+        && ! (reading_fcn_file || get_input_from_eval_string
+  	    || input_from_startup_file))
+      yyrestart (stdin);
+--- 692,698 ----
+  
+    // Only ask for input from stdin if we are expecting interactive
+    // input.
+!   if ((interactive || forced_interactive || really_forced_interactive)
+        && ! (reading_fcn_file || get_input_from_eval_string
+  	    || input_from_startup_file))
+      yyrestart (stdin);
+***************
+*** 711,717 ****
+    char c;
+    while ((c = *s++) != '\0')
+      {
+!       if (c == '\n')
+  	  current_input_column = 1;
+        else
+  	current_input_column++;
+--- 713,719 ----
+    char c;
+    while ((c = *s++) != '\0')
+      {
+!       if (c == '\n' || c == '\r' || c == '')
+  	  current_input_column = 1;
+        else
+  	current_input_column++;
+***************
+*** 1107,1113 ****
+  
+    bool begin_comment = true;
+    bool in_comment = true;
+!   int c = 0;
+  
+    while ((c = yyinput ()) != EOF)
+      {
+--- 1109,1115 ----
+  
+    bool begin_comment = true;
+    bool in_comment = true;
+!   int c = 0, d, ct;
+  
+    while ((c = yyinput ()) != EOF)
+      {
+***************
+*** 1121,1132 ****
+  
+        if (in_comment)
+  	{
+! 	  help_buf += (char) c;
+  
+- 	  if (c == '\n')
+  	    in_comment = false;
+  	}
+        else
+  	{
+  	  switch (c)
+  	    {
+--- 1123,1152 ----
+  
+        if (in_comment)
+  	{
+! 	  if (c == '\n' || c == '\r' || c == '')
+! 	    {
+! 	      ct = 0;
+! 	      d  = c;
+! 
+! 	      do
+! 		{
+! 		  if (d == '\n' || d == '')
+! 		    {
+! 		      if (++ct > 1)  break;
+! 		      help_buf += (char) '\n';
+! 		    }
+! 		}
+! 	      while (((d = yyinput ()) != EOF) &&
+! 		     (d == '\n' || d == '\r' || d == ''));
+! 
+! 	      if (d != EOF)  yyunput (d, yytext);
+  
+  	    in_comment = false;
+  	}
+        else
++ 	    help_buf += (char) c;
++ 	}
++       else
+  	{
+  	  switch (c)
+  	    {
+***************
+*** 1203,1209 ****
+  	unput (c2);
+      }
+    else
+!     retval = match_any (c1, ",;\n]");
+  
+    unput (c1);
+  
+--- 1223,1229 ----
+  	unput (c2);
+      }
+    else
+!     retval = match_any (c1, ",;\r\n]");
+  
+    unput (c1);
+  
+***************
+*** 1344,1349 ****
+--- 1364,1371 ----
+  	  retval |= ATE_SPACE_OR_TAB;
+  	  break;
+  
++ 	case '':
++ 	case '\r':
+  	case '\n':
+  	  retval |= ATE_NEWLINE;
+  	  in_comment = 0;
+***************
+*** 1480,1485 ****
+--- 1502,1508 ----
+  	    goto cleanup;
+  	  break;
+  
++ 	case '':
+  	case '\n':
+  	  current_input_column = 0;
+  	  promptflag--;
+***************
+*** 1599,1605 ****
+  	  if (! have_ellipsis_continuation (0))
+  	    buf << (char) c;
+  	}
+!       else if (c == '\n')
+  	{
+  	  error ("unterminated string constant");
+  	  break;
+--- 1622,1628 ----
+  	  if (! have_ellipsis_continuation (0))
+  	    buf << (char) c;
+  	}
+!       else if (c == '\n' || c == '\r' || c == '')
+  	{
+  	  error ("unterminated string constant");
+  	  break;
+***************
+*** 1920,1925 ****
+--- 1943,1950 ----
+  	case ',':
+  	  break;
+  
++ 	case '':
++ 	case '\r':
+  	case '\n':
+  	  if (in_comment)
+  	    in_comment = 0;
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/makefile.os2 i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/makefile.os2
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/makefile.os2	Fri Apr 30 17:59:46 1999
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/makefile.os2	Sat Jul 20 00:53:28 2002
+***************
+*** 45,52 ****
+  TI_OBJ := $(patsubst %.cc, %.obj, $(TI_SRC))
+  
+  SOURCES := BaseSLList.cc DLList.cc Map.cc SLList.cc SLStack.cc \
+! 	Stack.cc data.cc defaults.cc dirfns.cc dynamic-ld.cc error.cc \
+! 	file-io.cc fn-cache.cc gripes.cc help.cc input.cc lex.l \
+  	load-save.cc mappers.cc matherr.c oct-fstrm.cc oct-hist.cc \
+  	oct-iostrm.cc oct-map.cc oct-obj.cc oct-prcstrm.cc \
+  	oct-stdstrm.cc oct-stream.cc oct-strstrm.cc \
+--- 45,52 ----
+  TI_OBJ := $(patsubst %.cc, %.obj, $(TI_SRC))
+  
+  SOURCES := BaseSLList.cc DLList.cc Map.cc SLList.cc SLStack.cc \
+! 	Stack.cc cutils.c data.cc defaults.cc dirfns.cc dynamic-ld.cc \
+! 	error.cc file-io.cc fn-cache.cc gripes.cc help.cc input.cc lex.l \
+  	load-save.cc mappers.cc matherr.c oct-fstrm.cc oct-hist.cc \
+  	oct-iostrm.cc oct-map.cc oct-obj.cc oct-prcstrm.cc \
+  	oct-stdstrm.cc oct-stream.cc oct-strstrm.cc \
+***************
+*** 90,97 ****
+  EXE_OBJ   = $(patsubst %.cc, %.o, $(EXE_OBJ_1))
+  LIB_CRFT  = -L$(MSTDIR)/libcruft -lcruft1 -lcruft2 -lcruft3 -lcruft4
+  LIB_OCTV  = -L$(MSTDIR)/liboctave -loctave2
+! STD_LIBS  = -lreadline -lgnuinfo -lkpathsea -lxmalloc -lgpp2 -lstdcpp2 \
+! 	-lsocket -ldlfcn
+  OCT_LIBS  = octave1.a $(LIB_CRFT) $(LIB_OCTV) $(STD_LIBS)
+  LNK_FILES = $(EXE_OBJ) $(OCT_LIBS)
+  
+--- 90,96 ----
+  EXE_OBJ   = $(patsubst %.cc, %.o, $(EXE_OBJ_1))
+  LIB_CRFT  = -L$(MSTDIR)/libcruft -lcruft1 -lcruft2 -lcruft3 -lcruft4
+  LIB_OCTV  = -L$(MSTDIR)/liboctave -loctave2
+! STD_LIBS  = -lreadline -lgnuinfo -lkpathsea -lmerlin -lgpp2 -lstdcpp2 -lsocket
+  OCT_LIBS  = octave1.a $(LIB_CRFT) $(LIB_OCTV) $(STD_LIBS)
+  LNK_FILES = $(EXE_OBJ) $(OCT_LIBS)
+  
+***************
+*** 120,129 ****
+  	@-mkbuiltins $(DEF_FILES) > $@
+  
+  octave: $(EXE_OBJ) octave.def octave1.a makefile.os2 $(DEP_A)
+! 	$(CC) -o $@ octave.def $(LNK_FILES) -Zcrtdll -Zstack 0x10000
+  
+  ../octave.exe: octave
+! 	emxbind -bq $(EMX09CDIR)/bin/emxl $< $@
+  	emxbind -sq $@
+  
+  ###############################################################################
+--- 119,128 ----
+  	@-mkbuiltins $(DEF_FILES) > $@
+  
+  octave: $(EXE_OBJ) octave.def octave1.a makefile.os2 $(DEP_A)
+! 	$(LD) -o $@ octave.def $(LNK_FILES) -Zcrtdll -Zstack 0x10000
+  
+  ../octave.exe: octave
+! 	emxbind -bq $(EMXDIR)/bin/emxl $< $@
+  	emxbind -sq $@
+  
+  ###############################################################################
+***************
+*** 143,155 ****
+  	emxomfar -p32 $(ARFLAGS) $@ $(OBJECTS)
+  
+  octave1.def: octave1-src.lib octdld-src.lib tinst-src.lib
+! 	@echo LIBRARY octave1 INITINSTANCE TERMINSTANCE > $@
+! 	@echo DESCRIPTION 'octave1.dll, (c) Klaus Gebhardt 1995-1996' >> $@
+! 	@echo. >> $@
+! 	@echo DATA >> $@
+! 	@echo   MULTIPLE NONSHARED >> $@
+! 	@echo. >> $@
+! 	@echo EXPORTS >> $@
+  	emxexp -o00001 -n octdld-src.lib >> $@
+  	emxexp -o20001 -n octave1-src.lib >> $@
+  	emxexp -o30001 -n tinst-src.lib >> $@
+--- 142,154 ----
+  	emxomfar -p32 $(ARFLAGS) $@ $(OBJECTS)
+  
+  octave1.def: octave1-src.lib octdld-src.lib tinst-src.lib
+! 	@echo "LIBRARY octave1 INITINSTANCE TERMINSTANCE" > $@
+! 	@echo "DESCRIPTION 'octave1.dll, (c) Klaus Gebhardt 1995-1996'" >> $@
+! 	@echo "" >> $@
+! 	@echo "DATA" >> $@
+! 	@echo "  MULTIPLE NONSHARED" >> $@
+! 	@echo "" >> $@
+! 	@echo "EXPORTS" >> $@
+  	emxexp -o00001 -n octdld-src.lib >> $@
+  	emxexp -o20001 -n octave1-src.lib >> $@
+  	emxexp -o30001 -n tinst-src.lib >> $@
+***************
+*** 168,176 ****
+  ###############################################################################
+  
+  mkdefs.cmd: mkdefs
+! 	echo extproc ksh .\\/$@ > $@
+! 	echo shift >> $@
+! 	echo #Generated by makefile.os2. Do not edit! >> $@
+  	sed -e "s/#!\\/bin\\/sh//" $< >> $@
+  
+  mkbuiltins.cmd: mkbuiltins
+--- 167,175 ----
+  ###############################################################################
+  
+  mkdefs.cmd: mkdefs
+! 	echo "extproc ksh .\\/$@ > $@
+! 	echo "shift >> $@
+! 	echo "#Generated by makefile.os2. Do not edit! >> $@
+  	sed -e "s/#!\\/bin\\/sh//" $< >> $@
+  
+  mkbuiltins.cmd: mkbuiltins
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/mappers.cc i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/mappers.cc
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/mappers.cc	Mon Nov  2 06:25:16 1998
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/mappers.cc	Thu May 13 12:51:44 1999
+***************
+*** 148,154 ****
+    DEFUN_MAPPER (acos, 0, acos, 0, acos, -1.0, 1.0, 1,
+      "acos (X): compute acos (X) for each element of X");
+  
+!   DEFUN_MAPPER (acosh, 0, acosh, 0, acosh, 1.0, DBL_MAX, 1,
+      "acosh (X): compute acosh (X) for each element of X");
+  
+    DEFUN_MAPPER (angle, 0, arg, arg, 0, 0.0, 0.0, 0,
+--- 148,154 ----
+    DEFUN_MAPPER (acos, 0, acos, 0, acos, -1.0, 1.0, 1,
+      "acos (X): compute acos (X) for each element of X");
+  
+!   DEFUN_MAPPER (acosh, 0, xacosh, 0, acosh, 1.0, DBL_MAX, 1,
+      "acosh (X): compute acosh (X) for each element of X");
+  
+    DEFUN_MAPPER (angle, 0, arg, arg, 0, 0.0, 0.0, 0,
+***************
+*** 160,172 ****
+    DEFUN_MAPPER (asin, 0, asin, 0, asin, -1.0, 1.0, 1,
+      "asin (X): compute asin (X) for each element of X");
+  
+!   DEFUN_MAPPER (asinh, 0, asinh, 0, asinh, 0.0, 0.0, 0,
+      "asinh (X): compute asinh (X) for each element of X");
+  
+    DEFUN_MAPPER (atan, 0, atan, 0, atan, 0.0, 0.0, 0,
+      "atan (X): compute atan (X) for each element of X");
+  
+!   DEFUN_MAPPER (atanh, 0, atanh, 0, atanh, -1.0, 1.0, 1,
+      "atanh (X): compute atanh (X) for each element of X");
+  
+    DEFUN_MAPPER (ceil, 0, ceil, 0, ceil, 0.0, 0.0, 0,
+--- 160,172 ----
+    DEFUN_MAPPER (asin, 0, asin, 0, asin, -1.0, 1.0, 1,
+      "asin (X): compute asin (X) for each element of X");
+  
+!   DEFUN_MAPPER (asinh, 0, xasinh, 0, asinh, 0.0, 0.0, 0,
+      "asinh (X): compute asinh (X) for each element of X");
+  
+    DEFUN_MAPPER (atan, 0, atan, 0, atan, 0.0, 0.0, 0,
+      "atan (X): compute atan (X) for each element of X");
+  
+!   DEFUN_MAPPER (atanh, 0, xatanh, 0, atanh, -1.0, 1.0, 1,
+      "atanh (X): compute atanh (X) for each element of X");
+  
+    DEFUN_MAPPER (ceil, 0, ceil, 0, ceil, 0.0, 0.0, 0,
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/mappers.h i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/mappers.h
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/mappers.h	Fri May 24 05:08:38 1996
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/mappers.h	Thu May 13 14:52:44 1999
+***************
+*** 20,32 ****
+  
+  */
+  
+  #if !defined (octave_mappers_h)
+  #define octave_mappers_h 1
+  
+  #include <string>
+  
+  #include "lo-mappers.h"
+- #include "oct-cmplx.h"
+  
+  typedef int (*ch_Mapper)(int);
+  typedef double (*d_d_Mapper)(double);
+--- 20,33 ----
+  
+  */
+  
++ /* Modified by Klaus Gebhardt, 1997 */
++ 
+  #if !defined (octave_mappers_h)
+  #define octave_mappers_h 1
+  
+  #include <string>
+  
+  #include "lo-mappers.h"
+  
+  typedef int (*ch_Mapper)(int);
+  typedef double (*d_d_Mapper)(double);
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/oct-hist.cc i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/oct-hist.cc
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/oct-hist.cc	Thu Feb 20 05:18:58 1997
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/oct-hist.cc	Thu May 13 12:51:44 1999
+***************
+*** 27,32 ****
+--- 27,34 ----
+  
+  */
+  
++ /* Modified by Klaus Gebhardt, 1996 */
++ 
+  #ifdef HAVE_CONFIG_H
+  #include <config.h>
+  #endif
+***************
+*** 64,69 ****
+--- 66,79 ----
+  #include "utils.h"
+  #include "variables.h"
+  
++ #ifdef __EMX__
++ extern "C"
++ {
++ #include <process.h>
++   int _IO_system (const char *, int);
++ }
++ #endif
++ 
+  // Nonzero means input is coming from temporary history file.
+  int input_from_tmp_history_file = 0;
+  
+***************
+*** 283,289 ****
+  
+  	      int cmd_len = cmd.length ();
+  
+! 	      if (cmd[cmd_len - 1] == '\n')
+  		cmd.resize (cmd_len - 1);
+  
+  	      if (! cmd.empty ())
+--- 293,300 ----
+  
+  	      int cmd_len = cmd.length ();
+  
+! 	      if (cmd[cmd_len - 1] == '\n' || cmd[cmd_len - 1] == '\r'
+! 		  || cmd[cmd_len - 1] == '')
+  		cmd.resize (cmd_len - 1);
+  
+  	      if (! cmd.empty ())
+***************
+*** 302,308 ****
+  
+        int len = tmp.length ();
+  	
+!       if (len > 0 && tmp[len-1] == '\n')
+  	tmp.resize (len - 1);
+  
+        if (! tmp.empty ())
+--- 313,320 ----
+  
+        int len = tmp.length ();
+  	
+!       if (len > 0 &&
+! 	  (tmp[len-1] == '\n' || tmp[len-1] == '\r' || tmp[len-1] == ''))
+  	tmp.resize (len - 1);
+  
+        if (! tmp.empty ())
+***************
+*** 430,436 ****
+--- 442,452 ----
+    volatile octave_interrupt_handler old_interrupt_handler
+      = octave_ignore_interrupts ();
+  
++ #ifdef __EMX__
++   _IO_system (cmd.c_str (), P_WAIT);
++ #else
+    system (cmd.c_str ());
++ #endif
+  
+    octave_set_interrupt_handler (old_interrupt_handler);
+  
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/octave.cc i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/octave.cc
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/octave.cc	Tue Mar  2 08:09:54 1999
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/octave.cc	Thu May 13 13:28:54 1999
+***************
+*** 22,27 ****
+--- 22,29 ----
+  
+  // Born February 20, 1992.
+  
++ /* Modified by Klaus Gebhardt, 1996 */
++ 
+  #ifdef HAVE_CONFIG_H
+  #include <config.h>
+  #endif
+***************
+*** 47,52 ****
+--- 49,59 ----
+  #include <pwd.h>
+  #endif
+  
++ #ifdef __EMX__
++ #include <float.h>
++ #include <sys/uflags.h>
++ #endif
++ 
+  #include "lo-error.h"
+  #include "str-vec.h"
+  
+***************
+*** 83,88 ****
+--- 90,99 ----
+  #endif
+  
+  // Don't redefine the variables if glibc already has.
++ #ifdef __EMX__
++ char *program_invocation_name;
++ char *program_invocation_short_name;
++ #else
+  #if defined (HAVE_PROGRAM_INVOCATION_NAME) || defined (WITH_KPATHSEARCH)
+  extern char *program_invocation_name;
+  extern char *program_invocation_short_name;
+***************
+*** 90,95 ****
+--- 101,107 ----
+  char *program_invocation_name;
+  char *program_invocation_short_name;
+  #endif
++ #endif
+  
+  #if defined (USE_READLINE)
+  // This is from readline's paren.c:
+***************
+*** 121,127 ****
+  
+  // Usage message
+  static const char *usage_string = 
+!   "octave [-?HVdfhiqvx] [--debug] [--echo-commands] [--exec-path path]\n\
+         [--help] [--info-file file] [--info-program prog] [--interactive]\n\
+         [--no-history] [--no-init-file] [--no-line-editing] [--no-site-file]\n\
+         [-p path] [--path path] [--silent] [--traditional] [--verbose]\n\
+--- 133,139 ----
+  
+  // Usage message
+  static const char *usage_string = 
+!   "octave [-?HVdfhiIqvx] [--debug] [--echo-commands] [--exec-path path]\n\
+         [--help] [--info-file file] [--info-program prog] [--interactive]\n\
+         [--no-history] [--no-init-file] [--no-line-editing] [--no-site-file]\n\
+         [-p path] [--path path] [--silent] [--traditional] [--verbose]\n\
+***************
+*** 130,136 ****
+  // This is here so that it's more likely that the usage message and
+  // the real set of options will agree.  Note: the `+' must come first
+  // to prevent getopt from permuting arguments!
+! static const char *short_opts = "+?HVdfhip:qvx";
+  
+  // Long options.  See the comments in getopt.h for the meanings of the
+  // fields in this structure.
+--- 142,148 ----
+  // This is here so that it's more likely that the usage message and
+  // the real set of options will agree.  Note: the `+' must come first
+  // to prevent getopt from permuting arguments!
+! static const char *short_opts = "+?HVdfhiIp:qvx";
+  
+  // Long options.  See the comments in getopt.h for the meanings of the
+  // fields in this structure.
+***************
+*** 230,236 ****
+  
+    if (! odb)
+      {
+!       string val = Vdata_dir + string ("/octave:")
+  	+ Vlibexec_dir + string ("/octave");
+  
+        oct_putenv ("TEXMFDBS", val.c_str ());
+--- 242,248 ----
+  
+    if (! odb)
+      {
+!       string val = Vdata_dir + string ("/octave") + string (SEPCHAR_STR)
+  	+ Vlibexec_dir + string ("/octave");
+  
+        oct_putenv ("TEXMFDBS", val.c_str ());
+***************
+*** 327,332 ****
+--- 339,345 ----
+    --info-file FILE        Use top-level info file FILE.\n\
+    --info-program PROGRAM  Use PROGRAM for reading info files.\n\
+    --interactive, -i       Force interactive behavior.\n\
++   -I                      Force really interactive behavior, but no pager.\n\
+    --no-history, -H        Don't save commands to the history list\n\
+    --no-init-file          Don't read the ~/.octaverc or .octaverc files.\n\
+    --no-line-editing       Don't use readline for command-line editing.\n\
+***************
+*** 464,469 ****
+--- 477,486 ----
+  	  forced_interactive = 1;
+  	  break;
+  
++ 	case 'I':
++ 	  really_forced_interactive = 1;
++ 	  break;
++ 
+  	case 'p':
+  	  if (args.optarg ())
+  	    bind_builtin_variable ("LOADPATH", args.optarg ());
+***************
+*** 551,556 ****
+--- 568,580 ----
+    if (! inhibit_startup_message && reading_startup_message_printed)
+      cout << endl;
+  
++ #if defined (__EMX__)
++   _control87 (EM_INVALID | EM_DENORMAL | EM_ZERODIVIDE | EM_OVERFLOW |
++ 	      EM_UNDERFLOW | EM_INEXACT, MCW_EM);
++ 
++   _uflags (_UF_SBRK_MODEL, _UF_SBRK_ARBITRARY);
++ #endif
++ 
+    // Avoid counting commands executed from startup files.
+  
+    current_command_number = 1;
+***************
+*** 606,622 ****
+    // Force input to be echoed if not really interactive, but the user
+    // has forced interactive behavior.
+  
+!   if (! interactive && forced_interactive)
+      {
+        rl_blink_matching_paren = 0;
+  
+        // XXX FIXME XXX -- is this the right thing to do?
+  
+        bind_builtin_variable ("echo_executing_commands",
+  			     (double) ECHO_CMD_LINE);
+      }
+  
+!   if (! interactive)
+      using_readline = 0;
+  
+    int retval = main_loop ();
+--- 630,648 ----
+    // Force input to be echoed if not really interactive, but the user
+    // has forced interactive behavior.
+  
+!   if (! interactive && (forced_interactive || really_forced_interactive))
+      {
+        rl_blink_matching_paren = 0;
+  
+        // XXX FIXME XXX -- is this the right thing to do?
+  
++ #if ! defined (__EMX__)
+        bind_builtin_variable ("echo_executing_commands",
+  			     (double) ECHO_CMD_LINE);
++ #endif
+      }
+  
+!   if (! (interactive || really_forced_interactive))
+      using_readline = 0;
+  
+    int retval = main_loop ();
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/pager.cc i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/pager.cc
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/pager.cc	Fri Jan 22 11:39:46 1999
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/pager.cc	Thu May 13 12:51:44 1999
+***************
+*** 20,25 ****
+--- 20,27 ----
+  
+  */
+  
++ /* Modified by Klaus Gebhardt, 1996 */
++ 
+  #ifdef HAVE_CONFIG_H
+  #include <config.h>
+  #endif
+***************
+*** 221,227 ****
+  int
+  octave_pager_buf::sync (void)
+  {
+!   if (! interactive
+        || really_flush_to_pager
+        || (Vpage_screen_output && Vpage_output_immediately)
+        || ! Vpage_screen_output)
+--- 223,229 ----
+  int
+  octave_pager_buf::sync (void)
+  {
+!   if ((! interactive || really_forced_interactive)
+        || really_flush_to_pager
+        || (Vpage_screen_output && Vpage_output_immediately)
+        || ! Vpage_screen_output)
+***************
+*** 230,236 ****
+  
+        int len = pptr () - buf;
+  
+!       bool bypass_pager = (! interactive
+  			   || ! Vpage_screen_output
+  			   || (really_flush_to_pager
+  			       && Vpage_screen_output
+--- 232,238 ----
+  
+        int len = pptr () - buf;
+  
+!       bool bypass_pager = ((! interactive || really_forced_interactive)
+  			   || ! Vpage_screen_output
+  			   || (really_flush_to_pager
+  			       && Vpage_screen_output
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/parse.y i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/parse.y
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/parse.y	Sat Jan 15 13:15:34 2000
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/parse.y	Sat Jan 15 14:29:42 2000
+***************
+*** 20,25 ****
+--- 20,27 ----
+  
+  */
+  
++ /* Modified by Klaus Gebhardt, 1996 */
++ 
+  // Parser for Octave.
+  
+  // C decarations.
+***************
+*** 257,263 ****
+      { \
+        global_command = 0; \
+        yyerrok; \
+!       if (interactive || forced_interactive) \
+  	YYACCEPT; \
+        else \
+  	YYABORT; \
+--- 259,265 ----
+      { \
+        global_command = 0; \
+        yyerrok; \
+!       if (interactive || forced_interactive || really_forced_interactive) \
+  	YYACCEPT; \
+        else \
+  	YYABORT; \
+***************
+*** 377,383 ****
+  %type <subplot_axes_type> axes
+  
+  // Precedence and associativity.
+! %left ';' ',' '\n'
+  %right '='
+  %left EXPR_AND_AND EXPR_OR_OR
+  %left EXPR_AND EXPR_OR
+--- 379,385 ----
+  %type <subplot_axes_type> axes
+  
+  // Precedence and associativity.
+! %left ';' ',' '\n' '\r' ''
+  %right '='
+  %left EXPR_AND_AND EXPR_OR_OR
+  %left EXPR_AND EXPR_OR
+***************
+*** 420,429 ****
+--- 422,439 ----
+  
+  input1		: '\n'
+  		  { $$ = 0; }
++ 		| '\r'
++ 		  { $$ = 0; }
++ 		| ''
++ 		  { $$ = 0; }
+  		| simple_list
+  		  { $$ = $1; }
+  		| simple_list '\n'
+  		  { $$ = $1; }
++ 		| simple_list '\r'
++ 		  { $$ = $1; }
++ 		| simple_list ''
++ 		  { $$ = $1; }
+  		| simple_list END_OF_INPUT
+  		  { $$ = $1; }
+  		;
+***************
+*** 1113,1124 ****
+--- 1123,1136 ----
+  		  }
+  		| param_list1 param_list_end
+  		  {
++ 		    lexer_flags.looking_at_parameter_list = 0;
+  		    lexer_flags.quote_is_transpose = 0;
+  		    $1->mark_as_formal_parameters ();
+  		    $$ = $1;
+  		  }
+  		| param_list1 ',' ELLIPSIS param_list_end
+  		  {
++ 		    lexer_flags.looking_at_parameter_list = 0;
+  		    lexer_flags.quote_is_transpose = 0;
+  		    $1->mark_as_formal_parameters ();
+  		    $1->mark_varargs ();
+***************
+*** 1245,1256 ****
+--- 1257,1272 ----
+  		  { $$ = ';'; }
+  		| '\n'
+  		  { $$ = '\n'; }
++ 		| '\r'
++ 		  { $$ = '\r'; }
+  		| sep ','
+  		  { $$ = $1; }
+  		| sep ';'
+  		  { $$ = $1; }
+  		| sep '\n'
+  		  { $$ = $1; }
++ 		| sep '\r'
++ 		  { $$ = $1; }
+  		;
+  
+  opt_sep		: // empty
+***************
+*** 2395,2400 ****
+--- 2411,2417 ----
+      case 0:
+      case ',':
+      case '\n':
++     case '\r':
+        if (warn_missing_semi)
+  	maybe_warn_missing_semi (list);
+        break;
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/pt-plot.cc i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/pt-plot.cc
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/pt-plot.cc	Sun Jan 30 14:10:44 2000
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/pt-plot.cc	Sun Jan 30 14:16:38 2000
+***************
+*** 20,25 ****
+--- 20,27 ----
+  
+  */
+  
++ /* Modified by Klaus Gebhardt, 1996 */
++ 
+  #if defined (__GNUG__)
+  #pragma implementation
+  #endif
+***************
+*** 151,163 ****
+        sigemptyset (&set);
+        sigaddset (&set, SIGINT);
+        sigprocmask (SIG_BLOCK, &set, &oset);
+  #else
+       volatile octave_interrupt_handler old_interrupt_handler
+  	= octave_ignore_interrupts ();
+  #endif
+- 
+        plot_stream = new oprocstream (plot_prog.c_str ());
+! 
+        if (plot_stream)
+  	{
+  	  if (! *plot_stream)
+--- 153,169 ----
+        sigemptyset (&set);
+        sigaddset (&set, SIGINT);
+        sigprocmask (SIG_BLOCK, &set, &oset);
++ #endif
++ 
++ #if defined (__EMX__) && defined (OS2)
++       plot_stream = new oprocstream (plot_prog.c_str (), ios::out);
+  #else
++ #if !defined (HAVE_POSIX_SIGNALS)
+       volatile octave_interrupt_handler old_interrupt_handler
+  	= octave_ignore_interrupts ();
+  #endif
+        plot_stream = new oprocstream (plot_prog.c_str ());
+! #endif
+        if (plot_stream)
+  	{
+  	  if (! *plot_stream)
+***************
+*** 180,187 ****
+--- 186,195 ----
+  #if defined (HAVE_POSIX_SIGNALS)
+        sigprocmask (SIG_SETMASK, &oset, 0);
+  #else
++ #if ! defined (__EMX__) || ! defined (OS2)
+        octave_set_interrupt_handler (old_interrupt_handler);
+  #endif
++ #endif
+      }
+  
+    if (! error_state && plot_stream && *plot_stream && ! initialized)
+***************
+*** 1092,1097 ****
+--- 1100,1106 ----
+  
+    char *plot_command = plot_buf.str ();
+    send_to_plot_stream (plot_command);
++   sleep (2);
+  
+    delete [] plot_command;
+  
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/sighandlers.cc i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/sighandlers.cc
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/sighandlers.cc	Sat Jan 15 13:15:34 2000
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/sighandlers.cc	Sat Jan 15 14:29:44 2000
+***************
+*** 20,25 ****
+--- 20,27 ----
+  
+  */
+  
++ /* Modified by Klaus Gebhardt, 1995 - 1996 */
++ 
+  #ifdef HAVE_CONFIG_H
+  #include <config.h>
+  #endif
+***************
+*** 38,43 ****
+--- 40,50 ----
+  #include <unistd.h>
+  #endif
+  
++ #ifdef __EMX__
++ #include <float.h>
++ #include <sys/uflags.h>
++ #endif
++ 
+  #include "error.h"
+  #include "input.h"
+  #include "load-save.h"
+***************
+*** 82,88 ****
+  
+  #if defined (__EMX__)
+  #define MAYBE_ACK_SIGNAL(sig) \
+!   octave_set_signal_handler (sig, SIG_ACK)
+  #else
+  #define MAYBE_ACK_SIGNAL(sig) \
+    do { } while (0)
+--- 89,95 ----
+  
+  #if defined (__EMX__)
+  #define MAYBE_ACK_SIGNAL(sig) \
+!   signal (sig, SIG_ACK)
+  #else
+  #define MAYBE_ACK_SIGNAL(sig) \
+    do { } while (0)
+***************
+*** 129,135 ****
+      {
+        been_there_done_that = true;
+  
+!       cerr << "error: " << sig_name << " -- stopping myself...\n";
+  
+        save_user_variables ();
+  
+--- 136,142 ----
+      {
+        been_there_done_that = true;
+  
+!       cerr << "\n\nerror: " << sig_name << " -- stopping myself...\n";
+  
+        save_user_variables ();
+  
+***************
+*** 155,160 ****
+--- 162,170 ----
+  
+    if (can_interrupt)
+      {
++ #ifdef __EMX__
++       _uflags (_UF_SBRK_MODEL, _UF_SBRK_ARBITRARY);
++ #endif
+        jump_to_top_level ();
+        panic_impossible ();
+      }
+***************
+*** 173,178 ****
+--- 183,192 ----
+    sigemptyset (&oact.sa_mask);
+    sigaction (sig, &act, &oact);
+    return oact.sa_handler;
++ #elif defined (__EMX__)
++   sig_handler *signal_handler = signal (sig, handler);
++   MAYBE_ACK_SIGNAL(sig);
++   return signal_handler;
+  #else
+    return signal (sig, handler);
+  #endif
+***************
+*** 189,195 ****
+  // Handle SIGCHLD.
+  
+  static RETSIGTYPE
+! sigchld_handler (int /* sig */)
+  {
+    volatile octave_interrupt_handler saved_interrupt_handler
+       = octave_ignore_interrupts ();
+--- 203,209 ----
+  // Handle SIGCHLD.
+  
+  static RETSIGTYPE
+! sigchld_handler (int sig)
+  {
+    volatile octave_interrupt_handler saved_interrupt_handler
+       = octave_ignore_interrupts ();
+***************
+*** 201,215 ****
+  #if defined (__EMX__)
+    volatile sig_handler *saved_sigchld_handler
+      = octave_set_signal_handler (SIGCHLD, SIG_IGN);
+! #endif
+! 
+    sigset_t set, oset;
+  
+    BLOCK_CHILD (set, oset);
+  
+    int n = octave_child_list::length ();
+  
+!   for (int i = 0; i < n; i++)
+      {
+        octave_child& elt = octave_child_list::elem (i);
+  
+--- 215,230 ----
+  #if defined (__EMX__)
+    volatile sig_handler *saved_sigchld_handler
+      = octave_set_signal_handler (SIGCHLD, SIG_IGN);
+! #else
+    sigset_t set, oset;
+  
+    BLOCK_CHILD (set, oset);
++ #endif
+  
++   int i = 0;
+    int n = octave_child_list::length ();
+  
+!   for (i = 0; i < n; i++)
+  	{
+  	  octave_child& elt = octave_child_list::elem (i);
+  
+***************
+*** 225,243 ****
+  
+  	      octave_child::dead_child_handler f = elt.handler;
+  
+! 	      if (f)
+! 		f (pid, status);
+  
+  	      break;
+  	    }
+  	}
+      }
+  
+    octave_set_interrupt_handler (saved_interrupt_handler);
+  
+    UNBLOCK_CHILD (oset);
+! 
+! #ifdef __EMX__
+    octave_set_signal_handler (SIGCHLD, saved_sigchld_handler);
+  #endif
+  
+--- 240,264 ----
+  
+  		  octave_child::dead_child_handler f = elt.handler;
+  
+! 	      if (f)  f (pid, status);
+! 	      else
+! 		{
+! 		  string file = elt.filename;
+! 		  unlink (file.c_str ());
+! 		}
+  
+  		  break;
+  		}
+  	    }
+  	}
+  
++   if (i == n)  waitpid (-1, NULL, WNOHANG);
++ 
+    octave_set_interrupt_handler (saved_interrupt_handler);
+  
++ #ifndef __EMX__
+    UNBLOCK_CHILD (oset);
+! #else
+    octave_set_signal_handler (SIGCHLD, saved_sigchld_handler);
+  #endif
+  
+***************
+*** 250,256 ****
+  
+  #if defined (__alpha__)
+  static RETSIGTYPE
+! sigfpe_handler (int /* sig */)
+  {
+    MAYBE_ACK_SIGNAL (SIGFPE);
+  
+--- 271,277 ----
+  
+  #if defined (__alpha__)
+  static RETSIGTYPE
+! sigfpe_handler (int sig)
+  {
+    MAYBE_ACK_SIGNAL (SIGFPE);
+  
+***************
+*** 260,265 ****
+--- 281,290 ----
+  
+    if (can_interrupt)
+      {
++ #if defined (__EMX__)
++       _control87 (EM_INVALID | EM_DENORMAL | EM_ZERODIVIDE | EM_OVERFLOW |
++ 		  EM_UNDERFLOW | EM_INEXACT, MCW_EM);
++ #endif
+        jump_to_top_level ();
+        panic_impossible ();
+      }
+***************
+*** 311,317 ****
+  }
+  
+  static RETSIGTYPE
+! sigpipe_handler (int /* sig */)
+  {
+    MAYBE_ACK_SIGNAL (SIGPIPE);
+  
+--- 336,342 ----
+  }
+  
+  static RETSIGTYPE
+! sigpipe_handler (int sig)
+  {
+    MAYBE_ACK_SIGNAL (SIGPIPE);
+  
+***************
+*** 334,344 ****
+    octave_interrupt_handler retval;
+  
+  #ifdef SIGINT
+!   retval.int_handler = octave_set_signal_handler (SIGINT, sigint_handler);
+  #endif
+  
+  #ifdef SIGBREAK
+!   retval.brk_handler = octave_set_signal_handler (SIGBREAK, sigint_handler);
+  #endif
+  
+    return retval;
+--- 359,373 ----
+    octave_interrupt_handler retval;
+  
+  #ifdef SIGINT
+!   octave_set_signal_handler (SIGINT, sigint_handler);
+!   retval.int_handler = sigint_handler;
+!   MAYBE_ACK_SIGNAL (SIGINT);
+  #endif
+  
+  #ifdef SIGBREAK
+!   octave_set_signal_handler (SIGBREAK, sigint_handler);
+!   retval.brk_handler = sigint_handler;
+!   MAYBE_ACK_SIGNAL (SIGBREAK);
+  #endif
+  
+    return retval;
+***************
+*** 361,376 ****
+--- 390,428 ----
+  }
+  
+  octave_interrupt_handler
++ octave_set_interrupt_handler (RETSIGTYPE (*f)(int))
++ {
++   octave_interrupt_handler retval;
++ 
++   if (f)
++     {
++ #ifdef SIGINT
++       retval.int_handler = octave_set_signal_handler (SIGINT, f);
++       MAYBE_ACK_SIGNAL (SIGINT);
++ #endif
++ 
++ #ifdef SIGBREAK
++       retval.brk_handler = octave_set_signal_handler (SIGBREAK, f);
++       MAYBE_ACK_SIGNAL (SIGBREAK);
++ #endif
++     }
++ 
++   return retval;
++ }
++ 
++ octave_interrupt_handler
+  octave_set_interrupt_handler (const volatile octave_interrupt_handler& h)
+  {
+    octave_interrupt_handler retval;
+  
+  #ifdef SIGINT
+    retval.int_handler = octave_set_signal_handler (SIGINT, h.int_handler);
++   MAYBE_ACK_SIGNAL (SIGINT);
+  #endif
+  
+  #ifdef SIGBREAK
+    retval.brk_handler = octave_set_signal_handler (SIGBREAK, h.brk_handler);
++   MAYBE_ACK_SIGNAL (SIGBREAK);
+  #endif
+  
+    return retval;
+***************
+*** 468,475 ****
+--- 520,531 ----
+  #endif
+  
+  #ifdef SIGTERM
++ #ifdef __EMX__
++   signal (SIGTERM, SIG_DFL);
++ #else
+    octave_set_signal_handler (SIGTERM, generic_sig_handler);
+  #endif
++ #endif
+  
+  #ifdef SIGTRAP
+    octave_set_signal_handler (SIGTRAP, generic_sig_handler);
+***************
+*** 620,626 ****
+  octave_child_list *octave_child_list::instance = 0;
+  
+  void
+! octave_child_list::do_insert (pid_t pid, octave_child::dead_child_handler f)
+  {
+    // Insert item in first open slot, increasing size of list if
+    // necessary.
+--- 676,683 ----
+  octave_child_list *octave_child_list::instance = 0;
+  
+  void
+! octave_child_list::do_insert (pid_t pid, octave_child::dead_child_handler f,
+! 			      string name)
+  {
+    // Insert item in first open slot, increasing size of list if
+    // necessary.
+***************
+*** 633,639 ****
+  
+        if (tmp.pid < 0)
+  	{
+! 	  list (i) = octave_child (pid, f);
+  	  enlarge = false;
+  	  break;
+  	}
+--- 690,696 ----
+  
+        if (tmp.pid < 0)
+  	{
+! 	  list (i) = octave_child (pid, f, name);
+  	  enlarge = false;
+  	  break;
+  	}
+***************
+*** 651,669 ****
+  	    list.resize (total_len * 2);
+  	}
+  
+!       list (curr_len) = octave_child (pid, f);
+        curr_len++;
+      }
+  }
+  
+  void
+! octave_child_list::insert (pid_t pid, octave_child::dead_child_handler f)
+  {
+    if (! instance)
+      instance = new octave_child_list ();
+  
+    if (instance)
+!     instance->do_insert (pid, f);
+    else
+      panic_impossible ();
+  }
+--- 708,727 ----
+  	    list.resize (total_len * 2);
+  	}
+  
+!       list (curr_len) = octave_child (pid, f, name);
+        curr_len++;
+      }
+  }
+  
+  void
+! octave_child_list::insert (pid_t pid, octave_child::dead_child_handler f,
+! 			   string name)
+  {
+    if (! instance)
+      instance = new octave_child_list ();
+  
+    if (instance)
+!     instance->do_insert (pid, f, name);
+    else
+      panic_impossible ();
+  }
+***************
+*** 680,685 ****
+--- 738,760 ----
+        if (tmp.pid == pid)
+  	{
+  	  tmp.pid = -1;
++ 
++ 	  octave_child::dead_child_handler f = tmp.handler;
++ 
++ 	  if (f)
++ 	    {
++ 	      int status;
++ 
++ 	      if (waitpid (pid, &status, WNOHANG) <= 0)  status = 127;
++ 
++ 	      f (pid, status);
++ 	    }
++ 	  else
++ 	    {
++ 	      string file = tmp.filename;
++ 	      unlink (file.c_str ());
++ 	    }
++ 
+  	  break;
+  	}
+      }
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/sighandlers.h i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/sighandlers.h
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/sighandlers.h	Thu Oct  8 19:44:52 1998
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/sighandlers.h	Thu May 13 12:51:46 1999
+***************
+*** 22,30 ****
+--- 22,34 ----
+  
+  // This file should always be included after config.h!
+  
++ /* Modified by Klaus Gebhardt, 1996 */
++ 
+  #if !defined (octave_sighandlers_h)
+  #define octave_sighandlers_h 1
+  
++ #include <string>
++ 
+  #include <Array.h>
+  
+  #include "syswait.h"
+***************
+*** 59,66 ****
+  
+  typedef RETSIGTYPE sig_handler (int);
+  
+- // XXX FIXME XXX -- the data should probably be private...
+- 
+  struct
+  octave_interrupt_handler
+  {
+--- 63,68 ----
+***************
+*** 112,122 ****
+  
+    typedef void (*dead_child_handler) (pid_t, int);
+  
+!   octave_child (pid_t id = -1, dead_child_handler f = 0)
+!     : pid (id), handler (f) { }
+  
+    octave_child (const octave_child& oc)
+!     : pid (oc.pid), handler (oc.handler) { }
+  
+    octave_child& operator = (const octave_child& oc)
+      {
+--- 114,124 ----
+  
+    typedef void (*dead_child_handler) (pid_t, int);
+  
+!   octave_child (pid_t id = -1, dead_child_handler f = 0, string name = "")
+!     : pid (id), handler (f), filename (name) { }
+  
+    octave_child (const octave_child& oc)
+!     : pid (oc.pid), handler (oc.handler), filename (oc.filename) { }
+  
+    octave_child& operator = (const octave_child& oc)
+      {
+***************
+*** 124,129 ****
+--- 126,132 ----
+  	{
+  	  pid = oc.pid;
+  	  handler = oc.handler;
++ 	  filename = oc.filename;
+  	}
+        return *this;
+      }
+***************
+*** 135,140 ****
+--- 138,146 ----
+  
+    // The function we call if this child dies.
+    dead_child_handler handler;
++ 
++   // The file to remove if this child dies.
++   string filename;
+  };
+  
+  class
+***************
+*** 148,154 ****
+  
+    ~octave_child_list (void) { }
+  
+!   static void insert (pid_t pid, octave_child::dead_child_handler f);
+  
+    static void remove (pid_t pid);
+  
+--- 154,161 ----
+  
+    ~octave_child_list (void) { }
+  
+!   static void insert (pid_t pid, octave_child::dead_child_handler f,
+! 		      string name = "");
+  
+    static void remove (pid_t pid);
+  
+***************
+*** 177,183 ****
+  
+    static octave_child_list *instance;
+  
+!   void do_insert (pid_t pid, octave_child::dead_child_handler f);
+  
+    void do_remove (pid_t pid);
+  };
+--- 184,191 ----
+  
+    static octave_child_list *instance;
+  
+!   void do_insert (pid_t pid, octave_child::dead_child_handler f,
+! 		  string name = "");
+  
+    void do_remove (pid_t pid);
+  };
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/strftime.c i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/strftime.c
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/strftime.c	Sat Jan 15 13:15:34 2000
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/strftime.c	Sat Jan 15 14:29:44 2000
+***************
+*** 49,55 ****
+  # endif
+  #endif
+  
+! #if HAVE_TZNAME
+  extern char *tzname[];
+  #endif
+  
+--- 49,55 ----
+  # endif
+  #endif
+  
+! #ifdef HAVE_TZNAME
+  extern char *tzname[];
+  #endif
+  
+***************
+*** 61,68 ****
+     with other C libraries that use unsafe encodings.  */
+  #define DO_MULTIBYTE (HAVE_MBLEN && ! MULTIBYTE_IS_FORMAT_SAFE)
+  
+! #if DO_MULTIBYTE
+! # if HAVE_MBRLEN
+  #  include <wchar.h>
+  # else
+     /* Simulate mbrlen with mblen as best we can.  */
+--- 61,68 ----
+     with other C libraries that use unsafe encodings.  */
+  #define DO_MULTIBYTE (HAVE_MBLEN && ! MULTIBYTE_IS_FORMAT_SAFE)
+  
+! #ifdef DO_MULTIBYTE
+! #ifdef HAVE_MBRLEN
+  #  include <wchar.h>
+  # else
+     /* Simulate mbrlen with mblen as best we can.  */
+***************
+*** 73,83 ****
+    static const mbstate_t mbstate_zero;
+  #endif
+  
+! #if HAVE_LIMITS_H
+  # include <limits.h>
+  #endif
+  
+! #if STDC_HEADERS
+  # include <stddef.h>
+  # include <stdlib.h>
+  # include <string.h>
+--- 73,83 ----
+    static const mbstate_t mbstate_zero;
+  #endif
+  
+! #ifdef HAVE_LIMITS_H
+  # include <limits.h>
+  #endif
+  
+! #ifdef STDC_HEADERS
+  # include <stddef.h>
+  # include <stdlib.h>
+  # include <string.h>
+***************
+*** 180,186 ****
+      } while (0)
+  #define	cpy(n, s)	add ((n), memcpy((PTR) p, (PTR) (s), (n)))
+  
+! #if ! HAVE_TM_GMTOFF
+  /* Yield the difference between *A and *B,
+     measured in seconds, ignoring leap seconds.  */
+  static int tm_diff __P ((const struct tm *, const struct tm *));
+--- 180,186 ----
+      } while (0)
+  #define	cpy(n, s)	add ((n), memcpy((PTR) p, (PTR) (s), (n)))
+  
+! #ifndef HAVE_TM_GMTOFF
+  /* Yield the difference between *A and *B,
+     measured in seconds, ignoring leap seconds.  */
+  static int tm_diff __P ((const struct tm *, const struct tm *));
+***************
+*** 290,299 ****
+    register const char *f;
+  
+    zone = 0;
+! #if HAVE_TM_ZONE
+    zone = (const char *) tp->tm_zone;
+  #endif
+! #if HAVE_TZNAME
+    if (!(zone && *zone) && tp->tm_isdst >= 0)
+      zone = tzname[tp->tm_isdst];
+  #endif
+--- 290,299 ----
+    register const char *f;
+  
+    zone = 0;
+! #ifdef HAVE_TM_ZONE
+    zone = (const char *) tp->tm_zone;
+  #endif
+! #ifdef HAVE_TZNAME
+    if (!(zone && *zone) && tp->tm_isdst >= 0)
+      zone = tzname[tp->tm_isdst];
+  #endif
+***************
+*** 320,326 ****
+  		    ? INT_STRLEN_BOUND (time_t)
+  		    : INT_STRLEN_BOUND (int))];
+  
+! #if DO_MULTIBYTE
+  
+         switch (*f)
+  	{
+--- 320,326 ----
+  		    ? INT_STRLEN_BOUND (time_t)
+  		    : INT_STRLEN_BOUND (int))];
+  
+! #ifdef DO_MULTIBYTE
+  
+         switch (*f)
+  	{
+***************
+*** 482,488 ****
+  	case 'C':		/* POSIX.2 extension.  */
+  	  if (modifier == 'O')
+  	    goto bad_format;
+! #if HAVE_STRUCT_ERA_ENTRY
+  	  if (modifier == 'E')
+  	    {
+  	      struct era_entry *era = _nl_get_era_entry (tp);
+--- 482,488 ----
+  	case 'C':		/* POSIX.2 extension.  */
+  	  if (modifier == 'O')
+  	    goto bad_format;
+! #ifdef HAVE_STRUCT_ERA_ENTRY
+  	  if (modifier == 'E')
+  	    {
+  	      struct era_entry *era = _nl_get_era_entry (tp);
+***************
+*** 783,789 ****
+  	  DO_NUMBER (1, tp->tm_wday);
+  
+  	case 'Y':
+! #if HAVE_STRUCT_ERA_ENTRY
+  	  if (modifier == 'E')
+  	    {
+  	      struct era_entry *era = _nl_get_era_entry (tp);
+--- 783,789 ----
+  	  DO_NUMBER (1, tp->tm_wday);
+  
+  	case 'Y':
+! #ifdef HAVE_STRUCT_ERA_ENTRY
+  	  if (modifier == 'E')
+  	    {
+  	      struct era_entry *era = _nl_get_era_entry (tp);
+***************
+*** 800,806 ****
+  	    DO_NUMBER (1, tp->tm_year + TM_YEAR_BASE);
+  
+  	case 'y':
+! #if HAVE_STRUCT_ERA_ENTRY
+  	  if (modifier == 'E')
+  	    {
+  	      struct era_entry *era = _nl_get_era_entry (tp);
+--- 800,806 ----
+  	    DO_NUMBER (1, tp->tm_year + TM_YEAR_BASE);
+  
+  	case 'y':
+! #ifdef HAVE_STRUCT_ERA_ENTRY
+  	  if (modifier == 'E')
+  	    {
+  	      struct era_entry *era = _nl_get_era_entry (tp);
+***************
+*** 824,830 ****
+  
+  	  {
+  	    int diff;
+! #if HAVE_TM_GMTOFF
+  	    diff = tp->tm_gmtoff;
+  #else
+  	    struct tm gtm;
+--- 824,830 ----
+  
+  	  {
+  	    int diff;
+! #ifdef HAVE_TM_GMTOFF
+  	    diff = tp->tm_gmtoff;
+  #else
+  	    struct tm gtm;
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/syscalls.cc i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/syscalls.cc
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/syscalls.cc	Sat Jul 20 22:56:48 2002
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/syscalls.cc	Sun Jul 21 01:08:02 2002
+***************
+*** 25,30 ****
+--- 25,32 ----
+  //
+  //   mkfifo  unlink  waitpid
+  
++ /* Modified by Klaus Gebhardt, 1996 - 1999 */
++ 
+  #ifdef HAVE_CONFIG_H
+  #include <config.h>
+  #endif
+***************
+*** 32,37 ****
+--- 34,40 ----
+  #include <cerrno>
+  #include <cstdio>
+  #include <cstring>
++ #include <csignal>
+  
+  #ifdef HAVE_UNISTD_H
+  #ifdef HAVE_SYS_TYPES_H
+***************
+*** 44,49 ****
+--- 47,54 ----
+  #include <fcntl.h>
+  #endif
+  
++ #include <process.h>
++ 
+  #include "defun.h"
+  #include "error.h"
+  #include "file-ops.h"
+***************
+*** 54,59 ****
+--- 59,66 ----
+  #include "oct-obj.h"
+  #include "oct-stdstrm.h"
+  #include "oct-stream.h"
++ #include "oct-fstrm.h"
++ #include "sighandlers.h"
+  #include "sysdep.h"
+  #include "syswait.h"
+  #include "utils.h"
+***************
+*** 87,94 ****
+    return m;
+  }
+  
+! DEFUN (dup2, args, ,
+!  "[FID, MSG] = dup2 (OLD, NEW)\n\
+  \n\
+  Duplicate a file descriptor.\n\
+  \n\
+--- 94,150 ----
+    return m;
+  }
+  
+! DEFUN (_dup, args, ,
+!  "[FID, MSG] = _dup (old): duplicate a file descriptor")
+! {
+!   octave_value_list retval;
+! 
+!   retval(1) = string ();
+!   retval(0) = -1.0;
+! 
+!   int nargin = args.length ();
+! 
+!   if (nargin == 1)
+!     {
+! #if defined (HAVE_DUP)
+!       double d_old = args(0).double_value ();
+! 
+!       if (! error_state)
+! 	{
+! 	  if (D_NINT (d_old) == d_old)
+! 	    {
+! 	      int i_old = NINT (d_old);
+! 
+! 	      // XXX FIXME XXX -- are these checks sufficient?
+! 	      if (i_old >= 0)
+! 		{
+! 		  int status = dup (i_old);
+! 
+! 		  retval(0) = (double) status;
+! 
+! 		  if (status < 0)
+! 		    retval(1) = strerror (errno);
+! 		}
+! 	      else
+! 		error ("_dup: invalid file id");
+! 	    }
+! 	  else
+! 	    error ("_dup: argument must be integer value");
+! 	}
+!       else
+! 	error ("_dup: argument must be integer value");
+! #else
+!       gripe_not_supported ("_dup");
+! #endif
+!     }
+!   else
+!     print_usage ("_dup");
+! 
+!   return retval;
+! }
+! 
+! DEFUN (_dup2, args, ,
+!  "[FID, MSG] = _dup2 (OLD, NEW)\n\
+  \n\
+  Duplicate a file descriptor.\n\
+  \n\
+***************
+*** 105,118 ****
+    if (nargin == 2)
+      {
+  #if defined (HAVE_DUP2)
+! 
+!       octave_stream *old_stream = octave_stream_list::lookup (args(0));
+!       octave_stream *new_stream = octave_stream_list::lookup (args(1));
+  
+        if (! error_state)
+  	{
+! 	  int i_old = old_stream->file_number ();
+! 	  int i_new = new_stream->file_number ();
+  
+  	  if (i_old >= 0 && i_new >= 0)
+  	    {
+--- 161,177 ----
+    if (nargin == 2)
+      {
+  #if defined (HAVE_DUP2)
+!       double d_old = args(0).double_value ();
+!       double d_new = args(1).double_value ();
+  
+        if (! error_state)
+  	{
+! 	  if ((D_NINT (d_old) == d_old) && (D_NINT (d_new) == d_new))
+! 	    {
+! 	      int i_old = NINT (d_old);
+! 	      int i_new = NINT (d_new);
+! 
+! 	      // XXX FIXME XXX -- are these checks sufficient?
+  
+  	  if (i_old >= 0 && i_new >= 0)
+  	    {
+***************
+*** 124,139 ****
+  		retval(1) = strerror (errno);
+  	    }
+  	  else
+! 	    error ("dup2: invalid file id");
+  	}
+        else
+! 	error ("dup2: invalid stream");
+  #else
+!       gripe_not_supported ("dup2");
+  #endif
+      }
+    else
+!     print_usage ("dup2");
+  
+    return retval;
+  }
+--- 183,398 ----
+  		retval(1) = strerror (errno);
+  	    }
+  	  else
+! 		error ("_dup2: invalid file id");
+! 	}
+!       else
+! 	    error ("_dup2: arguments must be integer values");
+! 	}
+!       else
+! 	error ("_dup2: arguments must be integer values");
+! #else
+!       gripe_not_supported ("_dup2");
+! #endif
+!     }
+!   else
+!     print_usage ("_dup2");
+! 
+!   return retval;
+! }
+! 
+! DEFUN (_close, args, ,
+!  "[RETVAL, MSG] = _close (fid): close a file handle")
+! {
+!   octave_value_list retval;
+! 
+!   retval(1) = string ();
+!   retval(0) = -1.0;
+! 
+!   int nargin = args.length ();
+! 
+!   if (nargin == 1)
+!     {
+!       double d_old = args(0).double_value ();
+! 
+!       if (! error_state)
+! 	{
+! 	  if (D_NINT (d_old) == d_old)
+! 	    {
+! 	      int i_old = NINT (d_old);
+! 
+! 	      // XXX FIXME XXX -- are these checks sufficient?
+! 	      if (i_old >= 0)
+! 		{
+! 		  int status = close (i_old);
+! 
+! 		  retval(0) = (double) status;
+! 
+! 		  if (status < 0)
+! 		    retval(1) = strerror (errno);
+! 		}
+! 	      else
+! 		error ("_close: invalid file id");
+! 	    }
+! 	  else
+! 	    error ("_close: argument must be integer value");
+! 	}
+!     }
+!   else
+!     print_usage ("_close");
+! 
+!   return retval;
+! }
+! 
+! DEFUN (_fdopen, args, ,
+!  "[FID, MSG] = _fdopen (fid, mode): create a stream for file handle")
+! {
+!   octave_value_list retval;
+! 
+!   retval(1) = string ();
+!   retval(0) = -1.0;
+! 
+!   int nargin = args.length ();
+! 
+!   if (nargin == 2)
+!     {
+!       if (args(1).is_string ())
+! 	{
+! 	  string mode = args(1).string_value ();
+! 
+! 	  double d_old = args(0).double_value ();
+! 
+! 	  if (! error_state)
+! 	    {
+! 	      if (D_NINT (d_old) == d_old)
+! 		{
+! 		  int i_old = NINT (d_old);
+! 
+! 		  // XXX FIXME XXX -- are these checks sufficient?
+! 		  if (i_old >= 0)
+! 		    {
+! 		      if (mode == "r")
+! 			{
+! 			  FILE *f = fdopen (i_old, "r");
+! 			  octave_istdiostream *is
+! 			    = new octave_istdiostream ("fdopen", f);
+! 			  retval(0) = (double) octave_stream_list::insert (is);
+! 			}
+! 		      else if (mode == "w")
+! 			{
+! 			  FILE *f = fdopen (i_old, "w");
+! 			  octave_ostdiostream *os
+! 			    = new octave_ostdiostream ("fdopen", f);
+! 			  retval(0) = (double) octave_stream_list::insert (os);
+! 			}
+! 		      else
+! 			error ("_fdopen: invalid mode");
+! 		    }
+! 		  else
+! 		    error ("_fdopen: invalid file id");
+! 		}
+! 	      else
+! 		error ("_fdopen: argument must be integer value");
+! 	    }
+! 	}
+!       else
+! 	error ("_fdopen: mode must be a string");
+!     }
+!   else
+!     print_usage ("_fdopen");
+! 
+!   return retval;
+! }
+! 
+! DEFUN (spawn, args, ,
+!  "[STATUS, MSG] = spawn (mode, file, args): run a program")
+! {
+!   octave_value_list retval;
+! 
+!   retval(1) = string ();
+!   retval(0) = -1.0;
+! 
+!   int nargin = args.length ();
+! 
+!   if (nargin == 2 || nargin == 3)
+!     {
+! #if defined (HAVE_SPAWNVP)
+!       string mode_strg = args(0).string_value ();
+!       string exec_file = args(1).string_value ();
+! 
+!       int mode = P_WAIT;
+! 
+!       if (mode_strg == "wait")
+! 	mode = P_WAIT;
+!       else if (mode_strg == "nowait")
+! 	mode = P_NOWAIT;
+!       else if (mode_strg == "detach")
+! 	mode = P_DETACH;
+!       else if (mode_strg == "session")
+! 	mode = P_SESSION;
+!       else if (mode_strg == "pm")
+! 	mode = P_PM;
+!       else
+! 	error ("system: invalid mode specified.");
+! 
+!       if (! error_state)
+! 	{
+! 	  char **exec_args = 0;
+! 
+! 	  if (nargin == 3)
+! 	    {
+! 	      charMatrix chm = args(2).all_strings ();
+! 
+! 	      if (! error_state)
+! 		{
+! 		  int nr = chm.rows ();
+! 		  int nc = chm.cols ();
+! 
+! 		  exec_args = new char * [nr+2];
+! 
+! 		  // XXX FIXME XXX -- potential leak?
+! 
+! 		  exec_args[0] = strsave (exec_file.c_str ());
+! 		  exec_args[nr+1] = 0;
+! 
+! 		  for (int i = 0; i < nr; i++)
+! 		    {
+! 		      exec_args[i+1] = new char [nc+1];
+! 
+! 		      for (int j = 0; j < nc; j++)
+! 			exec_args[i+1][j] = chm (i, j);
+! 
+! 		      exec_args[i+1][nc] = '\0';
+! 		    }
+! 		}
+! 	      else
+! 		error ("spawn: arguments must be strings");
+  	    }
+  	  else
+! 	    {
+! 	      exec_args = new char * [2];
+! 
+! 	      exec_args[0] = strsave (exec_file.c_str ());
+! 	      exec_args[1] = 0;
+! 	    }
+! 
+! 	  if (! error_state)
+! 	    {
+! 	      int status = spawnvp (mode, exec_file.c_str (), exec_args);
+! 
+! 	      retval(0) = (double) status;
+! 
+! 	      if (status < 0)
+! 		retval(1) = strerror (errno);
+! 	    }
+! 	}
+!       else
+! 	error ("spawn: first two arguments must be strings");
+  #else
+!       gripe_not_supported ("spawn");
+  #endif
+      }
+    else
+!     print_usage ("spawn");
+  
+    return retval;
+  }
+***************
+*** 221,228 ****
+    return retval;
+  }
+  
+! DEFUN (fcntl, args, ,
+!  "[STATUS, MSG] = fcntl (FID, REQUEST, ARGUMENT)\n\
+  \n\
+  Control open file descriptors.\n\
+  \n\
+--- 480,487 ----
+    return retval;
+  }
+  
+! DEFUN (_fcntl, args, ,
+!  "[STATUS, MSG] = _fcntl (FID, REQUEST, ARGUMENT)\n\
+  \n\
+  Control open file descriptors.\n\
+  \n\
+***************
+*** 239,263 ****
+    if (nargin == 3)
+      {
+  #if defined (HAVE_FCNTL)
+!       octave_stream *strm = octave_stream_list::lookup (args(0));
+! 
+!       if (! error_state)
+! 	{
+! 	  int fid = strm->file_number ();
+! 
+  	  double d_req = args(1).double_value ();
+  	  double d_arg = args(2).double_value ();
+  
+  	  if (! error_state
+  	      && D_NINT (d_req) == d_req
+  	      && D_NINT (d_arg) == d_arg)
+  	    {
+  	      int req = NINT (d_req);
+  	      int arg = NINT (d_arg);
+  
+  	      // XXX FIXME XXX -- Need better checking here?
+  	      if (fid < 0)
+! 		error ("fcntl: invalid file id");
+  	      else
+  		{
+  		  int status = fcntl (fid, req, arg);
+--- 498,519 ----
+    if (nargin == 3)
+      {
+  #if defined (HAVE_FCNTL)
+!       double d_fid = args(0).double_value ();
+        double d_req = args(1).double_value ();
+        double d_arg = args(2).double_value ();
+  
+        if (! error_state
++ 	  && D_NINT (d_fid) == d_fid
+  	  && D_NINT (d_req) == d_req
+  	  && D_NINT (d_arg) == d_arg)
+  	{
++ 	  int fid = NINT (d_fid);
+  	  int req = NINT (d_req);
+  	  int arg = NINT (d_arg);
+  
+  	  // XXX FIXME XXX -- Need better checking here?
+  	  if (fid < 0)
+! 	    error ("_fcntl: invalid file id");
+  	  else
+  	    {
+  	      int status = fcntl (fid, req, arg);
+***************
+*** 268,282 ****
+  		    retval(1) = strerror (errno);
+  		}
+  	    }
+- 	}
+        else
+! 	error ("fcntl: file id must be an integer");
+  #else
+!       gripe_not_supported ("fcntl");
+  #endif
+      }
+    else
+!     print_usage ("fcntl");
+  
+    return retval;
+  }
+--- 524,537 ----
+  		retval(1) = strerror (errno);
+  	    }
+  	}
+        else
+! 	error ("_fcntl: file id must be an integer");
+  #else
+!       gripe_not_supported ("_fcntl");
+  #endif
+      }
+    else
+!     print_usage ("_fcntl");
+  
+    return retval;
+  }
+***************
+*** 517,522 ****
+--- 772,778 ----
+  
+    if (nargin == 2)
+      {
++ #if defined (HAVE_MKFIFO)
+        if (args(0).is_string ())
+  	{
+  	  string name = args(0).string_value ();
+***************
+*** 539,545 ****
+  	}
+        else
+  	error ("mkfifo: file name must be a string");
+! 
+      }
+    else
+      print_usage ("mkfifo");
+--- 795,803 ----
+  	}
+        else
+  	error ("mkfifo: file name must be a string");
+! #else
+!       gripe_not_supported ("mkfifo");
+! #endif
+      }
+    else
+      print_usage ("mkfifo");
+***************
+*** 547,552 ****
+--- 805,857 ----
+    return retval;
+  }
+  
++ DEFUN (_pipe, args, ,
++   "[FIDS, STATUS, MSG] = _pipe (): create an interprocess channel.\n\
++ \n\
++ Return the FIDS corresponding to the reading and writing ends of\n\
++ the pipe, as a vector.\n\
++ \n\
++ You must open the FIDS using _fdopen!\n\
++ \n\
++ If successful, STATUS is 0 and MSG is an empty string.  Otherwise,\n\
++ STATUS is nonzero and MSG contains a system-dependent error message.")
++ {
++   octave_value_list retval;
++ 
++   retval(2) = string ();
++   retval(1) = -1.0;
++   retval(0) = Matrix ();
++ 
++   int nargin = args.length ();
++ 
++   if (nargin == 0)
++     {
++ #if defined (HAVE_PIPE)
++       int fid[2];
++ 
++       int status = pipe (fid);
++ 
++       if (status < 0)  retval(2) = strerror (errno);
++       else
++ 	{
++ 	  Matrix file_ids (1, 2);
++ 
++ 	  file_ids (0, 0) = (double) fid[0];
++ 	  file_ids (0, 1) = (double) fid[1];
++ 
++           retval(0) = file_ids;
++ 	  retval(1) = (double) status;
++ 	}	  
++ #else
++       gripe_not_supported ("_pipe");
++ #endif
++     }
++   else
++     print_usage ("_pipe");
++ 
++   return retval;
++ }
++ 
+  DEFUN (pipe, args, ,
+    "[FILE_IDS, STATUS, MSG] = pipe (): create an interprocess channel.\n\
+  \n\
+***************
+*** 767,774 ****
+  
+  	      if (! error_state)
+  		{
+! 		  pid_t status = waitpid (pid, 0, options);
+  
+  		  retval(0) = (double) status;
+  
+  		  if (status < 0)
+--- 1072,1089 ----
+  
+  	      if (! error_state)
+  		{
+! #ifdef __EMX__
+! 		  volatile octave_interrupt_handler saved_interrupt_handler
+! 		    = octave_ignore_interrupts ();
+  
++ 		  volatile sig_handler *saved_sigchld_handler
++ 		    = octave_set_signal_handler (SIGCHLD, SIG_IGN);
++ #endif
++ 		  pid_t status = waitpid (pid, 0, options);
++ #ifdef __EMX__
++ 		  octave_set_interrupt_handler (saved_interrupt_handler);
++ 		  octave_set_signal_handler (SIGCHLD, saved_sigchld_handler);
++ #endif
+  		  retval(0) = (double) status;
+  
+  		  if (status < 0)
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/sysdep.cc i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/sysdep.cc
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/sysdep.cc	Sat Jul 20 22:56:48 2002
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/sysdep.cc	Sat Jul 20 23:19:46 2002
+***************
+*** 28,33 ****
+--- 28,35 ----
+  
+  */
+  
++ /* Modified by Klaus Gebhardt, 1996 */
++ 
+  #ifdef HAVE_CONFIG_H
+  #include <config.h>
+  #endif
+***************
+*** 60,65 ****
+--- 62,72 ----
+  LOSE! LOSE!
+  #endif
+  
++ #ifdef __EMX__
++ #include <float.h>
++ #include <sys/uflags.h>
++ #endif
++ 
+  #if defined (HAVE_TERMCAP_H)
+  #include <termcap.h>
+  #endif
+***************
+*** 80,89 ****
+--- 87,102 ----
+  #include <sys/utsname.h>
+  #endif
+  
++ #ifndef __EMX__
+  #if defined (USE_READLINE)
+  #include <readline/readline.h>
+  #include <readline/tilde.h>
+  #endif
++ #else
++ #include <readline/readline.h>
++ #include <readline/tilde.h>
++ #include <sys/ioctl.h>
++ #endif
+  
+  #include "mach-info.h"
+  
+***************
+*** 93,98 ****
+--- 106,112 ----
+  #include "input.h"
+  #include "mappers.h"
+  #include "oct-obj.h"
++ #include "pager.h"
+  #include "pathlen.h"
+  #include "ov.h"
+  #include "pager.h"
+***************
+*** 145,150 ****
+--- 159,166 ----
+  {
+    _control87 ((EM_INVALID | EM_DENORMAL | EM_ZERODIVIDE | EM_OVERFLOW
+  	       | EM_UNDERFLOW | EM_INEXACT), MCW_EM);
++ 
++   _uflags (_UF_SBRK_MODEL, _UF_SBRK_ARBITRARY);
+  }
+  #endif
+  
+***************
+*** 331,336 ****
+--- 347,353 ----
+  kbhit (void)
+  {
+    int c;
++   flush_octave_stdout ();
+    raw_mode (1);
+    c = cin.get ();
+    raw_mode (0);
+***************
+*** 465,471 ****
+  
+    // XXX FIXME XXX -- add timeout and default value args?
+  
+!   if (interactive)
+      {
+        int c = kbhit ();
+        char *s = new char [2];
+--- 482,488 ----
+  
+    // XXX FIXME XXX -- add timeout and default value args?
+  
+!   if (interactive || really_forced_interactive)
+      {
+        int c = kbhit ();
+        char *s = new char [2];
+***************
+*** 673,678 ****
+--- 690,716 ----
+  
+  DEFALIAS (EXTPROC, extproc);
+  
++ DEFUN (add_to_command_number, args, ,
++        "add_to_command_number: add argument to the current command number")
++ {
++   octave_value_list retval;
++   int nargin;
++ 
++   if ((nargin = args.length ()) != 1)
++     {
++       print_usage ("add_to_command_number");
++       return retval;
++     }
++ 
++   double tmp_d = args(0).double_value ();
++ 
++   if (error_state || ((int) tmp_d != tmp_d))
++     error ("add_to_command_number: expecting integer as argument");
++   else
++     current_command_number += (int) tmp_d;
++ 
++   return retval;
++ }
+  #endif
+  
+  /*
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/toplev.cc i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/toplev.cc
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/toplev.cc	Sat Jan 15 13:15:34 2000
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/toplev.cc	Sat Jan 15 14:55:14 2000
+***************
+*** 20,25 ****
+--- 20,27 ----
+  
+  */
+  
++ /* Modified by Klaus Gebhardt, 1996 - 1997 */
++ 
+  #ifdef HAVE_CONFIG_H
+  #include <config.h>
+  #endif
+***************
+*** 77,82 ****
+--- 79,92 ----
+  #include "variables.h"
+  #include <version.h>
+  
++ #ifdef __EMX__
++ extern "C"
++ {
++ #include <process.h>
++   int _IO_system (const char *, int);
++ }
++ #endif
++ 
+  // argv[0] for this program.
+  string Vprogram_invocation_name;
+  
+***************
+*** 142,147 ****
+--- 152,162 ----
+  void
+  parse_and_execute (FILE *f, int print)
+  {
++   volatile octave_interrupt_handler old_interrupt_handler
++     = octave_ignore_interrupts ();
++ 
++   volatile jmp_buf old_toplevel = toplevel;
++ 
+    begin_unwind_frame ("parse_and_execute");
+    
+    YY_BUFFER_STATE old_buf = current_buffer ();
+***************
+*** 160,165 ****
+--- 175,184 ----
+  
+    unwind_protect_ptr (curr_sym_tab);
+  
++   if (setjmp(toplevel) == 0)
++     {
++       octave_set_interrupt_handler (old_interrupt_handler);
++ 
+        int retval;
+        do
+  	{
+***************
+*** 196,203 ****
+--- 215,228 ----
+  	    }
+  	}
+        while (retval == 0);
++     }
++   else  error ("script executing interrupted ...");
+  
+    run_unwind_frame ("parse_and_execute");
++ 
++   octave_ignore_interrupts ();
++   toplevel = old_toplevel;
++   octave_set_interrupt_handler (old_interrupt_handler);
+  }
+  
+  static void
+***************
+*** 211,216 ****
+--- 236,244 ----
+  parse_and_execute (const string& s, int print, int verbose,
+  		   const char *warn_for)
+  {
++   volatile octave_interrupt_handler old_interrupt_handler
++     = octave_ignore_interrupts ();
++ 
+    begin_unwind_frame ("parse_and_execute_2");
+  
+    unwind_protect_int (reading_script_file);
+***************
+*** 247,252 ****
+--- 275,282 ----
+      error ("%s: unable to open file `%s'", warn_for, s.c_str ());
+  
+    run_unwind_frame ("parse_and_execute_2");
++ 
++   octave_set_interrupt_handler (old_interrupt_handler);
+  }
+  
+  int
+***************
+*** 258,263 ****
+--- 288,297 ----
+  
+    if (setjmp (toplevel) != 0)
+      {
++ #if defined (__EMX__) && defined (OS2)
++       run_all_unwind_protects ();
++ #endif
++ 
+        raw_mode (0);
+  
+        cout << "\n";
+***************
+*** 274,279 ****
+--- 308,318 ----
+    int retval;
+    do
+      {
++ #ifdef __EMX__
++       can_interrupt = 1;
++       octave_catch_interrupts ();
++ #endif
++ 
+        curr_sym_tab = top_level_sym_tab;
+  
+        reset_parser ();
+***************
+*** 288,294 ****
+  
+  	  global_command = 0;
+  
+! 	  if (! (interactive || forced_interactive))
+  	    {
+  	      bool quit = (returning || breaking);
+  
+--- 327,334 ----
+  
+  	  global_command = 0;
+  
+! 	  if (! (interactive || forced_interactive
+! 		 || really_forced_interactive))
+  	    {
+  	      bool quit = (returning || breaking);
+  
+***************
+*** 304,310 ****
+  
+  	  if (error_state)
+  	    {
+! 	      if (! (interactive || forced_interactive))
+  		break;
+  	    }
+  	  else
+--- 344,351 ----
+  
+  	  if (error_state)
+  	    {
+! 	      if (! (interactive || forced_interactive
+! 		     || really_forced_interactive))
+  		break;
+  	    }
+  	  else
+***************
+*** 374,380 ****
+  
+    flush_octave_stdout ();
+  
+!   if (! quitting_gracefully && (interactive || forced_interactive))
+      cout << "\n";
+  }
+  
+--- 415,422 ----
+  
+    flush_octave_stdout ();
+  
+!   if (!quitting_gracefully &&
+!       (interactive || forced_interactive || really_forced_interactive))
+      cout << "\n";
+  }
+  
+***************
+*** 383,388 ****
+--- 425,434 ----
+  {
+    clean_up_for_exit ();
+  
++ #if defined (__EMX__)
++   _sleep2 (500);
++ #endif
++ 
+    exit (retval == EOF ? 0 : retval);
+  }
+  
+***************
+*** 603,609 ****
+  
+    octave_value_list tmp = eval_string (s, print, parse_status, 1);
+  
+-   if (tmp.length () > 0)
+      retval = tmp(0);
+  
+    return retval;
+--- 649,654 ----
+***************
+*** 675,686 ****
+  
+  // Execute a shell command.
+  
+  static void
+  cleanup_iprocstream (void *p)
+  {
+    iprocstream *cmd = (iprocstream *) p;
+  
+!   octave_child_list::remove (cmd->pid ());
+  
+    delete cmd;
+  }
+--- 720,740 ----
+  
+  // Execute a shell command.
+  
++ static int cmd_status = -1;
++ static int cmd_pid    = -1;
++ 
++ static void
++ cmd_death_handler (pid_t, int status)
++ {
++   cmd_status = status;
++ }
++ 
+  static void
+  cleanup_iprocstream (void *p)
+  {
+    iprocstream *cmd = (iprocstream *) p;
+  
+!   octave_child_list::remove (cmd_pid);
+  
+    delete cmd;
+  }
+***************
+*** 692,699 ****
+--- 746,758 ----
+  
+    iprocstream *cmd = new iprocstream (cmd_str.c_str ());
+  
++   cmd_status = -1;
++   cmd_pid    = cmd->pid ();
++ 
+    if (cmd)
+      {
++       octave_child_list::insert (cmd_pid, cmd_death_handler);
++ 
+        add_unwind_protect (cleanup_iprocstream, cmd);
+  
+        if (*cmd)
+***************
+*** 723,729 ****
+  	  while (cmd->get (ch))
+  	    output_buf.put (ch);
+  
+! 	  int cmd_status = cmd->close ();
+  
+  	  if (WIFEXITED (cmd_status))
+  	    cmd_status = WEXITSTATUS (cmd_status);
+--- 782,788 ----
+  	  while (cmd->get (ch))
+  	    output_buf.put (ch);
+  
+! 	  cmd_status = cmd->close ();
+  
+  	  if (WIFEXITED (cmd_status))
+  	    cmd_status = WEXITSTATUS (cmd_status);
+***************
+*** 781,787 ****
+--- 840,850 ----
+  
+        string cmd_str = args(0).string_value ();
+  
++ #if defined (__EMX__) && defined (OS2)
++       enum exec_type { sync, async, pm };
++ #else
+        enum exec_type { sync, async };
++ #endif
+  
+        exec_type type = sync;
+  
+***************
+*** 797,804 ****
+--- 860,875 ----
+  		    type = sync;
+  		  else if (type_str == "async")
+  		    type = async;
++ #if defined (__EMX__) && defined (OS2)
++ 		  else if (type_str == "pm")
++ 		    type = pm;
++ 		  else
++ 		    error ("system: third arg must be \"sync\" , \"async\""
++ 			   "or \"pm\"");
++ #else
+  		  else
+  		    error ("system: third arg must be \"sync\" or \"async\"");
++ #endif
+  		}
+  	      else
+  		error ("system: third argument must be a string");
+***************
+*** 809,835 ****
+  
+        if (! error_state)
+  	{
+  	  if (type == async)
+  	    {
+  	      pid_t pid = fork ();
+  
+  	      if (pid < 0) 
+  		error ("system: fork failed -- can't create child process");
+  	      else if (pid == 0)
+  		{
+! 		  execl ("/bin/sh", "sh", "-c", cmd_str.c_str (), 0);
+! 
+! 		  panic_impossible ();
+  		}
+  	      else
+  		retval(0) = (double) pid;
+  	    }
+  	  else if (return_output)
+  	    retval = run_command_and_return_output (cmd_str);
+  	  else
+  	    {
+  	      int status = system (cmd_str.c_str ());
+  
+  	      // The value in status is as returned by waitpid.  If
+  	      // the process exited normally, extract the actual exit
+  	      // status of the command.  Otherwise, return 127 as a
+--- 880,932 ----
+  
+        if (! error_state)
+  	{
++ #if defined (__EMX__) && defined (OS2)
++ 	  if (type == async || type == pm)
++ #else
+  	  if (type == async)
++ #endif
+  	    {
++ #ifndef __EMX__
+  	      pid_t pid = fork ();
+  
+  	      if (pid < 0) 
+  		error ("system: fork failed -- can't create child process");
+  	      else if (pid == 0)
+  		{
+! 		  system (cmd_str.c_str ());
+! 		  exit (0);
+! 		  retval(0) = 0.0;
+  		}
+  	      else
+  		retval(0) = (double) pid;
++ #else
++ 	      pid_t pid;
++ 	      int p_mode;
++ #ifdef OS2
++ 	      if (type == pm)  p_mode = P_PM;
++ 	      else             p_mode = P_NOWAIT;
++ #else
++ 	      p_mode = P_NOWAIT;
++ #endif
++ 	      pid = _IO_system (cmd_str.c_str (), p_mode);
++ 
++ 	      if (pid < 0)
++ 		error ("system: spawn failed -- can't create child process");
++ 	      else
++ 		retval(0) = (double) pid;
++ #endif
+  	    }
+  	  else if (return_output)
+  	    retval = run_command_and_return_output (cmd_str);
+  	  else
+  	    {
++ #ifdef __EMX__
++  	      int status = _IO_system (cmd_str.c_str (), P_WAIT);
++ #else
+  	      int status = system (cmd_str.c_str ());
++ #endif
+  
++ #ifndef __EMX__
+  	      // The value in status is as returned by waitpid.  If
+  	      // the process exited normally, extract the actual exit
+  	      // status of the command.  Otherwise, return 127 as a
+***************
+*** 837,842 ****
+--- 934,942 ----
+  
+  	      if (WIFEXITED (status))
+  		status = WEXITSTATUS (status);
++ 	      else
++ 		status = 127;
++ #endif
+  
+  	      retval = (double) status;
+  	    }
+***************
+*** 850,858 ****
+  
+  DEFALIAS (shell_cmd, system);
+  
+! // XXX FIXME XXX -- this should really be static, but that causes
+! // problems on some systems.
+! SLStack<string> octave_atexit_functions;
+  
+  void
+  do_octave_atexit (void)
+--- 950,956 ----
+  
+  DEFALIAS (shell_cmd, system);
+  
+! static SLStack<string> octave_atexit_functions;
+  
+  void
+  do_octave_atexit (void)
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/utils.cc i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/utils.cc
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/utils.cc	Sat Jan 15 13:15:34 2000
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/utils.cc	Sat Jan 15 14:29:54 2000
+***************
+*** 20,25 ****
+--- 20,27 ----
+  
+  */
+  
++ /* Modified by Klaus Gebhardt, 1996 */
++ 
+  #ifdef HAVE_CONFIG_H
+  #include <config.h>
+  #endif
+***************
+*** 98,104 ****
+--- 100,108 ----
+  extern "C" void
+  jump_to_top_level (void)
+  {
++ #if ! defined (__EMX__) || ! defined (OS2)
+    run_all_unwind_protects ();
++ #endif
+  
+    longjmp (toplevel, 1);
+  }
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/variables.cc i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/variables.cc
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/variables.cc	Sat Jul 20 22:56:48 2002
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/variables.cc	Sun Jul 21 00:24:10 2002
+***************
+*** 20,25 ****
+--- 20,27 ----
+  
+  */
+  
++ /* Modified by Klaus Gebhardt, 1996 - 2002 */
++ 
+  #ifdef HAVE_CONFIG_H
+  #include <config.h>
+  #endif
+***************
+*** 71,77 ****
+--- 73,81 ----
+  #include "sysdep.h"
+  #include "pt-const.h"
+  #include "oct-obj.h"
++ #ifndef __EMX__
+  #include "oct-procbuf.h"
++ #endif
+  #include "pt-exp.h"
+  #include "pt-fcn.h"
+  #include "pt-fvc.h"
+***************
+*** 531,540 ****
+  	  if (! have_help_text)
+  	    {
+  	      first_comments_seen = true;
+! 	      help_txt += (char) c;
+  	    }
+  
+! 	  if (c == '\n')
+  	    {
+  	      if (update_pos)
+  		{
+--- 535,556 ----
+  	  if (! have_help_text)
+  	    {
+  	      first_comments_seen = true;
+! 	      if (c == '\r')
+! 		{
+! 		  int d = getc (ffile);
+! 		  if (c != '\n' && c != '\r' && c != '')
+! 		    help_txt += (char) '\n';
+! #if defined (EMX09C)
+! 		  fseek (ffile, -1l, SEEK_CUR);
+! #else
+! 		  ungetc (d, ffile);
+! #endif
+! 		}
+! 	      else if (c == '')  help_txt += (char) '\n';
+! 	      else                 help_txt += (char) c;
+  	    }
+  
+! 	  if (c == '\n' || c == '')
+  	    {
+  	      if (update_pos)
+  		{
+***************
+*** 549,556 ****
+  		    {
+  		      if (update_pos)
+  			current_input_column--;
+  		      ungetc (c, ffile);
+! 		      if (c == '\n')
+  			break;
+  		    }
+  		  else
+--- 565,576 ----
+  		    {
+  		      if (update_pos)
+  			current_input_column--;
++ #if defined (EMX09C)
++ 		      fseek (ffile, -1l, SEEK_CUR);
++ #else
+  		      ungetc (c, ffile);
+! #endif
+! 		      if (c == '\n' || c == '\r' || c == '')
+  			break;
+  		    }
+  		  else
+***************
+*** 568,573 ****
+--- 588,599 ----
+  		have_help_text = true;
+  	      break;
+  
++ 	    case '\r':
++ 	      if (first_comments_seen)  have_help_text = true;
++ 	      if (update_pos)           current_input_column = 0;
++ 	      continue;
++ 
++ 	    case '':
+  	    case '\n':
+  	      if (first_comments_seen)
+  		have_help_text = true;
+***************
+*** 587,593 ****
+--- 613,623 ----
+  	    default:
+  	      if (update_pos)
+  		current_input_column--;
++ #if defined (EMX09C)
++ 	      fseek (ffile, -1l, SEEK_CUR);
++ #else
+  	      ungetc (c, ffile);
++ #endif
+  	      goto done;
+  	    }
+  	}
+***************
+*** 874,880 ****
+  
+    if (! path.empty ())
+      {
+!       FILE *fptr = fopen (path.c_str (), "r");
+  
+        if (fptr)
+  	{
+--- 904,910 ----
+  
+    if (! path.empty ())
+      {
+!       FILE *fptr = fopen (path.c_str (), "rb");
+  
+        if (fptr)
+  	{
+***************
+*** 1752,1757 ****
+--- 1782,1823 ----
+      "warn if reloading a .oct file forces other functions to be cleared");
+  }
+  
++ #ifdef __EMX__
++ // We are using a general procbuf!
++ // So this has to be defined here.
++ // Klaus Gebhardt, 1998
++ 
++ static int Vkluge_procbuf_delay = 0;
++ 
++ static int
++ kluge_procbuf_delay (void)
++ {
++   double val;
++ 
++   if (builtin_real_scalar_variable ("kluge_procbuf_delay", val)
++       && ! xisnan (val))
++     {
++       int ival = NINT (val);
++       if (ival >= 0 && (double) ival == val)
++ 	{
++ 	  Vkluge_procbuf_delay = ival;
++ 	  return 0;
++ 	}
++     }
++ 
++   gripe_invalid_value_specified ("kluge_procbuf_delay");
++   return -1;
++ }
++ 
++ static void
++ symbols_of_oct_procbuf (void)
++ {
++   DEFVAR (kluge_procbuf_delay, (double) Vkluge_procbuf_delay, 0, kluge_procbuf_delay,
++ 	  "number of microseconds to delay in the parent after forking\n\
++ (not used under OS/2)");
++ }
++ #endif
++ 
+  void
+  install_builtin_variables (void)
+  {
+***************
+*** 1781,1794 ****
+  // Deleting names from the symbol tables.
+  
+  static inline bool
+! var_matches_any_pattern (const std::string& nm,
+  			 const string_vector& argv, int argc, int idx)
+  {
+    bool retval = false;
+  
+    for (int k = idx; k < argc; k++)
+      {
+!       std::string patstr = argv[k];
+  
+        if (! patstr.empty ())
+  	{
+--- 1847,1860 ----
+  // Deleting names from the symbol tables.
+  
+  static inline bool
+! var_matches_any_pattern (const string& nm,
+  			 const string_vector& argv, int argc, int idx)
+  {
+    bool retval = false;
+  
+    for (int k = idx; k < argc; k++)
+      {
+!       string patstr = argv[k];
+  
+        if (! patstr.empty ())
+  	{
+***************
+*** 1882,1888 ****
+  
+  	  for (int i = 0; i < lcount; i++)
+  	    {
+! 	      std::string nm = lvars[i];
+  
+  	      if (! var_matches_any_pattern (nm, argv, argc, idx))
+  		curr_sym_tab->clear (nm);
+--- 1948,1954 ----
+  
+  	  for (int i = 0; i < lcount; i++)
+  	    {
+! 	      string nm = lvars[i];
+  
+  	      if (! var_matches_any_pattern (nm, argv, argc, idx))
+  		curr_sym_tab->clear (nm);
+***************
+*** 1892,1898 ****
+  
+  	  for (int i = 0; i < gcount; i++)
+  	    {
+! 	      std::string nm = gvars[i];
+  
+  	      if (! var_matches_any_pattern (nm, argv, argc, idx))
+  		{
+--- 1958,1964 ----
+  
+  	  for (int i = 0; i < gcount; i++)
+  	    {
+! 	      string nm = gvars[i];
+  
+  	      if (! var_matches_any_pattern (nm, argv, argc, idx))
+  		{
+***************
+*** 1907,1913 ****
+  
+  	  for (int i = 0; i < fcount; i++)
+  	    {
+! 	      std::string nm = fcns[i];
+  
+  	      if (! var_matches_any_pattern (nm, argv, argc, idx))
+  		{
+--- 1973,1979 ----
+  
+  	  for (int i = 0; i < fcount; i++)
+  	    {
+! 	      string nm = fcns[i];
+  
+  	      if (! var_matches_any_pattern (nm, argv, argc, idx))
+  		{
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/version.h i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/version.h
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/version.h	Sat Jul 20 22:56:48 2002
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/version.h	Sat Jul 20 23:14:20 2002
+***************
+*** 1,6 ****
+  /*
+  
+! Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002 John W. Eaton
+  
+  This file is part of Octave.
+  
+--- 1,6 ----
+  /*
+  
+! Copyright (C) 1996, 1997, 1998 John W. Eaton
+  
+  This file is part of Octave.
+  
+***************
+*** 20,25 ****
+--- 20,47 ----
+  
+  */
+  
++ /* Modified by Klaus Gebhardt, 1996 - 1998 */
++ 
++ #if defined (__EMX__) && defined (OS2)
++ #define OCTAVE_VERSION "2.0.17"
++ #define OCTAVE_OS2_PATCHLEVEL "2.0.17-b01"
++ 
++ #define OCTAVE_COPYRIGHT \
++ "Copyright (C) 1996, 1997, 1999, 2000, 2001, 2002 John W. Eaton.\n\
++ OS/2-Port by Klaus Gebhardt, 1996 - 2000."
++ 
++ #define OCTAVE_NAME_AND_VERSION \
++ "Octave " OCTAVE_VERSION " for OS/2 2.x, Warp 3 and Warp 4.\n(Patchlevel " \
++ OCTAVE_OS2_PATCHLEVEL ")"
++ 
++ #define OCTAVE_NAME_VERSION_AND_COPYRIGHT \
++   OCTAVE_NAME_AND_VERSION ".\n" OCTAVE_COPYRIGHT "\n\
++ This is free software with ABSOLUTELY NO WARRANTY."
++ 
++ #define OCTAVE_STARTUP_MESSAGE \
++   OCTAVE_NAME_VERSION_AND_COPYRIGHT "\n\
++ For details, type `warranty'."
++ #else
+  #define OCTAVE_VERSION "2.0.17"
+  
+  #define OCTAVE_COPYRIGHT \
+***************
+*** 35,40 ****
+--- 57,63 ----
+  #define OCTAVE_STARTUP_MESSAGE \
+    OCTAVE_NAME_VERSION_AND_COPYRIGHT "\n\
+  For details, type `warranty'."
++ #endif
+  
+  /*
+  ;;; Local Variables: ***
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/y.tab.h i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/y.tab.h
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/src/y.tab.h	Wed Apr 14 18:59:30 1999
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/src/y.tab.h	Sun Jul 21 01:36:20 2002
+***************
+*** 38,107 ****
+    subplot_style *subplot_style_type;
+    subplot_axes *subplot_axes_type;
+  } YYSTYPE;
+! #define	EXPR_AND_AND	258
+! #define	EXPR_OR_OR	259
+! #define	EXPR_AND	260
+! #define	EXPR_OR	261
+! #define	EXPR_NOT	262
+! #define	EXPR_LT	263
+! #define	EXPR_LE	264
+! #define	EXPR_EQ	265
+! #define	EXPR_NE	266
+! #define	EXPR_GE	267
+! #define	EXPR_GT	268
+! #define	LEFTDIV	269
+! #define	EMUL	270
+! #define	EDIV	271
+! #define	ELEFTDIV	272
+! #define	EPLUS	273
+! #define	EMINUS	274
+! #define	QUOTE	275
+! #define	TRANSPOSE	276
+! #define	PLUS_PLUS	277
+! #define	MINUS_MINUS	278
+! #define	POW	279
+! #define	EPOW	280
+! #define	NUM	281
+! #define	IMAG_NUM	282
+! #define	NAME	283
+! #define	SCREW	284
+! #define	END	285
+! #define	PLOT	286
+! #define	TEXT	287
+! #define	STYLE	288
+! #define	AXES_TAG	289
+! #define	FOR	290
+! #define	WHILE	291
+! #define	IF	292
+! #define	ELSEIF	293
+! #define	ELSE	294
+! #define	SWITCH	295
+! #define	CASE	296
+! #define	OTHERWISE	297
+! #define	BREAK	298
+! #define	CONTINUE	299
+! #define	FUNC_RET	300
+! #define	UNWIND	301
+! #define	CLEANUP	302
+! #define	TRY	303
+! #define	CATCH	304
+! #define	GLOBAL	305
+! #define	TEXT_ID	306
+! #define	LEXICAL_ERROR	307
+! #define	FCN	308
+! #define	SCREW_TWO	309
+! #define	ELLIPSIS	310
+! #define	ALL_VA_ARGS	311
+! #define	END_OF_INPUT	312
+! #define	USING	313
+! #define	TITLE	314
+! #define	WITH	315
+! #define	AXES	316
+! #define	COLON	317
+! #define	OPEN_BRACE	318
+! #define	CLOSE_BRACE	319
+! #define	CLEAR	320
+! #define	UNARY	321
+  
+  
+  extern YYSTYPE yylval;
+--- 38,107 ----
+    subplot_style *subplot_style_type;
+    subplot_axes *subplot_axes_type;
+  } YYSTYPE;
+! #define	EXPR_AND_AND	257
+! #define	EXPR_OR_OR	258
+! #define	EXPR_AND	259
+! #define	EXPR_OR	260
+! #define	EXPR_NOT	261
+! #define	EXPR_LT	262
+! #define	EXPR_LE	263
+! #define	EXPR_EQ	264
+! #define	EXPR_NE	265
+! #define	EXPR_GE	266
+! #define	EXPR_GT	267
+! #define	LEFTDIV	268
+! #define	EMUL	269
+! #define	EDIV	270
+! #define	ELEFTDIV	271
+! #define	EPLUS	272
+! #define	EMINUS	273
+! #define	QUOTE	274
+! #define	TRANSPOSE	275
+! #define	PLUS_PLUS	276
+! #define	MINUS_MINUS	277
+! #define	POW	278
+! #define	EPOW	279
+! #define	NUM	280
+! #define	IMAG_NUM	281
+! #define	NAME	282
+! #define	SCREW	283
+! #define	END	284
+! #define	PLOT	285
+! #define	TEXT	286
+! #define	STYLE	287
+! #define	AXES_TAG	288
+! #define	FOR	289
+! #define	WHILE	290
+! #define	IF	291
+! #define	ELSEIF	292
+! #define	ELSE	293
+! #define	SWITCH	294
+! #define	CASE	295
+! #define	OTHERWISE	296
+! #define	BREAK	297
+! #define	CONTINUE	298
+! #define	FUNC_RET	299
+! #define	UNWIND	300
+! #define	CLEANUP	301
+! #define	TRY	302
+! #define	CATCH	303
+! #define	GLOBAL	304
+! #define	TEXT_ID	305
+! #define	LEXICAL_ERROR	306
+! #define	FCN	307
+! #define	SCREW_TWO	308
+! #define	ELLIPSIS	309
+! #define	ALL_VA_ARGS	310
+! #define	END_OF_INPUT	311
+! #define	USING	312
+! #define	TITLE	313
+! #define	WITH	314
+! #define	AXES	315
+! #define	COLON	316
+! #define	OPEN_BRACE	317
+! #define	CLOSE_BRACE	318
+! #define	CLEAR	319
+! #define	UNARY	320
+  
+  
+  extern YYSTYPE yylval;
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/scripts/image/colormap.m i:/project/C/emx-0.9c/src/octave/octave-2.0.17/scripts/image/colormap.m
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/scripts/image/colormap.m	Thu Mar 11 19:44:18 1999
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/scripts/image/colormap.m	Wed Nov 19 07:27:52 1997
+***************
+*** 29,35 ****
+  ##
+  ## colormap with no arguments returns the current colormap.
+  
+! ## Author: Tony Richardson <arichard@stark.cc.oh.us>
+  ## Created: July 1994
+  ## Adapted-By: jwe
+  
+--- 29,35 ----
+  ##
+  ## colormap with no arguments returns the current colormap.
+  
+! ## Author: Tony Richardson <amr@mpl.ucsd.edu>
+  ## Created: July 1994
+  ## Adapted-By: jwe
+  
+***************
+*** 42,76 ****
+    endif
+  
+    if (nargin == 1)
+- 
+      if (isstr (map))
+        if (strcmp (map, "default"))
+!         map = gray ();
+        else
+! 	unwind_protect
+! 	  save_default_eval_print_flag = default_eval_print_flag;
+! 	  default_eval_print_flag = 0;
+! 	  map = eval (map);
+! 	unwind_protect_cleanup
+! 	  default_eval_print_flag = save_default_eval_print_flag;
+! 	end_unwind_protect
+!       endif
+!     endif
+! 
+!     if (! isempty (map))
+!       if (columns (map) != 3)
+! 	error( "colormap: map must have 3 columns: [R,G,B]." );
+!       endif
+!       if (min (min (map)) < 0 || max (max (map)) > 1)
+!         error( "colormap: map must have values in [0,1]." );
+        endif
+        ## Set the new color map
+        __current_color_map__ = map;
+      endif
+- 
+    endif
+  
+    ## Return current color map.
+    cmap = __current_color_map__;
+  
+  endfunction
+--- 42,61 ----
+    endif
+  
+    if (nargin == 1)
+      if (isstr (map))
+        if (strcmp (map, "default"))
+!         __current_color_map__ = gray ();
+        else
+!         error ("invalid argument");
+        endif
++     else
+        ## Set the new color map
+        __current_color_map__ = map;
+      endif
+    endif
+  
+    ## Return current color map.
++ 
+    cmap = __current_color_map__;
+  
+  endfunction
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/scripts/image/gray.m i:/project/C/emx-0.9c/src/octave/octave-2.0.17/scripts/image/gray.m
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/scripts/image/gray.m	Thu Oct 29 21:09:40 1998
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/scripts/image/gray.m	Thu Jul 11 22:25:22 1996
+***************
+*** 19,25 ****
+  
+  ## Colormap.
+  
+! ## Author: Tony Richardson <arichard@stark.cc.oh.us>
+  ## Created: July 1994
+  ## Adapted-By: jwe
+  
+--- 19,25 ----
+  
+  ## Colormap.
+  
+! ## Author: Tony Richardson <amr@mpl.ucsd.edu>
+  ## Created: July 1994
+  ## Adapted-By: jwe
+  
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/scripts/image/gray2ind.m i:/project/C/emx-0.9c/src/octave/octave-2.0.17/scripts/image/gray2ind.m
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/scripts/image/gray2ind.m	Thu Oct 29 21:09:40 1998
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/scripts/image/gray2ind.m	Thu Jul 11 22:25:22 1996
+***************
+*** 19,25 ****
+  
+  ## Image format conversion
+  
+! ## Author: Tony Richardson <arichard@stark.cc.oh.us>
+  ## Created: July 1994
+  ## Adapted-By: jwe
+  
+--- 19,25 ----
+  
+  ## Image format conversion
+  
+! ## Author: Tony Richardson <amr@mpl.ucsd.edu>
+  ## Created: July 1994
+  ## Adapted-By: jwe
+  
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/scripts/image/image.m i:/project/C/emx-0.9c/src/octave/octave-2.0.17/scripts/image/image.m
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/scripts/image/image.m	Thu Oct 29 21:09:40 1998
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/scripts/image/image.m	Wed Jul  1 22:00:10 1998
+***************
+*** 23,66 ****
+  ## indices into the current colormap and should have values between 1
+  ## and the length of the colormap.
+  ##
+! ## image (x, zoom) changes the zoom factor.  The default value is 4.
+  ##
+! ## SEE ALSO: imshow, imagesc, colormap.
+  
+! ## Author: Tony Richardson <arichard@stark.cc.oh.us>
+  ## Created: July 1994
+  ## Adapted-By: jwe
+  
+  function image (x, zoom)
+  
+    if (nargin == 0)
+      ## Load Bobbie Jo Richardson (Born 3/16/94)
+!     x = loadimage ("default.img");
+!     zoom = 2;
+    elseif (nargin == 1)
+!     zoom = 4;
+    elseif (nargin > 2)
+      usage ("image (matrix, [zoom])");
+    endif
+  
+!   ppm_name = tmpnam ();
+  
+!   saveimage (ppm_name, x, "ppm");
+  
+!   ## Start the viewer.  Try xv, then xloadimage.
+  
+!   xv = sprintf ("xv -expand %f %s", zoom, ppm_name);
+! 
+!   xloadimage = sprintf ("xloadimage -zoom %f %s", zoom*100, ppm_name);
+! 
+!   rm = sprintf ("rm -f %s", ppm_name);
+! 
+!   ## Need to let the shell clean up the tmp file because we are putting
+!   ## the viewer in the background.
+! 
+!   command = sprintf ("( %s || %s && %s ) > /dev/null 2>&1 &",
+! 		     xv, xloadimage, rm);
+! 
+!   system (command);
+  
+  endfunction
+--- 23,56 ----
+  ## indices into the current colormap and should have values between 1
+  ## and the length of the colormap.
+  ##
+! ## image (x, zoom) changes the zoom factor.  The default value is 1.
+  ##
+! ## SEE ALSO: imshow, imagesc, colormap.## SEE ALSO: imshow, imagesc, colormap.
+  
+! ## Author: Tony Richardson <amr@mpl.ucsd.edu>
+  ## Created: July 1994
+  ## Adapted-By: jwe
++ ## Modified by Klaus Gebhardt, 1996 - 1997
+  
+  function image (x, zoom)
+  
+    if (nargin == 0)
+      ## Load Bobbie Jo Richardson (Born 3/16/94)
+!     [x, map] = loadimage ("default.img");
+    elseif (nargin == 1)
+!     zoom = 1;
+    elseif (nargin > 2)
+      usage ("image (matrix, [zoom])");
+    endif
+  
+!   pnm_name = tmpnam ();
+  
+!   saveimage (pnm_name, x, "pnm");
+  
+!   ## Start the viewer.
+!   i = findstr (pnm_name, "/");
+!   pnm_name (i) = "\\";
+  
+!   system (sprintf ("oct-view %s %f", pnm_name, zoom));
+  
+  endfunction
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/scripts/image/imagesc.m i:/project/C/emx-0.9c/src/octave/octave-2.0.17/scripts/image/imagesc.m
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/scripts/image/imagesc.m	Wed Nov 25 04:42:34 1998
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/scripts/image/imagesc.m	Thu Jul 11 22:25:22 1996
+***************
+*** 27,40 ****
+  ##
+  ## SEE ALSO: image, imshow
+  
+! ## Author: Tony Richardson <arichard@stark.cc.oh.us>
+  ## Created: July 1994
+  ## Adapted-By: jwe
+  
+! function y = imagesc (x, zoom)
+  
+    if (nargin < 1 || nargin > 2)
+!     usage ("imagesc (matrix, [zoom])");
+    elseif (nargin == 1)
+      zoom = 4;
+    endif
+--- 27,40 ----
+  ##
+  ## SEE ALSO: image, imshow
+  
+! ## Author: Tony Richardson <amr@mpl.ucsd.edu>
+  ## Created: July 1994
+  ## Adapted-By: jwe
+  
+! function x = imagesc (x, zoom)
+  
+    if (nargin < 1 || nargin > 2)
+!     usage ("image (matrix, [zoom])");
+    elseif (nargin == 1)
+      zoom = 4;
+    endif
+***************
+*** 48,59 ****
+    ## length (colormap) inclusive.
+  
+    if (maxval == minval)
+!     y = ones (high, wide);
+    else
+!     ## Rescale values to between 1 and rows (colormap) inclusive.
+!     y = round ((x - minval) / (maxval - minval) * (rows (colormap) - 1)) + 1;
+    endif
+  
+!   image (y, zoom);
+  
+  endfunction
+--- 48,59 ----
+    ## length (colormap) inclusive.
+  
+    if (maxval == minval)
+!     x = ones (high, wide);
+    else
+!     ## Rescale values to between 1 and length (colormap) inclusive.
+!     x = fix ((x - minval) / (maxval - minval) * (length (colormap) - 1)) + 1;
+    endif
+  
+!   image (x, zoom);
+  
+  endfunction
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/scripts/image/imshow.m i:/project/C/emx-0.9c/src/octave/octave-2.0.17/scripts/image/imshow.m
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/scripts/image/imshow.m	Thu Oct 29 21:09:40 1998
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/scripts/image/imshow.m	Thu Jul 11 22:25:22 1996
+***************
+*** 29,35 ****
+  ##
+  ## SEE ALSO: image, imagesc, colormap, gray2ind, rgb2ind.
+  
+! ## Author: Tony Richardson <arichard@stark.cc.oh.us>
+  ## Created: July 1994
+  ## Adapted-By: jwe
+  
+--- 29,35 ----
+  ##
+  ## SEE ALSO: image, imagesc, colormap, gray2ind, rgb2ind.
+  
+! ## Author: Tony Richardson <amr@mpl.ucsd.edu>
+  ## Created: July 1994
+  ## Adapted-By: jwe
+  
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/scripts/image/ind2gray.m i:/project/C/emx-0.9c/src/octave/octave-2.0.17/scripts/image/ind2gray.m
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/scripts/image/ind2gray.m	Thu Oct 29 21:09:40 1998
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/scripts/image/ind2gray.m	Thu Oct 10 23:38:00 1996
+***************
+*** 28,34 ****
+  ##
+  ## SEE ALSO: gray2ind, rgb2ntsc, image, colormap
+  
+! ## Author: Tony Richardson <arichard@stark.cc.oh.us>
+  ## Created: July 1994
+  ## Adapted-By: jwe
+  
+--- 28,34 ----
+  ##
+  ## SEE ALSO: gray2ind, rgb2ntsc, image, colormap
+  
+! ## Author: Tony Richardson <amr@mpl.ucsd.edu>
+  ## Created: July 1994
+  ## Adapted-By: jwe
+  
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/scripts/image/ind2rgb.m i:/project/C/emx-0.9c/src/octave/octave-2.0.17/scripts/image/ind2rgb.m
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/scripts/image/ind2rgb.m	Thu Oct 29 21:09:40 1998
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/scripts/image/ind2rgb.m	Thu Oct 10 23:38:00 1996
+***************
+*** 25,31 ****
+  ##
+  ## SEE ALSO: rgb2ind, image, imshow, ind2gray, gray2ind.
+  
+! ## Author: Tony Richardson <arichard@stark.cc.oh.us>
+  ## Created: July 1994
+  ## Adapted-By: jwe
+  
+--- 25,31 ----
+  ##
+  ## SEE ALSO: rgb2ind, image, imshow, ind2gray, gray2ind.
+  
+! ## Author: Tony Richardson <amr@mpl.ucsd.edu>
+  ## Created: July 1994
+  ## Adapted-By: jwe
+  
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/scripts/image/loadimage.m i:/project/C/emx-0.9c/src/octave/octave-2.0.17/scripts/image/loadimage.m
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/scripts/image/loadimage.m	Thu Oct 29 21:09:40 1998
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/scripts/image/loadimage.m	Wed Feb 11 00:32:52 1998
+***************
+*** 1,64 ****
+! ## Copyright (C) 1996 John W. Eaton
+  ##
+- ## This file is part of Octave.
+- ##
+- ## Octave is free software; you can redistribute it and/or modify it
+- ## under the terms of the GNU General Public License as published by
+- ## the Free Software Foundation; either version 2, or (at your option)
+- ## any later version.
+- ##
+- ## Octave is distributed in the hope that it will be useful, but
+- ## WITHOUT ANY WARRANTY; without even the implied warranty of
+- ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+- ## General Public License for more details.
+- ##
+- ## You should have received a copy of the GNU General Public License
+- ## along with Octave; see the file COPYING.  If not, write to the Free
+- ## Software Foundation, 59 Temple Place - Suite 330, Boston, MA
+- ## 02111-1307, USA.
+- 
+  ## Load an image file.
+  ##
+! ## [img, map] = loadimage (img_file) loads an image and it's associated
+! ## color map from file img_file.  The image must be in stored in
+! ## octave's image format.
+  ##
+  ## SEE ALSO: saveimage, load, save
+  
+! ## Author: Tony Richardson <arichard@stark.cc.oh.us>
+! ## Created: July 1994
+! ## Adapted-By: jwe
+  
+! function [img_retval, map_retval] = loadimage (filename)
+  
+!   if (nargin != 1)
+!     usage ("[img, map] = loadimage (filename)");
+    elseif (! isstr (filename))
+      error ("loadimage: expecting filename as a string");
+    endif
+  
+!   file = file_in_path (IMAGEPATH, filename);
+! 
+!   if (isempty (file))
+!     error ("loadimage: unable to find image file");
+    endif
+  
+!   ## The file is assumed to have variables img and map, or X and map.
+  
+!   eval (['load ', file]);
+  
+!   if (exist ("img"))
+!     img_retval = img;
+!   elseif (exist ("X"))
+!     img_retval = X;
+!   else
+!     error ("loadimage: invalid image file found");
+    endif
+  
+!   if (exist ("map"))
+!     map_retval = map;
+!   else
+!     error ("loadimage: invalid image file found");
+!   endif
+  
+  endfunction
+--- 1,37 ----
+! ## Copyright (C) 1996 Klaus Gebhardt
+  ##
+  ## Load an image file.
+  ##
+! ## [X, map] = loadimage (img_file, fmt) loads an image and its associated
+! ## color map from file img_file.
+  ##
+  ## SEE ALSO: saveimage, load, save
+  
+! ## Author: Klaus Gebhardt <gebhardt@crunch.ikp.physik.th-darmstadt.de>
+! ## Created: November 1996
+  
+! function [X, map] = loadimage (filename, fmt)
+  
+!   if (nargin != 1 && nargin != 2)
+!     usage ("loadimage (filename[, fmt])");
+    elseif (! isstr (filename))
+      error ("loadimage: expecting filename as a string");
+    endif
+  
+!   if (nargin == 1)
+!     fmt = "img";
+    endif
+  
+!   if (! isstr (fmt))
+!     error ("loadimage: expecting fmt as a string");
+!   endif
+  
+!   file = file_in_path (IMAGEPATH, filename);
+  
+!   if (isempty (file))
+!     error ("loadimage: unable to find image file");
+    endif
+  
+!   eval (sprintf ("[X, map] = %s_dec (file);", fmt));
+  
+  endfunction
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/scripts/image/ntsc2rgb.m i:/project/C/emx-0.9c/src/octave/octave-2.0.17/scripts/image/ntsc2rgb.m
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/scripts/image/ntsc2rgb.m	Thu Oct 29 21:09:40 1998
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/scripts/image/ntsc2rgb.m	Thu Jul 11 22:25:22 1996
+***************
+*** 19,25 ****
+  
+  ## Image format conversion.
+  
+! ## Author: Tony Richardson <arichard@stark.cc.oh.us>
+  ## Created: July 1994
+  ## Adapted-By: jwe
+  
+--- 19,25 ----
+  
+  ## Image format conversion.
+  
+! ## Author: Tony Richardson <amr@mpl.ucsd.edu>
+  ## Created: July 1994
+  ## Adapted-By: jwe
+  
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/scripts/image/ocean.m i:/project/C/emx-0.9c/src/octave/octave-2.0.17/scripts/image/ocean.m
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/scripts/image/ocean.m	Thu Oct 29 21:09:40 1998
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/scripts/image/ocean.m	Mon Jul 15 23:20:20 1996
+***************
+*** 19,25 ****
+  
+  ## Colormap.
+  
+! ## Author: Tony Richardson <arichard@stark.cc.oh.us>
+  ## Created: July 1994
+  ## Adapted-By: jwe
+  
+--- 19,25 ----
+  
+  ## Colormap.
+  
+! ## Author: Tony Richardson <amr@mpl.ucsd.edu>
+  ## Created: July 1994
+  ## Adapted-By: jwe
+  
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/scripts/image/rgb2ind.m i:/project/C/emx-0.9c/src/octave/octave-2.0.17/scripts/image/rgb2ind.m
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/scripts/image/rgb2ind.m	Thu Oct 29 21:09:40 1998
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/scripts/image/rgb2ind.m	Thu Oct 10 23:38:02 1996
+***************
+*** 25,31 ****
+  ##
+  ## Bugs: The color map may have duplicate entries.
+  
+! ## Author: Tony Richardson <arichard@stark.cc.oh.us>
+  ## Created: July 1994
+  ## Adapted-By: jwe
+  
+--- 25,31 ----
+  ##
+  ## Bugs: The color map may have duplicate entries.
+  
+! ## Author: Tony Richardson <amr@mpl.ucsd.edu>
+  ## Created: July 1994
+  ## Adapted-By: jwe
+  
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/scripts/image/rgb2ntsc.m i:/project/C/emx-0.9c/src/octave/octave-2.0.17/scripts/image/rgb2ntsc.m
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/scripts/image/rgb2ntsc.m	Thu Oct 29 21:09:40 1998
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/scripts/image/rgb2ntsc.m	Thu Jul 11 22:25:22 1996
+***************
+*** 19,25 ****
+  
+  ## Image format conversion.
+  
+! ## Author: Tony Richardson <arichard@stark.cc.oh.us>
+  ## Created: July 1994
+  ## Adapted-By: jwe
+  
+--- 19,25 ----
+  
+  ## Image format conversion.
+  
+! ## Author: Tony Richardson <amr@mpl.ucsd.edu>
+  ## Created: July 1994
+  ## Adapted-By: jwe
+  
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/scripts/image/saveimage.m i:/project/C/emx-0.9c/src/octave/octave-2.0.17/scripts/image/saveimage.m
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/scripts/image/saveimage.m	Sat Jul 20 22:56:46 2002
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/scripts/image/saveimage.m	Sat Jan 15 15:53:44 2000
+***************
+*** 1,101 ****
+! ## Copyright (C) 1996 John W. Eaton
+  ##
+- ## This file is part of Octave.
+- ##
+- ## Octave is free software; you can redistribute it and/or modify it
+- ## under the terms of the GNU General Public License as published by
+- ## the Free Software Foundation; either version 2, or (at your option)
+- ## any later version.
+- ##
+- ## Octave is distributed in the hope that it will be useful, but
+- ## WITHOUT ANY WARRANTY; without even the implied warranty of
+- ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+- ## General Public License for more details.
+- ##
+- ## You should have received a copy of the GNU General Public License
+- ## along with Octave; see the file COPYING.  If not, write to the Free
+- ## Software Foundation, 59 Temple Place - Suite 330, Boston, MA
+- ## 02111-1307, USA.
+- 
+  ## Save a matrix to disk in image format.
+  ##
+! ## saveimage (filename, x) saves matrix x to file filename in octave's
+  ## image format.  The current colormap is saved in the file also.
+  ##
+- ## saveimage (filename, x, "img") saves the image in the default format
+- ## and is the same as saveimage (filename, x).
+- ##
+- ## saveimage (filename, x, "ppm") saves the image in ppm format instead
+- ## of the default octave image format.
+- ##
+- ## saveimage (filename, x, "ps") saves the image in PostScript format
+- ## instead of the default octave image format. (Note: images saved in
+- ## PostScript format can not be read back into octave with loadimage.)
+- ##
+  ## saveimage (filename, x, format, map) saves the image along with the
+  ## specified colormap in the specified format.
+  ##
+- ## Note: If the colormap contains only two entries and these entries
+- ## are black and white, the bitmap ppm and PostScript formats are used.
+- ## If the image is a gray scale image (the entries within each row of
+- ## the colormap are equal) the gray scale ppm and PostScript image
+- ## formats are used, otherwise the full color formats are used.
+- ##
+- ## The conversion to PostScript is based on pbmtolps.c, which was
+- ## written by
+- ##
+- ##   George Phillips <phillips@cs.ubc.ca>
+- ##   Department of Computer Science
+- ##   University of British Columbia
+- ##
+- ## and is part of the portable bitmap utilities,
+- ##
+- ## SEE ALSO: loadimage, save, load, colormap
+- 
+- ## Author: Tony Richardson <arichard@stark.cc.oh.us>
+- ## Created: July 1994
+- ## Adapted-By: jwe
+  
+! ## Rewritten by jwe to avoid using octoppm and pbm routines so that
+! ## people who don't have the the pbm stuff installed can still use this
+! ## function.
+! ##
+! ## The conversion to PostScript is based on pnmtops.c, which is part of
+! ## the portable bitmap utilties and bears this copyright notice:
+! ##
+! ## Copyright (C) 1989 by Jef Poskanzer.
+! ##
+! ## Permission to use, copy, modify, and distribute this software and its
+! ## documentation for any purpose and without fee is hereby granted, provided
+! ## that the above copyright notice appear in all copies and that both that
+! ## copyright notice and this permission notice appear in supporting
+! ## documentation.  This software is provided "as is" without express or
+! ## implied warranty.
+  
+! function saveimage (filename, img, img_form, map)
+  
+!   if (nargin < 2 || nargin > 4)
+!     usage ("saveimage (filename, matrix, [format, [colormap]])");
+    endif
+  
+    if (nargin < 4)
+      map = colormap ();
+    endif
+  
+-   [map_nr, map_nc] = size (map);
+- 
+-   if (map_nc != 3)
+-     error ("colormap should be an N x 3 matrix");
+-   endif
+- 
+    if (nargin < 3)
+      img_form = "img";
+    elseif (! isstr (img_form))
+      error ("image format specification must be a string");
+-   elseif (! (strcmp (img_form, "img")
+-              || strcmp (img_form, "ppm")
+- 	     || strcmp (img_form, "ps")))
+-     error ("unsupported image format specification");
+    endif
+  
+    if (! is_matrix (img))
+--- 1,31 ----
+! ## Copyright (C) 1996 Klaus Gebhardt
+  ##
+  ## Save a matrix to disk in image format.
+  ##
+! ## saveimage (filename, x) saves matrix x to file filename in octaves
+  ## image format.  The current colormap is saved in the file also.
+  ##
+  ## saveimage (filename, x, format, map) saves the image along with the
+  ## specified colormap in the specified format.
+  ##
+  
+! ## Author: Klaus Gebhardt <gebhardt@crunch.ikp.physik.th-darmstadt.de>
+! ## Created: November 1996
+  
+! function saveimage (filename, img, img_form, map, opt)
+  
+!   if (nargin < 2 || nargin > 5)
+!     usage ("saveimage (filename, matrix, [format, [colormap, [opt]]])");
+    endif
+  
+    if (nargin < 4)
+      map = colormap ();
+    endif
+  
+    if (nargin < 3)
+      img_form = "img";
+    elseif (! isstr (img_form))
+      error ("image format specification must be a string");
+    endif
+  
+    if (! is_matrix (img))
+***************
+*** 106,302 ****
+      error ("file name must be a string");
+    endif
+  
+!   ## If we just want Octave image format, save and return.
+! 
+!   if (strcmp (img_form, "img"))
+!     eval (strcat ("save -ascii ", filename, " map img"));
+!     return;
+!   endif
+! 
+!   ## Convert to another format if requested.
+! 
+!   grey = all (map(:,1) == map(:,2) && map(:,1) == map (:,3));
+! 
+!   pbm = pgm = ppm = 0;
+! 
+!   map_sz = map_nr * map_nc;
+! 
+!   map = reshape (map, map_sz, 1);
+! 
+!   idx = find (map > 1);
+!   map (idx) = ones (size (idx));
+! 
+!   idx = find (map < 0);
+!   map (idx) = zeros (size (idx));
+! 
+!   map = round (255 * map);
+! 
+!   bw = (map_nr == 2
+!         && ((map(1,1) == 0 && map(2,1) == 255)
+!             || (map(1,1) == 255 && map(2,1) == 0)));
+! 
+!   img = round (img');
+!   [img_nr, img_nc] = size (img);
+! 
+!   img_sz = img_nr * img_nc;
+!   img = reshape (img, img_sz, 1);
+! 
+!   idx = find (img > map_nr);
+!   img (idx) = ones (size (idx)) * map_nr;
+! 
+!   idx = find (img <= 0);
+!   img (idx) = ones (size (idx));
+! 
+!   if (strcmp (img_form, "ppm"))
+!     if (grey && map_nr == 2 && bw)
+! 
+!       if (map(1) != 0)
+!       	map = [1; 0];
+!       else
+!       	map = [0; 1];
+!       endif
+! 
+!       n_long = rem (img_nc, 8);
+!       tmp = zeros (ceil (img_nc/8), img_nr);
+! 
+!       for i = 1:img_nr
+! 	idx = (i-1)*img_nc+1:i*img_nc;
+!       	if (n_long > 0)
+! 	  img_row = [map(img(idx)); (zeros (8-n_long, 1))];
+! 	else
+!       	  img_row = map(img(idx));
+! 	endif
+! 	if (img_nc < 8)
+! 	  for j = 1:8
+! 	    tmp(:,i) = tmp(:,i) + img_row (j) * 2^(8-j);
+! 	  endfor
+! 	else
+! 	  for j = 1:8
+! 	    tmp(:,i) = tmp(:,i) + img_row (j:8:img_nc) * 2^(8-j);
+! 	  endfor
+! 	endif
+!       endfor
+! 
+!       fid = fopen (filename, "w");
+!       fprintf (fid, "P4\n%d %d\n", img_nr, img_nc);
+!       fwrite (fid, tmp, "uchar");
+!       fprintf (fid, "\n");
+!       fclose (fid);
+! 
+!     elseif (grey)
+! 
+!       fid = fopen (filename, "w");
+!       fprintf (fid, "P5\n%d %d\n255\n", img_nr, img_nc);
+!       fwrite (fid, map(img), "uchar");
+!       fprintf (fid, "\n");
+!       fclose (fid);
+! 
+!     else
+! 
+!       img_idx = ((1:3:3*img_sz)+2)';
+!       map_idx = ((2*map_nr+1):map_sz)';
+! 
+!       tmap = map(map_idx);
+!       tmp(img_idx--) = tmap(img);
+! 
+!       map_idx = map_idx - map_nr;
+!       tmap = map(map_idx);
+!       tmp(img_idx--) = tmap(img);
+! 
+!       map_idx = map_idx - map_nr;
+!       tmap = map(map_idx);
+!       tmp(img_idx--) = tmap(img);
+! 
+!       fid = fopen (filename, "w");
+!       fprintf (fid, "P6\n%d %d\n255\n", img_nr, img_nc);
+!       fwrite (fid, tmp, "uchar");
+!       fprintf (fid, "\n");
+!       fclose (fid);
+! 
+!     endif
+! 
+!   elseif (strcmp (img_form, "ps") == 1)
+! 
+!     if (! grey)
+!       error ("must have a greyscale color map for conversion to PostScript");
+!     endif
+! 
+!     bps = 8;
+!     dpi = 300;
+!     pagewid = 612;
+!     pagehgt = 762;
+!     MARGIN = 0.95;
+!     devpix = dpi / 72.0 + 0.5;
+!     pixfac = 72.0 / dpi * devpix;
+! 
+!     ## Compute padding to round cols * bps up to the nearest multiple of 8
+!     ## (nr and nc are switched because we transposed the image above).
+! 
+!     padright = (((img_nr * bps + 7) / 8) * 8 - img_nr * bps) / bps;
+! 
+!     scols = img_nr * pixfac;
+!     srows = img_nc * pixfac;
+!     scale = 1;
+! 
+!     if (scols > pagewid * MARGIN || srows > pagehgt * MARGIN)
+!       if (scols > pagewid * MARGIN)
+! 	scale = scale * (pagewid / scols * MARGIN);
+! 	scols = scale * img_nr * pixfac;
+! 	srows = scale * img_nc * pixfac;
+!       endif
+!       if (srows > pagehgt * MARGIN)
+! 	scale = scale * (pagehgt / srows * MARGIN);
+! 	scols = scale * img_nr * pixfac;
+! 	srows = scale * img_nc * pixfac;
+!       endif
+!       warning ("image too large for page, rescaling to %g", scale);
+!     endif
+! 
+!     llx = (pagewid - scols) / 2;
+!     lly = (pagehgt - srows) / 2;
+!     urx = llx + fix (scols + 0.5);
+!     ury = lly + fix (srows + 0.5);
+! 
+!     fid = fopen (filename, "w");
+! 
+!     fprintf (fid, "%%!PS-Adobe-2.0 EPSF-2.0\n");
+!     fprintf (fid, "%%%%Creator: Octave %s (saveimage.m)\n", OCTAVE_VERSION);
+!     fprintf (fid, "%%%%Title: %s\n", filename);
+!     fprintf (fid, "%%%%Pages: 1\n");
+!     fprintf (fid, "%%%%BoundingBox: %d %d %d %d\n",
+!              fix (llx), fix (lly), fix (urx), fix (ury));
+!     fprintf (fid, "%%%%EndComments\n" );
+!     fprintf (fid, "/readstring {\n");
+!     fprintf (fid, "  currentfile exch readhexstring pop\n");
+!     fprintf (fid, "} bind def\n");
+!     fprintf (fid, "/picstr %d string def\n",
+!              fix ((img_nr + padright) * bps / 8));
+!     fprintf (fid, "%%%%EndProlog\n");
+!     fprintf (fid, "%%%%Page: 1 1\n");
+!     fprintf (fid, "gsave\n");
+!     fprintf (fid, "%g %g translate\n", llx, lly);
+!     fprintf (fid, "%g %g scale\n", scols, srows);
+!     fprintf (fid, "%d %d %d\n", img_nr, img_nc, bps);
+!     fprintf (fid, "[ %d 0 0 -%d 0 %d ]\n", img_nr, img_nc, img_nc);
+!     fprintf (fid, "{ picstr readstring }\n" );
+!     fprintf (fid, "image\n" );
+! 
+!     img = map(img);
+! 
+!     fmt = "%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x\n";
+!     fprintf (fid, fmt, img);
+! 
+!     if (rem (img_sz, 30) != 0)
+!       fprintf (fid, "\n" );
+!     endif
+! 
+!     fprintf (fid, "grestore\n" );
+!     fprintf (fid, "showpage\n" );
+!     fprintf (fid, "%%%%Trailer\n" );
+!     fclose (fid);
+! 
+    else
+!     error ("saveimage: what happened to the image type?");
+    endif
+  
+  endfunction
+--- 36,45 ----
+      error ("file name must be a string");
+    endif
+  
+!   if (nargin < 5)
+!     eval (sprintf ("%s_enc (filename, map, img);", img_form));
+    else
+!     eval (sprintf ("%s_enc (filename, map, img, opt);", img_form));
+    endif
+  
+  endfunction
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/scripts/miscellaneous/bug_report.m i:/project/C/emx-0.9c/src/octave/octave-2.0.17/scripts/miscellaneous/bug_report.m
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/scripts/miscellaneous/bug_report.m	Sat Jul 20 22:56:46 2002
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/scripts/miscellaneous/bug_report.m	Sat Jul 20 23:36:58 2002
+***************
+*** 24,29 ****
+--- 24,30 ----
+  ## you are finished editing.
+  
+  ## Author: jwe
++ ## Modified by Klaus Gebhardt, 1997
+  
+  function bug_report ()
+  
+***************
+*** 49,55 ****
+        endif
+      endif
+  
+!     cmd = strcat ("octave-bug-", __OCTAVE_VERSION__);
+  
+      if (length (subject) > 0)
+        cmd = sprintf ("%s -s \"%s\"", cmd, subject);
+--- 50,56 ----
+        endif
+      endif
+  
+!     cmd = "/octave-bug";
+  
+      if (length (subject) > 0)
+        cmd = sprintf ("%s -s \"%s\"", cmd, subject);
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/scripts/miscellaneous/popen2.m i:/project/C/emx-0.9c/src/octave/octave-2.0.17/scripts/miscellaneous/popen2.m
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/scripts/miscellaneous/popen2.m	Fri Aug  7 05:45:24 1998
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/scripts/miscellaneous/popen2.m	Sat Jan 31 18:56:46 1998
+***************
+*** 1,4 ****
+! ## Copyright (C) 1996 John W. Eaton
+  ##
+  ## This file is part of Octave.
+  ##
+--- 1,4 ----
+! ## Copyright (C) 1997 Klaus Gebhardt
+  ##
+  ## This file is part of Octave.
+  ##
+***************
+*** 21,28 ****
+  ##
+  ## Start a subprocess with two-way communication.  COMMAND specifies
+  ## the name of the command to start.  ARGS is an array of strings
+! ## containing options for COMMAND.  IN and out are the file ids of the
+! ## input and streams for the subprocess, and PID is the process id of
+  ## the subprocess, or -1 if COMMAND could not be executed.
+  ##
+  ## Example:
+--- 21,28 ----
+  ##
+  ## Start a subprocess with two-way communication.  COMMAND specifies
+  ## the name of the command to start.  ARGS is an array of strings
+! ## containing options for COMMAND.  IN and OUT are the file ids of the
+! ## input and output streams for the subprocess, and PID is the process id of
+  ## the subprocess, or -1 if COMMAND could not be executed.
+  ##
+  ## Example:
+***************
+*** 38,44 ****
+  ##  endwhile
+  ##  fclose (out);
+  
+! ## Author: jwe
+  
+  function [in, out, pid] = popen2 (command, args)
+  
+--- 38,44 ----
+  ##  endwhile
+  ##  fclose (out);
+  
+! ## Author: Klaus Gebhardt, 1997
+  
+  function [in, out, pid] = popen2 (command, args)
+  
+***************
+*** 48,98 ****
+  
+    if (nargin == 1 || nargin == 2)
+  
+-     if (nargin == 1)
+-       args = "";
+-     endif
+- 
+      if (isstr (command))
+  
+!       [stdin_pipe, stdin_status] = pipe ();
+!       [stdout_pipe, stdout_status] = pipe ();
+  
+!       if (stdin_status == 0 && stdout_status == 0)
+  
+! 	pid = fork ();
+  
+! 	if (pid == 0)
+  
+! 	  fclose (stdin_pipe (2));
+! 	  fclose (stdout_pipe (1));
+  
+! 	  dup2 (stdin_pipe (1), stdin);
+! 	  fclose (stdin_pipe (1));
+  
+! 	  dup2 (stdout_pipe (2), stdout);
+! 	  fclose (stdout_pipe (2));
+  
+! 	  if (exec (command, args) < 0)
+! 	    error ("popen2: unable to start process `%s'", command);
+! 	    exit (0);
+  	  endif
+  
+! 	elseif (pid)
+  
+! 	  fclose (stdin_pipe (1));
+! 	  fclose (stdout_pipe (2));
+  
+- 	  if (fcntl (stdout_pipe (1), __F_SETFL__, __O_NONBLOCK__) < 0)
+- 	    error ("popen2: error setting file mode");
+  	  else
+! 	    in = stdin_pipe (2);
+! 	    out = stdout_pipe (1);
+  	  endif
+  
+! 	elseif (pid < 0)
+! 	  error ("popen2: fork failed -- unable to create child process");
+  	endif
+!       else
+  	error ("popen2: pipe creation failed");
+        endif
+      else
+--- 48,114 ----
+  
+    if (nargin == 1 || nargin == 2)
+  
+      if (isstr (command))
+  
+!       [r_pipe,  r_status]  = _pipe ();
+!       [w_pipe,  w_status]  = _pipe ();
+  
+!       if ((r_status != -1) && (w_status != -1))
+  
+! 	r_parent_end = r_pipe(1);
+! 	r_child_end  = r_pipe(2);
+! 	_fcntl (r_parent_end, F_SETFD, 1);
+! 	r_org = _dup (1);
+  
+! 	w_parent_end = w_pipe(2);
+! 	w_child_end  = w_pipe(1);
+! 	_fcntl (w_parent_end, F_SETFD, 1);
+! 	w_org = _dup (0);
+  
+! 	if ((r_org != -1) && (w_org != -1))
+  
+! 	  _dup2 (r_child_end, 1);  _close (r_child_end);  r_child_end = -1;
+! 	  _dup2 (w_child_end, 0);  _close (w_child_end);  w_child_end = -1;
+  
+! 	  if (nargin == 1)
+! 	    pid = spawn ("nowait", command);
+! 	  else
+! 	    pid = spawn ("nowait", command, args);
+! 	  endif
+  
+! 	  _dup2 (r_org, 1);  _close (r_org);
+! 	  _dup2 (w_org, 0);  _close (w_org);
+! 	endif
+! 
+! 	if (r_child_end != -1)
+! 	  _close (r_child_end);
+  	  endif
+  
+! 	if (w_child_end != -1)
+! 	  _close (w_child_end);
+! 	endif
+  
+! 	if (pid < 0)
+! 	  _close (r_parent_end);
+! 	  _close (w_parent_end);
+! 	  error ("popen2: unable to start process `%s'", command);
+! 	else
+! 	  out = _fdopen (r_parent_end, "r");
+! 	  in  = _fdopen (w_parent_end, "w");
+! 	endif
+  
+  	  else
+! 
+! 	if (r_status != -1)
+! 	  _close (r_pipe(1));
+! 	  _close (r_pipe(2));
+  	  endif
+  
+! 	if (wr_status != -1)
+! 	  _close (w_pipe(1));
+! 	  _close (w_pipe(2));
+  	endif
+! 
+  	error ("popen2: pipe creation failed");
+        endif
+      else
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/scripts/startup/octaverc i:/project/C/emx-0.9c/src/octave/octave-2.0.17/scripts/startup/octaverc
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/scripts/startup/octaverc	Wed Jul 24 19:05:42 1996
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/scripts/startup/octaverc	Sat May  1 11:44:24 1999
+***************
+*** 2,4 ****
+--- 2,37 ----
+  ##
+  ## This file should contain any commands that should be executed each
+  ## time Octave starts for every user at this site.
++ 
++ ## System-wide startup file
++ ## Octave 2.0.13 for OS/2
++ ## (c) 1996, Klaus Gebhardt
++ 
++ PS1 = "octave:\\#>";
++ 
++ EDITOR = "e";
++ 
++ oct_home = "j:/apps2/science/octave";
++ if length(getenv("OCTAVE_HOME"))
++   oct_home = getenv("OCTAVE_HOME");
++ endif
++ 
++ LOADPATH  = sprintf ("%s/scripts//;%s/dlfcn/examples", oct_home, oct_home);
++ INFO_FILE = sprintf ("%s/doc/octave", oct_home);
++ 
++ if length(file_in_path(getenv("PATH"),"less.exe"))
++   PAGER = sprintf("%s -ce",file_in_path(getenv("PATH"),"less.exe"));
++ else
++   PAGER = "more";
++ endif
++ 
++ if length(getenv("GNUPLOT"))
++   gnuplot_binary = sprintf ("%s/gnuplot.exe", getenv("GNUPLOT"));
++ else
++   gnuplot_binary = "gnuplot";
++ endif
++ 
++ implicit_str_to_num_ok     = 1;
++ ok_to_lose_imaginary_part  = 1;
++ ignore_function_time_stamp = 1;
++ auto_unload_dot_oct_files  = 1;
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/doc/conf.tex i:/project/C/emx-0.9c/src/octave/octave-2.0.17/doc/conf.tex
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/doc/conf.tex	Sat Jul 20 22:59:02 2002
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/doc/conf.tex	Sat Jul 20 23:56:52 2002
+***************
+*** 2,7 ****
+  @c This is part of the Octave manual.
+  @c For copying conditions, see the file gpl.tex.
+  
+! @set VERSION 2.0.13
+! @set OCTAVEHOME /usr/local
+! @set TARGETHOSTTYPE i586-pc-linux-gnu
+--- 2,7 ----
+  @c This is part of the Octave manual.
+  @c For copying conditions, see the file gpl.tex.
+  
+! @set VERSION 2.0.17
+! @set OCTAVEHOME 
+! @set TARGETHOSTTYPE i486-OS/2
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/doc/faq/oct-faq.tex i:/project/C/emx-0.9c/src/octave/octave-2.0.17/doc/faq/oct-faq.tex
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/doc/faq/oct-faq.tex	Sat Jul 20 22:59:04 2002
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/doc/faq/oct-faq.tex	Sat Jan 15 13:50:36 2000
+***************
+*** 1,3 ****
+--- 1,4 ----
++ % Modified by Klaus Gebhardt, 1997
+  \input texinfo.tex      @c -*-texinfo-*-
+  
+  @setfilename oct-faq.
+***************
+*** 19,24 ****
+--- 20,33 ----
+  @top
+  @unnumbered Preface
+  @cindex FAQ for Octave, latest version
++ 
++ @macro email{text}
++ (\text\)
++ @end macro
++ 
++ @macro url{text}
++ (\text\)
++ @end macro
+  @end ifinfo
+  
+  This is a list of frequently asked questions (FAQ) for Octave users.
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/doc/interpreter/control.tex i:/project/C/emx-0.9c/src/octave/octave-2.0.17/doc/interpreter/control.tex
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/doc/interpreter/control.tex	Sat Jul 20 22:59:04 2002
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/doc/interpreter/control.tex	Thu May 13 12:51:58 1999
+***************
+*** 369,374 ****
+--- 369,375 ----
+  @tex
+  $AXA^T - X + B B^T = 0$ or $A^TXA - X + B^TB = 0$,
+  @end tex
++ @end iftex
+  @ifinfo
+  @code{a x a' - x + b b' = 0} or @code{a' x a - x + b' b = 0},
+  @end ifinfo
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/doc/interpreter/install.tex i:/project/C/emx-0.9c/src/octave/octave-2.0.17/doc/interpreter/install.tex
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/doc/interpreter/install.tex	Sat Jul 20 22:59:06 2002
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/doc/interpreter/install.tex	Sun Jan 30 14:16:38 2000
+***************
+*** 475,480 ****
+--- 475,488 ----
+  @email{bug-octave@@bevo.che.wisc.edu} if you are interested in helping
+  make a binary distribution available for your system.)
+  
++ Also, binary distributions are limited to static binaries that do not
++ support dynamic linking.  For earlier versions of Octave, I tried
++ distributing dynamically linked binaries but that proved to be too much
++ trouble to support.  If you want to have a copy of Octave that includes
++ all the features described in this manual, you will have to build it
++ from the sources yourself, or find someone else who is willing to do it
++ for you.
++ 
+  @menu
+  * Installing Octave from a Binary Distribution::  
+  * Creating a Binary Distribution::  
+***************
+*** 594,599 ****
+  @end example
+  
+  This will create a compressed tar file ready for distribution.
+! It will have a name like
+  @file{octave-@value{VERSION}-@value{TARGETHOSTTYPE}.tar.gz}
+  @end itemize
+--- 602,607 ----
+  @end example
+  
+  This will create a compressed tar file ready for distribution.
+! It will contain statically linked binaries and have a name like
+  @file{octave-@value{VERSION}-@value{TARGETHOSTTYPE}.tar.gz}
+  @end itemize
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/doc/interpreter/octave.tex i:/project/C/emx-0.9c/src/octave/octave-2.0.17/doc/interpreter/octave.tex
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/doc/interpreter/octave.tex	Sat Jul 20 22:59:08 2002
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/doc/interpreter/octave.tex	Thu May 13 12:51:58 1999
+***************
+*** 1,6 ****
+--- 1,7 ----
+  % Copyright (C) 1996, 1997 John W. Eaton
+  % This is part of the Octave manual.
+  % For copying conditions, see the file gpl.tex.
++ % Modified by Klaus Gebhardt, 1997
+  
+  \input texinfo
+  @setfilename octave.
+***************
+*** 11,16 ****
+--- 12,25 ----
+  * Octave: (octave).	Interactive language for numerical computations.
+  END-INFO-DIR-ENTRY
+  @end format
++ 
++ @macro email{text}
++ (\text\)
++ @end macro
++ 
++ @macro url{text}
++ (\text\)
++ @end macro
+  @end ifinfo
+  
+  @c Settings for printing on 8-1/2 by 11 inch paper:
+***************
+*** 36,42 ****
+  @c This file doesn't include a chapter, so it must not be included
+  @c if you want to run the Emacs function texinfo-multiple-files-update.
+  
+! @include conf.tex
+  
+  @settitle GNU Octave
+  
+--- 45,51 ----
+  @c This file doesn't include a chapter, so it must not be included
+  @c if you want to run the Emacs function texinfo-multiple-files-update.
+  
+! @include ../conf.tex
+  
+  @settitle GNU Octave
+  
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/doc/interpreter/poly.tex i:/project/C/emx-0.9c/src/octave/octave-2.0.17/doc/interpreter/poly.tex
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/doc/interpreter/poly.tex	Sat Jul 20 22:59:08 2002
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/doc/interpreter/poly.tex	Thu May 13 12:51:58 1999
+***************
+*** 8,22 ****
+  In Octave, a polynomial is represented by its coefficients (arranged
+  in descending order).  For example, a vector
+  @iftex
+  @end iftex
+  @ifinfo
+!  $c$
+  @end ifinfo
+  of length
+  @iftex
+  @tex
+   $N+1$
+  @end tex
+  @ifinfo
+   @var{N+1}
+  @end ifinfo
+--- 8,24 ----
+  In Octave, a polynomial is represented by its coefficients (arranged
+  in descending order).  For example, a vector
+  @iftex
++  $c$
+  @end iftex
+  @ifinfo
+!  @var{c}
+  @end ifinfo
+  of length
+  @iftex
+  @tex
+   $N+1$
+  @end tex
++ @end iftex
+  @ifinfo
+   @var{N+1}
+  @end ifinfo
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/doc/liboctave/gpl.tex i:/project/C/emx-0.9c/src/octave/octave-2.0.17/doc/liboctave/gpl.tex
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/doc/liboctave/gpl.tex	Sat Jul 20 22:59:10 2002
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/doc/liboctave/gpl.tex	Thu May 13 12:52:06 1999
+***************
+*** 1,4 ****
+! @c Copyright (C) 1996, 1997 John W. Eaton
+  @c This is part of the Octave manual.
+  @c For copying conditions, see the file gpl.tex.
+  
+--- 1,4 ----
+! @c Copyright (C) 1996 John W. Eaton
+  @c This is part of the Octave manual.
+  @c For copying conditions, see the file gpl.tex.
+  
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/doc/liboctave/liboct.tex i:/project/C/emx-0.9c/src/octave/octave-2.0.17/doc/liboctave/liboct.tex
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/doc/liboctave/liboct.tex	Sat Jul 20 22:59:12 2002
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/doc/liboctave/liboct.tex	Thu May 13 12:52:06 1999
+***************
+*** 1,6 ****
+--- 1,7 ----
+  % Copyright (C) 1996, 1997 John W. Eaton
+  % This is part of the Octave manual.
+  % For copying conditions, see the file gpl.tex.
++ % Modified by Klaus Gebhardt, 1997
+  
+  \input texinfo  @c -*-texinfo-*-
+  @setfilename liboct.
+***************
+*** 28,38 ****
+  @c This file doesn't include a chapter, so it must not be included
+  @c if you want to run the Emacs function texinfo-multiple-files-update.
+  
+! @include conf.tex
+  
+  @settitle Octave C++ Classes
+  
+  @ifinfo
+  
+  Copyright (C) 1996, 1997 John W. Eaton.
+  
+--- 29,47 ----
+  @c This file doesn't include a chapter, so it must not be included
+  @c if you want to run the Emacs function texinfo-multiple-files-update.
+  
+! @include ../conf.tex
+  
+  @settitle Octave C++ Classes
+  
+  @ifinfo
++ 
++ @macro email{text}
++ (\text\)
++ @end macro
++ 
++ @macro url{text}
++ (\text\)
++ @end macro
+  
+  Copyright (C) 1996, 1997 John W. Eaton.
+  
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/doc/makefile-subdirs.os2 i:/project/C/emx-0.9c/src/octave/octave-2.0.17/doc/makefile-subdirs.os2
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/doc/makefile-subdirs.os2	Wed Aug 13 11:22:52 1997
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/doc/makefile-subdirs.os2	Sat Jul 20 01:00:38 2002
+***************
+*** 12,21 ****
+  all: $(FILE).dvi $(FILE).ps $(FILE) $(FILE).INF
+  
+  $(FILE).dvi: $(SRCS)
+! 	-ksh -c "cmd /c 'tex386 ^&plain3 \\nonstopmode\\input $(FILE).tex'"
+! 	-ksh -c "cmd /c 'tex386 ^&plain3 \\nonstopmode\\input $(FILE).tex'"
+! 	-ksh -c "cmd /c 'texindex $(FILE).??'"
+! 	-ksh -c "cmd /c 'tex386 ^&plain3 \\nonstopmode\\input $(FILE).tex'"
+  
+  $(FILE).ps: $(FILE).dvi
+  	-dvips $(FILE)
+--- 12,22 ----
+  all: $(FILE).dvi $(FILE).ps $(FILE) $(FILE).INF
+  
+  $(FILE).dvi: $(SRCS)
+! 	cmd /c 'tex386 ^&plain3 \\nonstopmode\\input $(FILE).tex'
+! 	cmd /c 'tex386 ^&plain3 \\nonstopmode\\input $(FILE).tex'
+! 	cmd /c 'texindex $(FILE).??'
+! 	cmd /c 'tex386 ^&plain3 \\nonstopmode\\input $(FILE).tex'
+! 	cmd /c 'tex386 ^&plain3 \\nonstopmode\\input $(FILE).tex'
+  
+  $(FILE).ps: $(FILE).dvi
+  	-dvips $(FILE)
+diff -cwr i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/doc/makefile.os2 i:/project/C/emx-0.9c/src/octave/octave-2.0.17/doc/makefile.os2
+*** i:/project/C/emx-0.9c/src.orig/octave/octave-2.0.17/doc/makefile.os2	Wed Aug 13 11:09:44 1997
+--- i:/project/C/emx-0.9c/src/octave/octave-2.0.17/doc/makefile.os2	Sat Jul 20 00:56:16 2002
+***************
+*** 10,20 ****
+  MAKE_SUB = make -f ../makefile-subdirs.os2
+  
+  all:
+! 	cd faq         & $(MAKE_SUB) FILE=oct-faq all
+! 	cd interpreter & $(MAKE_SUB) FILE=octave  all
+! 	cd liboctave   & $(MAKE_SUB) FILE=liboct  all
+  
+  clean:
+! 	cd faq         & $(MAKE_SUB) FILE=oct-faq clean
+! 	cd interpreter & $(MAKE_SUB) FILE=octave  clean
+! 	cd liboctave   & $(MAKE_SUB) FILE=liboct  clean
+--- 10,20 ----
+  MAKE_SUB = make -f ../makefile-subdirs.os2
+  
+  all:
+! 	cd faq         ; $(MAKE_SUB) FILE=oct-faq all ; cd ..
+! 	cd interpreter ; $(MAKE_SUB) FILE=octave  all ; cd ..
+! 	cd liboctave   ; $(MAKE_SUB) FILE=liboct  all ; cd ..
+  
+  clean:
+! 	cd faq         ; $(MAKE_SUB) FILE=oct-faq clean ; cd ..
+! 	cd interpreter ; $(MAKE_SUB) FILE=octave  clean ; cd ..
+! 	cd liboctave   ; $(MAKE_SUB) FILE=liboct  clean ; cd ..

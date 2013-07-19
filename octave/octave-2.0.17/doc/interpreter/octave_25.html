@@ -1,0 +1,238 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from ./octave.texi on 9 October 1998 -->
+
+<TITLE>GNU Octave - Polynomial Manipulations</TITLE>
+</HEAD>
+<BODY>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_24.html">previous</A>, <A HREF="octave_26.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC160" HREF="octave_toc.html#TOC160">Polynomial Manipulations</A></H1>
+
+<P>
+In Octave, a polynomial is represented by its coefficients (arranged
+in descending order).  For example, a vector
+of length
+ corresponds to the following polynomial of order
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>compan</B> <I>(<VAR>c</VAR>)</I>
+<DD><A NAME="IDX772"></A>
+Compute the companion matrix corresponding to polynomial coefficient
+vector <VAR>c</VAR>.
+
+</P>
+<P>
+The companion matrix is
+
+</P>
+<P>
+The eigenvalues of the companion matrix are equal to the roots of the
+polynomial.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>conv</B> <I>(<VAR>a</VAR>, <VAR>b</VAR>)</I>
+<DD><A NAME="IDX773"></A>
+Convolve two vectors.
+
+</P>
+<P>
+<CODE>y = conv (a, b)</CODE> returns a vector of length equal to
+<CODE>length (a) + length (b) - 1</CODE>.
+If <VAR>a</VAR> and <VAR>b</VAR> are polynomial coefficient vectors, <CODE>conv</CODE>
+returns the coefficients of the product polynomial.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>deconv</B> <I>(<VAR>y</VAR>, <VAR>a</VAR>)</I>
+<DD><A NAME="IDX774"></A>
+Deconvolve two vectors.
+
+</P>
+<P>
+<CODE>[b, r] = deconv (y, a)</CODE> solves for <VAR>b</VAR> and <VAR>r</VAR> such that
+<CODE>y = conv (a, b) + r</CODE>.
+
+</P>
+<P>
+If <VAR>y</VAR> and <VAR>a</VAR> are polynomial coefficient vectors, <VAR>b</VAR> will
+contain the coefficients of the polynomial quotient and <VAR>r</VAR> will be
+a remander polynomial of lowest order.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>poly</B> <I>(<VAR>a</VAR>)</I>
+<DD><A NAME="IDX775"></A>
+If <VAR>a</VAR> is a square <VAR>N</VAR>-by-<VAR>N</VAR> matrix, <CODE>poly (<VAR>a</VAR>)</CODE>
+is the row vector of the coefficients of <CODE>det (z * eye (N) - a)</CODE>,
+the characteristic polynomial of <VAR>a</VAR>.  If <VAR>x</VAR> is a vector,
+<CODE>poly (<VAR>x</VAR>)</CODE> is a vector of coefficients of the polynomial
+whose roots are the elements of <VAR>x</VAR>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>polyderiv</B> <I>(<VAR>c</VAR>)</I>
+<DD><A NAME="IDX776"></A>
+Return the coefficients of the derivative of the polynomial whose
+coefficients are given by vector <VAR>c</VAR>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U> [<VAR>p</VAR>, <VAR>yf</VAR>] = <B>polyfit</B> <I>(<VAR>x</VAR>, <VAR>y</VAR>, <VAR>n</VAR>)</I>
+<DD><A NAME="IDX777"></A>
+Return the coefficients of a polynomial <VAR>p</VAR>(<VAR>x</VAR>) of degree
+<VAR>n</VAR> that minimizes 
+ to best fit the data in the least squares sense.
+</DL>
+
+</P>
+<P>
+If two output arguments are requested, the second contains the values of
+the polynomial for each value of <VAR>x</VAR>.
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>polyinteg</B> <I>(<VAR>c</VAR>)</I>
+<DD><A NAME="IDX778"></A>
+Return the coefficients of the integral of the polynomial whose
+coefficients are represented by the vector <VAR>c</VAR>.
+
+</P>
+<P>
+The constant of integration is set to zero.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>polyreduce</B> <I>(<VAR>c</VAR>)</I>
+<DD><A NAME="IDX779"></A>
+Reduces a polynomial coefficient vector to a minimum number of terms by
+stripping off any leading zeros.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>polyval</B> <I>(<VAR>c</VAR>, <VAR>x</VAR>)</I>
+<DD><A NAME="IDX780"></A>
+Evaluate a polynomial.
+
+</P>
+<P>
+<CODE>polyval (<VAR>c</VAR>, <VAR>x</VAR>)</CODE> will evaluate the polynomial at the
+specified value of <VAR>x</VAR>.
+
+</P>
+<P>
+If <VAR>x</VAR> is a vector or matrix, the polynomial is evaluated at each of
+the elements of <VAR>x</VAR>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>polyvalm</B> <I>(<VAR>c</VAR>, <VAR>x</VAR>)</I>
+<DD><A NAME="IDX781"></A>
+Evaluate a polynomial in the matrix sense.
+
+</P>
+<P>
+<CODE>polyvalm (<VAR>c</VAR>, <VAR>x</VAR>)</CODE> will evaluate the polynomial in the
+matrix sense, i.e. matrix multiplication is used instead of element by
+element multiplication as is used in polyval.
+
+</P>
+<P>
+The argument <VAR>x</VAR> must be a square matrix.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>residue</B> <I>(<VAR>b</VAR>, <VAR>a</VAR>, <VAR>tol</VAR>)</I>
+<DD><A NAME="IDX782"></A>
+If <VAR>b</VAR> and <VAR>a</VAR> are vectors of polynomial coefficients, then
+residue calculates the partial fraction expansion corresponding to the
+ratio of the two polynomials.
+<A NAME="IDX783"></A>
+
+</P>
+<P>
+The function <CODE>residue</CODE> returns <VAR>r</VAR>, <VAR>p</VAR>, <VAR>k</VAR>, and
+<VAR>e</VAR>, where the vector <VAR>r</VAR> contains the residue terms, <VAR>p</VAR>
+contains the pole values, <VAR>k</VAR> contains the coefficients of a direct
+polynomial term (if it exists) and <VAR>e</VAR> is a vector containing the
+powers of the denominators in the partial fraction terms.
+
+</P>
+<P>
+Assuming <VAR>b</VAR> and <VAR>a</VAR> represent polynomials
+ we have:
+
+</P>
+<P>
+where <VAR>M</VAR> is the number of poles (the length of the <VAR>r</VAR>,
+<VAR>p</VAR>, and <VAR>e</VAR> vectors) and <VAR>N</VAR> is the length of the <VAR>k</VAR>
+vector.
+
+</P>
+<P>
+The argument <VAR>tol</VAR> is optional, and if not specified, a default
+value of 0.001 is assumed.  The tolerance value is used to determine
+whether poles with small imaginary components are declared real.  It is
+also used to determine if two poles are distinct.  If the ratio of the
+imaginary part of a pole to the real part is less than <VAR>tol</VAR>, the
+imaginary part is discarded.  If two poles are farther apart than
+<VAR>tol</VAR> they are distinct.  For example,
+
+</P>
+
+<PRE>
+ b = [1, 1, 1];
+ a = [1, -5, 8, -4];
+ [r, p, k, e] = residue (b, a);
+     => r = [-2, 7, 3]
+     => p = [2, 2, 1]
+     => k = [](0x0)
+     => e = [1, 2, 1]
+</PRE>
+
+<P>
+which implies the following partial fraction expansion
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>roots</B> <I>(<VAR>v</VAR>)</I>
+<DD><A NAME="IDX784"></A>
+
+</P>
+<P>
+For a vector <VAR>v</VAR> with <VAR>N</VAR> components, return
+the roots of the polynomial
+</DL>
+
+</P>
+<P><HR><P>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_24.html">previous</A>, <A HREF="octave_26.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+</BODY>
+</HTML>

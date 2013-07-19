@@ -1,0 +1,172 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from ./octave.texi on 9 October 1998 -->
+
+<TITLE>GNU Octave - Quadrature</TITLE>
+</HEAD>
+<BODY>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_19.html">previous</A>, <A HREF="octave_21.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC148" HREF="octave_toc.html#TOC148">Quadrature</A></H1>
+
+
+
+<H2><A NAME="SEC149" HREF="octave_toc.html#TOC149">Functions of One Variable</A></H2>
+
+<P>
+<DL>
+<DT><U>Loadable Function:</U> [<VAR>v</VAR>, <VAR>ier</VAR>, <VAR>nfun</VAR>, <VAR>err</VAR>] = <B>quad</B> <I>(<VAR>f</VAR>, <VAR>a</VAR>, <VAR>b</VAR>, <VAR>tol</VAR>, <VAR>sing</VAR>)</I>
+<DD><A NAME="IDX741"></A>
+Integrate a nonlinear function of one variable using Quadpack.
+The first argument is the name of the  function to call to compute the
+value of the integrand.  It must have the form
+
+</P>
+
+<PRE>
+y = f (x)
+</PRE>
+
+<P>
+where <VAR>y</VAR> and <VAR>x</VAR> are scalars.
+
+</P>
+<P>
+The second and third arguments are limits of integration.  Either or
+both may be infinite.
+
+</P>
+<P>
+The optional argument <VAR>tol</VAR> is a vector that specifies the desired
+accuracy of the result.  The first element of the vector is the desired
+absolute tolerance, and the second element is the desired relative
+tolerance.  To choose a relative test only, set the absolute
+tolerance to zero.  To choose an absolute test only, set the relative
+tolerance to zero. 
+
+</P>
+<P>
+The optional argument <VAR>sing</VAR> is a vector of values at which the
+integrand is known to be singular.
+
+</P>
+<P>
+The result of the integration is returned in <VAR>v</VAR> and <VAR>ier</VAR>
+contains an integer error code (0 indicates a successful integration).
+The value of <VAR>nfun</VAR> indicates how many function evaluations were
+required, and <VAR>err</VAR> contains an estimate of the error in the
+solution.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U>  <B>quad_options</B> <I>(<VAR>opt</VAR>, <VAR>val</VAR>)</I>
+<DD><A NAME="IDX742"></A>
+When called with two arguments, this function allows you set options
+parameters for the function <CODE>quad</CODE>.  Given one argument,
+<CODE>quad_options</CODE> returns the value of the corresponding option.  If
+no arguments are supplied, the names of all the available options and
+their current values are displayed.
+</DL>
+
+</P>
+<P>
+Here is an example of using <CODE>quad</CODE> to integrate the function
+
+</P>
+<P>
+This is a fairly difficult integration (plot the function over the range
+of integration to see why).
+
+</P>
+<P>
+The first step is to define the function:
+
+</P>
+
+<PRE>
+function y = f (x)
+  y = x .* sin (1 ./ x) .* sqrt (abs (1 - x));
+endfunction
+</PRE>
+
+<P>
+Note the use of the `dot' forms of the operators.  This is not necessary
+for the call to <CODE>quad</CODE>, but it makes it much easier to generate a
+set of points for plotting (because it makes it possible to call the
+function with a vector argument to produce a vector result).
+
+</P>
+<P>
+Then we simply call quad:
+
+</P>
+
+<PRE>
+[v, ier, nfun, err] = quad ("f", 0, 3)
+     => 1.9819
+     => 1
+     => 5061
+     => 1.1522e-07
+</PRE>
+
+<P>
+Although <CODE>quad</CODE> returns a nonzero value for <VAR>ier</VAR>, the result
+is reasonably accurate (to see why, examine what happens to the result
+if you move the lower bound to 0.1, then 0.01, then 0.001, etc.).
+
+</P>
+
+
+<H2><A NAME="SEC150" HREF="octave_toc.html#TOC150">Orthogonal Collocation</A></H2>
+
+<P>
+<DL>
+<DT><U>Loadable Function:</U> [<VAR>r</VAR>, <VAR>A</VAR>, <VAR>B</VAR>, <VAR>q</VAR>] = <B>colloc</B> <I>(<VAR>n</VAR>, "left", "right")</I>
+<DD><A NAME="IDX743"></A>
+Compute derivative and integral weight matrices for orthogonal
+collocation using the subroutines given in J. Villadsen and
+M. L. Michelsen, <CITE>Solution of Differential Equation Models by
+Polynomial Approximation</CITE>.
+</DL>
+
+</P>
+<P>
+Here is an example of using <CODE>colloc</CODE> to generate weight matrices
+for solving the second order differential equation
+
+</P>
+<P>
+First, we can generate the weight matrices for <VAR>n</VAR> points (including
+the endpoints of the interval), and incorporate the boundary conditions
+in the right hand side (for a specific value of
+
+</P>
+
+<PRE>
+n = 7;
+alpha = 0.1;
+[r, a, b] = colloc (n-2, "left", "right");
+at = a(2:n-1,2:n-1);
+bt = b(2:n-1,2:n-1);
+rhs = alpha * b(2:n-1,n) - a(2:n-1,n);
+</PRE>
+
+<P>
+Then the solution at the roots <VAR>r</VAR> is
+
+</P>
+
+<PRE>
+u = [ 0; (at - alpha * bt) \ rhs; 1]
+     => [ 0.00; 0.004; 0.01 0.00; 0.12; 0.62; 1.00 ]
+</PRE>
+
+<P><HR><P>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_19.html">previous</A>, <A HREF="octave_21.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+</BODY>
+</HTML>

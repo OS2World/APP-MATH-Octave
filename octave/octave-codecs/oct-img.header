@@ -1,0 +1,20 @@
+LIBRARY oct-img INITINSTANCE TERMINSTANCE
+DESCRIPTION 'oct-img.dll v0.2, Klaus Gebhardt 1997'
+
+DATA
+   MULTIPLE NONSHARED
+
+EXPORTS
+;
+; Bitmaps
+;
+  BMP_Encode		@1
+  BMP_Decode		@2
+;
+  PNM_Encode		@3
+  PNM_Decode		@4
+;
+  PS_Encode		@5
+;
+; Octave Utilities
+;

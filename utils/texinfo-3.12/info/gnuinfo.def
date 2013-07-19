@@ -1,0 +1,59 @@
+LIBRARY GNUINFO INITINSTANCE TERMINSTANCE
+DESCRIPTION 'gnuinfo.dll v0.2, Klaus Gebhardt 1995'
+
+DATA
+   MULTIPLE NONSHARED
+
+EXPORTS
+  begin_info_session					@1
+  begin_info_session_with_error				@2
+  begin_multiple_window_info_session			@3
+  _finish_info_session					@4
+  dump_node_to_file					@5
+  dump_nodes_to_file					@6
+  info_add_path						@7
+  info_apropos						@8
+  info_error						@9
+  info_free_references					@10
+  info_get_labeled_reference				@11
+  info_get_node						@12
+  info_last_executed_command				@13
+  info_menu_of_node					@14
+  infopath						@15
+  info_read_and_dispatch				@16
+  info_recent_file_error				@17
+  info_set_input_from_file				@18
+
+  do_info_index_search					@20
+  index_entry_exists					@21
+  _initialize_info_session_without_clear_screen		@22
+  external_info_search					@23
+  display_update_display				@24
+  window_message_in_echo_area				@25
+  replace_in_documentation				@26
+  close_dribble_file					@27
+  open_dribble_file					@28
+  filename_non_directory				@29
+  version_string					@30
+  terminal_clear_screen					@31
+  terminal_clear_to_eol					@32
+  terminal_goto_xy					@33
+  terminal_prep_terminal				@34
+  terminal_unprep_terminal				@35
+  make_manpage_node					@36
+  strcasecmp						@37
+  strncasecmp						@38
+
+  build_message_node					@39
+  _initialize_info_session				@40
+  display_inhibited					@41
+;  textdomain						@42
+;  windows						@43
+  terminal_ring_bell					@44
+;  bindtextdomain					@45
+  echo_area_is_active					@46
+  inform_in_echo_area					@47
+  initialize_info_session				@48
+
+  screenheight						@10000
+  external_info_search_P				@10001

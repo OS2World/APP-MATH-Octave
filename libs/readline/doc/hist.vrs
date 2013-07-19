@@ -1,0 +1,51 @@
+\initial {A}
+\entry {\code {add_history}}{4}
+\entry {\code {append_history}}{6}
+\initial {C}
+\entry {\code {clear_history}}{4}
+\entry {\code {current_history}}{5}
+\initial {G}
+\entry {\code {get_history_event}}{7}
+\initial {H}
+\entry {\code {history_arg_extract}}{7}
+\entry {\code {history_base}}{7}
+\entry {\code {history_comment_char}}{8}
+\entry {\code {history_expand}}{7}
+\entry {\code {history_expansion_char}}{7}
+\entry {\code {history_get}}{5}
+\entry {\code {history_get_history_state}}{4}
+\entry {\code {history_inhibit_expansion_function}}{8}
+\entry {\code {history_is_stifled}}{4}
+\entry {\code {history_length}}{7}
+\entry {\code {history_list}}{5}
+\entry {\code {history_no_expand_chars}}{8}
+\entry {\code {history_quotes_inhibit_expansion}}{8}
+\entry {\code {history_search}}{5}
+\entry {\code {history_search_delimiter_chars}}{8}
+\entry {\code {history_search_pos}}{6}
+\entry {\code {history_search_prefix}}{6}
+\entry {\code {history_set_history_state}}{4}
+\entry {\code {history_set_pos}}{5}
+\entry {\code {history_subst_char}}{8}
+\entry {\code {history_tokenize}}{7}
+\entry {\code {history_total_bytes}}{5}
+\entry {\code {history_truncate_file}}{6}
+\initial {M}
+\entry {\code {max_input_history}}{7}
+\initial {N}
+\entry {\code {next_history}}{5}
+\initial {P}
+\entry {\code {previous_history}}{5}
+\initial {R}
+\entry {\code {read_history}}{6}
+\entry {\code {read_history_range}}{6}
+\entry {\code {remove_history}}{4}
+\entry {\code {replace_history_entry}}{4}
+\initial {S}
+\entry {\code {stifle_history}}{4}
+\initial {U}
+\entry {\code {unstifle_history}}{4}
+\entry {\code {using_history}}{4}
+\initial {W}
+\entry {\code {where_history}}{5}
+\entry {\code {write_history}}{6}

@@ -1,0 +1,993 @@
+diff -cwr octave-2.09.orig/readline/bind.c readline/bind.c
+*** octave-2.09.orig/readline/bind.c	Tue Sep 19 09:00:56 1995
+--- readline/bind.c	Sat Jan 31 11:49:46 1998
+***************
+*** 1,3 ****
+--- 1,4 ----
++ /* Modified by Klaus Gebhardt, October 1996 */
+  /* bind.c -- key binding and startup file support for the readline library. */
+  
+  /* Copyright (C) 1987, 1989, 1992 Free Software Foundation, Inc.
+***************
+*** 96,112 ****
+--- 97,117 ----
+  
+  static int glean_key_from_name ();
+  
++ #ifndef HAVE_STRICMP
+  #if defined (HAVE_STRCASECMP)
+  #define stricmp strcasecmp
+  #else
+  static int stricmp ();
+  #endif
++ #endif
+  
++ #ifndef HAVE_STRNICMP
+  #if defined (HAVE_STRNCASECMP)
+  #define strnicmp strncasecmp
+  #else
+  static int strnicmp ();
+  #endif
++ #endif
+  
+  #if defined (STATIC_MALLOC)
+  static char *xmalloc (), *xrealloc ();
+***************
+*** 1444,1449 ****
+--- 1449,1455 ----
+  
+  /* Compare at most COUNT characters from string1 to string2.  Case
+     doesn't matter. */
++ #ifndef HAVE_STRNICMP
+  static int
+  strnicmp (string1, string2, count)
+       char *string1, *string2;
+***************
+*** 1462,1469 ****
+--- 1468,1477 ----
+      }
+    return (count);
+  }
++ #endif
+  
+  /* strcmp (), but caseless. */
++ #ifndef HAVE_STRICMP
+  static int
+  stricmp (string1, string2)
+       char *string1, *string2;
+***************
+*** 1479,1484 ****
+--- 1487,1493 ----
+      }
+    return (*string1 - *string2);
+  }
++ #endif
+  #endif /* !HAVE_STRCASECMP */
+  
+  /* Determine if s2 occurs in s1.  If so, return a pointer to the
+diff -cwr octave-2.09.orig/readline/complete.c readline/complete.c
+*** octave-2.09.orig/readline/complete.c	Mon Dec  9 20:14:50 1996
+--- readline/complete.c	Sat Jan 31 11:49:46 1998
+***************
+*** 1016,1022 ****
+       int state;
+       char *text;
+  {
+! #if defined (__GO32__) || defined (__CYGWIN32__)
+    return (char *)NULL;
+  #else /* !__GO32__ */
+    static char *username = (char *)NULL;
+--- 1016,1022 ----
+       int state;
+       char *text;
+  {
+! #if defined (__GO32__)
+    return (char *)NULL;
+  #else /* !__GO32__ */
+    static char *username = (char *)NULL;
+***************
+*** 1232,1237 ****
+--- 1232,1238 ----
+  	replace_dirname = 0;
+  	if (rl_directory_completion_hook)
+  	  replace_dirname = (*rl_directory_completion_hook) (&dirname);
++ 
+  	if (replace_dirname)
+  	  {
+  	    free (users_dirname);
+diff -cwr octave-2.09.orig/readline/config.h readline/config.h
+*** octave-2.09.orig/readline/config.h	Fri Dec  6 22:26:18 1996
+--- readline/config.h	Sat Jan 31 11:54:16 1998
+***************
+*** 1,12 ****
+  /* config.h.  Generated automatically by configure.  */
+! /* config.h.in.  Generated automatically from configure.in by autoheader.  */
+  
+  /* Define if using alloca.c.  */
+! /* #undef C_ALLOCA */
+  
+  /* Define to one of _getb67, GETB67, getb67 for Cray-2 and Cray-YMP systems.
+     This function is required for alloca.c support on those systems.  */
+! /* #undef CRAY_STACKSEG_END */
+  
+  /* Define if you have alloca, as a function or macro.  */
+  #define HAVE_ALLOCA 1
+--- 1,12 ----
+  /* config.h.  Generated automatically by configure.  */
+! /* Created by hand, Klaus Gebhardt, 1996 */
+  
+  /* Define if using alloca.c.  */
+! #undef C_ALLOCA
+  
+  /* Define to one of _getb67, GETB67, getb67 for Cray-2 and Cray-YMP systems.
+     This function is required for alloca.c support on those systems.  */
+! #undef CRAY_STACKSEG_END
+  
+  /* Define if you have alloca, as a function or macro.  */
+  #define HAVE_ALLOCA 1
+***************
+*** 15,21 ****
+  #define HAVE_ALLOCA_H 1
+  
+  /* Define if you don't have vprintf but do have _doprnt.  */
+! /* #undef HAVE_DOPRNT */
+  
+  /* Define if you have the vprintf function.  */
+  #define HAVE_VPRINTF 1
+--- 15,21 ----
+  #define HAVE_ALLOCA_H 1
+  
+  /* Define if you don't have vprintf but do have _doprnt.  */
+! #undef HAVE_DOPRNT
+  
+  /* Define if you have the vprintf function.  */
+  #define HAVE_VPRINTF 1
+***************
+*** 30,36 ****
+   STACK_DIRECTION < 0 => grows toward lower addresses
+   STACK_DIRECTION = 0 => direction of growth unknown
+   */
+! /* #undef STACK_DIRECTION */
+  
+  /* Define if you have the ANSI C header files.  */
+  #define STDC_HEADERS 1
+--- 30,36 ----
+  	STACK_DIRECTION < 0 => grows toward lower addresses
+  	STACK_DIRECTION = 0 => direction of growth unknown
+   */
+! #undef STACK_DIRECTION
+  
+  /* Define if you have the ANSI C header files.  */
+  #define STDC_HEADERS 1
+***************
+*** 39,45 ****
+  #define TIME_WITH_SYS_TIME 1
+  
+  /* Define if you do not have <strings.h>, index, bzero, etc..  */
+! /* #undef USG */
+  
+  /* Define if you have the getwd function.  */
+  #define HAVE_GETWD 1
+--- 39,45 ----
+  #define TIME_WITH_SYS_TIME 1
+  
+  /* Define if you do not have <strings.h>, index, bzero, etc..  */
+! #undef USG
+  
+  /* Define if you have the getwd function.  */
+  #define HAVE_GETWD 1
+***************
+*** 47,60 ****
+  /* Define if you have the select function.  */
+  #define HAVE_SELECT 1
+  
+  /* Define if you have the strcasecmp function.  */
+! #define HAVE_STRCASECMP 1
+  
+  /* Define if you have the strerror function.  */
+  #define HAVE_STRERROR 1
+  
+  /* Define if you have the strncasecmp function.  */
+! #define HAVE_STRNCASECMP 1
+  
+  /* Define if you have the <dirent.h> header file.  */
+  #define HAVE_DIRENT_H 1
+--- 47,66 ----
+  /* Define if you have the select function.  */
+  #define HAVE_SELECT 1
+  
++ /* Define if you have the stricmp function.  */
++ #define HAVE_STRICMP
++ 
+  /* Define if you have the strcasecmp function.  */
+! #undef HAVE_STRCASECMP
+  
+  /* Define if you have the strerror function.  */
+  #define HAVE_STRERROR 1
+  
++ /* Define if you have the strnicmp function.  */
++ #define HAVE_STRNICMP
++ 
+  /* Define if you have the strncasecmp function.  */
+! #undef HAVE_STRNCASECMP
+  
+  /* Define if you have the <dirent.h> header file.  */
+  #define HAVE_DIRENT_H 1
+***************
+*** 63,72 ****
+  #define HAVE_FCNTL_H 1
+  
+  /* Define if you have the <ndir.h> header file.  */
+! /* #undef HAVE_NDIR_H */
+  
+  /* Define if you have the <sgtty.h> header file.  */
+! /* #undef HAVE_SGTTY_H */
+  
+  /* Define if you have the <stdlib.h> header file.  */
+  #define HAVE_STDLIB_H 1
+--- 69,78 ----
+  #define HAVE_FCNTL_H 1
+  
+  /* Define if you have the <ndir.h> header file.  */
+! #undef HAVE_NDIR_H
+  
+  /* Define if you have the <sgtty.h> header file.  */
+! #define HAVE_SGTTY_H
+  
+  /* Define if you have the <stdlib.h> header file.  */
+  #define HAVE_STDLIB_H 1
+***************
+*** 75,81 ****
+  #define HAVE_STRING_H 1
+  
+  /* Define if you have the <sys/dir.h> header file.  */
+! /* #undef HAVE_SYS_DIR_H */
+  
+  /* Define if you have the <sys/file.h> header file.  */
+  #define HAVE_SYS_FILE_H 1
+--- 81,87 ----
+  #define HAVE_STRING_H 1
+  
+  /* Define if you have the <sys/dir.h> header file.  */
+! #define HAVE_SYS_DIR_H
+  
+  /* Define if you have the <sys/file.h> header file.  */
+  #define HAVE_SYS_FILE_H 1
+***************
+*** 84,102 ****
+  #define HAVE_SYS_IOCTL_H 1
+  
+  /* Define if you have the <sys/ndir.h> header file.  */
+! /* #undef HAVE_SYS_NDIR_H */
+  
+  /* Define if you have the <sys/pte.h> header file.  */
+! /* #undef HAVE_SYS_PTE_H */
+  
+  /* Define if you have the <sys/ptem.h> header file.  */
+! /* #undef HAVE_SYS_PTEM_H */
+  
+  /* Define if you have the <sys/select.h> header file.  */
+! /* #undef HAVE_SYS_SELECT_H */
+  
+  /* Define if you have the <sys/stream.h> header file.  */
+! /* #undef HAVE_SYS_STREAM_H */
+  
+  /* Define if you have the <sys/time.h> header file.  */
+  #define HAVE_SYS_TIME_H 1
+--- 90,108 ----
+  #define HAVE_SYS_IOCTL_H 1
+  
+  /* Define if you have the <sys/ndir.h> header file.  */
+! #undef HAVE_SYS_NDIR_H
+  
+  /* Define if you have the <sys/pte.h> header file.  */
+! #undef HAVE_SYS_PTE_H
+  
+  /* Define if you have the <sys/ptem.h> header file.  */
+! #undef HAVE_SYS_PTEM_H
+  
+  /* Define if you have the <sys/select.h> header file.  */
+! #define HAVE_SYS_SELECT_H
+  
+  /* Define if you have the <sys/stream.h> header file.  */
+! #undef HAVE_SYS_STREAM_H
+  
+  /* Define if you have the <sys/time.h> header file.  */
+  #define HAVE_SYS_TIME_H 1
+diff -cwr octave-2.09.orig/readline/emacs_keymap.c readline/emacs_keymap.c
+*** octave-2.09.orig/readline/emacs_keymap.c	Tue Sep 19 08:20:14 1995
+--- readline/emacs_keymap.c	Sat Jan 31 12:03:04 1998
+***************
+*** 1,3 ****
+--- 1,4 ----
++ /* Modified by Klaus Gebhardt, Octaber 1996 */
+  /* emacs_keymap.c -- the keymap for emacs_mode in readline (). */
+  
+  /* Copyright (C) 1987, 1989, 1992 Free Software Foundation, Inc.
+***************
+*** 33,39 ****
+--- 34,44 ----
+  KEYMAP_ENTRY_ARRAY emacs_standard_keymap = {
+  
+    /* Control keys. */
++ #if defined (__EMX__)
++   { ISKMAP, (Function *)emacs_emx_keymap }, /* Control-@ */
++ #else
+    { ISFUNC, (Function *)0x0 },                    /* Control-@ */
++ #endif
+    { ISFUNC, rl_beg_of_line },		/* Control-a */
+    { ISFUNC, rl_backward },		/* Control-b */
+    { ISFUNC, (Function *)0x0 },		/* Control-c */
+***************
+*** 883,885 ****
+--- 888,1025 ----
+    { ISFUNC, (Function *)0x0 }
+  #endif /* KEYMAP_SIZE > 128 */
+  };
++ 
++ #if defined (__EMX__)
++ 
++ KEYMAP_ENTRY_ARRAY emacs_emx_keymap = {
++   { ISFUNC, (Function *)0x0 },      /*   0 */
++   { ISFUNC, (Function *)0x0 },      /*   1 */
++   { ISFUNC, (Function *)0x0 },      /*   2 */
++   { ISFUNC, (Function *)0x0 },      /*   3 */
++   { ISFUNC, (Function *)0x0 },      /*   4 */
++   { ISFUNC, (Function *)0x0 },      /*   5 */
++   { ISFUNC, (Function *)0x0 },      /*   6 */
++   { ISFUNC, (Function *)0x0 },      /*   7 */
++   { ISFUNC, (Function *)0x0 },      /*   8 */
++   { ISFUNC, (Function *)0x0 },      /*   9 */
++   { ISFUNC, (Function *)0x0 },      /*  10 */
++   { ISFUNC, (Function *)0x0 },      /*  11 */
++   { ISFUNC, (Function *)0x0 },      /*  12 */
++   { ISFUNC, (Function *)0x0 },      /*  13 */
++   { ISFUNC, (Function *)0x0 },      /*  14 */
++   { ISFUNC, (Function *)0x0 },      /*  15 */
++   { ISFUNC, (Function *)0x0 },      /*  16 */
++   { ISFUNC, (Function *)0x0 },      /*  17 */
++   { ISFUNC, (Function *)0x0 },      /*  18 */
++   { ISFUNC, (Function *)0x0 },      /*  19 */
++   { ISFUNC, (Function *)0x0 },      /*  20 */
++   { ISFUNC, (Function *)0x0 },      /*  21 */
++   { ISFUNC, (Function *)0x0 },      /*  22 */
++   { ISFUNC, (Function *)0x0 },      /*  23 */
++   { ISFUNC, (Function *)0x0 },      /*  24 */
++   { ISFUNC, (Function *)0x0 },      /*  25 */
++   { ISFUNC, (Function *)0x0 },      /*  26 */
++   { ISFUNC, (Function *)0x0 },      /*  27 */
++   { ISFUNC, (Function *)0x0 },      /*  28 */
++   { ISFUNC, (Function *)0x0 },      /*  29 */
++   { ISFUNC, (Function *)0x0 },      /*  30 */
++   { ISFUNC, (Function *)0x0 },      /*  31 */
++   { ISFUNC, (Function *)0x0 },      /*  32 */
++   { ISFUNC, (Function *)0x0 },      /*  33 */
++   { ISFUNC, (Function *)0x0 },      /*  34 */
++   { ISFUNC, (Function *)0x0 },      /*  35 */
++   { ISFUNC, (Function *)0x0 },      /*  36 */
++   { ISFUNC, (Function *)0x0 },      /*  37 */
++   { ISFUNC, (Function *)0x0 },      /*  38 */
++   { ISFUNC, (Function *)0x0 },      /*  39 */
++   { ISFUNC, (Function *)0x0 },      /*  40 */
++   { ISFUNC, (Function *)0x0 },      /*  41 */
++   { ISFUNC, (Function *)0x0 },      /*  42 */
++   { ISFUNC, (Function *)0x0 },      /*  43 */
++   { ISFUNC, (Function *)0x0 },      /*  44 */
++   { ISFUNC, (Function *)0x0 },      /*  45 */
++   { ISFUNC, (Function *)0x0 },      /*  46 */
++   { ISFUNC, (Function *)0x0 },      /*  47 */
++   { ISFUNC, (Function *)0x0 },      /*  48 */
++   { ISFUNC, (Function *)0x0 },      /*  49 */
++   { ISFUNC, (Function *)0x0 },      /*  50 */
++   { ISFUNC, (Function *)0x0 },      /*  51 */
++   { ISFUNC, (Function *)0x0 },      /*  52 */
++   { ISFUNC, (Function *)0x0 },      /*  53 */
++   { ISFUNC, (Function *)0x0 },      /*  54 */
++   { ISFUNC, (Function *)0x0 },      /*  55 */
++   { ISFUNC, (Function *)0x0 },      /*  56 */
++   { ISFUNC, (Function *)0x0 },      /*  57 */
++   { ISFUNC, (Function *)0x0 },      /*  58 */
++   { ISFUNC, (Function *)0x0 },      /*  59 */
++   { ISFUNC, (Function *)0x0 },      /*  60 */
++   { ISFUNC, (Function *)0x0 },      /*  61 */
++   { ISFUNC, (Function *)0x0 },      /*  62 */
++   { ISFUNC, (Function *)0x0 },      /*  63 */
++   { ISFUNC, (Function *)0x0 },      /*  64 */
++   { ISFUNC, (Function *)0x0 },      /*  65 */
++   { ISFUNC, (Function *)0x0 },      /*  66 */
++   { ISFUNC, (Function *)0x0 },      /*  67 */
++   { ISFUNC, (Function *)0x0 },      /*  68 */
++   { ISFUNC, (Function *)0x0 },      /*  69 */
++   { ISFUNC, (Function *)0x0 },      /*  70 */
++   { ISFUNC, rl_beg_of_line },       /*  71: home */
++   { ISFUNC, rl_get_previous_history }, /*  72: cursor up */
++   { ISFUNC, rl_beginning_of_history }, /*  73: page up */
++   { ISFUNC, (Function *)0x0 },      /*  74 */
++   { ISFUNC, rl_backward },          /*  75: cursor left */
++   { ISFUNC, (Function *)0x0 },      /*  76: center cursor */
++   { ISFUNC, rl_forward },           /*  77: cursor right */
++   { ISFUNC, (Function *)0x0 },      /*  78 */
++   { ISFUNC, rl_end_of_line },       /*  79: end */
++   { ISFUNC, rl_get_next_history },  /*  80: cursor down */
++   { ISFUNC, rl_end_of_history },    /*  81: page down */
++   { ISFUNC, (Function *)0x0 },      /*  82: ins */
++   { ISFUNC, rl_delete },            /*  83: del */
++   { ISFUNC, (Function *)0x0 },      /*  84 */
++   { ISFUNC, (Function *)0x0 },      /*  85 */
++   { ISFUNC, (Function *)0x0 },      /*  86 */
++   { ISFUNC, (Function *)0x0 },      /*  87 */
++   { ISFUNC, (Function *)0x0 },      /*  88 */
++   { ISFUNC, (Function *)0x0 },      /*  89 */
++   { ISFUNC, (Function *)0x0 },      /*  90 */
++   { ISFUNC, (Function *)0x0 },      /*  91 */
++   { ISFUNC, (Function *)0x0 },      /*  92 */
++   { ISFUNC, (Function *)0x0 },      /*  93 */
++   { ISFUNC, (Function *)0x0 },      /*  94 */
++   { ISFUNC, (Function *)0x0 },      /*  95 */
++   { ISFUNC, (Function *)0x0 },      /*  96 */
++   { ISFUNC, (Function *)0x0 },      /*  97 */
++   { ISFUNC, (Function *)0x0 },      /*  98 */
++   { ISFUNC, (Function *)0x0 },      /*  99 */
++   { ISFUNC, (Function *)0x0 },      /* 100 */
++   { ISFUNC, (Function *)0x0 },      /* 101 */
++   { ISFUNC, (Function *)0x0 },      /* 102 */
++   { ISFUNC, (Function *)0x0 },      /* 103 */
++   { ISFUNC, (Function *)0x0 },      /* 104 */
++   { ISFUNC, (Function *)0x0 },      /* 105 */
++   { ISFUNC, (Function *)0x0 },      /* 106 */
++   { ISFUNC, (Function *)0x0 },      /* 107 */
++   { ISFUNC, (Function *)0x0 },      /* 108 */
++   { ISFUNC, (Function *)0x0 },      /* 109 */
++   { ISFUNC, (Function *)0x0 },      /* 110 */
++   { ISFUNC, (Function *)0x0 },      /* 111 */
++   { ISFUNC, (Function *)0x0 },      /* 112 */
++   { ISFUNC, (Function *)0x0 },      /* 113 */
++   { ISFUNC, (Function *)0x0 },      /* 114 */
++   { ISFUNC, rl_backward_word },     /* 115: ctrl cursor left */
++   { ISFUNC, rl_forward_word },      /* 116: ctrl cursor right */
++   { ISFUNC, rl_kill_line },         /* 117: ctrl end */
++   { ISFUNC, (Function *)0x0 },      /* 118: ctrl page down */
++   { ISFUNC, rl_backward_kill_line },/* 119: ctrl home */
++   { ISFUNC, (Function *)0x0 },      /* 120: alt 1 */
++   { ISFUNC, (Function *)0x0 },      /* 121 */
++   { ISFUNC, (Function *)0x0 },      /* 122 */
++   { ISFUNC, (Function *)0x0 },      /* 123 */
++   { ISFUNC, (Function *)0x0 },      /* 124 */
++   { ISFUNC, (Function *)0x0 },      /* 125 */
++   { ISFUNC, (Function *)0x0 },      /* 126 */
++   { ISFUNC, (Function *)0x0 },      /* 127 */
++ };
++ 
++ #endif
+diff -cwr octave-2.09.orig/readline/examples/fileman.c readline/examples/fileman.c
+*** octave-2.09.orig/readline/examples/fileman.c	Tue Sep 19 08:21:00 1995
+--- readline/examples/fileman.c	Sat Jan 31 12:31:30 1998
+***************
+*** 54,60 ****
+  
+  char *
+  dupstr (s)
+!      int s;
+  {
+    char *r;
+  
+--- 54,60 ----
+  
+  char *
+  dupstr (s)
+!      char *s;
+  {
+    char *r;
+  
+diff -cwr octave-2.09.orig/readline/history.c readline/history.c
+*** octave-2.09.orig/readline/history.c	Tue Sep 19 09:00:56 1995
+--- readline/history.c	Sat Jan 31 11:49:46 1998
+***************
+*** 1,3 ****
+--- 1,4 ----
++ /* Modified by Klaus Gebhardt, October 1996 */
+  /* History.c -- standalone history library */
+  
+  /* Copyright (C) 1989, 1992 Free Software Foundation, Inc.
+***************
+*** 124,130 ****
+--- 125,135 ----
+  
+  /* Non-zero means that we have enforced a limit on the amount of
+     history that we save. */
++ #if defined (__EMX__) && defined (OS2)
++ int history_stifled = 0;
++ #else
+  static int history_stifled = 0;
++ #endif
+  
+  /* If HISTORY_STIFLED is non-zero, then this is the maximum number of
+     entries to remember. */
+***************
+*** 559,564 ****
+--- 564,622 ----
+       char *filename;
+       int from, to;
+  {
++ #if defined (__EMX__)
++ /*
++ ** read_history_range works now with text files.
++ ** Klaus Gebhardt, 1995
++ */
++    register int line_start, line_end;
++    char *input, *buffer = (char *)NULL;
++    int file, current_line, st_size;
++    struct stat finfo;
++ 
++    input = history_filename (filename);
++    file = open (input, O_RDONLY, 0666);
++    if ((file < 0) || (stat (input, &finfo) == -1))
++       error_and_exit:
++    {
++       if (file >= 0)  close (file);
++       if (input)      free (input);
++       if (buffer)     free (buffer);
++       return (errno);
++    }
++ 
++    buffer = (char *)xmalloc (finfo.st_size + 1);
++    st_size=read (file, buffer, finfo.st_size);
++    close (file);
++ 
++    if (to < 0)  to = st_size;
++ 
++    line_start = line_end = current_line = 0;
++    while (line_start < st_size && current_line < from)
++    {
++       for (line_end = line_start; line_end < st_size; line_end++)
++ 	 if (buffer[line_end] == '\n')
++ 	 {
++ 	    current_line++;
++ 	    line_start = line_end + 1;
++ 	    if (current_line == from)  break;
++ 	 }
++    }
++ 
++   for (line_end = line_start; line_end < st_size; line_end++)
++      if (buffer[line_end] == '\n')
++      {
++ 	buffer[line_end] = '\0';
++ 	if (buffer[line_start])  add_history (buffer + line_start);
++ 	current_line++;
++ 	if (current_line >= to)  break;
++ 	line_start = line_end + 1;
++      }
++ 
++    if (input)   free (input);
++    if (buffer)  free (buffer);
++    return (0);
++ #else
+    register int line_start, line_end;
+    char *input, *buffer = (char *)NULL;
+    int file, current_line;
+***************
+*** 633,638 ****
+--- 691,697 ----
+      free (buffer);
+  
+    return (0);
++ #endif
+  }
+  
+  /* Truncate the history file FNAME, leaving only LINES trailing lines.
+diff -cwr octave-2.09.orig/readline/keymaps.h readline/keymaps.h
+*** octave-2.09.orig/readline/keymaps.h	Fri Sep 22 08:29:42 1995
+--- readline/keymaps.h	Sat Jan 31 11:49:46 1998
+***************
+*** 1,3 ****
+--- 1,4 ----
++ /* Modified by Klaus Gebhardt, October 1996 */
+  /* keymaps.h -- Manipulation of readline keymaps. */
+  
+  /* Copyright (C) 1987, 1989, 1992 Free Software Foundation, Inc.
+***************
+*** 30,36 ****
+  #if defined (READLINE_LIBRARY)
+  #  include "chardefs.h"
+  #else
+! #  include <readline/chardefs.h>
+  #endif
+  
+  #if !defined (__FUNCTION_DEF)
+--- 31,37 ----
+  #if defined (READLINE_LIBRARY)
+  #  include "chardefs.h"
+  #else
+! #  include <chardefs.h>
+  #endif
+  
+  #if !defined (__FUNCTION_DEF)
+***************
+*** 70,75 ****
+--- 71,79 ----
+  #define ISMACR 2
+  
+  extern KEYMAP_ENTRY_ARRAY emacs_standard_keymap, emacs_meta_keymap, emacs_ctlx_keymap;
++ #ifdef __EMX__
++ extern KEYMAP_ENTRY_ARRAY emacs_emx_keymap;
++ #endif
+  extern KEYMAP_ENTRY_ARRAY vi_insertion_keymap, vi_movement_keymap;
+  
+  /* Return a new, empty keymap.
+diff -cwr octave-2.09.orig/readline/parens.c readline/parens.c
+*** octave-2.09.orig/readline/parens.c	Fri Dec  6 01:08:00 1996
+--- readline/parens.c	Sat Jan 31 11:49:46 1998
+***************
+*** 64,71 ****
+  #if defined (HAVE_SYS_SELECT_H)
+  #include <sys/select.h>
+  #endif
+! /* Including sys/time.h on Linux (any others?) defines the FD_XXX macros. */
+! #if defined (FD_SET) || defined (__linux__)
+  #  include <sys/time.h>
+  #endif /* FD_SET */
+  #include "readline.h"
+--- 64,70 ----
+  #if defined (HAVE_SYS_SELECT_H)
+  #include <sys/select.h>
+  #endif
+! #if defined (FD_SET)
+  #  include <sys/time.h>
+  #endif /* FD_SET */
+  #include "readline.h"
+diff -cwr octave-2.09.orig/readline/readline.c readline/readline.c
+*** octave-2.09.orig/readline/readline.c	Tue Sep 19 09:00:56 1995
+--- readline/readline.c	Sat Jan 31 11:49:48 1998
+***************
+*** 1,3 ****
+--- 1,4 ----
++ /* Modified by Klaus Gebhardt, October 1996 */
+  /* readline.c -- a general facility for reading lines of input
+     with emacs style editing and completion. */
+  
+***************
+*** 66,71 ****
+--- 67,76 ----
+  #include "readline.h"
+  #include "history.h"
+  
++ #if defined (__EMX__) && defined (OS2)
++ #include "cursor.h"      
++ #endif
++ 
+  /* NOTE: Functions and variables prefixed with `_rl_' are
+     pseudo-global: they are global so they can be shared
+     between files in the readline library, but are not intended
+***************
+*** 162,168 ****
+--- 167,177 ----
+  static int rl_initialized = 0;
+  
+  /* If non-zero, this program is running in an EMACS buffer. */
++ #ifdef __EMX__
++ static char *running_in_emacs = (char *)NULL;
++ #else
+  static int running_in_emacs = 0;
++ #endif
+  
+  /* The current offset in the current input line. */
+  int rl_point;
+***************
+*** 932,937 ****
+--- 941,950 ----
+       terminal and data structures. */
+    if (!rl_initialized)
+      {
++ #if defined (__EMX__) && defined (OS2)
++       _setcursortype (2);
++ #endif
++ 
+        readline_initialize_everything ();
+        rl_initialized++;
+      }
+***************
+*** 966,972 ****
+--- 979,989 ----
+    char *t;
+  
+    /* Find out if we are running in Emacs. */
++ #ifdef __EMX__
++   running_in_emacs = getenv ("EMACS");
++ #else
+    running_in_emacs = getenv ("EMACS") != (char *)0;
++ #endif
+  
+    /* Set up input and output if they are not already set up. */
+    if (!rl_instream)
+***************
+*** 1256,1261 ****
+--- 1273,1287 ----
+      }
+  #endif /* TIOCGWINSZ */
+  
++ #if defined (__EMX__)
++   {
++     int size[2];
++ 
++     _scrsize (size);
++     screenwidth = size[0]; screenheight = size[1];
++   }
++ #endif
++ 
+    /* Environment variable COLUMNS overrides setting of "co" if IGNORE_ENV
+       is unset. */
+    if (screenwidth <= 0)
+***************
+*** 3433,3438 ****
+--- 3459,3475 ----
+  {
+    return (isdigit (c) ? c - '0' : c);
+  }
++ 
++ #if defined (__EMX__) && defined (OS2)
++ char *
++ _rl_savestring (str)
++      char *str;
++ {
++   char *copy = (char*) xmalloc (strlen (str) + 1);
++   strcpy (copy, str);
++   return copy;
++ }
++ #endif
+  
+  #if defined (STATIC_MALLOC)
+  
+diff -cwr octave-2.09.orig/readline/readline.h readline/readline.h
+*** octave-2.09.orig/readline/readline.h	Fri Sep 22 08:29:42 1995
+--- readline/readline.h	Sat Jan 31 11:49:48 1998
+***************
+*** 1,3 ****
+--- 1,4 ----
++ /* Modified by Klaus Gebhardt, 1996 */
+  /* Readline.h -- the names of functions callable from within readline. */
+  
+  /* Copyright (C) 1987, 1989, 1992 Free Software Foundation, Inc.
+***************
+*** 31,38 ****
+  #  include "keymaps.h"
+  #  include "tilde.h"
+  #else
+! #  include <readline/keymaps.h>
+! #  include <readline/tilde.h>
+  #endif
+  
+  /* The functions for manipulating the text of the line within readline.
+--- 32,39 ----
+  #  include "keymaps.h"
+  #  include "tilde.h"
+  #else
+! #  include <keymaps.h>
+! #  include <tilde.h>
+  #endif
+  
+  /* The functions for manipulating the text of the line within readline.
+diff -cwr octave-2.09.orig/readline/rldefs.h readline/rldefs.h
+*** octave-2.09.orig/readline/rldefs.h	Mon Dec  9 20:13:14 1996
+--- readline/rldefs.h	Sat Jan 31 11:49:48 1998
+***************
+*** 1,3 ****
+--- 1,4 ----
++ /* Modified by Klaus Gebhardt, 1996 */
+  /* rldefs.h -- an attempt to isolate some of the system-specific defines
+     for readline.  This should be included after any files that define
+     system-specific constants like _POSIX_VERSION or USG. */
+***************
+*** 38,50 ****
+  #  include "memalloc.h"
+  #endif
+  
+- #if defined (__CYGWIN32__)
+- #define _POSIX_VERSION
+- #endif
+- 
+  #define NEW_TTY_DRIVER
+  #define HAVE_BSD_SIGNALS
+  /* #define USE_XON_XOFF */
+  
+  #if defined (__linux__) || defined (HAVE_TERMCAP_H)
+  #  include <termcap.h>
+--- 39,56 ----
+  #  include "memalloc.h"
+  #endif
+  
+  #define NEW_TTY_DRIVER
+  #define HAVE_BSD_SIGNALS
+  /* #define USE_XON_XOFF */
++ 
++ #ifdef __MSDOS__
++ #undef NEW_TTY_DRIVER
++ #undef HAVE_BSD_SIGNALS
++ #endif
++ 
++ #ifdef __EMX__
++ #undef HAVE_BSD_SIGNALS
++ #endif /* __EMX__ */
+  
+  #if defined (__linux__) || defined (HAVE_TERMCAP_H)
+  #  include <termcap.h>
+diff -cwr octave-2.09.orig/readline/rltty.c readline/rltty.c
+*** octave-2.09.orig/readline/rltty.c	Tue Sep 19 09:00:56 1995
+--- readline/rltty.c	Sat Jan 31 11:49:48 1998
+***************
+*** 1,3 ****
+--- 1,4 ----
++ /* Modified by Klaus Gebhardt, October 1996 */
+  /* rltty.c -- functions to prepare and restore the terminal for readline's
+     use. */
+  
+***************
+*** 21,26 ****
+--- 22,29 ----
+     have a copy of the license, write to the Free Software Foundation,
+     675 Mass Ave, Cambridge, MA 02139, USA. */
+  
++ /* Modified by Klaus Gebhardt, 1996 */
++ 
+  #ifdef HAVE_CONFIG_H
+  #include <config.h>
+  #endif
+***************
+*** 36,41 ****
+--- 39,48 ----
+  #include <errno.h>
+  #include <stdio.h>
+  
++ #if defined (__EMX__)
++ #include <sys/termio.h>
++ #endif
++ 
+  #if defined (HAVE_UNISTD_H)
+  #  include <unistd.h>
+  #endif /* HAVE_UNISTD_H */
+***************
+*** 79,84 ****
+--- 86,98 ----
+    if (sigint_blocked)
+      return;
+  
++ #if defined (__EMX__)
++   sigemptyset (&sigint_set);
++   sigemptyset (&sigint_oset);
++   sigaddset (&sigint_set, SIGINT);
++   sigaddset (&sigint_set, SIGBREAK);
++   sigprocmask (SIG_BLOCK, &sigint_set, &sigint_oset);
++ #else
+  #if defined (HAVE_POSIX_SIGNALS)
+    sigemptyset (&sigint_set);
+    sigemptyset (&sigint_oset);
+***************
+*** 93,98 ****
+--- 107,114 ----
+  #    endif /* HAVE_USG_SIGHOLD */
+  #  endif /* !HAVE_BSD_SIGNALS */
+  #endif /* !HAVE_POSIX_SIGNALS */
++ #endif
++ 
+    sigint_blocked = 1;
+  }
+  
+***************
+*** 103,108 ****
+--- 119,127 ----
+    if (!sigint_blocked)
+      return;
+  
++ #if defined (__EMX__)
++   sigprocmask (SIG_SETMASK, &sigint_oset, (sigset_t *)NULL);
++ #else
+  #if defined (HAVE_POSIX_SIGNALS)
+    sigprocmask (SIG_SETMASK, &sigint_oset, (sigset_t *)NULL);
+  #else
+***************
+*** 114,119 ****
+--- 133,139 ----
+  #    endif /* HAVE_USG_SIGHOLD */
+  #  endif /* !HAVE_BSD_SIGNALS */
+  #endif /* !HAVE_POSIX_SIGNALS */
++ #endif
+  
+    sigint_blocked = 0;
+  }
+***************
+*** 447,452 ****
+--- 467,475 ----
+  {
+    readline_echoing_p = (otio.c_lflag & ECHO);
+  
++ #if defined (__EMX__)
++   tiop->c_lflag &= ~IDEFAULT;
++ #endif /* __EMX__ */
+    tiop->c_lflag &= ~(ICANON | ECHO);
+  
+    if ((unsigned char) otio.c_cc[VEOF] != (unsigned char) _POSIX_VDISABLE)
+diff -cwr octave-2.09.orig/readline/signals.c readline/signals.c
+*** octave-2.09.orig/readline/signals.c	Tue Sep 19 23:08:24 1995
+--- readline/signals.c	Sat Jan 31 11:49:48 1998
+***************
+*** 1,3 ****
+--- 1,4 ----
++ /* Modified by Klaus Gebhardt, October 1996 */
+  /* signals.c -- signal handling support for readline. */
+  
+  /* Copyright (C) 1987, 1989, 1992 Free Software Foundation, Inc.
+***************
+*** 118,123 ****
+--- 119,128 ----
+  /* Interrupt handling. */
+  static SigHandler
+    *old_int  = (SigHandler *)NULL,
++ #if defined (__EMX__)
++   *old_break= (SigHandler *)NULL,
++   *old_term = (SigHandler *)NULL,
++ #endif
+    *old_alrm = (SigHandler *)NULL;
+  #if !defined (SHELL)
+  static SigHandler
+***************
+*** 143,155 ****
+--- 148,167 ----
+  #if !defined (HAVE_BSD_SIGNALS) && !defined (HAVE_POSIX_SIGNALS)
+    /* Since the signal will not be blocked while we are in the signal
+       handler, ignore it until rl_clear_signals resets the catcher. */
++ #if ! defined (__EMX__)
+    if (sig == SIGINT)
++ #else
++   if ((sig == SIGINT) || (sig == SIGBREAK))
++ #endif
+      signal (sig, SIG_IGN);
+  #endif /* !HAVE_BSD_SIGNALS */
+  
+    switch (sig)
+      {
+      case SIGINT:
++ #if defined (__EMX__)
++     case SIGBREAK:
++ #endif
+        {
+  	register HIST_ENTRY *entry;
+  
+***************
+*** 174,179 ****
+--- 186,195 ----
+        rl_clear_signals ();
+        rl_pending_input = 0;
+  
++ #if defined (__EMX__)
++       signal (sig, SIG_ACK);
++ #endif
++ 
+  #if defined (HAVE_POSIX_SIGNALS)
+        sigprocmask (SIG_BLOCK, (sigset_t *)NULL, &set);
+        sigdelset (&set, sig);
+***************
+*** 229,234 ****
+--- 245,256 ----
+    if (old_int == (SigHandler *)SIG_IGN)
+      rl_set_sighandler (SIGINT, SIG_IGN);
+  
++ #if defined (__EMX__)
++   old_break = (SigHandler *)rl_set_sighandler (SIGBREAK, rl_signal_handler);
++   if (old_break == (SigHandler *)SIG_IGN)
++     signal (SIGBREAK, SIG_IGN);
++ #endif
++ 
+    old_alrm = (SigHandler *)rl_set_sighandler (SIGALRM, rl_signal_handler);
+    if (old_alrm == (SigHandler *)SIG_IGN)
+      rl_set_sighandler (SIGALRM, SIG_IGN);
+***************
+*** 263,268 ****
+--- 285,293 ----
+  rl_clear_signals ()
+  {
+    rl_set_sighandler (SIGINT, old_int);
++ #if defined (__EMX__)
++   rl_set_sighandler (SIGBREAK, old_break);
++ #endif
+    rl_set_sighandler (SIGALRM, old_alrm);
+  
+  #if !defined (SHELL)

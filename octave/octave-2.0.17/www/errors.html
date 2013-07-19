@@ -1,0 +1,84 @@
+<html>
+<title>Errors</title>
+<body bgcolor=#CFCFCF>
+
+
+<center><table align=center border CELLSPACING=10 CELLPADDING=10>
+<tr>
+<td align=center><font size=5><b>Errors</b></font></td>
+<td align=left>
+This document describes the way Octave reports errors.
+<p>
+<menu>
+<img src="bullet.gif" align=bottom>
+<a href="octave.html">Octave for OS/2 Homepage.</a><br>
+<img src="bullet.gif" align=bottom>
+<a href="readme.html">Read Me!</a><br>
+<img src="bullet.gif" align=bottom>
+<a href="changes.html">History of Changes.</a><br
+</menu>
+</td>
+</table></center>
+
+<hr>
+
+
+There are two classes of errors that Octave produces when it encounters
+input that it is unable to understand, or when it is unable to perform
+an action.<p>
+
+A <b>parse error</b> occurs if Octave cannot understand something you
+have typed.  For example, if you misspell a keyword:<p>
+
+<center><img src="octave5.gif" align=middle></center><p>
+
+For most parse errors, Octave uses a caret (<b>^</b>) to mark the point
+on the line where it was unable to make sense of your input.  In this
+case, Octave generated an error message because the keyword
+<b>function</b> was misspelled.  Instead of seeing <b>function f</b>,
+Octave saw two consecutive variable names, which is invalid in this
+context.  It marked the error at the <b>y</b> because the first name by
+itself was accepted as valid input.<p>
+
+Another class of error message occurs occurs at evaluation time.  These
+errors are called <b>run-time errors</b>, or sometimes
+evaluation errors</b> because they occur when your program is being
+<b>run</b>, or <b>evaluated</b>.  For example, if after correcting the
+mistake in the previous function definition, you type<p>
+
+<center><img src="octave6.gif" align=middle></center><p>
+
+This error message has several parts, and gives you quite a bit of
+information to help you locate the source of the error.  The messages
+are generated from the point of the innermost error, and provide a
+traceback of enclosing expressions and function calls.<p>
+
+In the example above, the first line indicates that a variable named
+<b>x</b> was found to be undefined near line 1 and column 24 of some
+function or expression.  For errors occurring within functions, lines
+from the beginning of the file containing the function definition.  For
+errors occurring at the top level, the line number indicates the input
+line number, which is usually displayed in the prompt string.<p>
+
+The second and third lines in the example indicate that the error
+occurred within an assignment expression, and the last line of the error
+message indicates that the error occurred within the function <b>f</b>.
+If the function <b>f</b> had been called from another function, for
+example, <b>g</b>, the list of errors would have ended with one more
+line:<p>
+<pre>error: called from `g'</pre><p>
+These lists of function calls usually make it fairly easy to trace the
+path your program took before the error occurred, and to correct the
+error before trying again.<p>
+
+
+<hr><center><address><em>
+<a href="copyrigh.html">Copyright &copy; 1996, 1997 John W. Eaton.</a>
+</em></address></center>
+<center><address>Modified by 
+<a href="mailto:gebhkla@t-online.de">Klaus Gebhardt</a>
+, 1997</em></address></center>
+
+
+</body>
+</html>

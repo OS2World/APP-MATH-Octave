@@ -1,0 +1,48 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from ./octave.texi on 9 October 1998 -->
+
+<TITLE>GNU Octave - Footnotes</TITLE>
+</HEAD>
+<BODY>
+<H1>GNU Octave</H1>
+<H2>A high-level interactive language for numerical computations</H2>
+<H2>Edition 3 for Octave version 2.0.13</H2>
+<H2>February 1997</H2>
+<ADDRESS>John W. Eaton</ADDRESS>
+<P>
+<P><HR><P>
+<H3><A NAME="FOOT1" HREF="octave_3.html#DOCF1">(1)</A></H3>
+<P>The <SAMP>`#!'</SAMP>
+mechanism works on Unix systems derived from Berkeley Unix, System V
+Release 4, and some System V Release 3 systems.
+<H3><A NAME="FOOT2" HREF="octave_9.html#DOCF2">(2)</A></H3>
+<P>Some of Octave's function are
+implemented in terms of functions that cannot be called recursively.
+For example, the ODE solver <CODE>lsode</CODE> is ultimately implemented in a
+Fortran subroutine that cannot be called recursively, so <CODE>lsode</CODE>
+should not be called either directly or indirectly from within the
+user-supplied function that <CODE>lsode</CODE> requires.  Doing so will result
+in undefined behavior.
+<H3><A NAME="FOOT3" HREF="octave_9.html#DOCF3">(3)</A></H3>
+<P>It would be
+much better to use <CODE>prod (1:n)</CODE>, or <CODE>gamma (n+1)</CODE> instead,
+after first checking to ensure that the value <CODE>n</CODE> is actually a
+positive integer.
+<H3><A NAME="FOOT4" HREF="octave_12.html#DOCF4">(4)</A></H3>
+<P>The <SAMP>`.m'</SAMP> suffix was
+chosen for compatibility with MATLAB.
+<H3><A NAME="FOOT5" HREF="octave_13.html#DOCF5">(5)</A></H3>
+<P>Yes, it's a kluge, but it seems to be a
+reasonably useful one.
+<H3><A NAME="FOOT6" HREF="octave_16.html#DOCF6">(6)</A></H3>
+<P>For example, to first sort
+based on the values in column 1, and then, for any values that are
+repeated in column 1, sort based on the values found in column 2, etc.
+<P><HR><P>
+This document was generated on 9 October 1998 using the
+<A HREF="http://wwwcn.cern.ch/dci/texi2html/">texi2html</A>
+translator version 1.51.</P>
+</BODY>
+</HTML>

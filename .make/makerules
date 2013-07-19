@@ -1,0 +1,45 @@
+# Definitionen und Regeln fuer alle makefiles
+# (c) Klaus Gebhardt, 1994
+
+include $(_PRJ_SRC_DIR)\C\emx-0.9c\src\.make\makeconf
+
+%.imp : %.def ; emximp -o $@ $<
+%.a   : %.imp ; emximp -o $@ $<
+%.lib : %.imp ; emximp -o $@ $<
+
+%.o : %.f
+	f2c -A -a $<
+	$(CC) $(CFLAGS) -c $(patsubst %.f,%.c,$<) -o $@
+	@rm $(patsubst %.f,%.c,$<)
+
+%.o : %.cc ; $(CC) $(CFLAGS) -c $< -o $@
+%.o : %.c ; $(CC) $(CFLAGS) -c $< -o $@
+
+%.o : %.s ; $(CC) $(CFLAGS) -c -x assembler-with-cpp -I. $< -o $@
+%l.o : %.s ; $(CC) $(CFLAGS) -DLONG_DOUBLE -c -x assembler-with-cpp -I. $< -o $@
+
+%.obj : %.f
+	f2c -A -a $<
+	$(CC) $(CFLAGS) -c $(patsubst %.f,%.c,$<) -o $@ -Zomf
+	@rm $(patsubst %.f,%.c,$<)
+
+%.obj : %.cc ; $(CC) $(CFLAGS) -c $< -o $@ -Zomf
+%.obj : %.c ; $(CC) $(CFLAGS) -c $< -o $@ -Zomf
+
+%.obj : %.s ; $(CC) $(CFLAGS) -c -x assembler-with-cpp -I. $< -o $@ -Zomf
+%l.obj : %.s ; $(CC) $(CFLAGS) -DLONG_DOUBLE -c -x assembler-with-cpp -I. $< -o $@ -Zomf
+
+%.a : %.o
+	rm -f $@
+	$(AR) $(ARFLAGS) $@ $^
+	$(RANLIB) $@
+
+%.lib : %.a
+	emxomf -l $<
+
+%.lib : %.obj
+	rm -f $@
+	emxomfar -p128 $(ARFLAGS) $@ $^
+
+%.res : %.rc
+	rc -r $<

@@ -1,0 +1,862 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from ./octave.texi on 9 October 1998 -->
+
+<TITLE>GNU Octave - Matrix Manipulation</TITLE>
+</HEAD>
+<BODY>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_15.html">previous</A>, <A HREF="octave_17.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC131" HREF="octave_toc.html#TOC131">Matrix Manipulation</A></H1>
+
+<P>
+There are a number of functions available for checking to see if the
+elements of a matrix meet some condition, and for rearranging the
+elements of a matrix.  For example, Octave can easily tell you if all
+the elements of a matrix are finite, or are less than some specified
+value.  Octave can also rotate the elements, extract the upper- or
+lower-triangular parts, or sort the columns of a matrix.
+
+</P>
+
+
+
+<H2><A NAME="SEC132" HREF="octave_toc.html#TOC132">Finding Elements and Checking Conditions</A></H2>
+
+<P>
+The functions <CODE>any</CODE> and <CODE>all</CODE> are useful for determining
+whether any or all of the elements of a matrix satisfy some condition.
+The <CODE>find</CODE> function is also useful in determining which elements of
+a matrix meet a specified condition.
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>any</B> <I>(<VAR>x</VAR>)</I>
+<DD><A NAME="IDX570"></A>
+For a vector argument, return 1 if any element of the vector is
+nonzero.
+
+</P>
+<P>
+For a matrix argument, return a row vector of ones and
+zeros with each element indicating whether any of the elements of the
+corresponding column of the matrix are nonzero.  For example,
+
+</P>
+
+<PRE>
+any (eye (2, 4))
+     => [ 1, 1, 0, 0 ]
+</PRE>
+
+<P>
+To see if any of the elements of a matrix are nonzero, you can use a
+statement like
+
+</P>
+
+<PRE>
+any (any (a))
+</PRE>
+
+</DL>
+
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>all</B> <I>(<VAR>x</VAR>)</I>
+<DD><A NAME="IDX571"></A>
+The function <CODE>all</CODE> behaves like the function <CODE>any</CODE>, except
+that it returns true only if all the elements of a vector, or all the
+elements in a column of a matrix, are nonzero.
+</DL>
+
+</P>
+<P>
+Since the comparison operators (see section <A HREF="octave_9.html#SEC70">Comparison Operators</A>) return matrices
+of ones and zeros, it is easy to test a matrix for many things, not just
+whether the elements are nonzero.  For example, 
+
+</P>
+
+<PRE>
+all (all (rand (5) &#60; 0.9))
+     => 0
+</PRE>
+
+<P>
+tests a random 5 by 5 matrix to see if all of it's elements are less
+than 0.9.
+
+</P>
+<P>
+Note that in conditional contexts (like the test clause of <CODE>if</CODE> and
+<CODE>while</CODE> statements) Octave treats the test as if you had typed
+<CODE>all (all (condition))</CODE>.
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U> [<VAR>err</VAR>, <VAR>y1</VAR>, ...] = <B>common_size</B> <I>(<VAR>x1</VAR>, ...)</I>
+<DD><A NAME="IDX572"></A>
+Determine if all input arguments are either scalar or of common
+size.  If so, <VAR>err</VAR> is zero, and <VAR>yi</VAR> is a matrix of the
+common size with all entries equal to <VAR>xi</VAR> if this is a scalar or
+<VAR>xi</VAR> otherwise.  If the inputs cannot be brought to a common size,
+errorcode is 1, and <VAR>yi</VAR> is <VAR>xi</VAR>.  For example,
+
+</P>
+
+<PRE>
+[errorcode, a, b] = common_size ([1 2; 3 4], 5)
+     => errorcode = 0
+     => a = [ 1, 2; 3, 4 ]
+     => b = [ 5, 5; 5, 5 ]
+</PRE>
+
+<P>
+This is useful for implementing functions where arguments can either
+be scalars or of common size.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>diff</B> <I>(<VAR>x</VAR>, <VAR>k</VAR>)</I>
+<DD><A NAME="IDX573"></A>
+If <VAR>x</VAR> is a vector of length <VAR>n</VAR>, <CODE>diff (<VAR>x</VAR>)</CODE> is the
+vector of first differences
+
+</P>
+<P>
+If <VAR>x</VAR> is a matrix, <CODE>diff (<VAR>x</VAR>)</CODE> is the matrix of column
+differences.
+
+</P>
+<P>
+The second argument is optional.  If supplied, <CODE>diff (<VAR>x</VAR>,
+<VAR>k</VAR>)</CODE>, where <VAR>k</VAR> is a nonnegative integer, returns the
+<VAR>k</VAR>-th differences.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Mapping Function:</U>  <B>isinf</B> <I>(<VAR>x</VAR>)</I>
+<DD><A NAME="IDX574"></A>
+Return 1 for elements of <VAR>x</VAR> that are infinite and zero
+otherwise. For example,
+
+</P>
+
+<PRE>
+isinf ([13, Inf, NaN])
+     => [ 0, 1, 0 ]
+</PRE>
+
+</DL>
+
+<P>
+<DL>
+<DT><U>Mapping Function:</U>  <B>isnan</B> <I>(<VAR>x</VAR>)</I>
+<DD><A NAME="IDX575"></A>
+Return 1 for elements of <VAR>x</VAR> that are NaN values and zero
+otherwise. For example,
+
+</P>
+
+<PRE>
+isnan ([13, Inf, NaN])
+     => [ 0, 0, 1 ]
+</PRE>
+
+</DL>
+
+<P>
+<DL>
+<DT><U>Mapping Function:</U>  <B>finite</B> <I>(<VAR>x</VAR>)</I>
+<DD><A NAME="IDX576"></A>
+Return 1 for elements of <VAR>x</VAR> that are NaN values and zero
+otherwise. For example,
+
+</P>
+
+<PRE>
+finite ([13, Inf, NaN])
+     => [ 1, 0, 0 ]
+</PRE>
+
+</DL>
+
+<P>
+<DL>
+<DT><U>Loadable Function:</U>  <B>find</B> <I>(<VAR>x</VAR>)</I>
+<DD><A NAME="IDX577"></A>
+Return a vector of indices of nonzero elements of a matrix.  To obtain a
+single index for each matrix element, Octave pretends that the columns
+of a matrix form one long vector (like Fortran arrays are stored).  For
+example,
+
+</P>
+
+<PRE>
+find (eye (2))
+     => [ 1; 4 ]
+</PRE>
+
+<P>
+If two outputs are requested, <CODE>find</CODE> returns the row and column
+indices of nonzero elements of a matrix.  For example,
+
+</P>
+
+<PRE>
+[i, j] = find (2 * eye (2))
+     => i = [ 1; 2 ]
+     => j = [ 1; 2 ]
+</PRE>
+
+<P>
+If three outputs are requested, <CODE>find</CODE> also returns a vector
+containing the nonzero values.  For example,
+
+</P>
+
+<PRE>
+[i, j, v] = find (3 * eye (2))
+     => i = [ 1; 2 ]
+     => j = [ 1; 2 ]
+     => v = [ 3; 3 ]
+</PRE>
+
+</DL>
+<P>
+        
+
+
+<H2><A NAME="SEC133" HREF="octave_toc.html#TOC133">Rearranging Matrices</A></H2>
+
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>fliplr</B> <I>(<VAR>x</VAR>)</I>
+<DD><A NAME="IDX578"></A>
+Return a copy of <VAR>x</VAR> with the order of the columns reversed.  For
+example, 
+
+</P>
+
+<PRE>
+fliplr ([1, 2; 3, 4])
+     =>  2  1
+         4  3
+</PRE>
+
+</DL>
+
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>flipud</B> <I>(<VAR>x</VAR>)</I>
+<DD><A NAME="IDX579"></A>
+Return a copy of <VAR>x</VAR> with the order of the rows reversed.  For
+example,
+
+</P>
+
+<PRE>
+flipud ([1, 2; 3, 4])
+     =>  3  4
+         1  2
+</PRE>
+
+</DL>
+
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>rot90</B> <I>(<VAR>x</VAR>, <VAR>n</VAR>)</I>
+<DD><A NAME="IDX580"></A>
+Return a copy of <VAR>x</VAR> with the elements rotated counterclockwise in
+90-degree increments.  The second argument is optional, and specifies
+how many 90-degree rotations are to be applied (the default value is 1).
+Negative values of <VAR>n</VAR> rotate the matrix in a clockwise direction.
+For example,
+
+</P>
+
+<PRE>
+rot90 ([1, 2; 3, 4], -1)
+     =>  3  1
+         4  2
+</PRE>
+
+<P>
+rotates the given matrix clockwise by 90 degrees.  The following are all
+equivalent statements:
+
+</P>
+
+<PRE>
+rot90 ([1, 2; 3, 4], -1)
+==
+rot90 ([1, 2; 3, 4], 3)
+==
+rot90 ([1, 2; 3, 4], 7)
+</PRE>
+
+</DL>
+
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>reshape</B> <I>(<VAR>a</VAR>, <VAR>m</VAR>, <VAR>n</VAR>)</I>
+<DD><A NAME="IDX581"></A>
+Return a matrix with <VAR>m</VAR> rows and <VAR>n</VAR> columns whose elements are
+taken from the matrix <VAR>a</VAR>.  To decide how to order the elements,
+Octave pretends that the elements of a matrix are stored in column-major
+order (like Fortran arrays are stored).
+
+</P>
+<P>
+For example,
+
+</P>
+
+<PRE>
+reshape ([1, 2, 3, 4], 2, 2)
+     =>  1  3
+         2  4
+</PRE>
+
+<P>
+If the variable <CODE>do_fortran_indexing</CODE> is nonzero, the
+<CODE>reshape</CODE> function is equivalent to
+
+</P>
+
+<PRE>
+retval = zeros (m, n);
+retval (:) = a;
+</PRE>
+
+<P>
+but it is somewhat less cryptic to use <CODE>reshape</CODE> instead of the
+colon operator.  Note that the total number of elements in the original
+matrix must match the total number of elements in the new matrix.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>shift</B> <I>(<VAR>x</VAR>, <VAR>b</VAR>)</I>
+<DD><A NAME="IDX582"></A>
+If <VAR>x</VAR> is a vector, perform a circular shift of length <VAR>b</VAR> of
+the elements of <VAR>x</VAR>.
+
+</P>
+<P>
+If <VAR>x</VAR> is a matrix, do the same for each column of <VAR>x</VAR>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U> [<VAR>s</VAR>, <VAR>i</VAR>] = <B>sort</B> <I>(<VAR>x</VAR>)</I>
+<DD><A NAME="IDX583"></A>
+Return a copy of <VAR>x</VAR> with the elements elements arranged in
+increasing order.  For matrices, <CODE>sort</CODE> orders the elements in each
+column.
+
+</P>
+<P>
+For example,
+
+</P>
+
+<PRE>
+sort ([1, 2; 2, 3; 3, 1])
+     =>  1  1
+         2  2
+         3  3
+</PRE>
+
+<P>
+The <CODE>sort</CODE> function may also be used to produce a matrix
+containing the original row indices of the elements in the sorted
+matrix.  For example,
+
+</P>
+
+<PRE>
+[s, i] = sort ([1, 2; 2, 3; 3, 1])
+     => s = 1  1
+            2  2
+            3  3
+     => i = 1  3
+            2  1
+            3  2
+</PRE>
+
+</DL>
+
+<P>
+Since the <CODE>sort</CODE> function does not allow sort keys to be specified,
+it can't be used to order the rows of a matrix according to the values
+of the elements in various columns<A NAME="DOCF6" HREF="octave_foot.html#FOOT6">(6)</A>
+in a single call.  Using the second output, however, it is possible to
+sort all rows based on the values in a given column.  Here's an example
+that sorts the rows of a matrix based on the values in the second
+column.
+
+</P>
+
+<PRE>
+a = [1, 2; 2, 3; 3, 1];
+[s, i] = sort (a (:, 2));
+a (i, :)
+     =>  3  1
+         1  2
+         2  3
+</PRE>
+
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>tril</B> <I>(<VAR>a</VAR>, <VAR>k</VAR>)</I>
+<DD><A NAME="IDX584"></A>
+<DT><U>Function File:</U>  <B>triu</B> <I>(<VAR>a</VAR>, <VAR>k</VAR>)</I>
+<DD><A NAME="IDX585"></A>
+Return a new matrix formed by extracting extract the lower (<CODE>tril</CODE>)
+or upper (<CODE>triu</CODE>) triangular part of the matrix <VAR>a</VAR>, and
+setting all other elements to zero.  The second argument is optional,
+and specifies how many diagonals above or below the main diagonal should
+also be set to zero.
+
+</P>
+<P>
+The default value of <VAR>k</VAR> is zero, so that <CODE>triu</CODE> and
+<CODE>tril</CODE> normally include the main diagonal as part of the result
+matrix.
+
+</P>
+<P>
+If the value of <VAR>k</VAR> is negative, additional elements above (for
+<CODE>tril</CODE>) or below (for <CODE>triu</CODE>) the main diagonal are also
+selected.
+
+</P>
+<P>
+The absolute value of <VAR>k</VAR> must not be greater than the number of
+sub- or super-diagonals.
+
+</P>
+<P>
+For example,
+
+</P>
+
+<PRE>
+tril (ones (3), -1)
+     =>  0  0  0
+         1  0  0
+         1  1  0
+</PRE>
+
+<P>
+and
+
+</P>
+
+<PRE>
+tril (ones (3), 1)
+     =>  1  1  0
+         1  1  1
+         1  1  1
+</PRE>
+
+</DL>
+
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>vec</B> <I>(<VAR>x</VAR>)</I>
+<DD><A NAME="IDX586"></A>
+Return the vector obtained by stacking the columns of the matrix <VAR>x</VAR>
+one above the other.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>vech</B> <I>(<VAR>x</VAR>)</I>
+<DD><A NAME="IDX587"></A>
+Return the vector obtained by eliminating all supradiagonal elements of
+the square matrix <VAR>x</VAR> and stacking the result one column above the
+other.
+</DL>
+
+</P>
+
+
+<H2><A NAME="SEC134" HREF="octave_toc.html#TOC134">Special Utility Matrices</A></H2>
+
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>eye</B> <I>(<VAR>x</VAR>)</I>
+<DD><A NAME="IDX588"></A>
+<DT><U>Built-in Function:</U>  <B>eye</B> <I>(<VAR>n</VAR>, <VAR>m</VAR>)</I>
+<DD><A NAME="IDX589"></A>
+Return an identity matrix.  If invoked with a single scalar argument,
+<CODE>eye</CODE> returns a square matrix with the dimension specified.  If you
+supply two scalar arguments, <CODE>eye</CODE> takes them to be the number of
+rows and columns.  If given a vector with two elements, <CODE>eye</CODE> uses
+the values of the elements as the number of rows and columns,
+respectively.  For example,
+
+</P>
+
+<PRE>
+eye (3)
+     =>  1  0  0
+         0  1  0
+         0  0  1
+</PRE>
+
+<P>
+The following expressions all produce the same result:
+
+</P>
+
+<PRE>
+eye (2)
+==
+eye (2, 2)
+==
+eye (size ([1, 2; 3, 4])
+</PRE>
+
+<P>
+For compatibility with MATLAB, calling <CODE>eye</CODE> with no arguments
+is equivalent to calling it with an argument of 1.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>ones</B> <I>(<VAR>x</VAR>)</I>
+<DD><A NAME="IDX590"></A>
+<DT><U>Built-in Function:</U>  <B>ones</B> <I>(<VAR>n</VAR>, <VAR>m</VAR>)</I>
+<DD><A NAME="IDX591"></A>
+Return a matrix whose elements are all 1.  The arguments are handled
+the same as the arguments for <CODE>eye</CODE>.
+
+</P>
+<P>
+If you need to create a matrix whose values are all the same, you should
+use an expression like
+
+</P>
+
+<PRE>
+val_matrix = val * ones (n, m)
+</PRE>
+
+</DL>
+
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>zeros</B> <I>(<VAR>x</VAR>)</I>
+<DD><A NAME="IDX592"></A>
+<DT><U>Built-in Function:</U>  <B>zeros</B> <I>(<VAR>n</VAR>, <VAR>m</VAR>)</I>
+<DD><A NAME="IDX593"></A>
+Return a matrix whose elements are all 0.  The arguments are handled
+the same as the arguments for <CODE>eye</CODE>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U>  <B>rand</B> <I>(<VAR>x</VAR>)</I>
+<DD><A NAME="IDX594"></A>
+<DT><U>Loadable Function:</U>  <B>rand</B> <I>(<VAR>n</VAR>, <VAR>m</VAR>)</I>
+<DD><A NAME="IDX595"></A>
+<DT><U>Loadable Function:</U>  <B>rand</B> <I>(<CODE>"seed"</CODE>, <VAR>x</VAR>)</I>
+<DD><A NAME="IDX596"></A>
+Return a matrix with random elements uniformly distributed on the
+interval (0, 1).  The arguments are handled the same as the arguments
+for <CODE>eye</CODE>.  In
+addition, you can set the seed for the random number generator using the
+form
+
+</P>
+
+<PRE>
+rand ("seed", <VAR>x</VAR>)
+</PRE>
+
+<P>
+where <VAR>x</VAR> is a scalar value.  If called as
+
+</P>
+
+<PRE>
+rand ("seed")
+</PRE>
+
+<P>
+<CODE>rand</CODE> returns the current value of the seed.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Loadable Function:</U>  <B>randn</B> <I>(<VAR>x</VAR>)</I>
+<DD><A NAME="IDX597"></A>
+<DT><U>Loadable Function:</U>  <B>randn</B> <I>(<VAR>n</VAR>, <VAR>m</VAR>)</I>
+<DD><A NAME="IDX598"></A>
+<DT><U>Loadable Function:</U>  <B>randn</B> <I>(<CODE>"seed"</CODE>, <VAR>x</VAR>)</I>
+<DD><A NAME="IDX599"></A>
+Return a matrix with normally distributed random elements.  The
+arguments are handled the same as the arguments for <CODE>eye</CODE>.  In
+addition, you can set the seed for the random number generator using the
+form
+
+</P>
+
+<PRE>
+randn ("seed", <VAR>x</VAR>)
+</PRE>
+
+<P>
+where <VAR>x</VAR> is a scalar value.  If called as
+
+</P>
+
+<PRE>
+randn ("seed")
+</PRE>
+
+<P>
+<CODE>randn</CODE> returns the current value of the seed.
+</DL>
+
+</P>
+<P>
+The <CODE>rand</CODE> and <CODE>randn</CODE> functions use separate generators.
+This ensures that
+
+</P>
+
+<PRE>
+rand ("seed", 13);
+randn ("seed", 13);
+u = rand (100, 1);
+n = randn (100, 1);
+</PRE>
+
+<P>
+and
+
+</P>
+
+<PRE>
+rand ("seed", 13);
+randn ("seed", 13);
+u = zeros (100, 1);
+n = zeros (100, 1);
+for i = 1:100
+  u(i) = rand ();
+  n(i) = randn ();
+end
+</PRE>
+
+<P>
+produce equivalent results.
+
+</P>
+<P>
+Normally, <CODE>rand</CODE> and <CODE>randn</CODE> obtain their initial
+seeds from the system clock, so that the sequence of random numbers is
+not the same each time you run Octave.  If you really do need for to
+reproduce a sequence of numbers exactly, you can set the seed to a
+specific value.
+
+</P>
+<P>
+If it is invoked without arguments, <CODE>rand</CODE> and <CODE>randn</CODE> return a
+single element of a random sequence.
+
+</P>
+<P>
+The <CODE>rand</CODE> and <CODE>randn</CODE> functions use Fortran code from
+RANLIB, a library of fortran routines for random number generation,
+compiled by Barry W. Brown and James Lovato of the Department of
+Biomathematics at The University of Texas, M.D. Anderson Cancer Center,
+Houston, TX 77030.
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>diag</B> <I>(<VAR>v</VAR>, <VAR>k</VAR>)</I>
+<DD><A NAME="IDX600"></A>
+Return a diagonal matrix with vector <VAR>v</VAR> on diagonal <VAR>k</VAR>.  The
+second argument is optional.  If it is positive, the vector is placed on
+the <VAR>k</VAR>-th super-diagonal.  If it is negative, it is placed on the
+<VAR>-k</VAR>-th sub-diagonal.  The default value of <VAR>k</VAR> is 0, and the
+vector is placed on the main diagonal.  For example,
+
+</P>
+
+<PRE>
+diag ([1, 2, 3], 1)
+     =>  0  1  0  0
+         0  0  2  0
+         0  0  0  3
+         0  0  0  0
+</PRE>
+
+</DL>
+
+<P>
+The functions <CODE>linspace</CODE> and <CODE>logspace</CODE> make it very easy to
+create vectors with evenly or logarithmically spaced elements.
+See section <A HREF="octave_5.html#SEC51">Ranges</A>.
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>linspace</B> <I>(<VAR>base</VAR>, <VAR>limit</VAR>, <VAR>n</VAR>)</I>
+<DD><A NAME="IDX601"></A>
+Return a row vector with <VAR>n</VAR> linearly spaced elements between
+<VAR>base</VAR> and <VAR>limit</VAR>.  The number of elements, <VAR>n</VAR>, must be
+greater than 1.  The <VAR>base</VAR> and <VAR>limit</VAR> are always included in
+the range.  If <VAR>base</VAR> is greater than <VAR>limit</VAR>, the elements are
+stored in decreasing order.  If the number of points is not specified, a
+value of 100 is used.
+
+</P>
+<P>
+The <CODE>linspace</CODE> function always returns a row vector, regardless of
+the value of <CODE>prefer_column_vectors</CODE>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>logspace</B> <I>(<VAR>base</VAR>, <VAR>limit</VAR>, <VAR>n</VAR>)</I>
+<DD><A NAME="IDX602"></A>
+Similar to <CODE>linspace</CODE> except that the values are logarithmically
+spaced from
+
+</P>
+<P>
+If <VAR>limit</VAR> is equal to
+the points are between
+<EM>not</EM>
+in order to  be compatible with the corresponding MATLAB function.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>treat_neg_dim_as_zero</B>
+<DD><A NAME="IDX603"></A>
+If the value of <CODE>treat_neg_dim_as_zero</CODE> is nonzero, expressions
+like
+
+</P>
+
+<PRE>
+eye (-1)
+</PRE>
+
+<P>
+produce an empty matrix (i.e., row and column dimensions are zero).
+Otherwise, an error message is printed and control is returned to the
+top level.  The default value is 0.
+</DL>
+
+</P>
+
+
+<H2><A NAME="SEC135" HREF="octave_toc.html#TOC135">Famous Matrices</A></H2>
+
+<P>
+The following functions return famous matrix forms.
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>hankel</B> <I>(<VAR>c</VAR>, <VAR>r</VAR>)</I>
+<DD><A NAME="IDX604"></A>
+Return the Hankel matrix constructed given the first column <VAR>c</VAR>, and
+(optionally) the last row <VAR>r</VAR>.  If the last element of <VAR>c</VAR> is
+not the same as the first element of <VAR>r</VAR>, the last element of
+<VAR>c</VAR> is used.  If the second argument is omitted, the last row is
+taken to be the same as the first column.
+
+</P>
+<P>
+A Hankel matrix formed from an m-vector <VAR>c</VAR>, and an n-vector
+<VAR>r</VAR>, has the elements
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>hilb</B> <I>(<VAR>n</VAR>)</I>
+<DD><A NAME="IDX605"></A>
+Return the Hilbert matrix of order <VAR>n</VAR>.  The
+element of a Hilbert matrix is defined as
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>invhilb</B> <I>(<VAR>n</VAR>)</I>
+<DD><A NAME="IDX606"></A>
+Return the inverse of a Hilbert matrix of order <VAR>n</VAR>.  This is exact.
+Compare with the numerical calculation of <CODE>inverse (hilb (n))</CODE>,
+which suffers from the ill-conditioning of the Hilbert matrix, and the
+finite precision of your computer's floating point arithmetic.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>sylvester_matrix</B> <I>(<VAR>k</VAR>)</I>
+<DD><A NAME="IDX607"></A>
+Return the Sylvester matrix of order
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>toeplitz</B> <I>(<VAR>c</VAR>, <VAR>r</VAR>)</I>
+<DD><A NAME="IDX608"></A>
+Return the Toeplitz matrix constructed given the first column <VAR>c</VAR>,
+and (optionally) the first row <VAR>r</VAR>.  If the first element of <VAR>c</VAR>
+is not the same as the first element of <VAR>r</VAR>, the first element of
+<VAR>c</VAR> is used.  If the second argument is omitted, the first row is
+taken to be the same as the first column.
+
+</P>
+<P>
+A square Toeplitz matrix has the form
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>vander</B> <I>(<VAR>c</VAR>)</I>
+<DD><A NAME="IDX609"></A>
+Return the Vandermonde matrix whose next to last column is <VAR>c</VAR>.
+
+</P>
+<P>
+A Vandermonde matrix has the form
+</DL>
+
+</P>
+<P><HR><P>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_15.html">previous</A>, <A HREF="octave_17.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+</BODY>
+</HTML>

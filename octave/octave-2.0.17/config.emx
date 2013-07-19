@@ -1,0 +1,271 @@
+/* config.emx.  */
+/* OS/2-Config-Header. */
+/* (c) Klaus Gebhardt, 1994 - 1997 */
+
+#ifdef _ALL_SOURCE
+#undef _ALL_SOURCE
+#endif
+
+#ifdef EMX09D
+#define EMX09C
+#define CXX_NEW_FRIEND_TEMPLATE_DECL
+#endif
+
+
+#if defined (EMX09C)
+
+/* Special EMX */
+#define isinf(x)   (!isfinite(x) && !isnan(x))
+#define finite(x)  isfinite(x)
+#define Complex double_complex
+#define octave_procbuf procbuf
+
+
+/* Misc */
+#undef  const
+#undef  CRAY_STACKSEG_END
+#undef  _MINIX
+#undef  _POSIX_1_SOURCE
+#undef  _POSIX_SOURCE
+#undef  HAVE_BSD_SIGNALS
+#undef  HAVE_POSIX_SIGNALS
+#undef  SYS_SIGLIST_DECLARED
+#undef  HAVE_SYS_SIGLIST
+#define RETSIGTYPE void
+#define MUST_REINSTALL_SIGHANDLERS
+#define SEPCHAR ';'
+#define SEPCHAR_STR ";"
+#undef  CLOSEDIR_VOID
+#undef  SETVBUF_REVERSED
+#define STACK_DIRECTION 0
+#define STDC_HEADERS
+#define TIME_WITH_SYS_TIME
+#define TM_IN_SYS_TIME
+#undef  HAVE_GR_PASSWD
+#define C_ALLOCA
+#define DIRENT
+#undef  GETTIMEOFDAY_NO_TZ 
+#undef  SMART_PUTENV
+#undef  SCO
+#undef  RUSAGE_TIMES_ONLY
+
+
+/* Numbers */
+#undef  IEEE_BIG_ENDIAN
+#define IEEE_LITTLE_ENDIAN
+#undef  WORDS_BIGENDIAN
+#undef  VAX_D_FLOAT
+#undef  VAX_G_FLOAT
+#define SIZEOF_INT 4
+#define SIZEOF_LONG 4
+#define SIZEOF_SHORT 2
+#undef  SIGNGAM_DECLARED
+#undef  EXCEPTION_IN_MATH
+
+
+/* Fortran */
+#define F77_APPEND_UNDERSCORE
+#undef  F77_UPPERCASE_NAMES
+
+
+/* Functions */
+#define HAVE_ALLOCA
+#undef  HAVE_ASINH
+#undef  HAVE_ACOSH
+#undef  HAVE_ATANH
+#define HAVE_ATEXIT
+#define HAVE_BCOPY
+#define HAVE_BCOPY
+#define HAVE_BZERO
+#define HAVE_DUP
+#define HAVE_DUP2
+#undef  HAVE_ENDGRENT
+#define HAVE_ENDPWENT
+#undef  HAVE_ERF
+#undef  HAVE_ERFC
+#define HAVE_EXECVP
+#define HAVE_FCNTL
+#define HAVE_FINITE
+#undef  HAVE_FORK
+#undef  HAVE_GAMMA
+#define HAVE_GETCWD
+#undef  HAVE_GETEGID
+#undef  HAVE_GETEUID
+#undef  HAVE_GETGID
+#undef  HAVE_GETGRENT
+#undef  HAVE_GETGRGID
+#undef  HAVE_GETGRNAM
+#undef  HAVE_GETHOSTNAME
+#undef  HAVE_GETPGRP
+#define HAVE_GETPID
+#define HAVE_GETPPID
+#define HAVE_GETPWENT
+#define HAVE_GETPWNAM
+#define HAVE_GETPWUID
+#undef  HAVE_GETRUSAGE
+#undef  HAVE_GETUID
+#define HAVE_GETWD
+#define HAVE_GETTIMEOFDAY
+#undef  HAVE_INFINITY
+#define HAVE_ISINF
+#define HAVE_ISNAN
+#undef  HAVE_LGAMMA
+#undef  HAVE_LSTAT
+#define HAVE_MEMMOVE
+#define HAVE_MKDIR
+#define HAVE_MKFIFO
+#undef  HAVE_ON_EXIT
+#define HAVE_PIPE
+#undef  HAVE_PROGRAM_INVOCATION_NAME
+#define HAVE_PUTENV
+#undef  HAVE_QUIET_NAN
+#define HAVE_RENAME
+#undef  HAVE_RINDEX
+#define HAVE_RMDIR
+#undef  HAVE_SETGRENT
+#undef  HAVE_SETPWENT
+#define HAVE_SETVBUF
+#define HAVE_SPAWNVP
+#undef  HAVE_STRCASECMP
+#define HAVE_STRDUP
+#define HAVE_STRERROR
+#define HAVE_STRFTIME
+#define HAVE_STRICMP
+#undef  HAVE_STRNCASECMP
+#define HAVE_STRNICMP
+#define HAVE_SIGACTION
+#define HAVE_SIGPENDING
+#define HAVE_SIGPROCMASK
+#define HAVE_SIGSUSPEND
+#undef  HAVE_ST_BLKSIZE
+#undef  HAVE_ST_BLOCKS
+#define HAVE_ST_RDEV
+#define HAVE_STAT
+#undef  HAVE_SYS_SIGLIST
+#define HAVE_TIMES
+#define HAVE_TEMPNAM
+#undef  HAVE_TM_ZONE
+#define HAVE_TZNAME
+#define HAVE_UMASK
+#undef  HAVE_USG_SIGHOLD
+#undef  HAVE_USLEEP
+#define HAVE_UNLINK
+#define HAVE_VFPRINTF
+#define HAVE_VSPRINTF
+#define HAVE_WAITPID
+#define HAVE__SLEEP2
+
+
+/* Headers */
+#define HAVE_ALLOCA_H
+#define HAVE_ASSERT_H
+#define HAVE_CURSES_H
+#define HAVE_DIRENT_H
+#define HAVE_FCNTL_H
+#define HAVE_FLOAT_H
+#undef  HAVE_FLOATINGPOINT_H
+#define HAVE_GRP_H
+#undef  HAVE_IEEEFP_H
+#define HAVE_LIMITS_H
+#define HAVE_MEMORY_H
+#undef  HAVE_NAN_H
+#undef  HAVE_NCURSES_H
+#undef  HAVE_NDIR_H
+#define HAVE_PWD_H
+#define HAVE_SGTTY_H
+#define HAVE_STDLIB_H
+#define HAVE_STRING_H
+#define HAVE_SYS_DIR_H
+#define HAVE_SYS_FCNTL_H
+#undef  HAVE_SYS_NDIR_H
+#define HAVE_SYS_PARAM_H
+#undef  HAVE_SYS_PTEM_H
+#define HAVE_SYS_RESOURCE_H
+#undef  HAVE_SYS_SELECT_H
+#define HAVE_SYS_STAT_H
+#define HAVE_SYS_TIME_H
+#define HAVE_SYS_TIMES_H
+#undef  HAVE_SYS_TTOLD_H
+#define HAVE_SYS_TYPES_H
+#define HAVE_SYS_UTSNAME_H
+#define HAVE_SYS_WAIT_H
+#define HAVE_TERMCAP_H
+#define HAVE_TERMIO_H
+#undef  HAVE_TERMIOS_H
+#define HAVE_UNISTD_H
+#define HAVE_VARARGS_H
+
+
+/* Libraries */
+#undef  HAVE_LIBDL
+#undef  HAVE_LIBDLD
+#undef  HAVE_LIBGLOB
+#define HAVE_LIBM
+#define HAVE_LIBSOCKET
+#undef  HAVE_LIBSUN
+#undef  HAVE_LIBSUNMATH
+
+
+/* Definitions in <sys/types.h> */
+#undef  gid_t
+#undef  mode_t
+#undef  off_t
+#undef  pid_t
+#undef  size_t
+#undef  uid_t
+#undef  dev_t
+#undef  ino_t
+#undef  nlink_t
+#undef  sigset_t
+
+
+/* Dynamic linking. */
+#define WITH_DYNAMIC_LINKING
+#define WITH_DL
+#define HAVE_DLCLOSE
+#define HAVE_DLERROR
+#define HAVE_DLOPEN
+#define HAVE_DLSYM
+#undef  WITH_SHL
+#undef  HAVE_SHL_FINDSYM
+#undef  HAVE_SHL_LOAD
+
+
+/* Octave specific defines */
+#undef  OCTAVE_LITE
+#define OCTAVE_SOURCE
+#undef  BOUNDS_CHECKING
+#define USE_GNU_INFO
+#define USE_READLINE
+#define WITH_KPATHSEARCH
+
+
+/* Plotting */
+#undef  GNUPLOT_HAS_FRAMES
+#define GNUPLOT_HAS_MULTIPLOT
+#undef  USE_PLPLOT
+
+
+#if defined (__GNUC__)
+#define GCC_ATTR_NORETURN __attribute__ ((__noreturn__))
+#define GCC_ATTR_UNUSED __attribute__ ((__unused__))
+#else
+#define GCC_ATTR_NORETURN
+#define GCC_ATTR_UNUSED
+#endif
+
+#if defined (__GNUC__)
+#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ > 7)
+#define NPOS string::npos
+#endif
+#endif
+
+#define CONST_CAST(T, E) (T) (E)
+#define DYNAMIC_CAST(T, E) (T) (E)
+#define REINTERPRET_CAST(T, E) (T) (E)
+#define STATIC_CAST(T, E) (T) (E)
+#define X_CAST(T, E) (T) (E)
+
+#define HEAVYWEIGHT_INDEXING 1
+
+#endif /* defined (EMX09C) */

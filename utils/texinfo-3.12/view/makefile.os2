@@ -1,0 +1,20 @@
+# This is the OS/2 makefile for texinfos view directory.
+# (c) Klaus Gebhardt, 1999
+
+include ../makeconf.os2
+
+SOURCES = gnuview.c
+
+INCL = 
+
+OBJECTS = gnuview.obj
+
+LIBS = -ltexinfo
+
+all: gnuview.exe
+
+gnuview.exe: $(OBJECTS)
+	$(CC) $(LDFLAGS) -o gnuview.exe $(OBJECTS) $(LIBS) $(ZFLAGS)
+
+clean:
+	rm -f *.o *.obj *.a *.lib *.dll *.exe

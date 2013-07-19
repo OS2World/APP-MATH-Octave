@@ -1,0 +1,99 @@
+# Common configuration rules for all of octave's Makefiles.
+# Modified by Klaus Gebhardt, 1994 - 1996
+
+include $(_PRJ_SRC_DIR)\\C\\emx-0.9c\\src\\.make\\makeconf
+
+MSTDIR  = $(SRCDIR)/octave/octave-$(OCTVER)
+ORIGDIR = $(ORGDIR)/octave/octave-$(OCTVER)
+
+CONFIG_FILE = $(MSTDIR)/config.emx
+
+MKFLAGS = -f makefile.os2
+MAKE = make $(MKFLAGS)
+
+OFLAGS = $(MC_OFLAGS) -DEMX09C -DOS2 
+OOFLAGS = $(MC_OOFLAGS)
+
+IFLAGS =  -include $(CONFIG_FILE) -I$(MSTDIR)/src -I$(MSTDIR)/liboctave -I.
+CFLAGS = $(OFLAGS) $(IFLAGS)
+CC = gcc $(CFLAGS)
+
+LDFLAGS = $(MC_LDFLAGS)
+LD = gcc $(LDFLAGS)
+
+F2CFLAGS = -A -a
+F2C = f2c $(F2CFLAGS)
+
+FFLAGS = $(OFLAGS)
+G77 = gcc $(FFLAGS) $(IFLAGS)
+
+AR = ar
+ARFLAGS = r
+RANLIB = $(AR) s
+
+YACC = bison
+YFLAGS = -yd
+
+LEX = flex
+LFLAGS = -t 
+
+# Cancel default rule for .c from .y and make .cc from .y instead.
+
+%.c : %.y
+
+%.cc : %.y
+	$(YACC) $(YFLAGS) $<
+	mv y.tab.c $(@F)
+
+# Likewise for .c from .l.
+
+%.c : %.l
+
+%.cc : %.l
+	$(LEX) $(LFLAGS) $< > $(@F)
+
+
+%.df : %.cc
+	@echo making $@ from $<
+	@$(CPP) $(CFLAGS) -c -s -DMAKE_BUILTINS $< | mkdefs > $@
+
+%.o   : %.cc ; $(CC) $(OOFLAGS) -c $< -o $@
+%.o   : %.c  ; $(CC) -c $< -o $@
+%.obj : %.cc ; $(CC) $(OOFLAGS) -c $< -o $@ -Zomf
+%.obj : %.c  ; $(CC) -c $< -o $@ -Zomf
+
+
+# Compiling the fortran code:
+
+ifeq ($(FORTRAN),USE_G77)
+%.o   : %.f ; $(G77) -c $< -o $@
+%.obj : %.f ; $(G77) -c $< -o $@ -Zomf
+else
+%.o : %.f
+	$(F2C) -d$(TEMPDIR) $<
+	$(CC) -c $(TEMPDIR)/$(patsubst %.f,%.c,$<) -o $@
+	@rm -f $(TEMPDIR)/$(patsubst %.f,%.c,$<)
+
+%.obj : %.f
+	$(F2C) -d$(TEMPDIR) $<
+	$(CC) -c $(TEMPDIR)/$(patsubst %.f,%.c,$<) -o $@ -Zomf
+	@rm -f $(TEMPDIR)/$(patsubst %.f,%.c,$<)
+endif
+
+
+# OS/2 rules:
+
+%.res : %.rc
+	rc -r $<
+
+%.lib : %.def
+	emximp -o $(patsubst %.def,%.imp,$<) $<
+	emximp -o $@ $(patsubst %.def,%.imp,$<)
+	@rm -f $(patsubst %.def,%.imp,$<)
+
+%.a   : %.def
+	emximp -o $(patsubst %.def,%.imp,$<) $<
+	emximp -o $@ $(patsubst %.def,%.imp,$<)
+	@rm -f $(patsubst %.def,%.imp,$<)
+
+%.lib : %.a ; emxomf -s -l $<

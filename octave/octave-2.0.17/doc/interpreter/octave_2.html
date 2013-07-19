@@ -1,0 +1,703 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from ./octave.texi on 9 October 1998 -->
+
+<TITLE>GNU Octave - A Brief Introduction to Octave</TITLE>
+</HEAD>
+<BODY>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_1.html">previous</A>, <A HREF="octave_3.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC5" HREF="octave_toc.html#TOC5">A Brief Introduction to Octave</A></H1>
+<P>
+<A NAME="IDX7"></A>
+
+</P>
+<P>
+This manual documents how to run, install and port GNU Octave, and how
+to report bugs.
+
+</P>
+<P>
+GNU Octave is a high-level language, primarily intended for numerical
+computations.  It provides a convenient command line interface for
+solving linear and nonlinear problems numerically, and for performing
+other numerical experiments.  It may also be used as a batch-oriented
+language.
+
+</P>
+<P>
+GNU Octave is also freely redistributable software.  You may
+redistribute it and/or modify it under the terms of the GNU General
+Public License as published by the Free Software Foundation.  The GPL is
+included in this manual in section <A HREF="octave_36.html#SEC202">GNU GENERAL PUBLIC LICENSE</A>.
+
+</P>
+<P>
+This document corresponds to Octave version 2.0.13.
+
+</P>
+
+
+
+<H2><A NAME="SEC6" HREF="octave_toc.html#TOC6">Running Octave</A></H2>
+
+<P>
+On most systems, the way to invoke Octave is with the shell command
+<SAMP>`octave'</SAMP>.  Octave displays an initial message and then a prompt
+indicating it is ready to accept input.  You can begin typing Octave
+commands immediately afterward.
+
+</P>
+<P>
+If you get into trouble, you can usually interrupt Octave by typing
+<KBD>Control-C</KBD> (usually written <KBD>C-c</KBD> for short).  <KBD>C-c</KBD> gets
+its name from the fact that you type it by holding down <KBD>CTRL</KBD> and
+then pressing <KBD>c</KBD>.  Doing this will normally return you to Octave's
+prompt.
+
+</P>
+<P>
+<A NAME="IDX8"></A>
+<A NAME="IDX9"></A>
+To exit Octave, type <KBD>quit</KBD>, or <KBD>exit</KBD> at the Octave prompt.
+
+</P>
+<P>
+On systems that support job control, you can suspend Octave by sending
+it a <CODE>SIGTSTP</CODE> signal, usually by typing <KBD>C-z</KBD>.
+
+</P>
+
+
+<H2><A NAME="SEC7" HREF="octave_toc.html#TOC7">Simple Examples</A></H2>
+
+<P>
+The following chapters describe all of Octave's features in detail, but
+before doing that, it might be helpful to give a sampling of some of its
+capabilities.
+
+</P>
+<P>
+If you are new to Octave, I recommend that you try these examples to
+begin learning Octave by using it.  Lines marked with <SAMP>`octave:13&#62;'</SAMP>
+are lines you type, ending each with a carriage return.  Octave will
+respond with an answer, or by displaying a graph.
+
+</P>
+
+
+<H3><A NAME="SEC8" HREF="octave_toc.html#TOC8">Creating a Matrix</A></H3>
+
+<P>
+To create a new matrix and store it in a variable so that it you can
+refer to it later, type the command
+
+</P>
+
+<PRE>
+octave:1&#62; a = [ 1, 1, 2; 3, 5, 8; 13, 21, 34 ]
+</PRE>
+
+<P>
+Octave will respond by printing the matrix in neatly aligned columns.
+Ending a command with a semicolon tells Octave to not print the result
+of a command.  For example
+
+</P>
+
+<PRE>
+octave:2&#62; b = rand (3, 2);
+</PRE>
+
+<P>
+will create a 3 row, 2 column matrix with each element set to a random
+value between zero and one.
+
+</P>
+<P>
+To display the value of any variable, simply type the name of the
+variable.  For example, to display the value stored in the matrix
+<CODE>b</CODE>, type the command
+
+</P>
+
+<PRE>
+octave:3&#62; b
+</PRE>
+
+
+
+<H3><A NAME="SEC9" HREF="octave_toc.html#TOC9">Matrix Arithmetic</A></H3>
+
+<P>
+Octave has a convenient operator notation for performing matrix
+arithmetic.  For example, to multiply the matrix <CODE>a</CODE> by a scalar
+value, type the command
+
+</P>
+
+<PRE>
+octave:4&#62; 2 * a
+</PRE>
+
+<P>
+To multiply the two matrices <CODE>a</CODE> and <CODE>b</CODE>, type the command
+
+</P>
+
+<PRE>
+octave:5&#62; a * b
+</PRE>
+
+<P>
+To form the matrix product
+type the command
+
+</P>
+
+<PRE>
+octave:6&#62; a' * a
+</PRE>
+
+
+
+<H3><A NAME="SEC10" HREF="octave_toc.html#TOC10">Solving Linear Equations</A></H3>
+
+<P>
+To solve the set of linear equations <CODE>a<VAR>x</VAR> = b</CODE>,
+use the left division operator, <SAMP>`\'</SAMP>:
+
+</P>
+
+<PRE>
+octave:7&#62; a \ b
+</PRE>
+
+<P>
+This is conceptually equivalent to
+but avoids computing the inverse of a matrix directly.
+
+</P>
+<P>
+If the coefficient matrix is singular, Octave will print a warning
+message and compute a minimum norm solution.
+
+</P>
+
+
+<H3><A NAME="SEC11" HREF="octave_toc.html#TOC11">Integrating Differential Equations</A></H3>
+
+<P>
+Octave has built-in functions for solving nonlinear differential
+equations of the form
+
+</P>
+<P>
+For Octave to integrate equations of this form, you must first provide a
+definition of the function
+This is straightforward, and may be accomplished by entering the
+function body directly on the command line.  For example, the following
+commands define the right hand side function for an interesting pair of
+nonlinear differential equations.  Note that while you are entering a
+function, Octave responds with a different prompt, to indicate that it
+is waiting for you to complete your input.
+
+</P>
+
+<PRE>
+octave:8&#62; function xdot = f (x, t) 
+&#62;
+&#62;  r = 0.25;
+&#62;  k = 1.4;
+&#62;  a = 1.5;
+&#62;  b = 0.16;
+&#62;  c = 0.9;
+&#62;  d = 0.8;
+&#62;
+&#62;  xdot(1) = r*x(1)*(1 - x(1)/k) - a*x(1)*x(2)/(1 + b*x(1));
+&#62;  xdot(2) = c*a*x(1)*x(2)/(1 + b*x(1)) - d*x(2);
+&#62;
+&#62; endfunction
+</PRE>
+
+<P>
+Given the initial condition
+
+</P>
+
+<PRE>
+x0 = [1; 2];
+</PRE>
+
+<P>
+and the set of output times as a column vector (note that the first
+output time corresponds to the initial condition given above)
+
+</P>
+
+<PRE>
+t = linspace (0, 50, 200)';
+</PRE>
+
+<P>
+it is easy to integrate the set of differential equations:
+
+</P>
+
+<PRE>
+x = lsode ("f", x0, t);
+</PRE>
+
+<P>
+The function <CODE>lsode</CODE> uses the Livermore Solver for Ordinary
+Differential Equations, described in A. C. Hindmarsh, <CITE>ODEPACK, a
+Systematized Collection of ODE Solvers</CITE>, in: Scientific Computing, R. S.
+Stepleman et al. (Eds.), North-Holland, Amsterdam, 1983, pages 55--64.
+
+</P>
+
+
+<H3><A NAME="SEC12" HREF="octave_toc.html#TOC12">Producing Graphical Output</A></H3>
+
+<P>
+To display the solution of the previous example graphically, use the
+command
+
+</P>
+
+<PRE>
+plot (t, x)
+</PRE>
+
+<P>
+If you are using the X Window System, Octave will automatically create
+a separate window to display the plot.  If you are using a terminal that
+supports some other graphics commands, you will need to tell Octave what
+kind of terminal you have.  Type the command
+
+</P>
+
+<PRE>
+gset term
+</PRE>
+
+<P>
+to see a list of the supported terminal types.  Octave uses
+<CODE>gnuplot</CODE> to display graphics, and can display graphics on any
+terminal that is supported by <CODE>gnuplot</CODE>.
+
+</P>
+<P>
+To capture the output of the plot command in a file rather than sending
+the output directly to your terminal, you can use a set of commands like
+this
+
+</P>
+
+<PRE>
+gset term postscript
+gset output "foo.ps"
+replot
+</PRE>
+
+<P>
+This will work for other types of output devices as well.  Octave's
+<CODE>gset</CODE> command is really just piped to the <CODE>gnuplot</CODE>
+subprocess, so that once you have a plot on the screen that you like,
+you should be able to do something like this to create an output file
+suitable for your graphics printer.
+
+</P>
+<P>
+Or, you can eliminate the intermediate file by using commands like this
+
+</P>
+
+<PRE>
+gset term postscript
+gset output "|lpr -Pname_of_your_graphics_printer"
+replot
+</PRE>
+
+
+
+<H3><A NAME="SEC13" HREF="octave_toc.html#TOC13">Editing What You Have Typed</A></H3>
+
+<P>
+At the Octave prompt, you can recall, edit, and reissue previous
+commands using Emacs- or vi-style editing commands.  The default
+keybindings use Emacs-style commands.  For example, to recall the
+previous command, type <KBD>Control-p</KBD> (usually written <KBD>C-p</KBD> for
+short).  <KBD>C-p</KBD> gets its name from the fact that you type it by
+holding down <KBD>CTRL</KBD> and then pressing <KBD>p</KBD>.  Doing this will
+normally bring back the previous line of input.  <KBD>C-n</KBD> will bring up
+the next line of input, <KBD>C-b</KBD> will move the cursor backward on the
+line, <KBD>C-f</KBD> will move the cursor forward on the line, etc.
+
+</P>
+<P>
+A complete description of the command line editing capability is given
+in this manual in section <A HREF="octave_3.html#SEC30">Command Line Editing</A>.
+
+</P>
+
+
+<H3><A NAME="SEC14" HREF="octave_toc.html#TOC14">Getting Help</A></H3>
+
+<P>
+Octave has an extensive help facility.  The same documentation that is
+available in printed form is also available from the Octave prompt,
+because both forms of the documentation are created from the same input
+file.
+
+</P>
+<P>
+In order to get good help you first need to know the name of the command
+that you want to use.  This name of the function may not always be
+obvious, but a good place to start is to just type <CODE>help</CODE>.
+This will show you all the operators, reserved words, functions,
+built-in variables, and function files.  You can then get more
+help on anything that is listed by simply including the name as an
+argument to help.  For example,
+
+</P>
+
+<PRE>
+help plot
+</PRE>
+
+<P>
+will display the help text for the <CODE>plot</CODE> function.
+
+</P>
+<P>
+Octave sends output that is too long to fit on one screen through a
+pager like <CODE>less</CODE> or <CODE>more</CODE>.  Type a <KBD>RET</KBD> to advance one
+line, a <KBD>SPC</KBD> to advance one page, and <KBD>q</KBD> to exit the pager.
+
+</P>
+<P>
+The part of Octave's help facility that allows you to read the complete
+text of the printed manual from within Octave normally uses a separate
+program called Info.  When you invoke Info you will be put into a menu
+driven program that contains the entire Octave manual.  Help for using
+Info is provided in this manual in section <A HREF="octave_3.html#SEC29">Commands for Getting Help</A>.
+
+</P>
+
+
+<H2><A NAME="SEC15" HREF="octave_toc.html#TOC15">Conventions</A></H2>
+
+<P>
+This section explains the notational conventions that are used in this
+manual.  You may want to skip this section and refer back to it later.
+
+</P>
+
+
+
+<H3><A NAME="SEC16" HREF="octave_toc.html#TOC16">Fonts</A></H3>
+<P>
+<A NAME="IDX10"></A>
+
+</P>
+<P>
+Examples of Octave code appear in this font or form: <CODE>svd (a)</CODE>.
+Names that represent arguments or metasyntactic variables appear
+in this font or form: <VAR>first-number</VAR>.  Commands that you type at the
+shell prompt sometimes appear in this font or form:
+<SAMP>`octave --no-init-file'</SAMP>.  Commands that you type at the Octave
+prompt sometimes appear in this font or form: <KBD>foo --bar --baz</KBD>.
+Specific keys on your keyboard appear in this font or form: <KBD>ANY</KBD>.
+<A NAME="IDX11"></A>
+
+</P>
+
+
+<H3><A NAME="SEC17" HREF="octave_toc.html#TOC17">Evaluation Notation</A></H3>
+<P>
+<A NAME="IDX12"></A>
+<A NAME="IDX13"></A>
+
+</P>
+<P>
+In the examples in this manual, results from expressions that you
+evaluate are indicated with <SAMP>`=>'</SAMP>.  For example,
+
+</P>
+
+<PRE>
+sqrt (2)
+     => 1.4142
+</PRE>
+
+<P>
+You can read this as "<CODE>sqrt (2)</CODE> evaluates to 1.4142".
+
+</P>
+<P>
+In some cases, matrix values that are returned by expressions are
+displayed like this
+
+</P>
+
+<PRE>
+[1, 2; 3, 4] == [1, 3; 2, 4]
+     => [ 1, 0; 0, 1 ]
+</PRE>
+
+<P>
+and in other cases, they are displayed like this
+
+</P>
+
+<PRE>
+eye (3)
+     =>  1  0  0
+         0  1  0
+         0  0  1
+</PRE>
+
+<P>
+in order to clearly show the structure of the result.
+
+</P>
+<P>
+Sometimes to help describe one expression, another expression is
+shown that produces identical results.  The exact equivalence of
+expressions is indicated with <SAMP>`=='</SAMP>.  For example,
+
+</P>
+
+<PRE>
+rot90 ([1, 2; 3, 4], -1)
+==
+rot90 ([1, 2; 3, 4], 3)
+==
+rot90 ([1, 2; 3, 4], 7)
+</PRE>
+
+
+
+<H3><A NAME="SEC18" HREF="octave_toc.html#TOC18">Printing Notation</A></H3>
+<P>
+<A NAME="IDX14"></A>
+
+</P>
+<P>
+Many of the examples in this manual print text when they are
+evaluated.  Examples in this manual indicate printed text with
+<SAMP>`-|'</SAMP>.  The value that is returned by evaluating the
+expression (here <CODE>1</CODE>) is displayed with <SAMP>`=>'</SAMP> and
+follows on a separate line.
+
+</P>
+
+<PRE>
+printf ("foo %s\n", "bar")
+     -| foo bar
+     => 1
+</PRE>
+
+
+
+<H3><A NAME="SEC19" HREF="octave_toc.html#TOC19">Error Messages</A></H3>
+<P>
+<A NAME="IDX15"></A>
+
+</P>
+<P>
+Some examples signal errors.  This normally displays an error message
+on your terminal.  Error messages are shown on a line starting with
+<CODE>error:</CODE>.
+
+</P>
+
+<PRE>
+struct_elements ([1, 2; 3, 4])
+error: struct_elements: wrong type argument `matrix'
+</PRE>
+
+
+
+<H3><A NAME="SEC20" HREF="octave_toc.html#TOC20">Format of Descriptions</A></H3>
+<P>
+<A NAME="IDX16"></A>
+
+</P>
+<P>
+Functions, commands, and variables are described in this manual in a 
+uniform format.  The first line of a description contains the name of
+the item followed by its arguments, if any.
+The category--function, variable, or whatever--is printed next to the
+right margin.
+The description follows on succeeding lines, sometimes with examples.
+
+</P>
+
+
+
+<H4><A NAME="SEC21" HREF="octave_toc.html#TOC21">A Sample Function Description</A></H4>
+<P>
+<A NAME="IDX17"></A>
+
+</P>
+<P>
+In a function description, the name of the function being described
+appears first.  It is followed on the same line by a list of parameters.
+The names used for the parameters are also used in the body of the
+description.
+
+</P>
+<P>
+Here is a description of an imaginary function <CODE>foo</CODE>:
+
+</P>
+<P>
+<DL>
+<DT><U>Function:</U>  <B>foo</B> <I>(<VAR>x</VAR>, <VAR>y</VAR>, ...)</I>
+<DD><A NAME="IDX18"></A>
+The function <CODE>foo</CODE> subtracts <VAR>x</VAR> from <VAR>y</VAR>, then adds the
+remaining arguments to the result.  If <VAR>y</VAR> is not supplied, then the
+number 19 is used by default.
+
+</P>
+
+<PRE>
+foo (1, [3, 5], 3, 9)
+     => [ 14, 16 ]
+foo (5)
+     => 14
+</PRE>
+
+<P>
+More generally,
+
+</P>
+
+<PRE>
+foo (<VAR>w</VAR>, <VAR>x</VAR>, <VAR>y</VAR>, ...)
+==
+<VAR>x</VAR> - <VAR>w</VAR> + <VAR>y</VAR> + ...
+</PRE>
+
+</DL>
+
+<P>
+Any parameter whose name contains the name of a type (e.g.,
+<VAR>integer</VAR>, <VAR>integer1</VAR> or <VAR>matrix</VAR>) is expected to be of that
+type.  Parameters named <VAR>object</VAR> may be of any type.  Parameters
+with other sorts of names (e.g., <VAR>new_file</VAR>) are discussed
+specifically in the description of the function.  In some sections,
+features common to parameters of several functions are described at the
+beginning.
+
+</P>
+<P>
+Functions in Octave may be defined in several different ways.  The
+catagory name for functions may include another name that indicates the
+way that the function is defined.  These additional tags include
+
+</P>
+<DL COMPACT>
+
+<DT>Built-in Function
+<DD>
+<A NAME="IDX19"></A>
+The function described is written in a language like C++, C, or Fortran,
+and is part of the compiled Octave binary.
+
+<DT>Loadable Function
+<DD>
+<A NAME="IDX20"></A>
+The function described is written in a language like C++, C, or Fortran.
+On systems that support dynamic linking of user-supplied functions, it
+may be automatically linked while Octave is running, but only if it is
+needed.  See section <A HREF="octave_12.html#SEC97">Dynamically Linked Functions</A>.
+
+<DT>Function File
+<DD>
+<A NAME="IDX21"></A>
+The function described is defined using Octave commands stored in a text
+file.  See section <A HREF="octave_12.html#SEC95">Function Files</A>.
+
+<DT>Mapping Function
+<DD>
+<A NAME="IDX22"></A>
+The function described works element-by-element for matrix and vector
+arguments.
+</DL>
+
+
+
+<H4><A NAME="SEC22" HREF="octave_toc.html#TOC22">A Sample Command Description</A></H4>
+<P>
+<A NAME="IDX23"></A>
+
+</P>
+<P>
+Command descriptions have a format similar to function descriptions,
+except that the word `Function' is replaced by `Command.  Commands are
+functions that may called without surrounding their arguments in
+parentheses.  For example, here is the description for Octave's
+<CODE>cd</CODE> command:
+
+</P>
+<P>
+<DL>
+<DT><U>Command:</U> <B>cd</B> <I>dir</I>
+<DD><A NAME="IDX24"></A>
+<DT><U>Command:</U> <B>chdir</B> <I>dir</I>
+<DD><A NAME="IDX25"></A>
+Change the current working directory to <VAR>dir</VAR>.  For example,
+<KBD>cd ~/octave</KBD> changes the current working directory to
+<TT>`~/octave'</TT>.  If the directory does not exist, an error message is
+printed and the working directory is not changed.
+</DL>
+
+</P>
+
+
+<H4><A NAME="SEC23" HREF="octave_toc.html#TOC23">A Sample Variable Description</A></H4>
+<P>
+<A NAME="IDX26"></A>
+
+</P>
+<P>
+A <STRONG>variable</STRONG> is a name that can hold a value.  Although any variable
+can be set by the user, <STRONG>built-in variables</STRONG> typically exist
+specifically so that users can change them to alter the way Octave
+behaves (built-in variables are also sometimes called <STRONG>user
+options</STRONG>).  Ordinary variables and built-in variables are described
+using a format like that for functions except that there are no
+arguments.
+
+</P>
+<P>
+Here is a description of the imaginary variable
+<CODE>do_what_i_mean_not_what_i_say</CODE>.
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>do_what_i_mean_not_what_i_say</B>
+<DD><A NAME="IDX27"></A>
+If the value of this variable is nonzero, Octave will do what you
+actually wanted, even if you have typed a completely different and
+meaningless list of commands.
+</DL>
+
+</P>
+<P>
+Other variable descriptions have the same format, but `Built-in
+Variable' is replaced by `Variable', for ordinary variables, or
+`Constant' for symbolic constants whose values cannot be changed.
+
+</P>
+<P><HR><P>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_1.html">previous</A>, <A HREF="octave_3.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+</BODY>
+</HTML>

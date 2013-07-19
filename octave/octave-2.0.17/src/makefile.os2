@@ -1,0 +1,217 @@
+# Makefile for octave's src directory
+# Modified by Klaus Gebhardt, 1994 - 1996
+
+TOPDIR = ..
+
+include $(TOPDIR)/Makeconf.os2
+
+srcdir = .
+
+DLD_SRC := balance.cc besselj.cc betainc.cc chol.cc colloc.cc dassl.cc \
+	det.cc eig.cc expm.cc fft.cc fft2.cc filter.cc find.cc fsolve.cc \
+	gammainc.cc getgrent.cc getpwent.cc getrusage.cc givens.cc \
+	hess.cc ifft.cc ifft2.cc inv.cc log.cc lpsolve.cc lsode.cc \
+	lu.cc minmax.cc pinv.cc qr.cc quad.cc qzval.cc rand.cc schur.cc \
+	sort.cc svd.cc syl.cc time.cc
+
+DLD_OBJ := $(patsubst %.cc, %.obj, $(DLD_SRC))
+
+INCLUDES := builtins.h data.h defun.h defun-dld.h \
+	defun-int.h dirfns.h dynamic-ld.h error.h file-io.h \
+	fn-cache.h gripes.h help.h input.h lex.h load-save.h \
+	mappers.h oct.h oct-fstrm.h oct-hist.h oct-iostrm.h \
+	oct-map.h oct-obj.h oct-prcstrm.h \
+	oct-stdstrm.h oct-stream.h oct-strstrm.h pager.h parse.h \
+	pathlen.h pr-output.h pt-base.h pt-cmd.h \
+	pt-const.h pt-exp-base.h pt-exp.h pt-fcn.h pt-fvc-base.h \
+	pt-fvc.h pt-mat.h pt-misc.h pt-mvr-base.h pt-mvr.h \
+	pt-plot.h pt-pr-code.h pt-walk.h sighandlers.h symtab.h \
+	syscalls.h sysdep.h systime.h syswait.h token.h toplev.h \
+	unwind-prot.h utils.h variables.h version.h xdiv.h xpow.h \
+	BaseSLList.h DLList.h Map.h Pix.h SLList.h SLStack.h Stack.h \
+	ov-re-mat.h ov-cx-mat.h ov-ch-mat.h ov-struct.h ov-scalar.h \
+	ov-range.h ov-complex.h ov-va-args.h ov-colon.h ov-base.h \
+	ov-str-mat.h ov.h ov-typeinfo.h ops.h \
+	op-cm-cm.h op-cm-cs.h op-cm-m.h op-cm-s.h op-cs-cm.h \
+	op-cs-cs.h op-cs-m.h op-cs-s.h op-m-cm.h op-m-cs.h \
+	op-m-m.h op-m-s.h op-s-cm.h op-s-cs.h op-s-m.h op-s-s.h \
+	op-str-str.h
+
+TI_SRC := Array-oc.cc Array-os.cc Array-tc.cc Map-fnc.cc Map-tc.cc \
+	SLList-expr.cc SLList-misc.cc SLList-plot.cc SLList-tc.cc \
+	SLList-tm.cc SLStack-i.cc SLStack-pc.cc SLStack-str.cc \
+	SLStack-sym.cc SLStack-tok.cc SLStack-ue.cc SLStack-ui.cc
+
+TI_OBJ := $(patsubst %.cc, %.obj, $(TI_SRC))
+
+SOURCES := BaseSLList.cc DLList.cc Map.cc SLList.cc SLStack.cc \
+	Stack.cc cutils.c data.cc defaults.cc dirfns.cc dynamic-ld.cc \
+	error.cc file-io.cc fn-cache.cc gripes.cc help.cc input.cc lex.l \
+	load-save.cc mappers.cc matherr.c oct-fstrm.cc oct-hist.cc \
+	oct-iostrm.cc oct-map.cc oct-obj.cc oct-prcstrm.cc \
+	oct-stdstrm.cc oct-stream.cc oct-strstrm.cc \
+	pager.cc parse.y pr-output.cc pt-base.cc \
+	pt-cmd.cc pt-const.cc pt-exp-base.cc pt-exp.cc pt-fcn.cc \
+	pt-fvc-base.cc pt-fvc.cc pt-mat.cc pt-misc.cc pt-mvr-base.cc \
+	pt-mvr.cc pt-plot.cc pt-pr-code.cc \
+	sighandlers.cc strcasecmp.c strncase.c strfns.cc strftime.c \
+	symtab.cc syscalls.cc sysdep.cc system.c token.cc toplev.cc \
+	unwind-prot.cc utils.cc variables.cc xdiv.cc xpow.cc \
+	ov-base.cc ov-ch-mat.cc ov-re-mat.cc ov-cx-mat.cc ov-range.cc \
+	ov-scalar.cc ov-complex.cc ov-str-mat.cc ov-struct.cc \
+	ov-va-args.cc ov-colon.cc ov.cc ov-typeinfo.cc ops.cc \
+	op-cm-cm.cc op-cm-cs.cc op-cm-m.cc op-cm-s.cc op-cs-cm.cc \
+	op-cs-cs.cc op-cs-m.cc op-cs-s.cc op-m-cm.cc op-m-cs.cc \
+	op-m-m.cc op-m-s.cc op-s-cm.cc op-s-cs.cc op-s-m.cc op-s-s.cc \
+	op-str-str.cc
+
+OBJECTS_4 := $(SOURCES)
+OBJECTS_3 := $(patsubst %.l, %.obj, $(OBJECTS_4))
+OBJECTS_2 := $(patsubst %.y, %.obj, $(OBJECTS_3))
+OBJECTS_1 := $(patsubst %.c, %.obj, $(OBJECTS_2))
+OBJECTS := $(patsubst %.cc, %.obj, $(OBJECTS_1))
+
+DEF_FILES_5 := $(SOURCES) $(OCT_SRC) $(DLD_SRC) $(TI_SRC) octave.cc
+DEF_FILES_4 := $(addprefix $(srcdir)/, $(DEF_FILES_5))
+DEF_FILES_3 := $(notdir $(shell grep -l "^DEFUN" $(DEF_FILES_4)))
+DEF_FILES_2 := $(patsubst %.y, %.df, $(DEF_FILES_3))
+DEF_FILES_1 := $(patsubst %.l, %.df, $(DEF_FILES_2))
+DEF_FILES := $(patsubst %.cc, %.df, $(DEF_FILES_1))
+
+###############################################################################
+
+all: defaults.h oct-conf.h remove-procstream ../dll/octave1.dll ../octave.exe
+.PHONY: all
+
+###############################################################################
+
+EXE_SRC   = octave.cc builtins.cc
+EXE_OBJ_1 = $(patsubst %.c, %.o, $(EXE_SRC))
+EXE_OBJ   = $(patsubst %.cc, %.o, $(EXE_OBJ_1))
+LIB_CRFT  = -L$(MSTDIR)/libcruft -lcruft1 -lcruft2 -lcruft3 -lcruft4
+LIB_OCTV  = -L$(MSTDIR)/liboctave -loctave2
+STD_LIBS  = -lreadline -lgnuinfo -lkpathsea -lmerlin -lgpp2 -lstdcpp2 -lsocket
+OCT_LIBS  = octave1.a $(LIB_CRFT) $(LIB_OCTV) $(STD_LIBS)
+LNK_FILES = $(EXE_OBJ) $(OCT_LIBS)
+
+DEP_CRFTA = $(MSTDIR)/libcruft/cruft1.a $(MSTDIR)/libcruft/cruft2.a \
+	$(MSTDIR)/libcruft/cruft3.a $(MSTDIR)/libcruft/cruft4.a
+DEP_OCTVA = $(MSTDIR)/liboctave/octave2.a
+DEP_A     = $(DEP_CRFTA) $(DEP_OCTVA)
+
+OCTAVE1   = octave1.def octave1-src.lib tinst-src.lib octdld-src.lib
+DLL_LIBS  = $(LIB_CRFT) $(LIB_OCTV) $(STD_LIBS)
+DLL_FILES = $(OCTAVE1) $(DLL_LIBS)
+
+DEP_CRFTL = $(MSTDIR)/libcruft/cruft1.lib $(MSTDIR)/libcruft/cruft2.lib \
+	$(MSTDIR)/libcruft/cruft3.lib $(MSTDIR)/libcruft/cruft4.lib
+DEP_OCTVL = $(MSTDIR)/liboctave/octave2.lib
+DEP_LIB   = $(DEP_CRFTL) $(DEP_OCTVL)
+
+###############################################################################
+# The executable: ../octave.exe
+###############################################################################
+
+$(DEF_FILES): mkdefs.cmd defun-int.h defun-dld.h defun.h # defaults.h
+
+builtins.cc: $(DEF_FILES) mkbuiltins.cmd
+	@echo making $@ from $(DEF_FILES)
+	@-mkbuiltins $(DEF_FILES) > $@
+
+octave: $(EXE_OBJ) octave.def octave1.a makefile.os2 $(DEP_A)
+	$(LD) -o $@ octave.def $(LNK_FILES) -Zcrtdll -Zstack 0x10000
+
+../octave.exe: octave
+	emxbind -bq $(EMXDIR)/bin/emxl $< $@
+	emxbind -sq $@
+
+###############################################################################
+# The dynamic link library: ../dll/octave1.dll
+###############################################################################
+
+tinst-src.lib: $(TI_OBJ)
+	@rm -f $@ 
+	emxomfar $(ARFLAGS) $@ $(TI_OBJ)
+
+octdld-src.lib: $(DLD_OBJ)
+	@rm -f $@ 
+	emxomfar $(ARFLAGS) $@ $(DLD_OBJ)
+
+octave1-src.lib: $(OBJECTS)
+	@rm -f $@ 
+	emxomfar -p32 $(ARFLAGS) $@ $(OBJECTS)
+
+octave1.def: octave1-src.lib octdld-src.lib tinst-src.lib
+	@echo "LIBRARY octave1 INITINSTANCE TERMINSTANCE" > $@
+	@echo "DESCRIPTION 'octave1.dll, (c) Klaus Gebhardt 1995-1996'" >> $@
+	@echo "" >> $@
+	@echo "DATA" >> $@
+	@echo "  MULTIPLE NONSHARED" >> $@
+	@echo "" >> $@
+	@echo "EXPORTS" >> $@
+	emxexp -o00001 -n octdld-src.lib >> $@
+	emxexp -o20001 -n octave1-src.lib >> $@
+	emxexp -o30001 -n tinst-src.lib >> $@
+
+../dll/octave1.dll: $(OCTAVE1) octave1.a octave1.lib $(DEP_LIB)
+	$(CC) -o $@ $(DLL_FILES) -Zdll -Zomf -Zcrtdll
+
+###############################################################################
+
+defaults.h: ../defaults.emx
+	cp ../defaults.emx defaults.h
+
+oct-conf.h: ../oct-conf.emx
+	cp ../oct-conf.emx oct-conf.h
+
+###############################################################################
+
+mkdefs.cmd: mkdefs
+	echo "extproc ksh .\\/$@ > $@
+	echo "shift >> $@
+	echo "#Generated by makefile.os2. Do not edit! >> $@
+	sed -e "s/#!\\/bin\\/sh//" $< >> $@
+
+mkbuiltins.cmd: mkbuiltins
+	echo extproc ksh .\\/$@ > $@
+	echo shift >> $@
+	echo #Generated by makefile.os2. Do not edit! >> $@
+	sed -e "s/#!\\/bin\\/sh//" $< >> $@
+
+###############################################################################
+
+remove-procstream:
+	rm -f procstream.* oct-procbuf.*
+
+###############################################################################
+
+clean: remove-procstream
+	rm -f *.a *.lib *.o *.obj *.df
+	rm -f lex.cc parse.cc y.tab.h builtins.cc defaults.h oct-conf.h
+	rm -f octave ../octave.exe ../dll/octave1.dll
+
+###############################################################################
+
+defaults.obj:    defaults.cc defaults.h version.h
+dynamic-ld.obj:  dynamic-ld.cc defaults.h
+fn-cache.obj:    fn-cache.cc defaults.h
+help.obj:        help.cc defaults.h
+oct-hist.obj:    oct-hist.cc defaults.h
+octave.o:    	 octave.cc defaults.h version.h
+pager.obj:       pager.cc defaults.h
+pt-fcn.obj:      pt-fcn.cc defaults.h
+toplev.obj:    	 toplev.cc defaults.h version.h oct-conf.h
+utils.obj:       utils.cc defaults.h
+variables.obj:   variables.cc defaults.h version.h
+
+help.df:       help.cc defaults.h
+oct-hist.df:   oct-hist.cc defaults.h
+pager.df:      pager.cc defaults.h
+pt-fcn.df:     pt-fcn.cc defaults.h
+toplev.df:     toplev.cc defaults.h version.h oct-conf.h
+utils.df:      utils.cc defaults.h
+variables.df:  variables.cc defaults.h version.h
+
+lex.cc:        lex.l lex.h y.tab.h
+y.tab.h:       parse.cc
+parse.cc:      parse.y parse.h

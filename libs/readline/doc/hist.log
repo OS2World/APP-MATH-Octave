@@ -1,0 +1,166 @@
+This is emTeX (tex386), Version 3.141 [3c-beta8] (preloaded format=plain 93.8.18)  31 JAN 1998 22:38
+**&plain3 \nonstopmode\input hist.tex
+(hist.tex (h:\apps\emtex\texinput\texinfo.tex
+Loading texinfo package [Version 1.6]: Basics,
+\bindingoffset=\dimen16
+\normaloffset=\dimen17
+\pagewidth=\dimen18
+\pageheight=\dimen19
+\cornerlong=\dimen20
+\cornerthick=\dimen21
+\topandbottommargin=\dimen22
+\outerhsize=\dimen23
+\outervsize=\dimen24
+\headlinebox=\box16
+\footlinebox=\box17
+\margin=\insert252
+\EMsimple=\toks12
+\singlespaceskip=\skip18
+\groupinvalidhelp=\toks13
+\mil=\dimen25
+\exdentamount=\skip19
+\inmarginspacing=\skip20
+ fonts,
+\sffam=\fam8
+\fontdepth=\count26
+ page headings,
+\titlepagetopglue=\skip21
+\titlepagebottomglue=\skip22
+\evenheadline=\toks14
+\oddheadline=\toks15
+\evenfootline=\toks16
+\oddfootline=\toks17
+ tables,
+\tableindent=\dimen26
+\itemindent=\dimen27
+\itemmargin=\dimen28
+\itemmax=\dimen29
+\itemno=\count27
+\multitableparskip=\skip23
+\multitableparindent=\skip24
+\multitablecolspace=\dimen30
+\multitablelinespace=\skip25
+\colcount=\count28
+
+indexing,
+\initialskipamount=\skip26
+\secondaryindent=\skip27
+\partialpage=\box18
+\doublecolumnhsize=\dimen31
+ sectioning,
+\chapno=\count29
+\secno=\count30
+\subsecno=\count31
+\subsubsecno=\count32
+\appendixno=\count33
+\contentsfile=\write0
+\absseclevel=\count34
+\secbase=\count35
+\chapheadingskip=\skip28
+\secheadingskip=\skip29
+\subsecheadingskip=\skip30
+ toc printing,
+\contentsrightmargin=\skip31
+\shortappendixwidth=\dimen32
+\tocindent=\dimen33
+ environments,
+\dblarrowbox=\box19
+\longdblarrowbox=\box20
+\pushcharbox=\box21
+\bullbox=\box22
+\equivbox=\box23
+\errorbox=\box24
+\lispnarrowing=\skip32
+\envskipamount=\skip33
+\circthick=\dimen34
+\cartouter=\dimen35
+\cartinner=\dimen36
+\normbskip=\skip34
+\normpskip=\skip35
+\normlskip=\skip36
+\lskip=\skip37
+\rskip=\skip38
+ defuns,
+\defbodyindent=\skip39
+\defargsindent=\skip40
+\deftypemargin=\skip41
+\deflastargmargin=\skip42
+\parencount=\count36
+ cross reference,
+\auxfile=\write1
+\footnoteno=\count37
+
+and turning on texinfo input format.
+\defaultparindent=\dimen37
+) (hist.aux)
+@cpindfile=@write2
+@fnindfile=@write3
+@vrindfile=@write4
+@tpindfile=@write5
+@kyindfile=@write6
+@pgindfile=@write7
+ [1] [2] (hsuser.tex Chapter1
+[1]) (hstech.tex Chapter2 [2]
+Overfull \hbox (37.93651pt too wide) in paragraph at lines 91--91
+ []@texttt /* A structure used to pass the current state of the history stuff a
+round. */[] |
+
+@hbox(7.60416+2.43333)x433.62
+.@glue(@leftskip) 28.90755
+.@hbox(0.0+0.0)x0.0
+.@texttt /
+.@texttt *
+.@penalty 10000
+.etc.
+
+
+Overfull \hbox (37.93651pt too wide) in paragraph at lines 94--94
+ []  @texttt int offset;                   /* The location pointer within this 
+array. */[] |
+
+@hbox(7.60416+2.43333)x433.62
+.@glue(@leftskip) 28.90755
+.@hbox(0.0+0.0)x0.0
+.@penalty 10000
+.@glue 5.74869
+.@penalty 10000
+.etc.
+
+
+Overfull \hbox (26.43913pt too wide) in paragraph at lines 95--95
+ []  @texttt int length;                   /* Number of elements within this ar
+ray. */[] |
+
+@hbox(7.60416+2.43333)x433.62
+.@glue(@leftskip) 28.90755
+.@hbox(0.0+0.0)x0.0
+.@penalty 10000
+.@glue 5.74869
+.@penalty 10000
+.etc.
+
+
+Overfull \hbox (43.6852pt too wide) in paragraph at lines 96--96
+ []  @texttt int size;                     /* Number of slots allocated to this
+ array. */[] |
+
+@hbox(7.60416+2.43333)x433.62
+.@glue(@leftskip) 28.90755
+.@hbox(0.0+0.0)x0.0
+.@penalty 10000
+.@glue 5.74869
+.@penalty 10000
+.etc.
+
+[3] [4] [5] [6] [7] [8] [9]) Appendix @char 65 [10] (hist.cps)
+Appendix @char 66 [11] [12] (hist.vrs) [13] [14] (hist.toc) [-1] [-2] ) 
+Here is how much of TeX's memory you used:
+ 1044 strings out of 58031
+ 11495 string characters out of 234198
+ 36876 words of memory out of 262143
+ 1911 multiletter control sequences out of 10000
+ 27642 words of font info for 95 fonts, out of 81920 for 254
+ 18 hyphenation exceptions out of 607
+ 15i,7n,17p,234b,425s stack positions out of 300i,100n,60p,5000b,1000s
+
+Output written on hist.dvi (18 pages, 47376 bytes).

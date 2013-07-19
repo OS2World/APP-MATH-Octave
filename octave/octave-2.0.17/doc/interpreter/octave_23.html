@@ -1,0 +1,117 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from ./octave.texi on 9 October 1998 -->
+
+<TITLE>GNU Octave - Statistics</TITLE>
+</HEAD>
+<BODY>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_22.html">previous</A>, <A HREF="octave_24.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC158" HREF="octave_toc.html#TOC158">Statistics</A></H1>
+
+<P>
+I hope that someday Octave will include more statistics functions.  If
+you would like to help improve Octave in this area, please contact
+@email{bug-octave@bevo.che.wisc.edu}.
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>mean</B> <I>(<VAR>x</VAR>)</I>
+<DD><A NAME="IDX760"></A>
+If <VAR>x</VAR> is a vector, compute the mean of the elements of <VAR>x</VAR>
+If <VAR>x</VAR> is a matrix, compute the mean for each column and return them
+in a row vector.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>median</B> <I>(<VAR>x</VAR>)</I>
+<DD><A NAME="IDX761"></A>
+If <VAR>x</VAR> is a vector, compute the median value of the elements of
+<VAR>x</VAR>.
+If <VAR>x</VAR> is a matrix, compute the median value for each
+column and return them in a row vector.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>std</B> <I>(<VAR>x</VAR>)</I>
+<DD><A NAME="IDX762"></A>
+If <VAR>x</VAR> is a vector, compute the standard deviation of the elements
+of <VAR>x</VAR>.
+If <VAR>x</VAR> is a matrix, compute the standard deviation for
+each column and return them in a row vector.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>cov</B> <I>(<VAR>x</VAR>, <VAR>y</VAR>)</I>
+<DD><A NAME="IDX763"></A>
+If each row of <VAR>x</VAR> and <VAR>y</VAR> is an observation and each column is
+a variable, the (<VAR>i</VAR>,<VAR>j</VAR>)-th entry of
+<CODE>cov (<VAR>x</VAR>, <VAR>y</VAR>)</CODE> is the covariance between the <VAR>i</VAR>-th
+variable in <VAR>x</VAR> and the <VAR>j</VAR>-th variable in <VAR>y</VAR>.  If called
+with one argument, compute <CODE>cov (<VAR>x</VAR>, <VAR>x</VAR>)</CODE>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>corrcoef</B> <I>(<VAR>x</VAR>, <VAR>y</VAR>)</I>
+<DD><A NAME="IDX764"></A>
+If each row of <VAR>x</VAR> and <VAR>y</VAR> is an observation and each column is
+a variable, the (<VAR>i</VAR>,<VAR>j</VAR>)-th entry of
+<CODE>corrcoef (<VAR>x</VAR>, <VAR>y</VAR>)</CODE> is the correlation between the
+<VAR>i</VAR>-th variable in <VAR>x</VAR> and the <VAR>j</VAR>-th variable in <VAR>y</VAR>.
+If called with one argument, compute <CODE>corrcoef (<VAR>x</VAR>, <VAR>x</VAR>)</CODE>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>kurtosis</B> <I>(<VAR>x</VAR>)</I>
+<DD><A NAME="IDX765"></A>
+If <VAR>x</VAR> is a vector of length <VAR>N</VAR>, return the kurtosis
+
+</P>
+<P>
+of <VAR>x</VAR>.  If <VAR>x</VAR> is a matrix, return the row vector containing
+the kurtosis of each column.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>mahalanobis</B> <I>(<VAR>x</VAR>, <VAR>y</VAR>)</I>
+<DD><A NAME="IDX766"></A>
+Return the Mahalanobis' D-square distance between the multivariate
+samples <VAR>x</VAR> and <VAR>y</VAR>, which must have the same number of
+components (columns), but may have a different number of observations
+(rows).
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function File:</U>  <B>skewness</B> <I>(<VAR>x</VAR>)</I>
+<DD><A NAME="IDX767"></A>
+If <VAR>x</VAR> is a vector of length <VAR>N</VAR>, return the skewness
+
+</P>
+<P>
+of <VAR>x</VAR>.  If <VAR>x</VAR> is a matrix, return the row vector containing
+the skewness of each column.
+</DL>
+
+</P>
+<P><HR><P>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_22.html">previous</A>, <A HREF="octave_24.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+</BODY>
+</HTML>

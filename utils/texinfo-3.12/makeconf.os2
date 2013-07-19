@@ -1,0 +1,47 @@
+include $(_PRJ_SRC_DIR)\\C\\emx-0.9c\\src\\.make\\makeconf
+
+MSTDIR  = $(SRCDIR)/utils/texinfo-$(TEXIVER)
+ORIGDIR = $(ORGDIR)/utils/texinfo-$(TEXIVER)
+
+CC = gcc
+
+OFLAGS = $(MC_OFLAGS) -DHAVE_CONFIG_H
+
+LDFLAGS = $(MC_LFLAGS) -L../lib
+ZFLAGS = -Zomf -Zcrtdll
+
+IFLAGS = -I. -I.. -I../lib
+CFLAGS = $(OFLAGS) -mprobe -DEMX09C $(IFLAGS)
+EFLAGS = $(OFLAGS) -DEMX09C $(IFLAGS)
+
+%.obj : %.c
+	$(CC) $(CFLAGS) -c $< -o $@ -Zomf
+
+%.o : %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+
+%.a : %.o
+	rm -f $@
+	ar -r $@ $(OBJECTS)
+	$(RANLIB) $@
+
+%.lib : %.obj
+	rm -f $@
+	emxomfar -p128 r $@ $(OBJECTS)
+
+%.res : %.rc
+	rc -r $<
+
+%.lib : %.def
+	emximp -o $(patsubst %.def,%.imp,$<) $<
+	emximp -o $@ $(patsubst %.def,%.imp,$<)
+	@rm -f $(patsubst %.def,%.imp,$<)
+
+%.a   : %.def
+	emximp -o $(patsubst %.def,%.imp,$<) $<
+	emximp -o $@ $(patsubst %.def,%.imp,$<)
+	@rm -f $(patsubst %.def,%.imp,$<)
+
+%.lib : %.a
+	emxomf -s -l $<

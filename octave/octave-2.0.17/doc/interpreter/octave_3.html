@@ -1,0 +1,1507 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from ./octave.texi on 9 October 1998 -->
+
+<TITLE>GNU Octave - Getting Started</TITLE>
+</HEAD>
+<BODY>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_2.html">previous</A>, <A HREF="octave_4.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC24" HREF="octave_toc.html#TOC24">Getting Started</A></H1>
+
+<P>
+This chapter explains some of Octave's basic features, including how to
+start an Octave session, get help at the command prompt, edit the
+command line, and write Octave programs that can be executed as commands
+from your shell.
+
+</P>
+
+
+
+<H2><A NAME="SEC25" HREF="octave_toc.html#TOC25">Invoking Octave</A></H2>
+
+<P>
+Normally, Octave is used interactively by running the program
+<SAMP>`octave'</SAMP> without any arguments.  Once started, Octave reads
+commands from the terminal until you tell it to exit.
+
+</P>
+<P>
+You can also specify the name of a file on the command line, and Octave
+will read and execute the commands from the named file and then exit
+when it is finished.
+
+</P>
+<P>
+You can further control how Octave starts by using the command-line
+options described in the next section, and Octave itself can remind you
+of the options available.  Type <SAMP>`octave --help'</SAMP> to display all
+available options and briefly describe their use (<SAMP>`octave -h'</SAMP> is a
+shorter equivalent).
+
+</P>
+
+
+
+<H3><A NAME="SEC26" HREF="octave_toc.html#TOC26">Command Line Options</A></H3>
+<P>
+<A NAME="IDX28"></A>
+<A NAME="IDX29"></A>
+<A NAME="IDX30"></A>
+
+</P>
+<P>
+Here is a complete list of all the command line options that Octave
+accepts.
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>--debug</CODE>
+<DD>
+<DT><CODE>-d</CODE>
+<DD>
+<A NAME="IDX31"></A>
+<A NAME="IDX32"></A>
+Enter parser debugging mode.  Using this option will cause Octave's
+parser to print a lot of information about the commands it reads, and is
+probably only useful if you are actually trying to debug the parser.
+
+<DT><CODE>--echo-commands</CODE>
+<DD>
+<DT><CODE>-x</CODE>
+<DD>
+<A NAME="IDX33"></A>
+<A NAME="IDX34"></A>
+Echo commands as they are executed.
+
+<DT><CODE>--exec-path <VAR>path</VAR></CODE>
+<DD>
+<A NAME="IDX35"></A>
+Specify the path to search for programs to run.  The value of <VAR>path</VAR>
+specified on the command line will override any value of
+<CODE>OCTAVE_EXEC_PATH</CODE> found in the environment, but not any commands
+in the system or user startup files that set the built-in variable
+<CODE>EXEC_PATH</CODE>.
+
+<DT><CODE>--help</CODE>
+<DD>
+<DT><CODE>-h</CODE>
+<DD>
+<DT><CODE>-?</CODE>
+<DD>
+<A NAME="IDX36"></A>
+<A NAME="IDX37"></A>
+<A NAME="IDX38"></A>
+Print short help message and exit.
+
+<DT><CODE>--info-file <VAR>filename</VAR></CODE>
+<DD>
+<A NAME="IDX39"></A>
+Specify the name of the info file to use.  The value of <VAR>filename</VAR>
+specified on the command line will override any value of
+<CODE>OCTAVE_INFO_FILE</CODE> found in the environment, but not any commands
+in the system or user startup files that set the built-in variable
+<CODE>INFO_FILE</CODE>.
+
+<DT><CODE>--info-program <VAR>program</VAR></CODE>
+<DD>
+<A NAME="IDX40"></A>
+Specify the name of the info program to use.  The value of <VAR>program</VAR>
+specified on the command line will override any value of
+<CODE>OCTAVE_INFO_PROGRAM</CODE> found in the environment, but not any
+commands in the system or user startup files that set the built-in
+variable <CODE>INFO_PROGRAM</CODE>.
+
+<DT><CODE>--interactive</CODE>
+<DD>
+<DT><CODE>-i</CODE>
+<DD>
+<A NAME="IDX41"></A>
+<A NAME="IDX42"></A>
+Force interactive behavior.  This can be useful for running Octave via a
+remote shell command or inside an Emacs shell buffer.  For another way
+to run Octave within Emacs, see section <A HREF="octave_34.html#SEC195">Emacs Octave Support</A>.
+
+<DT><CODE>--no-init-file</CODE>
+<DD>
+<A NAME="IDX43"></A>
+Don't read the <TT>`~/.octaverc'</TT> or <TT>`.octaverc'</TT> files.
+
+<DT><CODE>--no-line-editing</CODE>
+<DD>
+<A NAME="IDX44"></A>
+Disable command-line editing.
+
+<DT><CODE>--no-site-file</CODE>
+<DD>
+<A NAME="IDX45"></A>
+Don't read the site-wide <TT>`octaverc'</TT> file.
+
+<DT><CODE>--norc</CODE>
+<DD>
+<DT><CODE>-f</CODE>
+<DD>
+<A NAME="IDX46"></A>
+<A NAME="IDX47"></A>
+Don't read any of the system or user initialization files at startup.
+This is equivalent to using both of the options <CODE>--no-init-file</CODE>
+and <CODE>--no-site-file</CODE>.
+
+<DT><CODE>--path <VAR>path</VAR></CODE>
+<DD>
+<DT><CODE>-p <VAR>path</VAR></CODE>
+<DD>
+<A NAME="IDX48"></A>
+<A NAME="IDX49"></A>
+Specify the path to search for function files.  The value of <VAR>path</VAR>
+specified on the command line will override any value of
+<CODE>OCTAVE_PATH</CODE> found in the environment, but not any commands in the
+system or user startup files that set the built-in variable <CODE>LOADPATH</CODE>.
+
+<DT><CODE>--silent</CODE>
+<DD>
+<DT><CODE>--quiet</CODE>
+<DD>
+<DT><CODE>-q</CODE>
+<DD>
+<A NAME="IDX50"></A>
+<A NAME="IDX51"></A>
+<A NAME="IDX52"></A>
+Don't print the usual greeting and version message at startup.
+
+<DT><CODE>--traditional</CODE>
+<DD>
+<DT><CODE>--braindead</CODE>
+<DD>
+<A NAME="IDX53"></A>
+<A NAME="IDX54"></A>
+Set initial values for user-preference variables to the following
+values for compatibility with MATLAB.
+
+
+<PRE>
+PS1                           = "&#62;&#62; "
+PS2                           = ""
+beep_on_error                 = 1
+default_save_format           = "mat-binary"
+define_all_return_values      = 1
+do_fortran_indexing           = 1
+empty_list_elements_ok        = 1
+implicit_str_to_num_ok        = 1
+ok_to_lose_imaginary_part     = 1
+page_screen_output            = 0
+prefer_column_vectors         = 0
+print_empty_dimensions        = 0
+treat_neg_dim_as_zero         = 1
+warn_function_name_clash      = 0
+whitespace_in_literal_matrix  = "traditional"
+</PRE>
+
+<DT><CODE>--verbose</CODE>
+<DD>
+<DT><CODE>-V</CODE>
+<DD>
+<A NAME="IDX55"></A>
+<A NAME="IDX56"></A>
+Turn on verbose output.
+
+<DT><CODE>--version</CODE>
+<DD>
+<DT><CODE>-v</CODE>
+<DD>
+<A NAME="IDX57"></A>
+<A NAME="IDX58"></A>
+Print the program version number and exit.
+
+<DT><CODE><VAR>file</VAR></CODE>
+<DD>
+Execute commands from <VAR>file</VAR>.
+</DL>
+
+<P>
+Octave also includes several built-in variables that contain information
+about the command line, including the number of arguments and all of the
+options.
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>argv</B>
+<DD><A NAME="IDX59"></A>
+The command line arguments passed to Octave are available in this
+variable.  For example, if you invoked Octave using the command
+
+</P>
+
+<PRE>
+octave --no-line-editing --silent
+</PRE>
+
+<P>
+<CODE>argv</CODE> would be a string vector with the elements
+<CODE>--no-line-editing</CODE> and <CODE>--silent</CODE>.
+
+</P>
+<P>
+If you write an executable Octave script, <CODE>argv</CODE> will contain the
+list of arguments passed to the script.  see section <A HREF="octave_3.html#SEC39">Executable Octave Programs</A>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>program_invocation_name</B>
+<DD><A NAME="IDX60"></A>
+<DT><U>Built-in Variable:</U> <B>program_name</B>
+<DD><A NAME="IDX61"></A>
+When Octave starts, the value of the built-in variable
+<CODE>program_invocation_name</CODE> is automatically set to the name that was
+typed at the shell prompt to run Octave, and the value of
+<CODE>program_name</CODE> is automatically set to the final component of
+<CODE>program_invocation_name</CODE>.  For example, if you typed
+<SAMP>`/usr/local/bin/octave'</SAMP> to start Octave,
+<CODE>program_invocation_name</CODE> would have the value
+<CODE>"/usr/local/bin/octave"</CODE>, and <CODE>program_name</CODE> would
+have the value <CODE>"octave"</CODE>.
+
+</P>
+<P>
+If executing a script from the command line (e.g., <CODE>octave foo.m</CODE>
+or using an executable Octave script, the program name is set to the
+name of the script.  See section <A HREF="octave_3.html#SEC39">Executable Octave Programs</A> for an example of
+how to create an executable Octave script.
+</DL>
+
+</P>
+<P>
+Here is an example of using these variables to reproduce Octave's
+command line.
+
+</P>
+
+<PRE>
+printf ("%s", program_name);
+for i = 1:nargin
+  printf (" %s", argv(i,:));
+endfor
+printf ("\n");
+</PRE>
+
+<P>
+See section <A HREF="octave_9.html#SEC65">Index Expressions</A> for an explanation of how to properly index
+arrays of strings and substrings in Octave, and See section <A HREF="octave_12.html#SEC90">Defining Functions</A> 
+for information about the variable <CODE>nargin</CODE>.
+
+</P>
+
+
+<H3><A NAME="SEC27" HREF="octave_toc.html#TOC27">Startup Files</A></H3>
+<P>
+<A NAME="IDX62"></A>
+<A NAME="IDX63"></A>
+
+</P>
+<P>
+When Octave starts, it looks for commands to execute from the following
+files:
+
+</P>
+<P>
+<A NAME="IDX64"></A>
+
+</P>
+<DL COMPACT>
+
+<DT><CODE><VAR>octave-home</VAR>/share/octave/site/m/startup/octaverc</CODE>
+<DD>
+Where <VAR>octave-home</VAR> is the directory in which all of Octave is
+installed (the default is <TT>`/usr/local'</TT>).  This file is
+provided so that changes to the default Octave environment can be made
+globally for all users at your site for all versions of Octave you have
+installed.  Some care should be taken when making changes to this file,
+since all users of Octave at your site will be affected.
+
+<DT><CODE><VAR>octave-home</VAR>/share/octave/<VAR>version</VAR>/m/startup/octaverc</CODE>
+<DD>
+Where <VAR>octave-home</VAR> is the directory in which all of Octave is
+installed (the default is <TT>`/usr/local'</TT>), and <VAR>version</VAR>
+is the version number of Octave.  This file is provided so that changes
+to the default Octave environment can be made globally for all users for
+a particular version of Octave.  Some care should be taken when making
+changes to this file, since all users of Octave at your site will be
+affected.
+
+<DT><CODE>~/.octaverc</CODE>
+<DD>
+<A NAME="IDX65"></A>
+This file is normally used to make personal changes to the default
+Octave environment.
+
+<DT><CODE>.octaverc</CODE>
+<DD>
+<A NAME="IDX66"></A>
+This file can be used to make changes to the default Octave environment
+for a particular project.  Octave searches for this file in the current
+directory after it reads <TT>`~/.octaverc'</TT>.  Any use of the <CODE>cd</CODE>
+command in the <TT>`~/.octaverc'</TT> file will affect the directory that
+Octave searches for the file <TT>`.octaverc'</TT>.
+
+If you start Octave in your home directory, commands from from the file
+<TT>`~/.octaverc'</TT> will only be executed once.
+</DL>
+
+<P>
+A message will be displayed as each of the startup files is read if you
+invoke Octave with the <CODE>--verbose</CODE> option but without the
+<CODE>--silent</CODE> option.
+
+</P>
+<P>
+Startup files may contain any valid Octave commands, including function
+definitions.
+
+</P>
+
+
+<H2><A NAME="SEC28" HREF="octave_toc.html#TOC28">Quitting Octave</A></H2>
+<P>
+<A NAME="IDX67"></A>
+<A NAME="IDX68"></A>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>exit</B> <I>(<VAR>status</VAR>)</I>
+<DD><A NAME="IDX69"></A>
+<DT><U>Built-in Function:</U>  <B>quit</B> <I>(<VAR>status</VAR>)</I>
+<DD><A NAME="IDX70"></A>
+Exit the current Octave session.  If the optional integer value
+<VAR>status</VAR> is supplied, pass that value to the operating system as the
+Octave's exit status.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>atexit</B> <I>(<VAR>fcn</VAR>)</I>
+<DD><A NAME="IDX71"></A>
+Register function to be called when Octave exits.  For example,
+
+</P>
+
+<PRE>
+function print_flops_at_exit ()
+  printf ("\n%s\n", system ("fortune"));
+  fflush (stdout);
+endfunction
+atexit ("print_flops_at_exit");
+</PRE>
+
+<P>
+will print a message when Octave exits.
+</DL>
+
+</P>
+
+
+<H2><A NAME="SEC29" HREF="octave_toc.html#TOC29">Commands for Getting Help</A></H2>
+<P>
+<A NAME="IDX72"></A>
+<A NAME="IDX73"></A>
+
+</P>
+<P>
+The entire text of this manual is available from the Octave prompt
+via the command <KBD>help -i</KBD>.  In addition, the documentation for
+individual user-written functions and variables is also available via
+the <KBD>help</KBD> command.  This section describes the commands used for
+reading the manual and the documentation strings for user-supplied
+functions and variables.  See section <A HREF="octave_12.html#SEC95">Function Files</A>, for more information
+about how to document the functions you write.
+
+</P>
+<P>
+<DL>
+<DT><U>Command:</U> <B>help</B>
+<DD><A NAME="IDX74"></A>
+Octave's <CODE>help</CODE> command can be used to print brief usage-style
+messages, or to display information directly from an on-line version of
+the printed manual, using the GNU Info browser.  If invoked without any
+arguments, <CODE>help</CODE> prints a list of all the available operators,
+functions, and built-in variables.  If the first argument is <CODE>-i</CODE>,
+the <CODE>help</CODE> command searches the index of the on-line version of
+this manual for the given topics.
+
+</P>
+<P>
+For example, the command <KBD>help help</KBD> prints a short message
+describing the <CODE>help</CODE> command, and <KBD>help -i help</KBD> starts the
+GNU Info browser at this node in the on-line version of the manual.
+
+</P>
+<P>
+Once the GNU Info browser is running, help for using it is available
+using the command <KBD>C-h</KBD>.
+</DL>
+
+</P>
+<P>
+The help command can give you information about operators, but not the
+comma and semicolons that are used as command separators.  To get help
+for those, you must type <KBD>help comma</KBD> or <KBD>help semicolon</KBD>.
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>INFO_FILE</B>
+<DD><A NAME="IDX75"></A>
+The variable <CODE>INFO_FILE</CODE> names the location of the Octave info file.
+The default value is <CODE>"<VAR>octave-home</VAR>/info/octave.info"</CODE>, where
+<VAR>octave-home</VAR> is the directory where all of Octave is installed.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>INFO_PROGRAM</B>
+<DD><A NAME="IDX76"></A>
+The variable <CODE>INFO_PROGRAM</CODE> names the info program to run.  Its
+initial value is
+<CODE>"<VAR>octave-home</VAR>/libexec/octave/<VAR>version</VAR>/exec/<VAR>arch</VAR>/info"</CODE>,
+where <VAR>octave-home</VAR> is the directory where all of Octave is
+installed, <VAR>version</VAR> is the Octave version number, and <VAR>arch</VAR> is
+the machine type.  The value of <CODE>INFO_PROGRAM</CODE> can be overridden by
+the environment variable <CODE>OCTAVE_INFO_PROGRAM</CODE>, or the command line
+argument <CODE>--info-program NAME</CODE>, or by setting the value of the
+built-in variable <CODE>INFO_PROGRAM</CODE> in a startup script.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>suppress_verbose_help_message</B>
+<DD><A NAME="IDX77"></A>
+If the value of <CODE>suppress_verbose_help_message</CODE> is nonzero, Octave
+will not add additional help information to the end of the output from
+the <CODE>help</CODE> command and usage messages for built-in commands.
+</DL>
+
+</P>
+
+
+<H2><A NAME="SEC30" HREF="octave_toc.html#TOC30">Command Line Editing</A></H2>
+<P>
+<A NAME="IDX78"></A>
+<A NAME="IDX79"></A>
+
+</P>
+<P>
+Octave uses the GNU readline library to provide an extensive set of
+command-line editing and history features.  Only the most common
+features are described in this manual.  Please see The GNU Readline
+Library manual for more information.
+
+</P>
+<P>
+To insert printing characters (letters, digits, symbols, etc.), simply
+type the character.  Octave will insert the character at the cursor and
+advance the cursor forward.
+
+</P>
+<P>
+Many of the command-line editing functions operate using control
+characters.  For example, the character <KBD>Control-a</KBD> moves the cursor
+to the beginning of the line.  To type <KBD>C-a</KBD>, hold down <KBD>CTRL</KBD>
+and then press <KBD>a</KBD>.  In the following sections, control characters
+such as <KBD>Control-a</KBD> are written as <KBD>C-a</KBD>.
+
+</P>
+<P>
+Another set of command-line editing functions use Meta characters.  On
+some terminals, you type <KBD>M-u</KBD> by holding down <KBD>META</KBD> and
+pressing <KBD>u</KBD>.  If your terminal does not have a <KBD>META</KBD> key, you
+can still type Meta charcters using two-character sequences starting
+with <KBD>ESC</KBD>.  Thus, to enter <KBD>M-u</KBD>, you could type
+<KBD>ESC</KBD><KBD>u</KBD>.  The <KBD>ESC</KBD> character sequences are also allowed on
+terminals with real Meta keys.  In the following sections, Meta
+characters such as <KBD>Meta-u</KBD> are written as <KBD>M-u</KBD>.
+
+</P>
+
+
+
+<H3><A NAME="SEC31" HREF="octave_toc.html#TOC31">Cursor Motion</A></H3>
+
+<P>
+The following commands allow you to position the cursor.
+
+</P>
+<DL COMPACT>
+
+<DT><KBD>C-b</KBD>
+<DD>
+Move back one character.
+
+<DT><KBD>C-f</KBD>
+<DD>
+Move forward one character.
+
+<DT><KBD><KBD>DEL</KBD></KBD>
+<DD>
+Delete the character to the left of the cursor.
+
+<DT><KBD>C-d</KBD>
+<DD>
+Delete the character underneath the cursor.
+
+<DT><KBD>M-f</KBD>
+<DD>
+Move forward a word.
+
+<DT><KBD>M-b</KBD>
+<DD>
+Move backward a word.
+
+<DT><KBD>C-a</KBD>
+<DD>
+Move to the start of the line.
+
+<DT><KBD>C-e</KBD>
+<DD>
+Move to the end of the line.
+
+<DT><KBD>C-l</KBD>
+<DD>
+Clear the screen, reprinting the current line at the top.
+
+<DT><KBD>C-_</KBD>
+<DD>
+<DT><KBD>C-/</KBD>
+<DD>
+Undo the last thing that you did.  You can undo all the way back to an
+empty line.
+
+<DT><KBD>M-r</KBD>
+<DD>
+Undo all changes made to this line.  This is like typing the `undo'
+command enough times to get back to the beginning.
+</DL>
+
+<P>
+The above table describes the most basic possible keystrokes that you need
+in order to do editing of the input line.  On most terminals, you can
+also use the arrow keys in place of <KBD>C-f</KBD> and <KBD>C-b</KBD> to move
+forward and backward.
+
+</P>
+<P>
+Notice how <KBD>C-f</KBD> moves forward a character, while <KBD>M-f</KBD> moves
+forward a word.  It is a loose convention that control keystrokes
+operate on characters while meta keystrokes operate on words.
+
+</P>
+<P>
+There is also a function available so that you can clear the screen from
+within Octave programs.
+
+</P>
+<P>
+<A NAME="IDX80"></A>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>clc</B> <I>()</I>
+<DD><A NAME="IDX81"></A>
+<DT><U>Built-in Function:</U>  <B>home</B> <I>()</I>
+<DD><A NAME="IDX82"></A>
+Clear the terminal screen and move the cursor to the upper left corner.
+</DL>
+
+</P>
+
+
+<H3><A NAME="SEC32" HREF="octave_toc.html#TOC32">Killing and Yanking</A></H3>
+
+<P>
+<STRONG>Killing</STRONG> text means to delete the text from the line, but to save
+it away for later use, usually by <STRONG>yanking</STRONG> it back into the line.
+If the description for a command says that it `kills' text, then you can
+be sure that you can get the text back in a different (or the same)
+place later.
+
+</P>
+<P>
+Here is the list of commands for killing text.
+
+</P>
+<DL COMPACT>
+
+<DT><KBD>C-k</KBD>
+<DD>
+Kill the text from the current cursor position to the end of the line.
+
+<DT><KBD>M-d</KBD>
+<DD>
+Kill from the cursor to the end of the current word, or if between
+words, to the end of the next word.
+
+<DT><KBD>M-<KBD>DEL</KBD></KBD>
+<DD>
+Kill from the cursor to the start of the previous word, or if between
+words, to the start of the previous word. 
+
+<DT><KBD>C-w</KBD>
+<DD>
+Kill from the cursor to the previous whitespace.  This is different than
+<KBD>M-<KBD>DEL</KBD></KBD> because the word boundaries differ.
+</DL>
+
+<P>
+And, here is how to <STRONG>yank</STRONG> the text back into the line.  Yanking
+means to copy the most-recently-killed text from the kill buffer.
+
+</P>
+<DL COMPACT>
+
+<DT><KBD>C-y</KBD>
+<DD>
+Yank the most recently killed text back into the buffer at the cursor.
+
+<DT><KBD>M-y</KBD>
+<DD>
+Rotate the kill-ring, and yank the new top.  You can only do this if
+the prior command is <KBD>C-y</KBD> or <KBD>M-y</KBD>.
+</DL>
+
+<P>
+When you use a kill command, the text is saved in a <STRONG>kill-ring</STRONG>.
+Any number of consecutive kills save all of the killed text together, so
+that when you yank it back, you get it in one clean sweep.  The kill
+ring is not line specific; the text that you killed on a previously
+typed line is available to be yanked back later, when you are typing
+another line.
+
+</P>
+
+
+<H3><A NAME="SEC33" HREF="octave_toc.html#TOC33">Commands For Changing Text</A></H3>
+
+<P>
+The following commands can be used for entering characters that would
+otherwise have a special meaning (e.g., <KBD>TAB</KBD>, <KBD>C-q</KBD>, etc.), or
+for quickly correcting typing mistakes.
+
+</P>
+<DL COMPACT>
+
+<DT><KBD>C-q</KBD>
+<DD>
+<DT><KBD>C-v</KBD>
+<DD>
+Add the next character that you type to the line verbatim.  This is
+how to insert things like <KBD>C-q</KBD> for example.
+
+<DT><KBD>M-<KBD>TAB</KBD></KBD>
+<DD>
+Insert a tab character.
+
+<DT><KBD>C-t</KBD>
+<DD>
+Drag the character before the cursor forward over the character at the
+cursor, also moving the cursor forward.  If the cursor is at the end of
+the line, then transpose the two characters before it.
+
+<DT><KBD>M-t</KBD>
+<DD>
+Drag the word behind the cursor past the word in front of the cursor
+moving the cursor over that word as well.
+
+<DT><KBD>M-u</KBD>
+<DD>
+Uppercase the characters following the cursor to the end of the current
+(or following) word, moving the cursor to the end of the word.
+
+<DT><KBD>M-l</KBD>
+<DD>
+Lowecase the characters following the cursor to the end of the current
+(or following) word, moving the cursor to the end of the word.
+
+<DT><KBD>M-c</KBD>
+<DD>
+Uppercase the character following the cursor (or the beginning of the
+next word if the cursor is between words), moving the cursor to the end
+of the word.
+</DL>
+
+
+
+<H3><A NAME="SEC34" HREF="octave_toc.html#TOC34">Letting Readline Type For You</A></H3>
+<P>
+<A NAME="IDX83"></A>
+
+</P>
+<P>
+The following commands allow Octave to complete command and variable
+names for you.
+
+</P>
+<DL COMPACT>
+
+<DT><KBD><KBD>TAB</KBD></KBD>
+<DD>
+Attempt to do completion on the text before the cursor.  Octave can
+complete the names of commands and variables.
+
+<DT><KBD>M-?</KBD>
+<DD>
+List the possible completions of the text before the cursor.
+</DL>
+
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>completion_append_char</B>
+<DD><A NAME="IDX84"></A>
+The value of <CODE>completion_append_char</CODE> is used as the character to
+append to successful command-line completion attempts.  The default
+value is <CODE>" "</CODE> (a single space).
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Function:</U>  <B>completion_matches</B> <I>(<VAR>hint</VAR>)</I>
+<DD><A NAME="IDX85"></A>
+Generate possible completions given <VAR>hint</VAR>.
+
+</P>
+<P>
+This function is provided for the benefit of programs like Emacs which
+might be controlling Octave and handling user input.  The current
+command number is not incremented when this function is called.  This is
+a feature, not a bug.
+</DL>
+
+</P>
+
+
+<H3><A NAME="SEC35" HREF="octave_toc.html#TOC35">Commands For Manipulating The History</A></H3>
+<P>
+<A NAME="IDX86"></A>
+<A NAME="IDX87"></A>
+<A NAME="IDX88"></A>
+
+</P>
+<P>
+Octave normally keeps track of the commands you type so that you can
+recall previous commands to edit or execute them again.  When you exit
+Octave, the most recent commands you have typed, up to the number
+specified by the variable <CODE>history_size</CODE>, are saved in a file.
+When Octave starts, it loads an initial list of commands from the file
+named by the variable <CODE>history_file</CODE>.
+
+</P>
+<P>
+Here are the commands for simple browsing and searching the history
+list.
+
+</P>
+<DL COMPACT>
+
+<DT><KBD><KBD>LFD</KBD></KBD>
+<DD>
+<DT><KBD><KBD>RET</KBD></KBD>
+<DD>
+Accept the line regardless of where the cursor is.  If this line is
+non-empty, add it to the history list.  If this line was a history
+line, then restore the history line to its original state.
+
+<DT><KBD>C-p</KBD>
+<DD>
+Move `up' through the history list.
+
+<DT><KBD>C-n</KBD>
+<DD>
+Move `down' through the history list.
+
+<DT><KBD>M-&#60;</KBD>
+<DD>
+Move to the first line in the history.
+
+<DT><KBD>M-&#62;</KBD>
+<DD>
+Move to the end of the input history, i.e., the line you are entering!
+
+<DT><KBD>C-r</KBD>
+<DD>
+Search backward starting at the current line and moving `up' through
+the history as necessary.  This is an incremental search.
+
+<DT><KBD>C-s</KBD>
+<DD>
+Search forward starting at the current line and moving `down' through
+the history as necessary.
+</DL>
+
+<P>
+On most terminals, you can also use the arrow keys in place of <KBD>C-p</KBD>
+and <KBD>C-n</KBD> to move through the history list.
+
+</P>
+<P>
+In addition to the keyboard commands for moving through the history
+list, Octave provides three functions for viewing, editing, and
+re-running chunks of commands from the history list.
+
+</P>
+<P>
+<DL>
+<DT><U>Command:</U> <B>history</B> <I>options</I>
+<DD><A NAME="IDX89"></A>
+If invoked with no arguments, <CODE>history</CODE> displays a list of commands
+that you have executed.  Valid options are:
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>-w <VAR>file</VAR></CODE>
+<DD>
+Write the current history to the file <VAR>file</VAR>.  If the name is
+omitted, use the default history file (normally <TT>`~/.octave_hist'</TT>).
+
+<DT><CODE>-r <VAR>file</VAR></CODE>
+<DD>
+Read the file <VAR>file</VAR>, replacing the current history list with its
+contents.  If the name is omitted, use the default history file
+(normally <TT>`~/.octave_hist'</TT>).
+
+<DT><CODE><VAR>N</VAR></CODE>
+<DD>
+Only display the most recent <VAR>N</VAR> lines of history.
+
+<DT><CODE>-q</CODE>
+<DD>
+Don't number the displayed lines of history.  This is useful for cutting
+and pasting commands if you are using the X Window System.
+</DL>
+
+<P>
+For example, to display the five most recent commands that you have
+typed without displaying line numbers, use the command
+<KBD>history -q 5</KBD>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Command:</U> <B>edit_history</B> <I>options</I>
+<DD><A NAME="IDX90"></A>
+If invoked with no arguments, <CODE>edit_history</CODE> allows you to edit the
+history list using the editor named by the variable <CODE>EDITOR</CODE>.  The
+commands to be edited are first copied to a temporary file.  When you
+exit the editor, Octave executes the commands that remain in the file.
+It is often more convenient to use <CODE>edit_history</CODE> to define functions 
+rather than attempting to enter them directly on the command line.
+By default, the block of commands is executed as soon as you exit the
+editor.  To avoid executing any commands, simply delete all the lines
+from the buffer before exiting the editor.
+
+</P>
+<P>
+The <CODE>edit_history</CODE> command takes two optional arguments specifying
+the history numbers of first and last commands to edit.  For example,
+the command
+
+</P>
+
+<PRE>
+edit_history 13
+</PRE>
+
+<P>
+extracts all the commands from the 13th through the last in the history
+list.  The command
+
+</P>
+
+<PRE>
+edit_history 13 169
+</PRE>
+
+<P>
+only extracts commands 13 through 169.  Specifying a larger number for
+the first command than the last command reverses the list of commands
+before placing them in the buffer to be edited.  If both arguments are
+omitted, the previous command in the history list is used.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Command:</U> <B>run_history</B>
+<DD><A NAME="IDX91"></A>
+Similar to <CODE>edit_history</CODE>, except that the editor is not invoked,
+and the commands are simply executed as they appear in the history list.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>EDITOR</B>
+<DD><A NAME="IDX92"></A>
+A string naming the editor to use with the <CODE>edit_history</CODE> command.
+If the environment variable <CODE>EDITOR</CODE> is set when Octave starts, its
+value is used as the default.  Otherwise, <CODE>EDITOR</CODE> is set to
+<CODE>"emacs"</CODE>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>history_file</B>
+<DD><A NAME="IDX93"></A>
+This variable specifies the name of the file used to store command
+history.  The default value is <CODE>"~/.octave_hist"</CODE>, but may be
+overridden by the environment variable <CODE>OCTAVE_HISTFILE</CODE>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>history_size</B>
+<DD><A NAME="IDX94"></A>
+This variable specifies how many entries to store in the history file.
+The default value is <CODE>1024</CODE>, but may be overridden by the
+environment variable <CODE>OCTAVE_HISTSIZE</CODE>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>saving_history</B>
+<DD><A NAME="IDX95"></A>
+If the value of <CODE>saving_history</CODE> is nonzero, command entered
+on the command line are saved in the file specified by the variable
+<CODE>history_file</CODE>.
+</DL>
+
+</P>
+
+
+<H3><A NAME="SEC36" HREF="octave_toc.html#TOC36">Customizing the Prompt</A></H3>
+<P>
+<A NAME="IDX96"></A>
+<A NAME="IDX97"></A>
+
+</P>
+<P>
+The following variables are available for customizing the appearance of
+the command-line prompts.  Octave allows the prompt to be customized by
+inserting a number of backslash-escaped special characters that are
+decoded as follows:
+
+</P>
+<DL COMPACT>
+
+<DT><SAMP>`\t'</SAMP>
+<DD>
+The time.
+
+<DT><SAMP>`\d'</SAMP>
+<DD>
+The date.
+
+<DT><SAMP>`\n'</SAMP>
+<DD>
+Begins a new line by printing the equivalent of a carriage return
+followed by a line feed.
+
+<DT><SAMP>`\s'</SAMP>
+<DD>
+The name of the program (usually just <SAMP>`octave'</SAMP>).
+
+<DT><SAMP>`\w'</SAMP>
+<DD>
+The current working directory.
+
+<DT><SAMP>`\W'</SAMP>
+<DD>
+The basename of the current working directory.
+
+<DT><SAMP>`\u'</SAMP>
+<DD>
+The username of the current user.
+
+<DT><SAMP>`\h'</SAMP>
+<DD>
+The hostname, up to the first `.'.
+
+<DT><SAMP>`\H'</SAMP>
+<DD>
+The hostname.
+
+<DT><SAMP>`\#'</SAMP>
+<DD>
+The command number of this command, counting from when Octave starts.
+
+<DT><SAMP>`\!'</SAMP>
+<DD>
+The history number of this command.  This differs from <SAMP>`\#'</SAMP> by the
+number of commands in the history list when Octave starts.
+
+<DT><SAMP>`\$'</SAMP>
+<DD>
+If the effective UID is 0, a <SAMP>`#'</SAMP>, otherwise a <SAMP>`$'</SAMP>.
+
+<DT><SAMP>`\nnn'</SAMP>
+<DD>
+The character whose character code in octal is <VAR>nnn</VAR>.
+
+<DT><SAMP>`\\'</SAMP>
+<DD>
+A backslash.
+</DL>
+
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>PS1</B>
+<DD><A NAME="IDX98"></A>
+The primary prompt string.  When executing interactively, Octave
+displays the primary prompt <CODE>PS1</CODE> when it is ready to read a
+command.
+
+</P>
+<P>
+The default value of <CODE>PS1</CODE> is <CODE>"\s:\#&#62; "</CODE>.  To change it, use a
+command like
+
+</P>
+
+<PRE>
+octave:13&#62; PS1 = "\\u@\\H&#62; "
+</PRE>
+
+<P>
+which will result in the prompt <SAMP>`boris@kremvax&#62; '</SAMP> for the user
+<SAMP>`boris'</SAMP> logged in on the host <SAMP>`kremvax.kgb.su'</SAMP>.  Note that two
+backslashes are required to enter a backslash into a string.
+See section <A HREF="octave_6.html#SEC53">Strings</A>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>PS2</B>
+<DD><A NAME="IDX99"></A>
+The secondary prompt string, which is printed when Octave is
+expecting additional input to complete a command.  For example, when
+defining a function over several lines, Octave will print the value of
+<CODE>PS1</CODE> at the beginning of each line after the first.  The default
+value of <CODE>PS2</CODE> is <CODE>"&#62; "</CODE>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>PS4</B>
+<DD><A NAME="IDX100"></A>
+If Octave is invoked with the <CODE>--echo-input</CODE> option, the value of
+<CODE>PS4</CODE> is printed before each line of input that is echoed.  The
+default value of <CODE>PS4</CODE> is <CODE>"+ "</CODE>.  See section <A HREF="octave_3.html#SEC25">Invoking Octave</A>, for
+a description of <CODE>--echo-input</CODE>.
+</DL>
+
+</P>
+
+
+<H3><A NAME="SEC37" HREF="octave_toc.html#TOC37">Diary and Echo Commands</A></H3>
+<P>
+<A NAME="IDX101"></A>
+<A NAME="IDX102"></A>
+<A NAME="IDX103"></A>
+<A NAME="IDX104"></A>
+<A NAME="IDX105"></A>
+
+</P>
+<P>
+Octave's diary feature allows you to keep a log of all or part of an
+interactive session by recording the input you type and the output that
+Octave produces in a separate file.
+
+</P>
+<P>
+<DL>
+<DT><U>Command:</U> <B>diary</B> <I>options</I>
+<DD><A NAME="IDX106"></A>
+Create a list of all commands <EM>and</EM> the output they produce, mixed
+together just as you see them on your terminal.  Valid options are:
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>on</CODE>
+<DD>
+Start recording your session in a file called <TT>`diary'</TT> in your
+current working directory.
+
+<DT><CODE>off</CODE>
+<DD>
+Stop recording your session in the diary file.
+
+<DT><CODE><VAR>file</VAR></CODE>
+<DD>
+Record your session in the file named <VAR>file</VAR>.
+</DL>
+
+<P>
+Without any arguments, <CODE>diary</CODE> toggles the current diary state.
+</DL>
+
+</P>
+<P>
+Sometimes it is useful to see the commands in a function or script as
+they are being evaluated.  This can be especially helpful for debugging
+some kinds of problems.
+
+</P>
+<P>
+<DL>
+<DT><U>Command:</U> <B>echo</B> <I>options</I>
+<DD><A NAME="IDX107"></A>
+Control whether commands are displayed as they are executed.  Valid
+options are:
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>on</CODE>
+<DD>
+Enable echoing of commands as they are executed in script files.
+
+<DT><CODE>off</CODE>
+<DD>
+Disable echoing of commands as they are executed in script files.
+
+<DT><CODE>on all</CODE>
+<DD>
+Enable echoing of commands as they are executed in script files and
+functions.
+
+<DT><CODE>off all</CODE>
+<DD>
+Disable echoing of commands as they are executed in script files and
+functions.
+</DL>
+
+<P>
+If invoked without any arguments, <CODE>echo</CODE> toggles the current echo
+state.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Built-in Variable:</U> <B>echo_executing_commands</B>
+<DD><A NAME="IDX108"></A>
+This variable is may also be used to control the echo state.  It may be
+the sum of the following values:
+
+</P>
+<DL COMPACT>
+
+<DT>1
+<DD>
+Echo commands read from script files.
+
+<DT>2
+<DD>
+Echo commands from functions.
+
+<DT>4
+<DD>
+Echo commands read from command line.
+</DL>
+
+<P>
+More than one state can be active at once.  For example, a value of 3 is
+equivalent to the command <KBD>echo on all</KBD>.
+
+</P>
+<P>
+The value of <CODE>echo_executing_commands</CODE> is set by the <KBD>echo</KBD>
+command and the command line option <CODE>--echo-input</CODE>.
+</DL>
+
+</P>
+
+
+<H2><A NAME="SEC38" HREF="octave_toc.html#TOC38">How Octave Reports Errors</A></H2>
+<P>
+<A NAME="IDX109"></A>
+<A NAME="IDX110"></A>
+
+</P>
+<P>
+Octave reports two kinds of errors for invalid programs.
+
+</P>
+<P>
+A <STRONG>parse error</STRONG> occurs if Octave cannot understand something you
+have typed.  For example, if you misspell a keyword,
+
+</P>
+
+<PRE>
+octave:13&#62; functon y = f (x) y = x^2; endfunction
+</PRE>
+
+<P>
+Octave will respond immediately with a message like this:
+
+</P>
+
+<PRE>
+parse error:
+
+  functon y = f (x) y = x^2; endfunction
+          ^
+</PRE>
+
+<P>
+For most parse errors, Octave uses a caret (<SAMP>`^'</SAMP>) to mark the point
+on the line where it was unable to make sense of your input.  In this
+case, Octave generated an error message because the keyword
+<CODE>function</CODE> was misspelled.  Instead of seeing <SAMP>`function f'</SAMP>,
+Octave saw two consecutive variable names, which is invalid in this
+context.  It marked the error at the <CODE>y</CODE> because the first name by
+itself was accepted as valid input.
+
+</P>
+<P>
+Another class of error message occurs at evaluation time.  These
+errors are called <STRONG>run-time errors</STRONG>, or sometimes
+<STRONG>evaluation errors</STRONG> because they occur when your program is being
+<STRONG>run</STRONG>, or <STRONG>evaluated</STRONG>.  For example, if after correcting the
+mistake in the previous function definition, you type
+
+</P>
+
+<PRE>
+octave:13&#62; f ()
+</PRE>
+
+<P>
+Octave will respond with
+
+</P>
+
+<PRE>
+error: `x' undefined near line 1 column 24
+error: evaluating expression near line 1, column 24
+error: evaluating assignment expression near line 1, column 22
+error: called from `f'
+</PRE>
+
+<P>
+This error message has several parts, and gives you quite a bit of
+information to help you locate the source of the error.  The messages
+are generated from the point of the innermost error, and provide a
+traceback of enclosing expressions and function calls.
+
+</P>
+<P>
+In the example above, the first line indicates that a variable named
+<SAMP>`x'</SAMP> was found to be undefined near line 1 and column 24 of some
+function or expression.  For errors occurring within functions, lines
+from the beginning of the file containing the function definition.  For
+errors occurring at the top level, the line number indicates the input
+line number, which is usually displayed in the prompt string.
+
+</P>
+<P>
+The second and third lines in the example indicate that the error
+occurred within an assignment expression, and the last line of the error
+message indicates that the error occurred within the function <CODE>f</CODE>.
+If the function <CODE>f</CODE> had been called from another function, for
+example, <CODE>g</CODE>, the list of errors would have ended with one more
+line:
+
+</P>
+
+<PRE>
+error: called from `g'
+</PRE>
+
+<P>
+These lists of function calls usually make it fairly easy to trace the
+path your program took before the error occurred, and to correct the
+error before trying again.
+
+</P>
+
+
+<H2><A NAME="SEC39" HREF="octave_toc.html#TOC39">Executable Octave Programs</A></H2>
+<P>
+<A NAME="IDX111"></A>
+<A NAME="IDX112"></A>
+<A NAME="IDX113"></A>
+<A NAME="IDX114"></A>
+<A NAME="IDX115"></A>
+
+</P>
+<P>
+Once you have learned Octave, you may want to write self-contained
+Octave scripts, using the <SAMP>`#!'</SAMP> script mechanism.  You can do this
+on GNU systems and on many Unix systems <A NAME="DOCF1" HREF="octave_foot.html#FOOT1">(1)</A>
+
+</P>
+<P>
+For example, you could create a text file named <TT>`hello'</TT>, containing
+the following lines:
+
+</P>
+
+<PRE>
+#! <VAR>octave-interpreter-name</VAR> -qf
+# a sample Octave program
+printf ("Hello, world!\n");
+</PRE>
+
+<P>
+(where <VAR>octave-interpreter-name</VAR> should be replaced with the full
+file name for your Octave binary).  After making this file executable
+(with the <CODE>chmod</CODE> command), you can simply type:
+
+</P>
+
+<PRE>
+hello
+</PRE>
+
+<P>
+at the shell, and the system will arrange to run Octave as if you had
+typed:
+
+</P>
+
+<PRE>
+octave hello
+</PRE>
+
+<P>
+The line beginning with <SAMP>`#!'</SAMP> lists the full file name of an
+interpreter to be run, and an optional initial command line argument to
+pass to that interpreter.  The operating system then runs the
+interpreter with the given argument and the full argument list of the
+executed program.  The first argument in the list is the full file name
+of the Octave program. The rest of the argument list will either be
+options to Octave, or data files, or both.  The <SAMP>`-qf'</SAMP> option is
+usually specified in stand-alone Octave programs to prevent them from
+printing the normal startup message, and to keep them from behaving
+differently depending on the contents of a particular user's
+<TT>`~/.octaverc'</TT> file.  See section <A HREF="octave_3.html#SEC25">Invoking Octave</A>.  Note that some
+operating systems may place a limit on the number of characters that are
+recognized after <SAMP>`#!'</SAMP>.
+
+</P>
+<P>
+Self-contained Octave scripts are useful when you want to write a
+program which users can invoke without knowing that the program is
+written in the Octave language.
+
+</P>
+<P>
+If you invoke an executable Octave script with command line arguments,
+the arguments are available in the built-in variable <CODE>argv</CODE>.
+See section <A HREF="octave_3.html#SEC26">Command Line Options</A>.  For example, the following program will
+reproduce the command line that is used to execute it.
+
+</P>
+
+<PRE>
+#! /bin/octave -qf
+printf ("%s", program_name);
+for i = 1:nargin
+  printf (" %s", argv(i,:));
+endfor
+printf ("\n");
+</PRE>
+
+
+
+<H2><A NAME="SEC40" HREF="octave_toc.html#TOC40">Comments in Octave Programs</A></H2>
+<P>
+<A NAME="IDX116"></A>
+<A NAME="IDX117"></A>
+<A NAME="IDX118"></A>
+<A NAME="IDX119"></A>
+<A NAME="IDX120"></A>
+<A NAME="IDX121"></A>
+
+</P>
+<P>
+A <STRONG>comment</STRONG> is some text that is included in a program for the sake
+of human readers, and that is not really part of the program.  Comments
+can explain what the program does, and how it works.  Nearly all
+programming languages have provisions for comments, because programs are
+typically hard to understand without them.
+
+</P>
+<P>
+In the Octave language, a comment starts with either the sharp sign
+character, <SAMP>`#'</SAMP>, or the percent symbol <SAMP>`%'</SAMP> and continues to the
+end of the line.  The Octave interpreter ignores the rest of a
+line following a sharp sign or percent symbol.  For example, we could
+have put the following into the function <CODE>f</CODE>:
+
+</P>
+
+<PRE>
+function xdot = f (x, t)
+
+# usage: f (x, t)
+#
+# This function defines the right hand
+# side functions for a set of nonlinear
+# differential equations.
+
+  r = 0.25;
+  ...
+endfunction
+</PRE>
+
+<P>
+The <CODE>help</CODE> command (see section <A HREF="octave_3.html#SEC29">Commands for Getting Help</A>) is able to find the first
+block of comments in a function (even those that are composed directly
+on the command line).  This means that users of Octave can use the same
+commands to get help for built-in functions, and for functions that you
+have defined.  For example, after defining the function <CODE>f</CODE> above,
+the command <KBD>help f</KBD> produces the output
+
+</P>
+
+<PRE>
+ usage: f (x, t)
+
+ This function defines the right hand
+ side functions for a set of nonlinear
+ differential equations.
+</PRE>
+
+<P>
+Although it is possible to put comment lines into keyboard-composed
+throw-away Octave programs, it usually isn't very useful, because the
+purpose of a comment is to help you or another person understand the
+program at a later time.
+
+</P>
+
+<P><HR><P>
+Go to the <A HREF="octave_1.html">first</A>, <A HREF="octave_2.html">previous</A>, <A HREF="octave_4.html">next</A>, <A HREF="octave_40.html">last</A> section, <A HREF="octave_toc.html">table of contents</A>.
+</BODY>
+</HTML>
